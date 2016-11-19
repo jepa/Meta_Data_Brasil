@@ -1,268 +1,301 @@
 library(shiny)
+library(leaflet)
 
-shinyUI(navbarPage(
-  theme = "fondo.css",
-  "Metadata of Marine Research in Mexico",
-  #### HOME ####
-  tabPanel("Home",
-           fluidRow(
-             column(
-               12,
-               align = "center",
-               h1("Project Outline") #,
-               # img(
-               #   src = "Portada.jpg",
-               #   height = 400,
-               #   width = 800
-               # )
-             ),
-             column(
-               10,
-               align = "justified",
-               offset = 1,
-               p(h3("Wellcome!")),
-               p(
-                 "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
-               ),
-               p(
-                 "A meta-database of available ecological, social and economic data in Mexico will help facilitate efficient use of existing information and stimulate collaboration. A meta-database is a documentation of the sources of information instead of a database of the actual data. For example, a meta-database record might represent the sources (e.g., the institution hosting the data, a URL where the data could be assessed), types (e.g., fish abundance, temperature), location (e.g., reef in Caribbean) and time-frame (e.g., specific years, seasons, or a time-series). Such meta-database can help reveal trends in the availability of different types of data, identify existing data gaps, and facilitate researchers and managers to use all the available information for their studies or for decision making. Hence, this database can be an important instrument in the context of increasing collaboration among different disciplines. A researcher could identify data of interest within the meta-database, contact the right person or institute directly, and collaborate on new research. This way, the meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Such meta-database has been developed for Canada (Cisneros-Montemayor et al. 2016) and such experiences could be adapted for Mexico."
-               ),
-               p(
-                 "The meta-database can also be constantly updated when new datasets become available. As new projects materialize in Mexico, new information will be created and then potentially incorporated as a new entry in the metadata. This process will keep the database updated and constantly expanding. There is no requirement that corresponding datasets, which may be restricted or otherwise not be publicly available, be initially shared. This facilitates the prompt incorporation of any new information into the meta-database. Finally, besides being a useful resource for collaboration and analysis, the metadata will reflect the state of marine research in Mexico."
-               ),
+shinyUI(
+  navbarPage(
+    theme = "fondo.css",
+    "Metadata of Marine Research in Mexico",
+    #### HOME ####
+    tabPanel("Home",
+             fluidRow(
                column(
                  12,
                  align = "center",
-               img(
-                 src = "flow_chart.png",
-                 height = 150,
-                 width = 600
-               ))
-               
+                 h1("Project Outline")
+               ),
+               column(
+                 10,
+                 align = "justified",
+                 offset = 1,
+                 p(h3("Wellcome!")),
+                 p(
+                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
+                 ),
+                 p(
+                   "A meta-database of available ecological, social and economic data in Mexico will help facilitate efficient use of existing information and stimulate collaboration. A meta-database is a documentation of the sources of information instead of a database of the actual data. For example, a meta-database record might represent the sources (e.g., the institution hosting the data, a URL where the data could be assessed), types (e.g., fish abundance, temperature), location (e.g., reef in Caribbean) and time-frame (e.g., specific years, seasons, or a time-series). Such meta-database can help reveal trends in the availability of different types of data, identify existing data gaps, and facilitate researchers and managers to use all the available information for their studies or for decision making. Hence, this database can be an important instrument in the context of increasing collaboration among different disciplines. A researcher could identify data of interest within the meta-database, contact the right person or institute directly, and collaborate on new research. This way, the meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Such meta-database has been developed for Canada (Cisneros-Montemayor et al. 2016) and such experiences could be adapted for Mexico."
+                 ),
+                 p(
+                   "The meta-database can also be constantly updated when new datasets become available. As new projects materialize in Mexico, new information will be created and then potentially incorporated as a new entry in the metadata. This process will keep the database updated and constantly expanding. There is no requirement that corresponding datasets, which may be restricted or otherwise not be publicly available, be initially shared. This facilitates the prompt incorporation of any new information into the meta-database. Finally, besides being a useful resource for collaboration and analysis, the metadata will reflect the state of marine research in Mexico."
+                 ),
+                 column(
+                   12,
+                   align = "center",
+                   img(
+                     src = "flow_chart.png",
+                     height = 150,
+                     width = 600
+                   )
+                 )
+                 
+               )
              )
-           )),
-  #### Input Data ####
-  tabPanel(
-    "Input Data",
-    fluidPage(
-      column(12,align="center",
-             titlePanel("Main Pannel for Uploading Data to the Meta-Dataset")),
-      fluidRow(
-        sidebarLayout(
-          sidebarPanel(
-            width = 12,
-            h3("Instructions"),
-            p("In here we should have a very brieff text informing the instructions on how to fill the blanks"),
-            selectInput(
-              "User_Contact",
-              "User Contact:",
-              choices = c(
-                "",
-                "Punta Arena",
-                "Lado de los Palos",
-                "Boca de la Islita",
-                "Punta de Monte",
-                "Enscenada Santa Cruz",
-                "Oporito"
+    ),
+    #### Input Data ####
+    tabPanel(
+      "Input Data",
+      fluidPage(
+        column(12,align="center",
+               titlePanel("Main Pannel for Uploading Data to the Meta-Dataset")),
+        fluidRow(
+          column(12,align="justified",
+                 h3("Instructions"),
+                 p("In here we should have a very brieff text informing the instructions on how to fill the blanks"
+                 )
+          ),
+          #### first Column####
+          ######Contact Info ####
+          column(
+            width = 4,
+            p(h3("Contact Information")),
+            #Mean and sd Harvestable Biomass#
+            textInput("User_Name",
+                      "Name",
+                      "",
+                      width = '100%'),
+            textInput("User_Email",
+                      "Email",
+                      "",
+                      width = '100%'),
+            p(h3("Some Name")),
+###### SOME NAME ####
+            tabsetPanel(
+              id = "Some_Name",
+###### Reference ####
+              tabPanel(
+                "Reference",
+                textInput("Reference_",
+                          "Please provide a path", 
+                          "")
+              ),
+tabPanel(
+  "Reference",
+  textInput("Reference_",
+            "Please provide a path", 
+            "")
+)
+              )
+            )
+          ),#Close first column
+          
+          #### Second column ####
+          column(
+            width = 4,
+            p(h3("General Data Information")),
+            tabsetPanel(
+              id = "General_Info",
+#######Dataset_Title ####
+              tabPanel(
+                "Data Title",
+                textInput("Dataset_Title",
+                          "Title of Original Dataset", 
+                          "")
+              ),
+#######Shot_Title ####
+              tabPanel(
+                "Short Title",
+                textInput("Short_Title",
+                          "Capture Title", 
+                          "")
+              ),
+#######Keywords ####
+              tabPanel(
+                "Keywords",
+                textInput("Keyword_1",
+                          "Keyword 1", 
+                          "",
+                          width = '50%'),
+                textInput("Keyword_2",
+                          "Keyword 2", 
+                          "",
+                          width = '50%'),
+                textInput("Keyword_3",
+                          "Keyword 3", 
+                          "",
+                          width = '50%'),
+                textInput("Keyword_4",
+                          "Keyword 4",
+                          "",
+                          width = '50%')
+              ),
+#######Author ####
+              tabPanel(
+                "Author",
+                textInput("Author",
+                          "Author of the Dataset", 
+                          ""),
+                textInput("Institution",
+                          "Institution", 
+                          "")
+              ),
+#######Generla_Info_Help ####
+              tabPanel(
+                "Help",
+                p(
+                  strong(
+                    "Data Title"
+                  ),
+                  "Original name of dataset.", em("Note"), ": the data specifically, not the source or repository where it was published"
+                ),
+                p(
+                  strong(
+                    "Short Title"
+                  ),
+                  "Please prove a short title that better describes the dataset. Please keep it consize. There is a limit of 8 words"
+                ),
+                p(h5("Example")),
+                p(
+                  "Shark Survey for Mexican Pacific Coast between 1980-2000"
+                ),
+                p(
+                  strong(
+                    "Keywords"
+                  ),
+                  "Limited to 8 words that describe the subject or dataset and are useful for searches"
+                ),
+                p(
+                  strong(
+                    "Author"
+                  ),
+                  "Author (Principal) of the dataset for referencing the data. Can be multiple authors and institutions."
+                )
+              )
+            ),
+            ######Dataset_Available####
+            tabsetPanel(
+              id = "inTabset",
+              tabPanel(
+                "Is the Data Set Available?",
+                selectInput("Dataset_Available", 
+                            label= "Choose Only One",
+                            choices = list("Public Access" = 1, 
+                                           "Restricted Access (Public)" = 2,
+                                           "Private" = 3),
+                            selected = 0,
+                            width = '50%')
+              ),
+              tabPanel(
+                "Help",
+                p(
+                  "Is the data available for use?"
+                ),
+                p(h5("Example")),
+                p(
+                  "Could be: NGO, Gov, Academia, IGO, Industry,  Private. (Multiple)"
+                )
+              )
+            ),
+            tabsetPanel(
+              id = "Institution_type",
+              tabPanel(
+                "Institution Collecting Data",
+                checkboxGroupInput("Institution_Type",
+                                   label = "Chose One or Multiple", 
+                                   choices = list("NGO" = 1,
+                                                  "Gob." = 2, 
+                                                  "Academy" = 3,
+                                                  "IGO", 
+                                                  "Industry" = 5 ), 
+                                   selected = 0)
+              ),
+              tabPanel(
+                "Help",
+                p(
+                  "The type of institution that generated the dataset (corresponds to the Institution field. Can be multiple selection)"
+                ),
+                p(h5("Example")),
+                p(
+                  "Could be: NGO, Gov, Academia, IGO, Industry,  Private. (Multiple)"
+                )
               )
             )
           ),
-          mainPanel("ja")
-        ),
-        column(
-          width = 4,
-          p(h3("Factores de Pesca")),
-          #Mean and sd Harvestable Biomass#
-          numericInput(
-            inputId = "mean",
-            label = "Biomasa Capturable (promedio)",
-            value = 1000,
-            min = 0,
-            max = 100
-          ),
-          numericInput(
-            inputId = "sd",
-            label = "Biomasa Capturable (desviación estandar)",
-            value = 100,
-            min = 0,
-            max = 100
-          ),
-          numericInput(
-            inputId = "FM",
-            label = "Mortalidad por Pesca",
-            value = 0.2,
-            min = 0,
-            max = 1
-          ),
-          #Conversion Factor
-          numericInput(
-            inputId = "Con_Fac",
-            label = "Factor de Conversión (Pesca<->Venta)",
-            value = .25,
-            min = .1,
-            max = 1
-          ),
-          #CPUE
-          numericInput(
-            inputId = "CPUE",
-            label = "Captura por Unidad de Esfuerzo (CPUE)",
-            value = 25,
-            min = 1,
-            max = NA
-          ),
-          #Precio de venta
-          numericInput(
-            inputId = "Price",
-            label = "Precio de venta por Kilo",
-            value = 200,
-            min = 1,
-            max = NA
-          )
-        ),
-        #Close first column
-        #### SECOND COLUMN, costos ####
-        column(
-          width = 6,
-          p(h3("Costos de Pesca")),
-          p(h6("Seleccione uno")),
-          tabsetPanel(
-            id = "inTabset",
-            #### C Unidad de Esfuerzo ####
-            tabPanel(
-              "Costos Unidad de Esfuerzo",
-              numericInput(
-                inputId = "Costo_F_G_1",
-                label = "Costo 1",
-                value = 150,
-                min = 0,
-                max = NA
+          #Close second column
+          #### Third COLUMN, Spatial####
+          column(
+            p(h3("Spatial Information")),
+            width = 3,
+            tabsetPanel(
+              id ="Spatial_Information",
+              ###### Area ####
+              tabPanel(
+                "Area",
+                selectInput("Area", 
+                            label= "Choose Only One",
+                            choices = list("National" = 1, 
+                                           "Atlantic" = 2,
+                                           "Pacific" = 3,
+                                           "FreshWater/Terrestrial" = 4),
+                            selected = 0,
+                            width = '100%')
               ),
-              numericInput(
-                inputId = "Costo_F_G_2",
-                label = "Costo 2",
-                value = 70,
-                min = NA,
-                max = NA
+              ###### Region ####
+              tabPanel(
+                "Region",
+                checkboxGroupInput("Region", 
+                                   label= "Choose all tha Apply",
+                                   choices = list("Gulf of California" = 1, 
+                                                  "Nortwest Pacific" = 2,
+                                                  "South Pacific" = 3,
+                                                  "Gulf of Tehuantepec" = 4,
+                                                  "Yucatan Peninsula / Mar Caribe" = 5,
+                                                  "West Gulf of Mexico" = 6,
+                                                  "FreshWater/Terrestrial" = 7),
+                                   selected = 0,
+                                   width = '100%'
+                )
               ),
-              numericInput(
-                inputId = "Costo_F_1",
-                label = "Costo 3",
-                value = 0,
-                min = 0,
-                max = NA
+              ###### Location ####
+              tabPanel(
+                "Location",
+                textInput("Location",
+                          "Location",
+                          "",
+                          width = '100%'),
+                actionButton(
+                  "Location_Map",
+                  "Map"
+                )
               ),
-              numericInput(
-                inputId = "Costo_F_2",
-                label = "Costo 4",
-                value = 0,
-                min = 0,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Costo_F_3",
-                label = "Costo 5",
-                value = 0,
-                min = 0,
-                max = NA
-              )
-            ),
-            #### C Unidad de Captura ####
-            tabPanel(
-              "Costos por unidad de Captura",
-              p(h5("Costos por Unidad de Captura")),
-              numericInput(
-                inputId = "Cost_UE1",
-                label = "Precio Gasolina",
-                value = 14,
-                min = 0,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UE2",
-                label = "Distancia",
-                value = 0,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UE3",
-                label = "Consumo del Vehículo",
-                value = 9,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UE4",
-                label = "Capacidad del Vehículo (Kg)",
-                value = 1000,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UC1",
-                label = " Precio del Hielo",
-                value = 20,
-                min = 0,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UC2",
-                label = "Capacidad de carga Hielo",
-                value = 25,
-                min = NA,
-                max = NA
-              )
-            ),
-            #### Costos Fijos ####
-            tabPanel(
-              "Costos Fijos",
-              numericInput(
-                inputId = "Cost_UC2",
-                label = "Permiso de Pesca",
-                value = 750,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UC3",
-                label = "Permiso de Barco",
-                value = 78,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UC4",
-                label = "Mantenimiento del Equipo",
-                value = 2500,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UC5",
-                label = "Mantenimiento del Equipo",
-                value = 2500,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Cost_UC6",
-                label = "Mantenimiento del Equipo",
-                value = 2500,
-                min = NA,
-                max = NA
-              ),
-              numericInput(
-                inputId = "Boat_U",
-                label = "Uso del barco en la pesca (%)",
-                value = .20,
-                min = 0,
-                max = 1,
-                step = .1
+              ###### Spatial_Help ####
+              tabPanel(
+                "Help",
+                p(strong("Area:"),"A broad category of where the data was generated, cannot be lefted in blank"),
+                p(strong("Region:"),"A more specific location category, can be left blank"),
+                p(strong("Location:"),"A very specific localization category. Can be anything from an specific city or beach to coordinates."),
+                p(strong("Map:"),"Brings out a map so you can geo-reference the data")
               )
             )
           )
         )
+      ),
+      mainPanel(em(
+        column(
+          width = 12,
+          align ="center",
+          leafletOutput("Location_Map")
+          #leafletOutput("map")
+        )
       )
-))
+      )
+    )
+  )
 )
-)
+
+
+
+
+
+
+
+
+
