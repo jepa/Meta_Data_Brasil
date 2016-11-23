@@ -1,5 +1,6 @@
 library(shiny)
 library(leaflet)
+library(DT)
 
 shinyUI(
   navbarPage(
@@ -66,48 +67,59 @@ shinyUI(
                       "Email",
                       "",
                       width = '100%'),
-            p(h3("Some Name")),
-###### SOME NAME ####
+            ###### Data Rpository ####
+            p(h3("Repository Information")),
             tabsetPanel(
-              id = "Some_Name",
-###### Reference ####
+              id = "Data_Input",
+              ###### Reference ####
               tabPanel(
                 "Reference",
                 textInput("Reference_",
                           "Please provide a path", 
                           "")
               ),
-tabPanel(
-  "Reference",
-  textInput("Reference_",
-            "Please provide a path", 
-            "")
-)
+              ###### Data Collection ####
+              tabPanel(
+                "Compilation",
+                textInput("Compilation_Title",
+                          "Name of Data Compilation", 
+                          "")
+              ),
+              ###### Help #
+              tabPanel(
+                "Help",
+                strong("Reference"),"The digital path of where can the data be found. If no digital repository exists, please provide the name of the publication where data can be found",
+                p(strong("Compilation"),"The name of the collection where data exists."),
+                br(),
+                p(em("For example:"),"The dataset could be",em("Shark Catch for Mexico Between 2000-2014"), "and the Collection where the data was published could be the:",em("FAO Yearbook of Fishery and Aquaculture Statistics, 2014"))
               )
-            )
-          ),#Close first column
-          
+            ),
+            fileInput('Data_Upload',
+                      h4('Upload Data'),
+                      accept=c('text/csv',
+                               'text/comma-separated-values,text/plain','.csv'))
+          ),
           #### Second column ####
           column(
             width = 4,
             p(h3("General Data Information")),
             tabsetPanel(
               id = "General_Info",
-#######Dataset_Title ####
+              #######Dataset_Title ####
               tabPanel(
                 "Data Title",
                 textInput("Dataset_Title",
                           "Title of Original Dataset", 
                           "")
               ),
-#######Shot_Title ####
+              #######Shot_Title ####
               tabPanel(
                 "Short Title",
                 textInput("Short_Title",
                           "Capture Title", 
                           "")
               ),
-#######Keywords ####
+              #######Keywords ####
               tabPanel(
                 "Keywords",
                 textInput("Keyword_1",
@@ -127,7 +139,7 @@ tabPanel(
                           "",
                           width = '50%')
               ),
-#######Author ####
+              #######Author ####
               tabPanel(
                 "Author",
                 textInput("Author",
@@ -137,7 +149,7 @@ tabPanel(
                           "Institution", 
                           "")
               ),
-#######Generla_Info_Help ####
+              #######Generla_Info_Help ####
               tabPanel(
                 "Help",
                 p(
@@ -283,13 +295,58 @@ tabPanel(
           width = 12,
           align ="center",
           leafletOutput("Location_Map")
-          #leafletOutput("map")
+          
         )
       )
       )
+    ),
+    #### RESULTS ####
+    tabPanel("Premilinar Results",
+             p("Hola"),
+             column(
+               width=12,
+               align = "center",
+               tabsetPanel(
+                 id = "Map_Raw",
+                 tabPanel(
+                   p(h3("Map of Data Localization")),
+                   leafletOutput("Data_Map")
+               ),
+               tabPanel(
+                 p(h3("Metadata Explorer")),
+                 dataTableOutput('Metadata')
+               )
+               )
+             ),
+             br(),
+             br(),
+             column(
+               width = 6,
+               align= "center",
+               p(h3("Quantitative Results")),
+               p(h4("Total Number of Data Registers")),
+               p(h2(textOutput("Number_Entries"))),
+               p(h4("Number of Data Enteries per Subject")),
+               selectInput("Plot_Option", 
+                           label= "Choose To Show Plot:",
+                           choices = list("By Subject" = 1, 
+                                          "By Region" = 2,
+                                          "By Location" =3
+                           )
+               ),
+               plotOutput("Number_spp")
+               
+             ),
+             column(
+               width = 6,
+               align= "center",
+               p(h3("Qualitative Results")),
+               plotOutput("Keywords_Plot")
+               )
     )
   )
 )
+
 
 
 
