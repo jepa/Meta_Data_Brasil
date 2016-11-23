@@ -12,8 +12,11 @@ library(leaflet) #For the maps
 library(DT) #For showing nice tables
 library(dplyr) #Data wrangling
 library(ggplot2) #Plots
+#install.packages('wordcloud')
 library(wordcloud) #For Word Mining
+#install.packages('tm')
 library(tm) #For Word Mining
+library(xlsx)
 
 
 
@@ -104,11 +107,10 @@ shinyServer(function(input, output) {
   
   # Results Tab ####
   
-  # Reading the dataset #For now is a saved file but can be connected to actual dataset
+  # Reading the dataset ####
   
   datasetInput <- reactive({
-    data <- read.csv("Template_APP.csv",
-                     header = TRUE)
+    data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.3.xlsx","Template")
     Template <- data.frame(data)
   })
   
@@ -215,11 +217,15 @@ shinyServer(function(input, output) {
     WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
     WordsCorpus <- tm_map(WordsCorpus, PlainTextDocument) #Converts to plain text
     WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
+    
+    Word_Remove <- c(input$Keyword_Remove1,input$Keyword_Remove2)
+    
+    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) #Removes a word of user preference 
     wordcloud(WordsCorpus, #Plots the words
-              max.words = 1000,
+              max.words = 100,
               random.order = FALSE,
               colors=brewer.pal(8, "Dark2"))
-    
+              
     
   })
   

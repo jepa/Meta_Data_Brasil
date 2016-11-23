@@ -41,7 +41,7 @@ shinyUI(
                )
              )
     ),
-    #### Input Data ####
+    #### INPUT DATA ####
     tabPanel(
       "Input Data",
       fluidPage(
@@ -341,7 +341,17 @@ shinyUI(
                width = 6,
                align= "center",
                p(h3("Qualitative Results")),
-               plotOutput("Keywords_Plot")
+               textInput("Keyword_Remove1",
+                         "Remove any Keyword",
+                         "",
+                         width = '50%'),
+               textInput("Keyword_Remove2",
+                         "",
+                         "",
+                         width = '50%'),
+               plotOutput("Keywords_Plot"),
+               p(em("Note: Not all words might be represented in the graph"))
+        
                )
     )
   )
