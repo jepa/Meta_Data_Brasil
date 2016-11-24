@@ -220,12 +220,14 @@ shinyServer(function(input, output) {
     
     Word_Remove <- c(input$Keyword_Remove1,input$Keyword_Remove2)
     
-    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) #Removes a word of user preference 
+    #Removes a word of user preference 
+    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 
+    #
+    
     wordcloud(WordsCorpus, #Plots the words
               max.words = 100,
               random.order = FALSE,
               colors=brewer.pal(8, "Dark2"))
-              
     
   })
   
