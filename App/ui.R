@@ -320,6 +320,7 @@ shinyUI(
              ),
              br(),
              br(),
+             #### Quantitative Results####
              column(
                width = 6,
                align= "center",
@@ -334,9 +335,14 @@ shinyUI(
                                           "By Location" =3
                            )
                ),
-               plotOutput("Number_spp")
-               
+               plotOutput("Number_spp"),
+               sliderInput("Num_Data_Range",
+                           "Data Range Filter for Subjects:",
+                           value=c(0,200),
+                           min = 0, 
+                           max = 200)
              ),
+             #### Qualitative Results####
              column(
                width = 6,
                align= "center",

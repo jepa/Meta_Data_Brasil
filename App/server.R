@@ -16,7 +16,7 @@ library(ggplot2) #Plots
 library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
-library(xlsx)
+#library(xlsx)
 
 
 
@@ -110,7 +110,8 @@ shinyServer(function(input, output) {
   # Reading the dataset ####
   
   datasetInput <- reactive({
-    data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.3.xlsx","Template")
+    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.3.xlsx","Template")
+    data<- read.csv("./Template.csv", header = TRUE)
     Template <- data.frame(data)
   })
   
@@ -131,10 +132,13 @@ shinyServer(function(input, output) {
   
   output$Number_spp <- renderPlot({
     #### By Subject_Name####
+    
     if(input$Plot_Option == 1){
       Spp <- datasetInput() %>% 
         group_by(Subject_Name) %>% 
-        summarise(Entradas = sum(Dataset_Available))
+        summarise(Entradas = sum(Dataset_Available)) %>% 
+        filter(Entradas >= input$Num_Data_Range[1]) %>% 
+        filter(Entradas <= input$Num_Data_Range[2])
       
       ggplot(data= Spp,
              aes(
@@ -153,7 +157,9 @@ shinyServer(function(input, output) {
               legend.position = "none",
               axis.title = element_text(size=20,
                                         face="bold")
+                
         )
+        
     }else{
       #### By Region####
       if(input$Plot_Option == 2){
@@ -178,6 +184,7 @@ shinyServer(function(input, output) {
                 axis.title = element_text(size=20,
                                           face="bold")
           )
+          
       }else{
         #### By Location####
         if(input$Plot_Option == 3){
