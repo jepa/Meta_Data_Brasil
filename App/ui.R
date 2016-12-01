@@ -340,10 +340,10 @@ shinyUI(
                p(h3("Quantitative Results")),
                p(h4("Total Number of Data Registers")),
                p(h2(textOutput("Number_Entries"))),
-               p(h4("Number of Data Enteries per Subject")),
+               p(h4("Number of Data Enteries per Area")),
                selectInput("Plot_Option", 
                            label= "Choose To Show Plot:",
-                           choices = list("By Subject" = 1, 
+                           choices = list("By Area" = 1, 
                                           "By Region" = 2,
                                           "By Location" =3
                            )

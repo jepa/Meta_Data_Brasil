@@ -125,22 +125,25 @@ shinyServer(function(input, output) {
   # Download Data ####
   #Specific Data #
   MMID_Data <- reactive({
-    if(input$MMID_Download_Selection == 356){
-      read.csv("./Data_Download/MMID_356.csv", header = TRUE)
-    }else{
-      paste("Nope")
-    }
+    Dfile = paste("./Data_Download/MMID_",
+        input$MMID_Download_Selection, 
+            '.csv',
+            sep='') 
+      read.csv(Dfile, header = TRUE)
+    
   })
   
   output$Data_Download <- downloadHandler(
     filename = function() { 
-      paste(input$Data_Download, 
+      paste("MMID",
+            input$MMID_Download_Selection, 
             '.csv',
             sep='') 
     },
     content = function(file) {
       write.csv(MMID_Data(), file)
     }
+      
   )
   
   # All Meta-dataset #
@@ -164,26 +167,26 @@ shinyServer(function(input, output) {
   
   
   output$Number_spp <- renderPlot({
-    #### By Subject_Name####
+    #### By Area####
     
     if(input$Plot_Option == 1){
       Spp <- datasetInput() %>% 
-        group_by(Subject_Name) %>% 
+        group_by(Area) %>% 
         summarise(Entradas = sum(Dataset_Available)) %>% 
         filter(Entradas >= input$Num_Data_Range[1]) %>% 
         filter(Entradas <= input$Num_Data_Range[2])
       
       ggplot(data= Spp,
              aes(
-               x=reorder(Subject_Name, -Entradas),
+               x=reorder(Area, -Entradas),
                y=Entradas,
-               fill=Subject_Name
+               fill=Area
              )) +
         geom_bar(stat="identity")+
-        coord_flip()+
+        #coord_flip()+
         theme_classic() +
         ylab("Number of Data Enteries")+
-        xlab("Subject Name")+
+        xlab("Research Field")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14),
               axis.text.y = element_text(size = 14),
@@ -224,7 +227,7 @@ shinyServer(function(input, output) {
         #### By Location####
         if(input$Plot_Option == 3){
           Spp3 <- datasetInput() %>%
-            filter(Location != "NA") %>% 
+            filter(Location != "na") %>% 
             group_by(Location) %>%
             summarise(Value = sum(Dataset_Available))
           ggplot(data= Spp3,
@@ -249,6 +252,7 @@ shinyServer(function(input, output) {
       }
     }
   })
+    
   
   #### Qualitative Analysis ####
   
