@@ -122,6 +122,39 @@ shinyServer(function(input, output) {
     
   })
   
+  # Download Data ####
+  #Specific Data #
+  MMID_Data <- reactive({
+    if(input$MMID_Download_Selection == 356){
+      read.csv("./Data_Download/MMID_356.csv", header = TRUE)
+    }else{
+      paste("Nope")
+    }
+  })
+  
+  output$Data_Download <- downloadHandler(
+    filename = function() { 
+      paste(input$Data_Download, 
+            '.csv',
+            sep='') 
+    },
+    content = function(file) {
+      write.csv(MMID_Data(), file)
+    }
+  )
+  
+  # All Meta-dataset #
+  output$MMID_Download <- downloadHandler(
+    filename = function() { 
+      paste(input$MMID_Download, 
+            '.csv', 
+            sep='') 
+    },
+    content = function(file) {
+      write.csv(datasetInput(), file)
+    }
+  )
+  
   #### Quantitative Results ####
   # Number of entries ####
   output$Number_Entries <- renderPrint({
@@ -165,7 +198,9 @@ shinyServer(function(input, output) {
       if(input$Plot_Option == 2){
         Spp2 <- datasetInput() %>%
           group_by(Region) %>%
-          summarise(Value = sum(Dataset_Available))
+          summarise(Value = sum(Dataset_Available)) %>% 
+          filter(Region != "na")
+        
         ggplot(data= Spp2,
                aes(
                  x=reorder(Region, -Value),

@@ -312,9 +312,22 @@ shinyUI(
                    p(h3("Map of Data Localization")),
                    leafletOutput("Data_Map")
                ),
+               #### Download Data ####
                tabPanel(
                  p(h3("Metadata Explorer")),
+                 numericInput("MMID_Download_Selection",
+                              "Select the MMID to download",
+                              value = 1,
+                              min = 1,
+                              max = "na",
+                              step = 1),
+                 column(width=12,
+                        align = "center",
+                 downloadButton('Data_Download', 'Download Specific Data'),
+                 downloadButton('MMID_Download', 'Download All Meta-data')
+                 ),
                  dataTableOutput('Metadata')
+                 
                )
                )
              ),
