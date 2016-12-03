@@ -18,7 +18,7 @@ shinyUI(
                  10,
                  align = "justified",
                  offset = 1,
-                 p(h3("Wellcome!")),
+                 p(h3("Welcome!")),
                  p(
                    "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
                  ),
