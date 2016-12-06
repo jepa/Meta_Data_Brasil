@@ -16,7 +16,8 @@ library(tidyr)
 #SAU <- read.csv("/Users/jpalacios/Downloads/SAU EEZ 945 v1-43/SAU EEZ 945 v1-43.csv")
 
 ## Clementina path ##
-SAU <- read_csv("~/Documents/Box Sync/UBC/Metadata_Mexico/English/Datasets/SAU EEZ 945 v1-43/SAU EEZ 945 v1-43.csv")
+SAU <- read_csv("~/Documents/Box Sync/UBC/Metadata_Mexico/English/Datasets/SAU_Pacific/SAU EEZ 945 v1-43.csv")
+
 
 
 #Step 1 ###
@@ -29,7 +30,7 @@ Data <- SAU %>%
   summarise(Suma = sum(Value)) %>% 
   select(-Suma) %>% 
   mutate(Nombre = "Catch of") %>% 
-  mutate(Nombre2 = "in Mexico")
+  mutate(Nombre2 = "in Mexico (Pacific)")
 
 #Step 2 ###
 # the paste function pastest whatever factor you tell it to, so I just paste them in a new dataframe and, vuala!!!! 
@@ -49,7 +50,7 @@ colnames(b) <- "Scientific_Name"
 #Step 3 ###
 #Now we do the same for the Keywords
 Keywords <- b %>% 
-  mutate(KW = "Catch; Reconstructed Data;")
+  mutate(KW = "Catch; Reconstructed Data;Atlantic")
 
 
 Keywords_F <- data.frame(paste(Keywords$KW,
@@ -62,10 +63,10 @@ Keywords_F <- data.frame(paste(Keywords$KW,
 
 Observations <- SAU %>% 
   mutate(Value =1) %>% 
-  group_by(common_name, year) %>% 
+  group_by(scientific_name,common_name, year) %>% 
   summarise(top = sum(Value)) %>% 
   mutate(Value2 =1) %>% 
-  group_by(common_name) %>% 
+  group_by(common_name,scientific_name) %>% 
   summarise(top2 =sum(Value2))
 
 
@@ -91,6 +92,15 @@ Timeframe <- SAU %>%
   
 #write.csv(Timeframe, "Timeframe.csv")
 
+#A as a final act, we put them together in one big table and save it
+
+Final_SAU_Pacific <- data.frame(a, #Short title
+                                Keywords_F, #Keywords and scientific name
+                                Observations$top2, #Number of data points
+                                Timeframe) #Begining and end
+
+colnames(Final_SAU_Pacific) <- c("Short Title","Keywords","Number Data Points", "Time Frame","Scientific Name","First Y","End")
+write.csv(Final_SAU_Pacific, "Final_SAU_Pacific.csv")
 
 ####################### END ########################
 
@@ -103,7 +113,7 @@ Timeframe <- SAU %>%
 ## Hal 1000 path ##
 
 ## Clementina path ##
-SAU_A <- read_csv("~/Documents/Box Sync/UBC/Metadata_Mexico/English/Datasets/SAU EEZ 944 v1-43/SAU EEZ 944 v1-43.csv")
+SAU_A <- read_csv("~/Documents/Box Sync/UBC/Metadata_Mexico/English/Datasets/SAU_Atlantic/SAU EEZ 944 v1-43.csv")
 
 
 #Step 1 ###
@@ -116,7 +126,7 @@ Data <- SAU_A %>%
   summarise(Suma = sum(Value)) %>% 
   select(-Suma) %>% 
   mutate(Nombre = "Catch of") %>% 
-  mutate(Nombre2 = "in Mexico")
+  mutate(Nombre2 = "in Mexico (Atlantic)")
 
 #Step 2 ###
 # the paste function pastest whatever factor you tell it to, so I just paste them in a new dataframe and, vuala!!!! 
@@ -169,7 +179,7 @@ Timeframe_A <- SAU_A %>%
 #write.csv(Timeframe, "Timeframe.csv")
 
 
-Atlantic <- data.frame(a,Keywords_F,Timeframe_A,Observations_A$Data_Points)
-#write.csv(Atlantic, "Atlantic_Clear_SAU.csv")
+Final_SAU_Atlantic <- data.frame(a,Keywords_F,Timeframe_A,Observations_A$Data_Points)
+#write.csv(Final_SAU_Atlantic, "Final_SAU_Atlantic.csv")
 ####################### END ########################
 
