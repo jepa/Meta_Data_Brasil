@@ -1,5 +1,6 @@
 ####
 # Data wrangling script 
+#The data used is added in the MMd as "Reconstructed" data, I added "Industria, artisanal, etc to keywords
 ####
 
 #library(xlsx)
@@ -50,7 +51,7 @@ colnames(b) <- "Scientific_Name"
 #Step 3 ###
 #Now we do the same for the Keywords
 Keywords <- b %>% 
-  mutate(KW = "Catch; Reconstructed Data;Atlantic")
+  mutate(KW = "Captura; Reconstruida; Pacifico; Industrial; Subsistencia;Artesanal;Deportiva")
 
 
 Keywords_F <- data.frame(paste(Keywords$KW,
@@ -100,7 +101,7 @@ Final_SAU_Pacific <- data.frame(a, #Short title
                                 Timeframe) #Begining and end
 
 colnames(Final_SAU_Pacific) <- c("Short Title","Keywords","Number Data Points", "Time Frame","Scientific Name","First Y","End")
-write.csv(Final_SAU_Pacific, "Final_SAU_Pacific.csv")
+#write.csv(Final_SAU_Pacific, "Final_SAU_Pacific.csv")
 
 ####################### END ########################
 
@@ -146,7 +147,7 @@ colnames(b) <- "Scientific_Name"
 #Step 3 ###
 #Now we do the same for the Keywords
 Keywords <- b %>% 
-  mutate(KW = "Catch; Reconstructed Data;")
+  mutate(KW = "Captura; Reconstruida; Atlantico; Industrial; Subsistencia;Artesanal;Deportiva")
 
 
 Keywords_F <- data.frame(paste(Keywords$KW,
