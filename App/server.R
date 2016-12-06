@@ -111,7 +111,7 @@ shinyServer(function(input, output) {
   
   datasetInput <- reactive({
     #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.3.xlsx","Template")
-    data<- read.csv("./Template.csv", header = TRUE)
+    data<- read.csv("./Template2.csv", header = TRUE)
     Template <- data.frame(data)
   })
   
@@ -173,8 +173,9 @@ shinyServer(function(input, output) {
       Spp <- datasetInput() %>% 
         group_by(Area) %>% 
         summarise(Entradas = sum(Dataset_Available)) %>% 
-        filter(Entradas >= input$Num_Data_Range[1]) %>% 
-        filter(Entradas <= input$Num_Data_Range[2])
+        filter(Area !="na") # %>% 
+        # filter(Entradas >= input$Num_Data_Range[1]) %>% 
+        # filter(Entradas <= input$Num_Data_Range[2])
       
       ggplot(data= Spp,
              aes(
@@ -188,7 +189,8 @@ shinyServer(function(input, output) {
         ylab("Number of Data Enteries")+
         xlab("Research Field")+
         theme(axis.text.x = element_text(hjust = 1,
-                                         size=14),
+                                         size=14,
+                                         angle=45),
               axis.text.y = element_text(size = 14),
               legend.position = "none",
               axis.title = element_text(size=20,
@@ -202,7 +204,8 @@ shinyServer(function(input, output) {
         Spp2 <- datasetInput() %>%
           group_by(Region) %>%
           summarise(Value = sum(Dataset_Available)) %>% 
-          filter(Region != "na")
+          filter(Region != "na") %>% 
+          filter(Region != "")
         
         ggplot(data= Spp2,
                aes(
@@ -265,6 +268,27 @@ shinyServer(function(input, output) {
     WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
     
     Word_Remove <- c(input$Keyword_Remove1,input$Keyword_Remove2)
+    
+    #Removes a word of user preference 
+    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 
+    #
+    
+    wordcloud(WordsCorpus, #Plots the words
+              max.words = 100,
+              random.order = FALSE,
+              colors=brewer.pal(8, "Dark2"))
+    
+  })
+  
+  #### Subject_Name Word Cloud ####
+  
+  output$Subject_name_Plot <- renderPlot({
+    Words <- datasetInput()
+    WordsCorpus <- Corpus(VectorSource(Words$Subject_name)) #Selects only Subject_name
+    WordsCorpus <- tm_map(WordsCorpus, PlainTextDocument) #Converts to plain text
+    WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
+    
+    Word_Remove <- c(input$Subject_Remove,input$Subject_Remove2)
     
     #Removes a word of user preference 
     WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 

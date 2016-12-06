@@ -348,14 +348,15 @@ shinyUI(
                                           "By Location" =3
                            )
                ),
-               plotOutput("Number_spp"),
-               sliderInput("Num_Data_Range",
-                           "Data Range Filter for Subjects:",
-                           value=c(0,200),
-                           min = 0, 
-                           max = 200)
+               plotOutput("Number_spp") #,
+               # sliderInput("Num_Data_Range",
+               #             "Data Range Filter for Subjects:",
+               #             value=c(0,200),
+               #             min = 0, 
+               #             max = 200)
              ),
              #### Qualitative Results####
+             ####Keywords Word Cloud####
              column(
                width = 6,
                align= "center",
@@ -369,6 +370,18 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Keywords_Plot"),
+               p(em("Note: Not all words might be represented in the graph")),
+               #### Subject_Name Word Cloud ####
+               p(h4("Subject Name Word Cloud")),
+               textInput("Subject_Remove",
+                         "Remove Any Subject",
+                         "",
+                         width = '50%'),
+               textInput("Subject_Remove2",
+                         "",
+                         "",
+                         width = '50%'),
+               plotOutput("Subject_name_Plot"),
                p(em("Note: Not all words might be represented in the graph"))
         
                )
