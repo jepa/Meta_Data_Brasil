@@ -300,7 +300,43 @@ shinyUI(
       )
       )
     ),
-    #### RESULTS ####
+    #### PRELIMINAR RESULTS ####
+    tabPanel("Metadata",
+             p("Hola"),
+             column(
+               width=12,
+               align = "center",
+               tabsetPanel(
+                 id ="Data_Explorer",
+                 tabPanel(
+                   p(h3("Metadata Explorer")),
+                   column(width=12,
+                          align = "center",
+                          downloadButton('MMID_Download', 
+                                         'Download All Meta-data')
+                   ),
+                   dataTableOutput('Metadata')
+                   ),
+                   tabPanel(
+                     p(h3("Data Available")),
+                     column(
+                       width=12,
+                       align = "center",
+                     numericInput("MMID_Download_Selection",
+                                  "Select the MMID to download",
+                                  value = 1,
+                                  min = 1,
+                                  max = "na",
+                                  step = 1,
+                                  width = '25%'),
+                     downloadButton('Data_Download', 
+                                    'Download Specific Data')
+                     ),
+                     dataTableOutput('Available_Data')
+                   )
+              )
+             )
+             ),
     tabPanel("Premilinar Results",
              p("Hola"),
              column(
@@ -311,23 +347,6 @@ shinyUI(
                  tabPanel(
                    p(h3("Map of Data Localization")),
                    leafletOutput("Data_Map")
-               ),
-               #### Download Data ####
-               tabPanel(
-                 p(h3("Metadata Explorer")),
-                 numericInput("MMID_Download_Selection",
-                              "Select the MMID to download",
-                              value = 1,
-                              min = 1,
-                              max = "na",
-                              step = 1),
-                 column(width=12,
-                        align = "center",
-                 downloadButton('Data_Download', 'Download Specific Data'),
-                 downloadButton('MMID_Download', 'Download All Meta-data')
-                 ),
-                 dataTableOutput('Metadata')
-                 
                )
                )
              ),
@@ -348,12 +367,12 @@ shinyUI(
                                           "By Location" =3
                            )
                ),
-               plotOutput("Number_spp") #,
-               # sliderInput("Num_Data_Range",
-               #             "Data Range Filter for Subjects:",
-               #             value=c(0,200),
-               #             min = 0, 
-               #             max = 200)
+               plotOutput("Number_spp") ,
+               sliderInput("Num_Data_Range",
+                           "Select the Top Categories",
+                           value=10,
+                           min = 1,
+                           max = 50)
              ),
              #### Qualitative Results####
              ####Keywords Word Cloud####

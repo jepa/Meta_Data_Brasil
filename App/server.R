@@ -16,7 +16,7 @@ library(ggplot2) #Plots
 library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
-#library(xlsx)
+library(xlsx)
 
 
 
@@ -107,18 +107,23 @@ shinyServer(function(input, output) {
   
   # Results Tab ####
   
-  # Reading the dataset ####
+  # Reading the Template ####
   
   datasetInput <- reactive({
-    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.3.xlsx","Template")
-    data<- read.csv("./Template2.csv", header = TRUE)
+    data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
+    #data<- read.csv("./Template2.csv", header = TRUE)
     Template <- data.frame(data)
   })
   
   #Metadata Display ####
   output$Metadata <- renderDataTable({
-    Temp <- datasetInput()
-    Temp
+    datasetInput()
+    
+  })
+  
+  output$Available_Data <- renderDataTable({
+    datasetInput() %>% 
+      filter(Dataset_Available == 2)
     
   })
   
@@ -161,7 +166,8 @@ shinyServer(function(input, output) {
   #### Quantitative Results ####
   # Number of entries ####
   output$Number_Entries <- renderPrint({
-    Number_entries <- datasetInput()
+    Number_entries <- datasetInput() %>% 
+      filter(MMID != "na")
     Number_entries$MMID[length(Number_entries$MMID)]
   })
   
@@ -232,8 +238,14 @@ shinyServer(function(input, output) {
           Spp3 <- datasetInput() %>%
             filter(Location != "na") %>% 
             group_by(Location) %>%
-            summarise(Value = sum(Dataset_Available))
-          ggplot(data= Spp3,
+            summarise(Value = sum(Dataset_Available)) %>% 
+            arrange(desc(Value))
+          
+          Head_Spp3 <- head(Spp3,input$Num_Data_Range) %>% 
+            arrange(desc(Value))
+            
+          
+          ggplot(data= Head_Spp3,
                  aes(
                    x=reorder(Location, -Value),
                    y=Value,
@@ -243,7 +255,7 @@ shinyServer(function(input, output) {
             theme_classic() +
             coord_flip() +
             ylab("Number of Data Enteries")+
-            xlab("State")+
+            xlab("Location Name")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14),
                   axis.text.y = element_text(size = 14),
