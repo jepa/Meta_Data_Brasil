@@ -16,7 +16,7 @@ library(ggplot2) #Plots
 library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
-library(xlsx)
+#library(xlsx)
 
 
 
@@ -110,8 +110,13 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   
   datasetInput <- reactive({
-    data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
-    #data<- read.csv("./Template2.csv", header = TRUE)
+    
+    # PATH FOR HALL 2000 #
+    #library(xlsx)
+    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
+    
+    #PATH FOR CARMELIA #
+    data<- read.csv("./Template.csv", header = TRUE)
     Template <- data.frame(data)
   })
   
@@ -121,9 +126,11 @@ shinyServer(function(input, output) {
     
   })
   
+  # Data_Available Display ####
+  
   output$Available_Data <- renderDataTable({
     datasetInput() %>% 
-      filter(Dataset_Available == 2)
+      filter(Available_Metadata == "YES" )
     
   })
   

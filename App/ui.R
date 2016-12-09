@@ -300,7 +300,7 @@ shinyUI(
       )
       )
     ),
-    #### PRELIMINAR RESULTS ####
+    #### METADATA ####
     tabPanel("Metadata",
              p("Hola"),
              column(
@@ -337,6 +337,7 @@ shinyUI(
               )
              )
              ),
+    #### PRELIMINARY RESULTS ###
     tabPanel("Premilinar Results",
              p("Hola"),
              column(
@@ -352,6 +353,12 @@ shinyUI(
              ),
              br(),
              br(),
+             column(
+               width = 12,
+               align = "center",
+             p(h3("Preeliminary Results (Quantitative & Qualitative)"))
+             ),
+             #### PRELIMINARY RESULTS ####
              #### Quantitative Results####
              column(
                width = 6,
