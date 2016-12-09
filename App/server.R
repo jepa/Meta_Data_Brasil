@@ -24,10 +24,10 @@ library(tm) #For Word Mining
 shinyServer(function(input, output) {
   
   
-  #### Input Data Tab ####  
-  # Input datatable ####
+#### INPUT DATA TAB ####  
   
-  myData <- reactive({
+  # Upload datatable ####
+    myData <- reactive({
     inFile <- input$Data_Upload
     if (is.null(inFile)) return(NULL)
     data <- read.csv(inFile$datapath, header = TRUE)
@@ -52,72 +52,17 @@ shinyServer(function(input, output) {
   
   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
-  #### Results Tab ####
-  # Mapa de resultados ####
-  # Data points ####
-  
-  FEDECOOP <- paste(sep = "<br/>",
-                    "<b><a href='http://www.fedecoop.com.mx'>MetaID 342</a></b>",
-                    "Lobster Stock Assesment and Catch from FEDECOOP since 1970",
-                    "Private Dataset"
-  )
-  
-  
-  output$Data_Map <- renderLeaflet({
-    leaflet() %>%
-      addTiles(
-        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-      ) %>%
-      #### The Actual Map####
-    #Initial view #
-    setView(lng = -102.5528, 
-            lat = 23.6345,
-            zoom = 5) %>% 
-      # markers ####
-    addMarkers(lng = -109.4725,
-               lat = 24.6356, 
-               popup = "7654")%>%
-      addMarkers(lng = -95.8084852,
-                 lat = 20.5764432,
-                 popup = "MetaID 423"
-      )%>%
-      addMarkers(lng = -107.8084852,
-                 lat = 15.5764432,
-                 popup = "Meta ID = 343. Short Title: Buoy ID4: sst, salinity and currents since 1980"
-      )%>%
-      addRectangles(
-        lng1=-107.607877, lat1=18.459820,
-        lng2=-110.557877, lat2=17.431188,
-        color="red",
-        fillColor = "red",
-        fillOpacity = 0,
-        popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
-      ) %>% 
-      addRectangles(
-        lng1=-115.507877, lat1=28.400000,
-        lng2=-115.557877, lat2=28.421188,
-        color="green",
-        fillColor = "green",
-        fillOpacity = 0.2,
-        popup = FEDECOOP
-      )
-    
-  })
-  
-  # Results Tab ####
+  # METADATA TAB ####
   
   # Reading the Template ####
-  
   datasetInput <- reactive({
-    
-    # PATH FOR HALL 2000 #
+    # PATH FOR HALL 2000 
     #library(xlsx)
     #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
     
     #PATH FOR CARMELIA #
     data<- read.csv("./Template.csv", header = TRUE)
-    Template <- data.frame(data)
+    data.frame(data)
   })
   
   #Metadata Display ####
@@ -136,18 +81,20 @@ shinyServer(function(input, output) {
   
   # Download Data ####
   #Specific Data #
+  #First we create a path where the data is saved
   MMID_Data <- reactive({
     Dfile = paste("./Data_Download/MMID_",
-        input$MMID_Download_Selection, 
-            '.csv',
-            sep='') 
-      read.csv(Dfile, header = TRUE)
-    
+                  input$MMID_Download_Selection, #THis includes the number
+                  '.csv',
+                  sep='')
+    read.csv(Dfile, header = TRUE)
+
   })
   
+  #This is just for the download button and the name of the file...
   output$Data_Download <- downloadHandler(
-    filename = function() { 
-      paste("MMID",
+    filename = function() {  
+      paste("MMID_",
             input$MMID_Download_Selection, 
             '.csv',
             sep='') 
@@ -155,7 +102,7 @@ shinyServer(function(input, output) {
     content = function(file) {
       write.csv(MMID_Data(), file)
     }
-      
+    
   )
   
   # All Meta-dataset #
@@ -169,6 +116,63 @@ shinyServer(function(input, output) {
       write.csv(datasetInput(), file)
     }
   )
+  
+  ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  
+  #### PRELIMINARY RESULTS TAB ####
+  # Mapa de resultados ####
+  
+  # Data points shown in the map ###
+  #Fedecop information 
+  FEDECOOP <- paste(sep = "<br/>",
+                    "<b><a href='http://www.fedecoop.com.mx'>MetaID 342</a></b>",
+                    "Lobster Stock Assesment and Catch from FEDECOOP since 1970",
+                    "Private Dataset"
+  )
+  
+  #### The Actual Map ####
+  #(requieres leaflet package)
+  output$Data_Map <- renderLeaflet({
+    leaflet() %>%
+      addTiles(
+        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+      ) %>%
+    #Initial view #
+    setView(lng = -102.5528, 
+            lat = 23.6345,
+            zoom = 5) %>% 
+      # Data examples as markers ####
+    addMarkers(lng = -109.4725,
+               lat = 24.6356, 
+               popup = "7654")%>%
+      addMarkers(lng = -95.8084852,
+                 lat = 20.5764432,
+                 popup = "MetaID 423"
+      )%>%
+      addMarkers(lng = -107.8084852,
+                 lat = 15.5764432,
+                 popup = "Meta ID = 343. Short Title: Buoy ID4: sst, salinity and currents since 1980"
+      )%>%
+      # Data examples as rectangles ####
+      addRectangles(
+        lng1=-107.607877, lat1=18.459820,
+        lng2=-110.557877, lat2=17.431188,
+        color="red",
+        fillColor = "red",
+        fillOpacity = 0,
+        popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
+      ) %>% 
+      addRectangles(
+        lng1=-115.507877, lat1=28.400000,
+        lng2=-115.557877, lat2=28.421188,
+        color="green",
+        fillColor = "green",
+        fillOpacity = 0.2,
+        popup = FEDECOOP
+      )
+    
+  })
   
   #### Quantitative Results ####
   # Number of entries ####
