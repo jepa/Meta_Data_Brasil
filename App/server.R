@@ -30,7 +30,8 @@ shinyServer(function(input, output) {
     myData <- reactive({
     inFile <- input$Data_Upload
     if (is.null(inFile)) return(NULL)
-    data <- read.csv(inFile$datapath, header = TRUE)
+    data <- read.csv(inFile$datapath,
+                     header = TRUE)
     data
   })
   
@@ -61,7 +62,9 @@ shinyServer(function(input, output) {
     #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
     
     #PATH FOR CARMELIA #
-    data<- read.csv("./Template.csv", header = TRUE)
+    data<- read.csv("./Template.csv", 
+                    header = TRUE,
+                    na="NA")
     data.frame(data)
   })
   
@@ -279,6 +282,30 @@ shinyServer(function(input, output) {
     }
   })
     
+  #### SE_Component ####
+  output$SE_Component <- renderPlot({
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(SE_Interaction)) %>% 
+      filter(SE_Interaction != "Otros")
+    
+    ggplot(data=Se_Plot,
+           aes(
+             x=SE_Interaction,
+             fill= SE_Interaction
+           ))+
+    geom_bar()+
+      theme_classic() +
+      ylab("Number of Data Enteries")+
+      xlab("Social Economic Component")+
+      theme(axis.text.x = element_text(hjust = 1,
+                                       size=14,
+                                       angle= 45),
+            axis.text.y = element_text(size = 14),
+            legend.position = "none",
+            axis.title = element_text(size=20,
+                                      face="bold"))
+  })
+  
   
   #### Qualitative Analysis ####
   
@@ -324,6 +351,82 @@ shinyServer(function(input, output) {
     
   })
   
+#### Experimental Analysis ####  
+  
+  output$SE_Component_Area <- renderPlot({
+    
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(Area))
+      
+    
+    if(input$SE_E_Plot_Option == 1){
+    ggplot(data=Se_Plot,
+           aes(
+             x=Area,
+             fill= SE_Interaction
+           ))+
+      geom_bar()+
+      theme_classic() +
+      ylab("Number of Data Enteries")+
+      xlab("Area")+
+      theme(axis.text.x = element_text(hjust = 1,
+                                       size=14,
+                                       angle= 45),
+            axis.text.y = element_text(size = 14),
+            legend.position = "top",
+            axis.title = element_text(size=20,
+                                      face="bold"))+ 
+        guides(fill = guide_legend(title = "Social Economic Component",
+                                   title.position = "left"))
+    }else{
+      Se_Plot <- datasetInput() %>% 
+        filter(!is.na(Region))
+      if(input$SE_E_Plot_Option == 2){
+        ggplot(data=Se_Plot,
+               aes(
+                 x=Region,
+                 fill= SE_Interaction
+               ))+
+          geom_bar()+
+          theme_classic() +
+          ylab("Number of Data Enteries")+
+          xlab("Region")+
+          theme(axis.text.x = element_text(hjust = 1,
+                                           size=14,
+                                           angle= 45),
+                axis.text.y = element_text(size = 14),
+                legend.position = "top",
+                axis.title = element_text(size=20,
+                                          face="bold"))+ 
+          guides(fill = guide_legend(title = "Social Economic Component",
+                                     title.position = "left"))
+      }else{
+        Se_Plot <- datasetInput() %>% 
+          filter(!is.na(Location))
+        if(input$SE_E_Plot_Option == 3){
+          ggplot(data=Se_Plot,
+                 aes(
+                   x=Location,
+                   fill= SE_Interaction
+                 ))+
+            geom_bar()+
+            theme_classic() +
+            ylab("Number of \nData Enteries")+
+            xlab("Location")+
+            theme(axis.text.x = element_text(hjust = 1,
+                                             size=14,
+                                             angle= 45),
+                  axis.text.y = element_text(size = 14),
+                  legend.position = "top",
+                  axis.title = element_text(size=20,
+                                            face="bold"))+ 
+            guides(fill = guide_legend(title = "Social Economic Component",
+                                       title.position = "left"))
+          
+        }
+      }
+    }
+  })
 
 })
 

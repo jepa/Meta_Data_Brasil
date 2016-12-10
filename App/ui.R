@@ -150,7 +150,7 @@ shinyUI(
                           "Institution", 
                           "")
               ),
-              #######Generla_Info_Help ####
+              #######Geneal_Info_Help ####
               tabPanel(
                 "Help",
                 p(
@@ -267,7 +267,7 @@ shinyUI(
                                    width = '100%'
                 )
               ),
-              ###### Location ####
+              ###### Location (MAP) ####
               tabPanel(
                 "Location",
                 textInput("Location",
@@ -291,12 +291,28 @@ shinyUI(
           )
         )
       ),
+      #### Input Data Map ####
       mainPanel(em(
         column(
           width = 12,
           align ="center",
-          leafletOutput("Location_Map")
-          
+          leafletOutput("Location_Map"),
+          numericInput("Map_Long",
+                       "Longitude",
+                       value=-50,
+                       min =-122.1836,
+                       max = -84.6419,
+                       step = 1,
+                       width = "20%"
+                       ),
+          numericInput("Map_Lat",
+                       "Longitude",
+                       value=-50,
+                       min =-12.1031,
+                       max = -32.627,
+                       step = 1,
+                       width = "20%"
+          )
         )
       )
       )
@@ -375,12 +391,15 @@ shinyUI(
                                           "By Location" =3
                            )
                ),
-               plotOutput("Number_spp") ,
+               plotOutput("Number_spp"),
                sliderInput("Num_Data_Range",
                            "Select the Top Categories",
                            value=10,
                            min = 1,
-                           max = 50)
+                           max = 50),
+               #### SE_Component ####
+               p(h4("Social Economic Component")),
+               plotOutput("SE_Component")
              ),
              #### Qualitative Results####
              ####Keywords Word Cloud####
@@ -411,7 +430,21 @@ shinyUI(
                plotOutput("Subject_name_Plot"),
                p(em("Note: Not all words might be represented in the graph"))
         
-               )
+               ),
+             #### Experimental Analysis ####
+             column(width =12,
+                    align = "center",
+             p(h2("Experimental Analysis")),
+             selectInput("SE_E_Plot_Option", 
+                         label= "Choose To Show Plot:",
+                         choices = list("By Area" = 1, 
+                                        "By Region" = 2,
+                                        "By Location" =3
+                         ),
+                         width = "20%"
+             )
+             ),
+             plotOutput("SE_Component_Area")
     )
   )
 )
