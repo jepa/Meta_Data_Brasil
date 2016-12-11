@@ -46,7 +46,11 @@ shinyServer(function(input, output) {
     #Initial view #
       setView(lng = -102.5528, 
               lat = 23.6345,
-              zoom = 5)
+              zoom = 5) %>% 
+        #Adding Data localization ####
+      addMarkers(lng = input$Map_Long,
+                 lat= input$Map_Lat,
+                 popup=input$Short_Title)
     }
   })
   

@@ -297,6 +297,7 @@ shinyUI(
           width = 12,
           align ="center",
           leafletOutput("Location_Map"),
+          column(width = 6,
           numericInput("Map_Long",
                        "Longitude",
                        value=-50,
@@ -304,14 +305,17 @@ shinyUI(
                        max = -84.6419,
                        step = 1,
                        width = "20%"
-                       ),
+                       )
+          ),
+          column(width=6,
           numericInput("Map_Lat",
-                       "Longitude",
+                       "Latitude",
                        value=-50,
                        min =-12.1031,
                        max = -32.627,
                        step = 1,
                        width = "20%"
+          )
           )
         )
       )
