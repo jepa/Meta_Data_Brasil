@@ -75,7 +75,15 @@ shinyServer(function(input, output) {
   
   #Metadata Display ####
   output$Metadata <- renderDataTable({
-    datasetInput()
+    a<-datasetInput()
+    datatable(a,
+              rownames = FALSE,
+              options = list()
+    )
+    
+    
+    
+    
     
   })
   
@@ -141,7 +149,9 @@ shinyServer(function(input, output) {
   #### The Actual Map ####
   #(requieres leaflet package)
   output$Data_Map <- renderLeaflet({
-    leaflet() %>%
+    data = datasetInput() %>% 
+      filter(!is.na(Lat))
+    leaflet(data=data) %>%
       addTiles(
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
@@ -178,7 +188,14 @@ shinyServer(function(input, output) {
         fillColor = "green",
         fillOpacity = 0.2,
         popup = FEDECOOP
-      )
+      ) %>% 
+      #### Lat & Long in dataset ####
+    addMarkers(
+      lng = ~Long,
+      lat = ~Lat,
+      popup = ~as.character(MMID),
+      clusterOptions = markerClusterOptions()
+    )
     
   })
   
@@ -363,7 +380,7 @@ shinyServer(function(input, output) {
     Se_Plot <- datasetInput() %>% 
       filter(!is.na(Area))
       
-    
+    #### By Area ####
     if(input$SE_E_Plot_Option == 1){
     ggplot(data=Se_Plot,
            aes(
@@ -384,6 +401,7 @@ shinyServer(function(input, output) {
         guides(fill = guide_legend(title = "Social Economic Component",
                                    title.position = "left"))
     }else{
+      #### By Region ####
       Se_Plot <- datasetInput() %>% 
         filter(!is.na(Region))
       if(input$SE_E_Plot_Option == 2){
@@ -406,8 +424,10 @@ shinyServer(function(input, output) {
           guides(fill = guide_legend(title = "Social Economic Component",
                                      title.position = "left"))
       }else{
+        #### By Location ####
         Se_Plot <- datasetInput() %>% 
           filter(!is.na(Location))
+        
         if(input$SE_E_Plot_Option == 3){
           ggplot(data=Se_Plot,
                  aes(

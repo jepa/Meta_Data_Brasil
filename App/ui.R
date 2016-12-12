@@ -267,7 +267,7 @@ shinyUI(
                                    width = '100%'
                 )
               ),
-              ###### Location (MAP) ####
+              ###### Location ####
               tabPanel(
                 "Location",
                 textInput("Location",
@@ -300,21 +300,21 @@ shinyUI(
           column(width = 6,
           numericInput("Map_Long",
                        "Longitude",
-                       value=-50,
+                       value=-103,
                        min =-122.1836,
                        max = -84.6419,
                        step = 1,
-                       width = "20%"
+                       width = "30%"
                        )
           ),
           column(width=6,
           numericInput("Map_Lat",
                        "Latitude",
-                       value=-50,
+                       value=24,
                        min =-12.1031,
                        max = -32.627,
                        step = 1,
-                       width = "20%"
+                       width = "30%"
           )
           )
         )
@@ -323,6 +323,7 @@ shinyUI(
     ),
     #### METADATA ####
     tabPanel("Metadata",
+             #### Instructions ####
              p("Hola"),
              column(
                width=12,
@@ -337,6 +338,7 @@ shinyUI(
                                          'Download All Meta-data')
                    ),
                    dataTableOutput('Metadata')
+                                   
                    ),
                    tabPanel(
                      p(h3("Data Available")),
@@ -358,20 +360,18 @@ shinyUI(
               )
              )
              ),
-    #### PRELIMINARY RESULTS ###
+    #### PRELIMINARY RESULTS ####
     tabPanel("Premilinar Results",
+             #Wellcome / Instructions####
              p("Hola"),
              column(
                width=12,
                align = "center",
-               tabsetPanel(
-                 id = "Map_Raw",
-                 tabPanel(
-                   p(h3("Map of Data Localization")),
-                   leafletOutput("Data_Map")
-               )
-               )
-             ),
+               #### Map of Data Localization ####
+               p(h3("Map of Data Localization")),
+               leafletOutput("Data_Map"),
+               p(em("Note: The numbers displayed in each marker (Blue Baloon) represent the MMID"))
+               ),
              br(),
              br(),
              column(
