@@ -61,7 +61,8 @@ shinyServer(function(input, output) {
   
   # Reading the Template ####
   datasetInput <- reactive({
-    # PATH FOR HALL 2000 
+  
+      # PATH FOR HALL 2000 
     #library(xlsx)
     #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
     
