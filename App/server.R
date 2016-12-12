@@ -75,10 +75,13 @@ shinyServer(function(input, output) {
   
   #Metadata Display ####
   output$Metadata <- renderDataTable({
-    a<-datasetInput()
-    datatable(a,
+    
+    datatable(datasetInput(),
               rownames = FALSE,
-              options = list()
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 50,
+                             autoWidth = TRUE)
     )
     
     
