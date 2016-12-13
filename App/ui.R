@@ -43,6 +43,11 @@ shinyUI(
              )
     ),
     #### INPUT DATA ####
+    
+    #### IMPORTANT INFORMATION FOR WHEN EDDITING THIS PART ####
+    #here is a code to add rows and columns to datatables, could be useful.
+    #https://yihui.shinyapps.io/DT-proxy/
+    #That's it, be happy, like a hippo.
     tabPanel(
       "Input Data",
       fluidPage(
