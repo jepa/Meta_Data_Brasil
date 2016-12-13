@@ -7,6 +7,8 @@
 #    http://shiny.rstudio.com/
 #
 
+####Libraries needed ####
+
 library(shiny)
 library(leaflet) #For the maps
 library(DT) #For showing nice tables
@@ -18,16 +20,19 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 #library(xlsx)
 
+#Functions #
 
+source('./Functions/Fun_Dat_links.r')
 
-# Define server logic required to draw a histogram
+#The begining #
+
 shinyServer(function(input, output) {
   
   
-#### INPUT DATA TAB ####  
+  #### INPUT DATA TAB ####  
   
   # Upload datatable ####
-    myData <- reactive({
+  myData <- reactive({
     inFile <- input$Data_Upload
     if (is.null(inFile)) return(NULL)
     data <- read.csv(inFile$datapath,
@@ -43,10 +48,10 @@ shinyServer(function(input, output) {
           urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
           attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
         ) %>%
-    #Initial view #
-      setView(lng = -102.5528, 
-              lat = 23.6345,
-              zoom = 5) %>% 
+        #Initial view #
+        setView(lng = -102.5528, 
+                lat = 23.6345,
+                zoom = 5) %>% 
         #Adding Data localization ####
       addMarkers(lng = input$Map_Long,
                  lat= input$Map_Lat,
@@ -61,8 +66,8 @@ shinyServer(function(input, output) {
   
   # Reading the Template ####
   datasetInput <- reactive({
-  
-      # PATH FOR HALL 2000 
+    
+    # PATH FOR HALL 2000 
     #library(xlsx)
     #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
     
@@ -73,28 +78,46 @@ shinyServer(function(input, output) {
     data.frame(data)
   })
   
+  
   #Metadata Display ####
   output$Metadata <- renderDataTable({
     
-    datatable(datasetInput(),
+    #you will need this function on the "Functions" folder (it is already sourced at the beginning of the app)
+    #Fun_Dat_links
+    x <- Ref_Links(datasetInput()$Reference,
+                   datasetInput()$Subject_name)
+    
+    #Re order the datatable
+    Final <- datasetInput() %>% 
+      bind_cols(x) %>% 
+      select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
+    
+    #Show the datatable 
+    datatable(Final,
               rownames = FALSE,
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 50,
-                             autoWidth = TRUE)
+                             autoWidth = TRUE,
+                             lengthMenu = c(10, 50, 100, 500, 1000)
+                             )
     )
-    
-    
-    
-    
-    
   })
   
   # Data_Available Display ####
   
   output$Available_Data <- renderDataTable({
-    datasetInput() %>% 
+    Data_Available <- datasetInput() %>% 
       filter(Available_Metadata == "YES" )
+    
+    datatable(Data_Available,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 50,
+                             autoWidth = TRUE,
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'))
+    )
     
   })
   
@@ -107,7 +130,7 @@ shinyServer(function(input, output) {
                   '.csv',
                   sep='')
     read.csv(Dfile, header = TRUE)
-
+    
   })
   
   #This is just for the download button and the name of the file...
@@ -159,10 +182,10 @@ shinyServer(function(input, output) {
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
         attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%
-    #Initial view #
-    setView(lng = -102.5528, 
-            lat = 23.6345,
-            zoom = 5) %>% 
+      #Initial view #
+      setView(lng = -102.5528, 
+              lat = 23.6345,
+              zoom = 5) %>% 
       # Data examples as markers ####
     addMarkers(lng = -109.4725,
                lat = 24.6356, 
@@ -176,14 +199,14 @@ shinyServer(function(input, output) {
                  popup = "Meta ID = 343. Short Title: Buoy ID4: sst, salinity and currents since 1980"
       )%>%
       # Data examples as rectangles ####
-      addRectangles(
-        lng1=-107.607877, lat1=18.459820,
-        lng2=-110.557877, lat2=17.431188,
-        color="red",
-        fillColor = "red",
-        fillOpacity = 0,
-        popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
-      ) %>% 
+    addRectangles(
+      lng1=-107.607877, lat1=18.459820,
+      lng2=-110.557877, lat2=17.431188,
+      color="red",
+      fillColor = "red",
+      fillOpacity = 0,
+      popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
+    ) %>% 
       addRectangles(
         lng1=-115.507877, lat1=28.400000,
         lng2=-115.557877, lat2=28.421188,
@@ -219,8 +242,8 @@ shinyServer(function(input, output) {
         group_by(Area) %>% 
         summarise(Entradas = sum(Dataset_Available)) %>% 
         filter(Area !="na") # %>% 
-        # filter(Entradas >= input$Num_Data_Range[1]) %>% 
-        # filter(Entradas <= input$Num_Data_Range[2])
+      # filter(Entradas >= input$Num_Data_Range[1]) %>% 
+      # filter(Entradas <= input$Num_Data_Range[2])
       
       ggplot(data= Spp,
              aes(
@@ -240,9 +263,9 @@ shinyServer(function(input, output) {
               legend.position = "none",
               axis.title = element_text(size=20,
                                         face="bold")
-                
+              
         )
-        
+      
     }else{
       #### By Region####
       if(input$Plot_Option == 2){
@@ -270,7 +293,7 @@ shinyServer(function(input, output) {
                 axis.title = element_text(size=20,
                                           face="bold")
           )
-          
+        
       }else{
         #### By Location####
         if(input$Plot_Option == 3){
@@ -282,7 +305,7 @@ shinyServer(function(input, output) {
           
           Head_Spp3 <- head(Spp3,input$Num_Data_Range) %>% 
             arrange(desc(Value))
-            
+          
           
           ggplot(data= Head_Spp3,
                  aes(
@@ -306,7 +329,7 @@ shinyServer(function(input, output) {
       }
     }
   })
-    
+  
   #### SE_Component ####
   output$SE_Component <- renderPlot({
     Se_Plot <- datasetInput() %>% 
@@ -318,7 +341,7 @@ shinyServer(function(input, output) {
              x=SE_Interaction,
              fill= SE_Interaction
            ))+
-    geom_bar()+
+      geom_bar()+
       theme_classic() +
       ylab("Number of Data Enteries")+
       xlab("Social Economic Component")+
@@ -376,31 +399,31 @@ shinyServer(function(input, output) {
     
   })
   
-#### Experimental Analysis ####  
+  #### Experimental Analysis ####  
   
   output$SE_Component_Area <- renderPlot({
     
     Se_Plot <- datasetInput() %>% 
       filter(!is.na(Area))
-      
+    
     #### By Area ####
     if(input$SE_E_Plot_Option == 1){
-    ggplot(data=Se_Plot,
-           aes(
-             x=Area,
-             fill= SE_Interaction
-           ))+
-      geom_bar()+
-      theme_classic() +
-      ylab("Number of Data Enteries")+
-      xlab("Area")+
-      theme(axis.text.x = element_text(hjust = 1,
-                                       size=14,
-                                       angle= 45),
-            axis.text.y = element_text(size = 14),
-            legend.position = "top",
-            axis.title = element_text(size=20,
-                                      face="bold"))+ 
+      ggplot(data=Se_Plot,
+             aes(
+               x=Area,
+               fill= SE_Interaction
+             ))+
+        geom_bar()+
+        theme_classic() +
+        ylab("Number of Data Enteries")+
+        xlab("Area")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         size=14,
+                                         angle= 45),
+              axis.text.y = element_text(size = 14),
+              legend.position = "top",
+              axis.title = element_text(size=20,
+                                        face="bold"))+ 
         guides(fill = guide_legend(title = "Social Economic Component",
                                    title.position = "left"))
     }else{
@@ -455,6 +478,6 @@ shinyServer(function(input, output) {
       }
     }
   })
-
+  
 })
 
