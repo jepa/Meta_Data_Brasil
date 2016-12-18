@@ -2,7 +2,7 @@
 library(shiny)
 library(leaflet)
 library(DT)
-
+library(markdown)
 
 shinyUI(
   navbarPage(
@@ -366,11 +366,20 @@ shinyUI(
                    p(h3("Reference List")),
                    column(
                      width = 12,
+                     align = "center",
+                     radioButtons('format',
+                                  'Select the Document format',
+                                  c('PDF',
+                                    'HTML',
+                                    'Word'),
+                                  inline = TRUE),
+                     downloadButton('downloadReport',
+                                    "Download Reference List")
+                     ),
+                   column(
+                     width = 12,
                      align = "left",
-                     downloadButton("Ref_Download",
-                                    "Download Reference List"
-                     )#,
-                     #includeHTML("./Reference/Reference_List.html")
+                   includeHTML("./Reference/Reference_List.html")
                    )
                  )
                )
