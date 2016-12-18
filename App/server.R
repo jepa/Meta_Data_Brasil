@@ -180,6 +180,16 @@ shinyServer(function(input, output) {
     }
   )
   
+  ##### Reference Display ####
+  
+  
+  getPage<-function() {
+    return(includeHTML("./Reference/Reference_List.html"))
+  }
+  output$Reference<-renderUI({getPage()
+    })
+  
+  
   ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
   #### PRELIMINARY RESULTS TAB ####

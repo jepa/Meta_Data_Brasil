@@ -379,7 +379,7 @@ shinyUI(
                    column(
                      width = 12,
                      align = "left",
-                   includeHTML("./Reference/Reference_List.html")
+                   htmlOutput("Reference")
                    )
                  )
                )
