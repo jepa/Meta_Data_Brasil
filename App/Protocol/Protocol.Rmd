@@ -1,0 +1,138 @@
+---
+title: "Meta Data of Marine Research Protocol"
+Author: "Juliano Palacios-Abrantes; Core Group"
+output:
+  pdf_document: default
+  html_notebook: default
+---
+
+#Executive Summary 
+
+#Introduction
+Protocol for Data Input
+##General Guide
+- No accents
+- Entries can be in both Spanish and English (except stated otherwise) 
+
+##MMID
+###Definition
+This is the ID of each data entry, important to have when working with multiple datasets
+
+###Example
+8347
+
+##Short Title
+###Definition
+Short informative title of the dataset. Mandatory
+-	No limitations on the number of words
+- Can be in English or Spanish
+- Can´t be multiple
+
+###Example
+Shark Survey for Mexican Pacific Coast between 1990-2000
+
+##Keywords
+###Definition
+Words that best describe the subject or dataset. These words will be useful at the searching period. Mandatory
+-	No words limitation
+-	Can be numbers
+-	They have to be in Spanish 
+
+###Example
+Pescado, Tuna, Pescador, Esfuerzo, Sinaloa, Temperatura, Mapa, 1:250000
+
+##Author
+###Definition
+Author of the dataset responsible for giving support on the dataset. Mandatory
+-	In case there is non, whoever is uploading the data should be the “author”
+
+###Example
+Andres Cisneros; a.cisneros@oceans.ubc.ca
+
+##Institution
+###Definition
+Institution or organization associated with the author. Not mandatory
+
+###Example
+University of British Columbia
+
+##Dataset Available
+Is the dataset publically available for anyone to use? Mandatory
+1.	Yes, it is public and of easy access
+a.	A dataset that lives on a webpage and you can download from it
+2.	Yes, it is public domain. However, is not directly available or has some type of limitation (nationality, request, etc.) 
+a.	A public dataset that you need to file in a request to have access 
+3.	No, it is a private dataset
+a.	A fisherman cooperative sampling data
+
+##Subject Name
+###Definition
+Common species name, if known; otherwise, subject studied. Mandatory
+•	Limited to 2 words
+•	Has to be in Spanish
+
+###Example
+Atrina maura, Tuna, shark, callo de hacha, panga,  pH, Sinaloa 
+
+##Area
+###Definition
+The broader category of where the data was generated. Options are fixed but can’t be multiple selection. Mandatory.
+•	National (When data applies for the whole country)
+•	Atlantic Ocean
+•	Pacific Ocean
+•	Freshwater/Terrestrial (When data is related to freshwater and or land ecosystems)
+
+##Region
+###Definition
+A less broad location of the data (if possible). Options are fixed and can be multiple. Not mandatory
+•	Gulf of California
+•	Northwest Pacific
+•	South Pacific
+•	Gulf of Tehuantepec
+•	Yucatan Peninsula / Mar Caribe
+•	West Gulf of Mexico.
+
+##Location
+###Definition
+The more specific level of data localization. It can range from a specific state to georeferenced data. It is an open category with no limitations. Not mandatory
+
+###Example
+Laguna de Altata, Western Pacific of Baja California Sur, Shape file, Georeferenced.
+
+##Start and End Year
+###Definition
+The Starting year and end year of the time series. Mandatory
+
+##Temporal Resolution
+###Definition
+What is the temporal resolution of the data? Fixed values. Mandatory
+•	Annual
+•	Monthly
+•	Semester
+•	Weekly
+•	Daily
+•	Seconds
+
+##Data Time Points
+###Definition
+This section refers to the amount of data points available in the dataset. It is related to the start and end year.
+
+###Example
+The dataset start year in 2010, the end year is 2015 and the frequency is yearly. However, there is only 3 data points because data from 2012 and 2013 are missing. 
+
+##Unit Type
+##Spatial Resolution
+##Dataset Title
+##Compilation Title
+##Publication Year
+##Reference
+##Available in Metadata
+##Metadata Name
+##User Contact
+##Institution Type
+##Research Fund
+##Research Field
+##Social-Economic Interaction
+##Data-Uncertanty
+
+
