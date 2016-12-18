@@ -3,9 +3,9 @@ library(shiny)
 library(leaflet)
 library(DT)
 
+
 shinyUI(
   navbarPage(
-    theme = "fondo.css",
     "Metadata of Marine Research in Mexico",
     #### HOME ####
     tabPanel("Home",
@@ -303,24 +303,24 @@ shinyUI(
           align ="center",
           leafletOutput("Location_Map"),
           column(width = 6,
-          numericInput("Map_Long",
-                       "Longitude",
-                       value=-103,
-                       min =-122.1836,
-                       max = -84.6419,
-                       step = 1,
-                       width = "30%"
-                       )
+                 numericInput("Map_Long",
+                              "Longitude",
+                              value=-103,
+                              min =-122.1836,
+                              max = -84.6419,
+                              step = 1,
+                              width = "30%"
+                 )
           ),
           column(width=6,
-          numericInput("Map_Lat",
-                       "Latitude",
-                       value=24,
-                       min =-12.1031,
-                       max = -32.627,
-                       step = 1,
-                       width = "30%"
-          )
+                 numericInput("Map_Lat",
+                              "Latitude",
+                              value=24,
+                              min =-12.1031,
+                              max = -32.627,
+                              step = 1,
+                              width = "30%"
+                 )
           )
         )
       )
@@ -343,13 +343,13 @@ shinyUI(
                                          'Download All Meta-data')
                    ),
                    dataTableOutput('Metadata')
-                                   
-                   ),
-                   tabPanel(
-                     p(h3("Data Available")),
-                     column(
-                       width=12,
-                       align = "center",
+                   
+                 ),
+                 tabPanel(
+                   p(h3("Data Available")),
+                   column(
+                     width=12,
+                     align = "center",
                      numericInput("MMID_Download_Selection",
                                   "Select the MMID to download",
                                   value = 1,
@@ -359,12 +359,23 @@ shinyUI(
                                   width = '25%'),
                      downloadButton('Data_Download', 
                                     'Download Specific Data')
-                     ),
-                     dataTableOutput('Available_Data')
+                   ),
+                   dataTableOutput('Available_Data')
+                 ),
+                 tabPanel(
+                   p(h3("Reference List")),
+                   column(
+                     width = 12,
+                     align = "left",
+                     downloadButton("Ref_Download",
+                                    "Download Reference List"
+                     )#,
+                     #includeHTML("./Reference/Reference_List.html")
                    )
-              )
+                 )
+               )
              )
-             ),
+    ),
     #### PRELIMINARY RESULTS ####
     tabPanel("Premilinar Results",
              #Wellcome / Instructions####
@@ -376,13 +387,13 @@ shinyUI(
                p(h3("Map of Data Localization")),
                leafletOutput("Data_Map"),
                p(em("Note: The numbers displayed in each marker (Blue Baloon) represent the MMID"))
-               ),
+             ),
              br(),
              br(),
              column(
                width = 12,
                align = "center",
-             p(h3("Preeliminary Results (Quantitative & Qualitative)"))
+               p(h3("Preeliminary Results (Quantitative & Qualitative)"))
              ),
              #### PRELIMINARY RESULTS ####
              #### Quantitative Results####
@@ -438,20 +449,19 @@ shinyUI(
                          width = '50%'),
                plotOutput("Subject_name_Plot"),
                p(em("Note: Not all words might be represented in the graph"))
-        
-               ),
+             ),
              #### Experimental Analysis ####
              column(width =12,
                     align = "center",
-             p(h2("Experimental Analysis")),
-             selectInput("SE_E_Plot_Option", 
-                         label= "Choose To Show Plot:",
-                         choices = list("By Area" = 1, 
-                                        "By Region" = 2,
-                                        "By Location" =3
-                         ),
-                         width = "20%"
-             )
+                    p(h2("Experimental Analysis")),
+                    selectInput("SE_E_Plot_Option", 
+                                label= "Choose To Show Plot:",
+                                choices = list("By Area" = 1, 
+                                               "By Region" = 2,
+                                               "By Location" =3
+                                ),
+                                width = "20%"
+                    )
              ),
              plotOutput("SE_Component_Area")
     )

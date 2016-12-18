@@ -1,11 +1,3 @@
-#
-# This is the server logic of a Shiny web application. You can run the 
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-# 
-#    http://shiny.rstudio.com/
-#
 
 ####Libraries needed ####
 
@@ -19,6 +11,8 @@ library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
 #library(xlsx)
+library(networkD3)
+
 
 #Functions #
 
@@ -69,7 +63,7 @@ shinyServer(function(input, output) {
     
     # PATH FOR HALL 2000 
     #library(xlsx)
-    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.4.xlsx","Template")
+    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.5.xlsx","Template")
     
     #PATH FOR CARMELIA #
     data<- read.csv("./Template.csv", 
@@ -159,6 +153,26 @@ shinyServer(function(input, output) {
     }
   )
   
+  #### Reference ####
+  
+  # output$Ref_Download <- downloadHandler(
+  #   filename = "Reporte Anchoveta.pdf",
+  #   
+  #   content = function(file) {
+  #     src <- normalizePath('Reference_List.Rmd')
+  #     
+  #     # temporarily switch to the temp dir, in case you do not have write
+  #     # permission to the current working directory
+  #     # owd <- setwd(tempdir())
+  #     # on.exit(setwd(owd))
+  #     file.copy(src, 'Reference_List.Rmd')
+  #     
+  #     
+  #     out <- render('Reference_List.Rmd', pdf_document())
+  #     file.rename(out, file)
+  #   }
+  # )
+  
   ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
   #### PRELIMINARY RESULTS TAB ####
@@ -240,7 +254,7 @@ shinyServer(function(input, output) {
     if(input$Plot_Option == 1){
       Spp <- datasetInput() %>% 
         group_by(Area) %>% 
-        summarise(Entradas = sum(Dataset_Available)) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
         filter(Area !="na") # %>% 
       # filter(Entradas >= input$Num_Data_Range[1]) %>% 
       # filter(Entradas <= input$Num_Data_Range[2])
@@ -254,7 +268,7 @@ shinyServer(function(input, output) {
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Number of Data Enteries")+
+        ylab("Number of Data Points")+
         xlab("Research Field")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
@@ -271,7 +285,7 @@ shinyServer(function(input, output) {
       if(input$Plot_Option == 2){
         Spp2 <- datasetInput() %>%
           group_by(Region) %>%
-          summarise(Value = sum(Dataset_Available)) %>% 
+          summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
           filter(Region != "na") %>% 
           filter(Region != "")
         
@@ -283,7 +297,7 @@ shinyServer(function(input, output) {
                )) +
           geom_bar(stat="identity")+
           theme_classic() +
-          ylab("Number of Data Enteries")+
+          ylab("Number of Data Points")+
           xlab("Region")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
@@ -300,7 +314,7 @@ shinyServer(function(input, output) {
           Spp3 <- datasetInput() %>%
             filter(Location != "na") %>% 
             group_by(Location) %>%
-            summarise(Value = sum(Dataset_Available)) %>% 
+            summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
             arrange(desc(Value))
           
           Head_Spp3 <- head(Spp3,input$Num_Data_Range) %>% 
@@ -316,7 +330,7 @@ shinyServer(function(input, output) {
             geom_bar(stat="identity")+
             theme_classic() +
             coord_flip() +
-            ylab("Number of Data Enteries")+
+            ylab("Number of Data Points")+
             xlab("Location Name")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14),
@@ -334,16 +348,19 @@ shinyServer(function(input, output) {
   output$SE_Component <- renderPlot({
     Se_Plot <- datasetInput() %>% 
       filter(!is.na(SE_Interaction)) %>% 
-      filter(SE_Interaction != "Otros")
+      filter(SE_Interaction != "Otros") %>% 
+      group_by(SE_Interaction) %>% 
+      summarise(Value = sum(Data_Time_Points,na.rm=T))
     
     ggplot(data=Se_Plot,
            aes(
-             x=SE_Interaction,
-             fill= SE_Interaction
+             y = Value,
+             x = SE_Interaction,
+             fill =SE_Interaction
            ))+
-      geom_bar()+
+      geom_bar(stat = "identity")+
       theme_classic() +
-      ylab("Number of Data Enteries")+
+      ylab("Number of Data Points")+
       xlab("Social Economic Component")+
       theme(axis.text.x = element_text(hjust = 1,
                                        size=14,
@@ -403,10 +420,10 @@ shinyServer(function(input, output) {
   
   output$SE_Component_Area <- renderPlot({
     
+    #### By Area ####
     Se_Plot <- datasetInput() %>% 
       filter(!is.na(Area))
     
-    #### By Area ####
     if(input$SE_E_Plot_Option == 1){
       ggplot(data=Se_Plot,
              aes(
@@ -415,7 +432,7 @@ shinyServer(function(input, output) {
              ))+
         geom_bar()+
         theme_classic() +
-        ylab("Number of Data Enteries")+
+        ylab("Number of Data Points")+
         xlab("Area")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
@@ -428,17 +445,19 @@ shinyServer(function(input, output) {
                                    title.position = "left"))
     }else{
       #### By Region ####
-      Se_Plot <- datasetInput() %>% 
-        filter(!is.na(Region))
+      
       if(input$SE_E_Plot_Option == 2){
-        ggplot(data=Se_Plot,
+        Se_Plot <- datasetInput() %>% 
+          filter(!is.na(Region))
+        
+          ggplot(data=Se_Plot,
                aes(
                  x=Region,
                  fill= SE_Interaction
                ))+
           geom_bar()+
           theme_classic() +
-          ylab("Number of Data Enteries")+
+          ylab("Number of Data Points")+
           xlab("Region")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
@@ -451,10 +470,12 @@ shinyServer(function(input, output) {
                                      title.position = "left"))
       }else{
         #### By Location ####
-        Se_Plot <- datasetInput() %>% 
-          filter(!is.na(Location))
         
         if(input$SE_E_Plot_Option == 3){
+          
+          Se_Plot <- datasetInput() %>% 
+            filter(!is.na(Location))
+          
           ggplot(data=Se_Plot,
                  aes(
                    x=Location,
@@ -462,7 +483,7 @@ shinyServer(function(input, output) {
                  ))+
             geom_bar()+
             theme_classic() +
-            ylab("Number of \nData Enteries")+
+            ylab("Number of \nData Points")+
             xlab("Location")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
@@ -478,6 +499,5 @@ shinyServer(function(input, output) {
       }
     }
   })
-  
 })
 
