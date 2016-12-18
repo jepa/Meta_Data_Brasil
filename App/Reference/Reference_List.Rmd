@@ -4,9 +4,11 @@ author: "Juliano Palacios Abrantes"
 date: "17/12/2016"
 output:
   html_document:
+    theme: lumen
     toc: yes
     toc_depth: '2'
   pdf_document:
+    number_sections: no
     toc: yes
     toc_depth: 2
 ---
