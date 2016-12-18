@@ -3,6 +3,13 @@ title: "Reference List of the Metadata of Marine Research in Mexico"
 author: "Juliano Palacios Abrantes"
 date: "17/12/2016"
 output:
+<<<<<<< HEAD
+=======
+  html_document:
+    theme: lumen
+    toc: yes
+    toc_depth: '2'
+>>>>>>> fa62a734abbaf7497da20e9a953ceed1c125917f
   pdf_document:
     number_sections: no
     toc: yes
