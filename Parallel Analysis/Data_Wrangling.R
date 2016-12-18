@@ -7,6 +7,8 @@
 library(dplyr)
 library(tidyr)
 
+setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
+
 #### Sea Around Us Data, Pacific ####
 
 # Title ####
@@ -184,3 +186,29 @@ Final_SAU_Atlantic <- data.frame(a,Keywords_F,Timeframe_A,Observations_A$Data_Po
 #write.csv(Final_SAU_Atlantic, "Final_SAU_Atlantic.csv")
 ####################### END ########################
 
+#### Prices ####
+#http://www.economia-sniim.gob.mx/SNIIM-PESCA/Consolidados.asp
+
+Price <- read.csv("./Data/Precios.csv")
+
+Precio_d_Venta <- Price %>% 
+  select(Spp_Origen,Por_Estado,Por_Punto) %>% 
+  mutate(Inicio = "Precio de Venta de") %>% 
+  mutate(Fin = "en el Origen (1998-2016)") %>% 
+  mutate(P_Venta = paste(Inicio,Spp_Origen,Fin)) %>% 
+  mutate(Inicio_M = "Precio de Menudeo de") %>% 
+  mutate(Fin_M = "(1998-2016)") %>% 
+  mutate(P_Menudeo = paste(Inicio_M,Spp_Origen,Fin_M)) %>%   mutate(Inicio_D = "Precio de") %>% 
+  mutate(Fin_D = "en Destino de Venta (1998-2016)") %>% 
+  mutate(P_Destino = paste(Inicio_D,Spp_Origen,Fin_D)) %>%
+  mutate(Inicio_E = "Precio de Venta de Pescado en") %>% 
+  mutate(P_Estado = paste(Inicio_E,Por_Estado,Fin_M)) %>% 
+  mutate(Inicio_P = "Precio de Venta de Pescado en Punto de Cotizacion") %>% 
+  mutate(P_Punto = paste(Inicio_P,Por_Punto,Fin_M)) %>% 
+  select(P_Venta,P_Menudeo,P_Destino,P_Estado,P_Punto)
+
+#write.csv(Precio_d_Venta, "Precio_d_Venta.csv")
+
+
+
+  
