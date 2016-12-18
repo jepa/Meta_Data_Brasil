@@ -1,0 +1,362 @@
+---
+title: "Reference List of the Metadata of Marine Research in Mexico"
+author: "Juliano Palacios Abrantes"
+date: "17/12/2016"
+output:
+  html_document:
+    toc: yes
+    toc_depth: '2'
+  pdf_document:
+    toc: yes
+    toc_depth: 2
+---
+
+```{r Library, echo=F, eval=T, message=F, warning=F}
+library(knitr)
+library(dplyr)
+```
+
+
+```{r Loading Database, echo=F, eval=T}
+x <- read.csv("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Template.csv")
+#kable(x)
+References <- levels(x$Compilation_Title)
+  
+```
+
+```{r Reference Template, echo=F, eval=F}
+
+#Tis is the reference template. Add a new template for each new reference added to the metadata. Change "Template" for the next number....
+
+Ref_Template <- References[Template]
+ReferenceTemplate  <- x %>% 
+  filter(Compilation_Title == Ref_Template) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_Template <- kable(align ="c",
+                   col.names = c("Compilation","Author","Institution","Publication Year"),
+                   ReferenceTemplate)
+
+Cita_Template <- x %>% 
+  filter(Compilation_Title == Ref_Template) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_Template <- paste(Cita_Template$Author,Cita_Template$Reference)
+
+## Copy and paste the following part outside the chunk
+
+#`r Ref_Template`
+### Basic Information About Reference
+`r Summary_Template`
+
+### Abstract
+
+
+### Link
+
+`r Link_Template`
+
+```
+
+
+
+# Introduction
+This list is made based on the *"Compilation Title"* variable of the metadata. As explained in the *"Protocol"*, the *Compilation Title* is a category that englobes different data in one webpage, book, or report.
+
+\clearpage
+
+```{r Reference 2 CONAPESCA, echo=F, eval=T}
+
+Ref_2 <- References[2]
+Reference2  <- x %>% 
+  filter(Compilation_Title == Ref_2) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_2 <- kable(align ="c" ,col.names = c("Compilation","Author","Institution","Publication Year"),Reference2)
+
+Cita_2 <- x %>% 
+  filter(Compilation_Title == Ref_2) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_2 <- paste(Cita_2$Author,Cita_2$Reference)
+
+```
+
+#`r Ref_2`
+### Basic Information About Reference
+`r Summary_2`
+
+### Abstract
+
+Integra estadística básica relevante en materia de acuacultura y pesca, relativa a los principales aspectos económicos y sociales. Su objetivo principal es difundir información general de consulta y está dirigida a todo tipo de usuarios.
+
+### Link
+
+`r Link_2`
+
+```{r Reference 3 CONABIO, echo=F, eval=T}
+
+
+Ref_3 <- References[3]
+Reference3  <- x %>% 
+  filter(Compilation_Title == Ref_3) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_3 <- kable(align ="c" ,Reference3,
+                   col.names = c("Compilation","Author","Institution","Publication Year"))
+
+Cita_3 <- x %>% 
+  filter(Compilation_Title == Ref_3) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_3 <- paste(Cita_3$Author,Cita_3$Reference)
+
+```
+
+#`r Ref_3`
+### Basic Information About Reference
+`r Summary_3`
+
+### Abstract
+
+Geoinformación, es un portal de información geográfica donde se puede consultar, visualizar y descargar cartografía temática de diferentes escalas generada y recopilada por CONABIO. Para desarrollar este portal se utilizó software de código abierto (open source).
+
+Las características principales del portal, son, desarrollar mecanismos de acceso a los acervos de datos geográficos de la CONABIO a través de servicios de información especializados, como:
+
+Vista gráfica de la información por temas generales.
+Información detallada sobre la cartografía disponible a través de búsquedas en los metadatos.
+Descarga de información en un formato compatible (shapefile)
+La información cartográfica es administrada por la Subdirección de Sistemas de Información Geográfica. La consulta de esta información se realiza a través de una clasificación general de temas, bajo los siguientes rubros:
+
+- Topografía
+- Hidrología
+- Edafología
+- Geología
+- Climatología
+- Vegetación y uso de suelo
+- División política
+- Población
+- Infraestructura
+- Regionalización
+- Biodiversidad
+- Productos satelitales
+
+### Link
+
+`r Link_3`
+
+```{r Reference 4 DataMares, echo=F, eval=T}
+
+
+Ref_4 <- References[4]
+Reference4  <- x %>% 
+  filter(Compilation_Title == Ref_4) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_4 <- kable(align ="c" ,col.names = c("Compilation","Author","Institution","Publication Year"),Reference4)
+
+Cita_4 <- x %>% 
+  filter(Compilation_Title == Ref_4) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_4 <- paste(Cita_4$Author,Cita_4$Reference)
+
+```
+
+#`r Ref_4`
+### Basic Information About Reference
+`r Summary_4`
+
+### Abstract
+
+Data integration, analysis, metadata, and sound information is the center of DataMARES, providing users the tools for making informed decisions and a platform that serves as a base-line tool for historical information, one-time data collection and long-term monitoring data of coastal and marine ecosystems in the Gulf of California and around the world.DataMARES is the foundation of new innovative science that allow open, persistent, robust, and secure integration and access of scientific information, to meet the needs of science and society to the understanding of our coast and oceans.
+
+### Link
+
+`r Link_4`
+
+```{r Reference 5 MMM, echo=F, eval=T}
+
+
+Ref_5 <- References[5]
+Reference5  <- x %>% 
+  filter(Compilation_Title == Ref_5) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_5 <- kable(align ="c" ,col.names = c("Compilation","Author","Institution","Publication Year"),Reference5)
+
+Cita_5 <- x %>% 
+  filter(Compilation_Title == Ref_5) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_5 <- paste(Cita_5$Author,Cita_5$Reference)
+
+```
+
+#`r Ref_5`
+### Basic Information About Reference
+`r Summary_5`
+
+### Abstract
+
+A meta-database of available ecological, social and economic data in Mexico will help facilitate efficient use of existing information and stimulate collaboration. A meta-database is a documentation of the sources of information instead of a database of the actual data.
+
+### Link
+
+`r Link_5`
+
+```{r Reference 6 SATMO, echo=F, eval=T}
+
+
+Ref_6 <- References[6]
+Reference6  <- x %>% 
+  filter(Compilation_Title == Ref_6) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_6 <- kable(align ="c" ,col.names = c("Compilation","Author","Institution","Publication Year"),Reference6)
+
+Cita_6 <- x %>% 
+  filter(Compilation_Title == Ref_6) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_6 <- paste(Cita_6$Author,Cita_6$Reference)
+
+```
+
+#`r Ref_6`
+### Basic Information About Reference
+`r Summary_6`
+
+### Abstract
+
+### Link
+
+`r Link_6`
+
+```{r Reference 7 SAU, echo=F, eval=T}
+
+
+Ref_7 <- References[7]
+Reference7  <- x %>% 
+  filter(Compilation_Title == Ref_7) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_7 <- kable(align ="c",
+                   col.names = c("Compilation","Author","Institution","Publication Year"),
+                   Reference7)
+
+Cita_7 <- x %>% 
+  filter(Compilation_Title == Ref_7) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_7 <- paste(Cita_7$Author,Cita_7$Reference)
+
+```
+
+#`r Ref_7`
+### Basic Information About Reference
+`r Summary_7`
+
+### Abstract
+The data presented in *reconstructed data* combine official reported data and reconstructed estimates of unreported data (including major discards), with reference to individual EEZs. Official reported data are mainly extracted from the Food and Agriculture Organization of the United Nations (FAO) FishStat database. The *Reported catch* line overlaid on the catch graph represent all catches deemed reported (including foreign) and allocated to this spatial entity. 
+
+### Link
+
+`r Link_7`
+
+```{r Reference 8, echo=F, eval=T}
+
+#Tis is the reference 8. Add a new 8 for each new reference added to the metadata. Change "8" for the next number....
+
+Ref_8 <- References[8]
+Reference8  <- x %>% 
+  filter(Compilation_Title == Ref_8) %>% 
+  slice(1) %>% 
+  select(
+         Compilation_Title,
+         Author,
+         Institution,
+         Publication_Year
+         )
+  
+Summary_8 <- kable(align ="c",
+                   col.names = c("Compilation","Author","Institution","Publication Year"),
+                   Reference8)
+
+Cita_8 <- x %>% 
+  filter(Compilation_Title == Ref_8) %>% 
+  slice(1) %>% 
+  select(Reference,
+         Author)
+                    
+Link_8 <- paste(Cita_8$Author,Cita_8$Reference)
+
+```
+
+#`r Ref_8`
+
+### Basic Information About Reference
+`r Summary_8`
+
+### Abstract
+
+
+### Link
+
+`r Link_8`
