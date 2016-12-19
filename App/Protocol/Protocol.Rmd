@@ -14,6 +14,12 @@ Protocol for Data Input
 - No accents
 - Entries can be in both Spanish and English (except stated otherwise) 
 
+```{r Template, echo =F, eval=F)}
+
+Data <- read.csv("./Template.csv")
+
+```
+
 ##MMID
 ###Definition
 This is the ID of each data entry, important to have when working with multiple datasets
@@ -121,11 +127,51 @@ This section refers to the amount of data points available in the dataset. It is
 The dataset start year in 2010, the end year is 2015 and the frequency is yearly. However, there is only 3 data points because data from 2012 and 2013 are missing. 
 
 ##Unit Type
+### Definition
+They type of unit used. Fixed Values
+- Area
+- Size
+- Weight
+- Values
+- Counts
+- Index
+- Temperature
+- Concentration
+- pH
+- Depth
+
 ##Spatial Resolution
+### Definition
+What is the spatial resolution of the data
+### Example
+It could be a "state", it could be coordinates.
+
 ##Dataset Title
+### Definition
+Original name of dataset (the data specifically, not the source or repository where it was published).
+### Example
+- Producción Annual de Octopus Nei.
+- PARTICIPACIÓN DE LA ACUACULTURA EN EL VALOR DE LA PRODUCCIÓN PESQUERA NACIONAL
+- Personal Ocupado en el Sector Pesca
+
+This are all datasets that are found inside the Anuario Estadístico de Acuacultura y Pesca 2013
+
 ##Compilation Title
+### Definition
+Name of the document or repository where data is presented
+### Example
+- FAO fisheries quantity
+- Anuario Estadístico SAGARPA
+- Censo Poblacional de INEGI
+
+This are all mayor aggregations/spurces of data
 ##Publication Year
+### Definition
+Year in which the dataset was published
+### Example
+1998
 ##Reference
+
 ##Available in Metadata
 ##Metadata Name
 ##User Contact
