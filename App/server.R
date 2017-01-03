@@ -66,7 +66,7 @@ shinyServer(function(input, output) {
     #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.5.xlsx","Template")
     
     #PATH FOR CARMELIA #
-    data<- read.csv("./Template2.csv", 
+    data<- read.csv("./Template.csv", 
                     header = TRUE,
                     na="NA")
     data.frame(data)
