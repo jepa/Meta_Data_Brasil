@@ -5,11 +5,13 @@ output:
     number_sections: no
     toc: yes
     toc_depth: 1
+    fig_height: 2
+    fig_width: 2
   html_document:
     theme: lumen
     toc: yes
     toc_depth: '1'
-Author: Juliano Palacios-Abrantes; Core Group
+Author: "Juliano Palacios-Abrantes; Core Group"
 ---
 
 #Executive Summary 
@@ -49,11 +51,11 @@ This is the ID of each data entry. It is important to input this number correcly
 ##Short Title
 - Mandatory / Open / Single
 
-Short informative title of the dataset. There are no limitations on the number of words but please make it short.
+Short informative title of the dataset. There are no limitations on the number of words but it should be as informative as possible.
 
 ###Example
-Shark Survey in the Pacific Coast between 1990-2000.
-*Original dataset title:* Shark Survey in the Mexican Pacific Coast, between Oaxaca and Chiapas State using georeference devices between 1990-2000
+*MMID_361:* "Catch of Thunnus alalunga in Mexico (Atlantic)"
+*Original dataset title:* SAU eeZ 944 v1-43
 
 ##Keywords
 - Mandatory / Open / Multiple / Spanish
@@ -64,88 +66,127 @@ Words in spanish that best describe the subject or/and dataset. These words will
 
 ###Example
 For a "normal" row, the keywords could look something like this:
-Pescado; Tuna; Pescador; Esfuerzo; Sinaloa; Temperatura; Mapa; 1:250000
+*MMID_361:* Captura; Reconstruida; Atlantico; Industrial; Subsistencia; Artesanal; Deportiva; Thunnus alalunga
 
-**Special Situation:** For 
+**Special Situation:**  A good example fot this section is *MMID_105* where the Short Title of the dataset is "Historic Catch of Calamar for Multiple States". In this case, the original dataset has catch for five different states in Mexico. Hence the keywords, "Calamar; Captura; Campeche; Colima; Oaxaca; Yucatan; Quintana Roo"
 
 ##Author
+- Mandatory / Open / Multiple
+Principal (first) author of the dataset. The author can be a person, group or organization. However, priority must me given to individuals over groups or institutions. In case of multiple authors, an aditional *"et al."* should be included after the first author. Do not include all authors. In case there is no information about the author of the dataset, whoever is uploading the data should be referenced as author.
 
-Author of the dataset responsible for giving support on the dataset. Mandatory
--	In case there is non, whoever is uploading the data should be the “author”
-
-###Example
-Andres Cisneros; a.cisneros@oceans.ubc.ca
+###Examples
+- *MMID_361:* Andres Cisneros-Montemayor
+- *MMID_613:* CONABIO
+- *MMID_712:* Acosta-Gonzalez, G.; et.al
 
 ##Institution
+- Optional / Open / Single
 
-Institution or organization associated with the author. Not mandatory
+Institution where the dataset lives. In the case of multiple institution provide the one that serves as an umbrella. 
 
 ###Example
-University of British Columbia
+- *MMID_361:* Sea Around Us, SAU
+- *MMID_19:* CONAPESCA (even thou CONAPESCA is part of SAGARPA and the Mexican Goverment, the data lives on CONAPESCA's web page)
 
 ##Dataset Available
-Is the dataset publically available for anyone to use? Mandatory
-1.	Yes, it is public and of easy access
-a.	A dataset that lives on a webpage and you can download from it
-2.	Yes, it is public domain. However, is not directly available or has some type of limitation (nationality, request, etc.) 
-a.	A public dataset that you need to file in a request to have access 
+- Mandatory / Fixed / Single
+
+Is the dataset available for consultation or download. This section is numeric and the options are:
+1.	Yes, it is public domain and available for consultation and/or download
+2.	Yes, it is public domain. However, is not directly available or has some type of limitation (nationality, request, broken link, or is just absent)
 3.	No, it is a private dataset
-a.	A fisherman cooperative sampling data
+
+###Examples
+- *MMID_361:* 1, The dataset is available for download online
+- *MMID_1198:* 2, In this case the dataset is public domain (Mexican goverment). However, it is limited to Mexicans and its access is only uppon request.
+- *MMID_1523:* 3, The metadata is available however, the data is not available. A contact information is provided for further inqueries.
 
 ##Subject Name
+- Mandatory / Open / Single (two words) / Spanish
 
-Common species name, if known; otherwise, subject studied. Mandatory
-•	Limited to 2 words
-•	Has to be in Spanish
+This category comprehends the name of the principal subject of the dataset. In case of species, priority should be given to scientific names (without author and year). In case the scientific name is unknown the common name should be included in spanish. All entries should be in Spanish, with the clear exception of scientific names.
 
 ###Example
-Atrina maura, Tuna, shark, callo de hacha, panga,  pH, Sinaloa 
+- *MMID_361:* Thunnus alalunga
+- *MMID_19:* Abulon 
+- *MMID_1198:* Chiapas
 
 ##Area
+- Mandatory / Fixed / Single
 
-The broader category of where the data was generated. Options are fixed but can’t be multiple selection. Mandatory.
-•	National (When data applies for the whole country)
-•	Atlantic Ocean
-•	Pacific Ocean
-•	Freshwater/Terrestrial (When data is related to freshwater and or land ecosystems)
+The broader category of where the data was generated. Fixed options are as follows:
+-	National (When data applies for the whole country or scatter data from both oceans)
+- Atlantic Ocean (Covers the Gulf of Mexico and Caribbean)
+- Pacific Ocean (Any part within Mexico's Pacific Ocean)
+- Freshwater/Terrestrial (When data is related to freshwater and/or land ecosystems)
 
 ##Region
+- Mandatory / Fixed / Single
 
-A less broad location of the data (if possible). Options are fixed and can be multiple. Not mandatory
-•	Gulf of California
-•	Northwest Pacific
-•	South Pacific
-•	Gulf of Tehuantepec
-•	Yucatan Peninsula / Mar Caribe
-•	West Gulf of Mexico.
+A less broad location of the data. While this option is mandatory, the option of "NA" (Not Applicable) is valid. However, authors are encourage to select one of the following options:
+
+-	Gulf of California
+-	Northwest Pacific
+-	South Pacific
+-	Gulf of Tehuantepec
+-	Yucatan Peninsula / Mar Caribe
+-	West Gulf of Mexico.
+
+![Polital Map Of Mexico](Images/Mexico_Regions.png)
+
+**Special Situation**: When data is spread and located in more than one region, authors should act as follow:
+a. If data is spread within two contiguous locations, author should choose the one that has the more amount of data
+b. If data is spread within two areas that are not connected, then the category should be "NA"
+
+### Example (Special Situation)
+
+- **MMID_630:** In this case the author decided to categorize this data as "Gulf of Tehuantepec" since it covers that whole area and only partiall "South Pacific"
+
+![Map Example for Continuous Areas](Images/MMID_630_Map.png)
+- **MMID_636:** For this dataset Region was determined as "NA" since the data is spread out the country's coastal line.
+
+![Map Example for nonContinuous Areas](Images/MMID_633_Map.png)
 
 ##Location
-
-The more specific level of data localization. It can range from a specific state to georeferenced data. It is an open category with no limitations. Not mandatory
+- Optional / Open / Single
+The more specific level of data localization. It can range from a specific state to georeferenced data. It is an open category with no limitations.
 
 ###Example
-Laguna de Altata, Western Pacific of Baja California Sur, Shape file, Georeferenced.
+- *MMID_1198:* Chiapas
+- *MMID_15:* Georeference
+- *MMID_606:* Laguna de Terminos
 
 ##Start and End Year
+- Mandatory / Open / Single
+The Starting year and end year of the time series.
 
-The Starting year and end year of the time series. Mandatory
+** Special Situation:** When the row represents multiple dataset with different timeframes, the section should be "NA" (MMID_612)
 
 ##Temporal Resolution
+- Mandatory / Fixed / Single
+What is the temporal resolution of the data? The options are as follows:
+-	Annual
+-	Monthly
+-	Semester
+-	Weekly
+-	Daily
+-	Seconds
 
-What is the temporal resolution of the data? Fixed values. Mandatory
-•	Annual
-•	Monthly
-•	Semester
-•	Weekly
-•	Daily
-•	Seconds
+** Special Situation:** Likewise Location
 
 ##Data Time Points
-
 This section refers to the amount of data points available in the dataset. It is related to the start and end year.
 
+**Special Situation** 
+
+# AQUI ME QUEDE 
+
 ###Example
-The dataset start year in 2010, the end year is 2015 and the frequency is yearly. However, there is only 3 data points because data from 2012 and 2013 are missing. 
+**MMID_361:** 55. The dataset starts in 1952 and ends in 2010, hence, there are 52 datapoints.
+**MMID_377:** 5. The dataset starts in 1954 and ends in 1966, however, there are only 5 years with data and not 13. 
+
+**Special Situation**
+
 
 ##Unit Type
 ### Definition
