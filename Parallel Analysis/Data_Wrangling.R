@@ -213,6 +213,22 @@ Precio_d_Venta <- Price %>%
 
 #write.csv(Precio_d_Venta, "Precio_d_Venta.csv")
 
+####################### END ########################
 
+# Atlas UNAM ####
+UNAM <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/UNAM.csv") %>% 
+  select(1:13)
+
+UNAM_X <- UNAM %>% 
+  mutate(SST_X = paste(SST,F_SST,"(2003-2012)")) %>% 
+  mutate(Anomalia = paste(A_T,"en",F_A_T)) %>% 
+  mutate(Clorofila_Conce = paste(Clorofila,F_C,"(2003-2012)")) %>% 
+  mutate(Clorofila_Ano = paste(A_C,"en",A_F)) %>% 
+  mutate(Vientos_X = paste(Vientos,Fecha,"(1999-2006)")) %>%
+  mutate(Topografia_X = paste(Topografia,Fecha, "(1992-1999)")) %>% 
+  mutate(Nivel_X = paste(Nivel,Fecha,"(1992-1999)")) %>% 
+  mutate(Velocidad_x = paste(Velocidad,Fecha,"(1992-1999)"))
+  
+#write.csv(UNAM_X[18:21],"UNAM_MMID.csv")
 
   
