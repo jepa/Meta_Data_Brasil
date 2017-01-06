@@ -3,11 +3,15 @@
 #The data used is added in the MMd as "Reconstructed" data, I added "Industria, artisanal, etc to keywords
 ####
 
+
+#### NOTE Allways run this first ####
 #library(xlsx)
 library(dplyr)
 library(tidyr)
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
+
+#________________________________________________________#
 
 #### Sea Around Us Data, Pacific ####
 

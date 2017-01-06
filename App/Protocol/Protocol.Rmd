@@ -1,54 +1,75 @@
 ---
 title: "Meta Data of Marine Research Protocol"
-Author: "Juliano Palacios-Abrantes; Core Group"
 output:
-  pdf_document: default
-  html_notebook: default
+  pdf_document:
+    number_sections: no
+    toc: yes
+    toc_depth: 1
+  html_document:
+    theme: lumen
+    toc: yes
+    toc_depth: '1'
+Author: Juliano Palacios-Abrantes; Core Group
 ---
 
 #Executive Summary 
 
 #Introduction
 Protocol for Data Input
+
 ##General Guide
 - No accents
 - Entries can be in both Spanish and English (except stated otherwise) 
 
-```{r Template, echo =F, eval=F)}
+## Abaout the Metadata fields
+All fields x possible things:
+
+1. They can be *mandatory* or *optional*
+2. They can be *fixed* values or open *section*
+
+- Fixed: the inputs are part of a select group and no other value is allowed.
+- Open: Inpus can be whatever the author decides
+
+3. There could be *multiple values* or a *single one*
+
+
+```{r Template, echo =F, eval=F}
 
 Data <- read.csv("./Template.csv")
 
 ```
 
-##MMID
-###Definition
-This is the ID of each data entry, important to have when working with multiple datasets
+#Metadata Fields
 
-###Example
-8347
+##MMID
+- Mandatory / Fixed / Single
+
+This is the ID of each data entry. It is important to input this number correcly after the last data point to keep consistency.
 
 ##Short Title
-###Definition
-Short informative title of the dataset. Mandatory
--	No limitations on the number of words
-- Can be in English or Spanish
-- Can´t be multiple
+- Mandatory / Open / Single
+
+Short informative title of the dataset. There are no limitations on the number of words but please make it short.
 
 ###Example
-Shark Survey for Mexican Pacific Coast between 1990-2000
+Shark Survey in the Pacific Coast between 1990-2000.
+*Original dataset title:* Shark Survey in the Mexican Pacific Coast, between Oaxaca and Chiapas State using georeference devices between 1990-2000
 
 ##Keywords
-###Definition
-Words that best describe the subject or dataset. These words will be useful at the searching period. Mandatory
--	No words limitation
--	Can be numbers
--	They have to be in Spanish 
+- Mandatory / Open / Multiple / Spanish
+
+Words in spanish that best describe the subject or/and dataset. These words will be useful to search data. There is no words limitation. Can be both words and numbers.
+
+**Special Situation:** When a row contains more than one datasets the keywords must have all the datasets available in te repository. 
 
 ###Example
-Pescado, Tuna, Pescador, Esfuerzo, Sinaloa, Temperatura, Mapa, 1:250000
+For a "normal" row, the keywords could look something like this:
+Pescado; Tuna; Pescador; Esfuerzo; Sinaloa; Temperatura; Mapa; 1:250000
+
+**Special Situation:** For 
 
 ##Author
-###Definition
+
 Author of the dataset responsible for giving support on the dataset. Mandatory
 -	In case there is non, whoever is uploading the data should be the “author”
 
@@ -56,7 +77,7 @@ Author of the dataset responsible for giving support on the dataset. Mandatory
 Andres Cisneros; a.cisneros@oceans.ubc.ca
 
 ##Institution
-###Definition
+
 Institution or organization associated with the author. Not mandatory
 
 ###Example
@@ -72,7 +93,7 @@ a.	A public dataset that you need to file in a request to have access
 a.	A fisherman cooperative sampling data
 
 ##Subject Name
-###Definition
+
 Common species name, if known; otherwise, subject studied. Mandatory
 •	Limited to 2 words
 •	Has to be in Spanish
@@ -81,7 +102,7 @@ Common species name, if known; otherwise, subject studied. Mandatory
 Atrina maura, Tuna, shark, callo de hacha, panga,  pH, Sinaloa 
 
 ##Area
-###Definition
+
 The broader category of where the data was generated. Options are fixed but can’t be multiple selection. Mandatory.
 •	National (When data applies for the whole country)
 •	Atlantic Ocean
@@ -89,7 +110,7 @@ The broader category of where the data was generated. Options are fixed but can�
 •	Freshwater/Terrestrial (When data is related to freshwater and or land ecosystems)
 
 ##Region
-###Definition
+
 A less broad location of the data (if possible). Options are fixed and can be multiple. Not mandatory
 •	Gulf of California
 •	Northwest Pacific
@@ -99,18 +120,18 @@ A less broad location of the data (if possible). Options are fixed and can be mu
 •	West Gulf of Mexico.
 
 ##Location
-###Definition
+
 The more specific level of data localization. It can range from a specific state to georeferenced data. It is an open category with no limitations. Not mandatory
 
 ###Example
 Laguna de Altata, Western Pacific of Baja California Sur, Shape file, Georeferenced.
 
 ##Start and End Year
-###Definition
+
 The Starting year and end year of the time series. Mandatory
 
 ##Temporal Resolution
-###Definition
+
 What is the temporal resolution of the data? Fixed values. Mandatory
 •	Annual
 •	Monthly
@@ -120,7 +141,7 @@ What is the temporal resolution of the data? Fixed values. Mandatory
 •	Seconds
 
 ##Data Time Points
-###Definition
+
 This section refers to the amount of data points available in the dataset. It is related to the start and end year.
 
 ###Example
@@ -171,14 +192,33 @@ Year in which the dataset was published
 ### Example
 1998
 ##Reference
+Link or address of where the data can be found
+
+### Example
+www.repositoryonlinewheredatalives.com or Meta-dataset 
 
 ##Available in Metadata
+If the data is or not part of the Meta-dataset data repository
+
 ##Metadata Name
+In case the data set is in the Meta-data, then what's the name of it?
+
 ##User Contact
+Name and email of person who identified and/or added the data to the Metadata
+
 ##Institution Type
+The type of institution that generated the dataset (corresponds to "Institution" field)
+
 ##Research Fund
+Who funded the data collection
+
 ##Research Field
+What was the main reason why the data was  gathered 
+
 ##Social-Economic Interaction
+What type of social-ecological interaction is this data an indicator for
+
 ##Data-Uncertanty
+What is the quality of the data?
 
 
