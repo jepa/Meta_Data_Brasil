@@ -1,17 +1,19 @@
 ---
 title: "Meta Data of Marine Research Protocol"
 output:
-  pdf_document:
-    number_sections: no
-    toc: yes
-    toc_depth: 1
+  html_document:
     fig_height: 2
     fig_width: 2
-  html_document:
     theme: lumen
     toc: yes
     toc_depth: '1'
-Author: "Juliano Palacios-Abrantes; Core Group"
+  pdf_document:
+    fig_height: 2
+    fig_width: 2
+    number_sections: no
+    toc: yes
+    toc_depth: 1
+Author: Juliano Palacios-Abrantes; Core Group
 ---
 
 #Executive Summary 
@@ -177,9 +179,8 @@ What is the temporal resolution of the data? The options are as follows:
 ##Data Time Points
 This section refers to the amount of data points available in the dataset. It is related to the start and end year.
 
-**Special Situation** 
+**Special Situation:** In the case of multiple datasets within a row, Data Time Points should reflect the amount of datasets within that row. 
 
-# AQUI ME QUEDE 
 
 ###Example
 **MMID_361:** 55. The dataset starts in 1952 and ends in 2010, hence, there are 52 datapoints.
@@ -232,6 +233,7 @@ This are all mayor aggregations/spurces of data
 Year in which the dataset was published
 ### Example
 1998
+
 ##Reference
 Link or address of where the data can be found
 
