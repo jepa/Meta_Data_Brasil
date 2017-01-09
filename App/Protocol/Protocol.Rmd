@@ -177,6 +177,7 @@ What is the temporal resolution of the data? The options are as follows:
 ** Special Situation:** Likewise Location
 
 ##Data Time Points
+- Mandatory / Open / Single
 This section refers to the amount of data points available in the dataset. It is related to the start and end year.
 
 **Special Situation:** In the case of multiple datasets within a row, Data Time Points should reflect the amount of datasets within that row. 
@@ -186,12 +187,11 @@ This section refers to the amount of data points available in the dataset. It is
 **MMID_361:** 55. The dataset starts in 1952 and ends in 2010, hence, there are 52 datapoints.
 **MMID_377:** 5. The dataset starts in 1954 and ends in 1966, however, there are only 5 years with data and not 13. 
 
-**Special Situation**
-
+**Special Situation: MMID_377**, has 117 different datasets regarding socioeconomic information. Hence, while the name is only on dataset, the number of data time points become 117.
 
 ##Unit Type
-### Definition
-They type of unit used. Fixed Values
+- Mandatory / Fix / Single
+They type of unit presented in the dataset. The options are:
 - Area
 - Size
 - Weight
@@ -204,20 +204,19 @@ They type of unit used. Fixed Values
 - Depth
 
 ##Spatial Resolution
-### Definition
-What is the spatial resolution of the data
+- Mandatory / Fix / Single
+
+What is the spatial resolution of the dataset.
+
 ### Example
-It could be a "state", it could be coordinates.
+
+*MMID_361:* Area 
 
 ##Dataset Title
-### Definition
-Original name of dataset (the data specifically, not the source or repository where it was published).
-### Example
-- Producción Annual de Octopus Nei.
-- PARTICIPACIÓN DE LA ACUACULTURA EN EL VALOR DE LA PRODUCCIÓN PESQUERA NACIONAL
-- Personal Ocupado en el Sector Pesca
+Original name of dataset (the data specifically, not the source or repository where it was published). This is important in order to localize the dataset in a document or a sourve that has multiple datasets.
 
-This are all datasets that are found inside the Anuario Estadístico de Acuacultura y Pesca 2013
+### Example
+**MMID_1266:** The name of the row is:"*Valor mensual de Importacion de Productos Pesqueros en (2014)*" but the name of the original dataset is *"Exportacion de Productos Pesqueros y Acuicolas 2014/p"*
 
 ##Compilation Title
 ### Definition
