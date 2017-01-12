@@ -261,7 +261,14 @@ shinyServer(function(input, output) {
   output$Number_Entries <- renderPrint({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
-    Number_entries$MMID[length(Number_entries$MMID)]
+      Number_entries$MMID[length(Number_entries$MMID)]
+      
+  })
+  
+  output$Number_Data_Points <- renderPrint({
+    Number_entries <- datasetInput()
+    sum(Number_entries$Data_Time_Points,na.rm=T)
+    
   })
   
   
@@ -330,6 +337,7 @@ shinyServer(function(input, output) {
         if(input$Plot_Option == 3){
           Spp3 <- datasetInput() %>%
             filter(Location != "na") %>% 
+            filter(Location != "Multiple States") %>% 
             group_by(Location) %>%
             summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
             arrange(desc(Value))
@@ -346,11 +354,12 @@ shinyServer(function(input, output) {
                  )) +
             geom_bar(stat="identity")+
             theme_classic() +
-            coord_flip() +
+            #coord_flip() +
             ylab("Number of Data Points")+
             xlab("Location Name")+
             theme(axis.text.x = element_text(hjust = 1,
-                                             size=14),
+                                             size=14,
+                                             angle=45),
                   axis.text.y = element_text(size = 14),
                   legend.position = "none",
                   axis.title = element_text(size=20,
@@ -510,6 +519,98 @@ shinyServer(function(input, output) {
                   axis.title = element_text(size=20,
                                             face="bold"))+ 
             guides(fill = guide_legend(title = "Social Economic Component",
+                                       title.position = "left"))
+          
+        }
+      }
+    }
+  })
+  
+  ## Research Field Plot ####
+  output$Research_Field_Plot <- renderPlot({
+    
+    #### By Area ####
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(Area)) %>% 
+      group_by(Area,Research_Field) %>% 
+      summarise(Entradas = sum(Data_Time_Points,na.rm=T))
+    
+    if(input$Research_Field_Plot_Option == 1){
+      ggplot(data=Se_Plot,
+             aes(
+               x=Area,
+               y=Entradas,
+               fill= Research_Field
+             ))+
+        geom_bar(stat = "identity")+
+        theme_classic() +
+        ylab("Number of Data Points")+
+        xlab("Area")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         size=14,
+                                         angle= 45),
+              axis.text.y = element_text(size = 14),
+              legend.position = "top",
+              axis.title = element_text(size=20,
+                                        face="bold"))+ 
+        guides(fill = guide_legend(title = "Research Field",
+                                   title.position = "left"))
+    }else{
+      #### By Region ####
+      
+      if(input$Research_Field_Plot_Option == 2){
+        Se_Plot <- datasetInput() %>% 
+          filter(!is.na(Region)) %>% 
+          group_by(Region,Research_Field) %>% 
+          summarise(Entradas = sum(Data_Time_Points,na.rm=T))
+        
+        ggplot(data=Se_Plot,
+               aes(
+                 x=Region,
+                 y= Entradas,
+                 fill= Research_Field
+               ))+
+          geom_bar(stat = "identity")+
+          theme_classic() +
+          ylab("Number of Data Points")+
+          xlab("Region")+
+          theme(axis.text.x = element_text(hjust = 1,
+                                           size=14,
+                                           angle= 45),
+                axis.text.y = element_text(size = 14),
+                legend.position = "right",
+                axis.title = element_text(size=20,
+                                          face="bold"))+ 
+          guides(fill = guide_legend(title = "Research Field",
+                                     title.position = "left"))
+      }else{
+        #### By Location ####
+        
+        if(input$Research_Field_Plot_Option == 3){
+          
+          Se_Plot <- datasetInput() %>% 
+            filter(!is.na(Location)) %>% 
+            group_by(Location,Research_Field) %>% 
+            summarise(Entradas = sum(Data_Time_Points,na.rm=T))
+          
+          ggplot(data=Se_Plot,
+                 aes(
+                   x=Location,
+                   y = Entradas,
+                   fill= Research_Field
+                 ))+
+            geom_bar(stat = "identity")+
+            theme_classic() +
+            ylab("Number of \nData Points")+
+            xlab("Location")+
+            theme(axis.text.x = element_text(hjust = 1,
+                                             size=14,
+                                             angle= 45),
+                  axis.text.y = element_text(size = 14),
+                  legend.position = "top",
+                  axis.title = element_text(size=20,
+                                            face="bold"))+ 
+            guides(fill = guide_legend(title = "Research Field",
                                        title.position = "left"))
           
         }

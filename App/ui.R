@@ -410,8 +410,10 @@ shinyUI(
                width = 6,
                align= "center",
                p(h3("Quantitative Results")),
-               p(h4("Total Number of Data Registers")),
-               p(h2(textOutput("Number_Entries"))),
+               p(h5("Total Number of Data Registers")),
+               p(h4(textOutput("Number_Entries"))),
+               p(h5("Total Number of Data Points")),
+               p(h4(textOutput("Number_Data_Points"))),
                p(h4("Number of Data Enteries per Area")),
                selectInput("Plot_Option", 
                            label= "Choose To Show Plot:",
@@ -470,9 +472,18 @@ shinyUI(
                                                "By Location" =3
                                 ),
                                 width = "20%"
-                    )
+                    ),
+             plotOutput("SE_Component_Area"),
+             selectInput("Research_Field_Plot_Option", 
+                         label= "Choose To Show Plot:",
+                         choices = list("By Area" = 1, 
+                                        "By Region" = 2,
+                                        "By Location" =3
+                         ),
+                         width = "20%"
              ),
-             plotOutput("SE_Component_Area")
+             plotOutput("Research_Field_Plot")
+             )
     )
   )
 )
