@@ -20,8 +20,9 @@ library(readr)
 ```
 
 
-```{r Loading Database, echo=F, eval=T, warning=F,message=F}
-x <- read.csv("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Data/Reference.csv") %>% 
+```{r Loading Database, echo=F, eval=F, warning=F,message=F}
+x <- read.csv("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Data/Reference.csv") 
+x <- x %>% 
   group_by(Nombre)
 #kable(x)
 
