@@ -3,8 +3,8 @@ title: MetadataPilot
 account: jepa
 server: shinyapps.io
 appId: 149935
-bundleId: 673251
+bundleId: 678640
 url: https://jepa.shinyapps.io/metadatapilot/
-when: 1483930775.36984
+when: 1484332203.13984
 asMultiple: FALSE
 asStatic: FALSE
