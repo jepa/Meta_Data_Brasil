@@ -44,7 +44,7 @@ server <- function(input, output) {
   
   RedInput <- reactive({
     
-    read_csv("./Red.csv")
+    read.csv("./Red.csv")
     
   })
   
