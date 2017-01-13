@@ -535,7 +535,6 @@ shinyUI(
              ),
              plotOutput("Research_Field_Plot")
              )
-    
     ),
     tabPanel("Cómo Participar")
   )
