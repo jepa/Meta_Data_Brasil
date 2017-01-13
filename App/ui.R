@@ -413,7 +413,7 @@ shinyUI(
                      width = 12,
                      align = "center",
                      radioButtons('format',
-                                  'Select the Document format',
+                                  'Seleccione el Formato',
                                   c('PDF',
                                     'HTML',
                                     'Word'),
@@ -430,50 +430,56 @@ shinyUI(
                )
              ),
     #### PRELIMINARY RESULTS ####
-    tabPanel("Premilinar Results",
+    tabPanel("Resultados Preeliminares",
              #Wellcome / Instructions####
              p("Hola"),
              column(
-               width=12,
+               width=4,
                align = "center",
-               p(h3("Número de Registros")),
+               p(h3("Registros Capturados")),
                p(h4(textOutput("Number_Entries")))
              ),
-             # column(
-             #   width=6,
-             #   align = "center",
-             #   p(h3("Número de datos")),
-             #   p(h4(textOutput("Number_Data_Points")))
-             # ),
+             column(
+               width=4,
+               align = "center",
+               p(h3("Número de Datos")),
+               p(h4(textOutput("Number_Data_Points")))
+             ),
+             column(
+               width=4,
+               align = "center",
+               p(h3("Fuentes Consultadas")),
+               p(h4(textOutput("Sources")))
+             ),
              br(),
              br(),
              column(
                width = 12,
                align = "center",
-               p(h3("Preeliminary Results (Quantitative & Qualitative)")),
-               p(h4("Number of Data Enteries per Area"))
+               p(h3("Resultados preeliminares (Cuantitativos y Cualitativos)"))
              ),
              #### PRELIMINARY RESULTS ####
              #### Quantitative Results####
              column(
                width = 6,
                align= "center",
-               p(h3("Quantitative Results")),
+               p(h3("Resultados Cuantitativos")),
+               p(h4("Número de datos por Unidad de Espacio")),
                selectInput("Plot_Option", 
-                           label= "Choose To Show Plot:",
-                           choices = list("By Area" = 1, 
-                                          "By Region" = 2,
-                                          "By Location" =3
+                           label= "Seleccione la Opción Deseada:",
+                           choices = list("Area" = 1, 
+                                          "Región" = 2,
+                                          "Locación" =3
                            )
                ),
                plotOutput("Number_spp"),
                sliderInput("Num_Data_Range",
-                           "Select the Top Categories",
+                           "Seleccion el Número a Mostrar",
                            value=10,
                            min = 1,
                            max = 50),
                #### SE_Component ####
-               p(h4("Social Economic Component")),
+               p(h4("Componente Social Económico")),
                plotOutput("SE_Component")
              ),
              #### Qualitative Results####
@@ -481,9 +487,10 @@ shinyUI(
              column(
                width = 6,
                align= "center",
-               p(h3("Qualitative Results")),
+               p(h3("Resultados Cualitativos")),
+               p(h4("Palabras Claves Más Repetidas")),
                textInput("Keyword_Remove1",
-                         "Remove any Keyword",
+                         "Quite Cualquier Palabra",
                          "",
                          width = '50%'),
                textInput("Keyword_Remove2",
@@ -491,11 +498,11 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Keywords_Plot"),
-               p(em("Note: Not all words might be represented in the graph")),
+               p(em("Nota: Es posible que no todas las palabras estén representadas")),
                #### Subject_Name Word Cloud ####
-               p(h4("Subject Name Word Cloud")),
+               p(h4("Categorías Más Repetidas")),
                textInput("Subject_Remove",
-                         "Remove Any Subject",
+                         "Quite Cualquier Palabra",
                          "",
                          width = '50%'),
                textInput("Subject_Remove2",
@@ -503,26 +510,26 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Subject_name_Plot"),
-               p(em("Note: Not all words might be represented in the graph"))
+               p(em("Nota: Es posible que no todas las palabras estén representadas"))
              ),
              #### Experimental Analysis ####
              column(width =12,
                     align = "center",
-                    p(h2("Experimental Analysis")),
+                    p(h2("Análysis Experimental")),
                     selectInput("SE_E_Plot_Option", 
                                 label= "Choose To Show Plot:",
-                                choices = list("By Area" = 1, 
-                                               "By Region" = 2,
-                                               "By Location" =3
+                                choices = list("Area" = 1, 
+                                               "Región" = 2,
+                                               "Localidad" =3
                                 ),
                                 width = "20%"
                     ),
              plotOutput("SE_Component_Area"),
              selectInput("Research_Field_Plot_Option", 
-                         label= "Choose To Show Plot:",
-                         choices = list("By Area" = 1, 
-                                        "By Region" = 2,
-                                        "By Location" =3
+                         label= "Seleccione la Opción Deseada:",
+                         choices = list("Area" = 1, 
+                                        "Region" = 2,
+                                        "Location" =3
                          ),
                          width = "20%"
              ),

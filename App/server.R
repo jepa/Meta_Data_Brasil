@@ -203,6 +203,31 @@ shinyServer(function(input, output) {
   #### Quantitative Results ####
   # Number of entries ####
   
+  output$Number_Entries <- renderPrint({
+    Number_entries <- datasetInput() %>% 
+      filter(MMID != "na")
+    Number_entries$MMID[length(Number_entries$MMID)]
+    
+  })
+  
+  output$Number_Data_Points <- renderPrint({
+    Number_entries <- datasetInput()
+    sum(Number_entries$Data_Time_Points,na.rm=T)
+    
+  })
+  
+  output$Sources <- renderPrint({
+     z<- datasetInput() %>% 
+      group_by(Compilation_Title) %>% 
+      summarise(sum(Data_Time_Points)) %>% 
+      select(-2) %>% 
+      filter(!is.na(Compilation_Title)) %>% 
+      mutate(z = 1)
+    
+    sum(z$z)
+    
+  })
+  
   output$Number_spp <- renderPlot({
     #### By Area####
     
