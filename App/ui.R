@@ -38,7 +38,6 @@ shinyUI(
                      width = 600
                    )
                  )
-                 
                )
              )
     ),

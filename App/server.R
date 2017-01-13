@@ -16,7 +16,8 @@ library(networkD3)
 
 #Functions #
 
-source('./Functions/Fun_Dat_links.r')
+#Commented for publication of project
+#source('Fun_Dat_links.r')
 
 #The begining #
 
@@ -78,13 +79,13 @@ shinyServer(function(input, output) {
     
     #you will need this function on the "Functions" folder (it is already sourced at the beginning of the app)
     #Fun_Dat_links
-    x <- Ref_Links(datasetInput()$Reference,
-                   datasetInput()$Subject_name)
+    # x <- Ref_Links(datasetInput()$Reference,
+    #                datasetInput()$Subject_name)
     
     #Re order the datatable
-    Final <- datasetInput() %>% 
-      bind_cols(x) %>% 
-      select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
+     Final <- datasetInput() #%>% 
+    #   bind_cols(x) %>% 
+    #   select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
     
     #Show the datatable 
     datatable(Final,
