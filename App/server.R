@@ -38,25 +38,6 @@ shinyServer(function(input, output) {
     data
   })
   
-  # Mapa de localización ####
-  output$Location_Map <- renderLeaflet({
-    if (input$Location_Map == TRUE) {
-      leaflet() %>%
-        addTiles(
-          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-        ) %>%
-        #Initial view #
-        setView(lng = -102.5528, 
-                lat = 23.6345,
-                zoom = 5) %>% 
-        #Adding Data localization ####
-      addMarkers(lng = input$Map_Long,
-                 lat= input$Map_Lat,
-                 popup=input$Short_Title)
-    }
-  })
-  
   
   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
@@ -65,11 +46,6 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    # PATH FOR HALL 2000 
-    #library(xlsx)
-    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.5.xlsx","Template")
-    
-    #PATH FOR CARMELIA #
     data<- read.csv("./Template.csv", 
                     header = TRUE,
                     na="NA")
@@ -119,43 +95,8 @@ shinyServer(function(input, output) {
     
   })
   
-  # Download Data ####
-  #Specific Data #
-  #First we create a path where the data is saved
-  # MMID_Data <- reactive({
-  #   Dfile = paste("./Data_Download/MMID_",
-  #                 input$MMID_Download_Selection, #THis includes the number
-  #                 '.csv',
-  #                 sep='')
-  #   read.csv(Dfile, header = TRUE)
-  #   
-  # })
-  # 
-  # #This is just for the download button and the name of the file...
-  # output$Data_Download <- downloadHandler(
-  #   filename = function() {  
-  #     paste("MMID_",
-  #           input$MMID_Download_Selection, 
-  #           '.csv',
-  #           sep='') 
-  #   },
-  #   content = function(file) {
-  #     write.csv(MMID_Data(), file)
-  #   }
-  #   
-  # )
+  #Resultados iniciales ####
   
-  # All Meta-dataset #
-  output$MMID_Download <- downloadHandler(
-    filename = function() { 
-      paste(input$MMID_Download, 
-            '.csv', 
-            sep='') 
-    },
-    content = function(file) {
-      write.csv(datasetInput(), file)
-    }
-  )
   
   #### Reference ####
   
@@ -185,7 +126,6 @@ shinyServer(function(input, output) {
   )
   
   ##### Reference Display ####
-  
   
   getPage<-function() {
     return(includeHTML("./Reference/Reference_List.html"))
@@ -262,19 +202,6 @@ shinyServer(function(input, output) {
   
   #### Quantitative Results ####
   # Number of entries ####
-  output$Number_Entries <- renderPrint({
-    Number_entries <- datasetInput() %>% 
-      filter(MMID != "na")
-      Number_entries$MMID[length(Number_entries$MMID)]
-      
-  })
-  
-  output$Number_Data_Points <- renderPrint({
-    Number_entries <- datasetInput()
-    sum(Number_entries$Data_Time_Points,na.rm=T)
-    
-  })
-  
   
   output$Number_spp <- renderPlot({
     #### By Area####
