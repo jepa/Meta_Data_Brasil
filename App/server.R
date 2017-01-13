@@ -1,3 +1,6 @@
+#### NOTA ####
+#Read ui.R for information between branches
+
 
 ####Libraries needed ####
 
@@ -119,28 +122,28 @@ shinyServer(function(input, output) {
   # Download Data ####
   #Specific Data #
   #First we create a path where the data is saved
-  MMID_Data <- reactive({
-    Dfile = paste("./Data_Download/MMID_",
-                  input$MMID_Download_Selection, #THis includes the number
-                  '.csv',
-                  sep='')
-    read.csv(Dfile, header = TRUE)
-    
-  })
-  
-  #This is just for the download button and the name of the file...
-  output$Data_Download <- downloadHandler(
-    filename = function() {  
-      paste("MMID_",
-            input$MMID_Download_Selection, 
-            '.csv',
-            sep='') 
-    },
-    content = function(file) {
-      write.csv(MMID_Data(), file)
-    }
-    
-  )
+  # MMID_Data <- reactive({
+  #   Dfile = paste("./Data_Download/MMID_",
+  #                 input$MMID_Download_Selection, #THis includes the number
+  #                 '.csv',
+  #                 sep='')
+  #   read.csv(Dfile, header = TRUE)
+  #   
+  # })
+  # 
+  # #This is just for the download button and the name of the file...
+  # output$Data_Download <- downloadHandler(
+  #   filename = function() {  
+  #     paste("MMID_",
+  #           input$MMID_Download_Selection, 
+  #           '.csv',
+  #           sep='') 
+  #   },
+  #   content = function(file) {
+  #     write.csv(MMID_Data(), file)
+  #   }
+  #   
+  # )
   
   # All Meta-dataset #
   output$MMID_Download <- downloadHandler(

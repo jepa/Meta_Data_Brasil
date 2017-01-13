@@ -1,3 +1,8 @@
+#### NOTA ####
+
+# This version of the app is modified to be publish online. Some things are commented like;
+
+# Data to download
 
 library(shiny)
 library(leaflet)
@@ -13,33 +18,94 @@ shinyUI(
                column(
                  12,
                  align = "center",
-                 h1("Project Outline")
+                 h1("Hacia la Creación de una Base de Metadatos de Investigación Marina en México")
                ),
                column(
                  10,
                  align = "justified",
                  offset = 1,
-                 p(h3("Welcome!")),
+                 p(h3("¡Bienvenidos!")),
                  p(
-                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
+                   "La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir pero no siempre están disponibles al público o su existencia no es conocida. El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigaciónnovedosa en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información existente al mismo tiempo que estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país" 
+                 ),
+                 p(h3(
+                   "Objetivos del proyecto"
+                 )),
+                 p(
+                   "•Crear una meta base de datos que contenga información ecológica, económica, oceanográfica y social, referente al ambiente marino"
+                   ),
+                 p(
+                   "•Identificar tendencias en la disponibilidad de datos marinos en México"
+                   ),
+                 p(
+                   "• Identificar oportunidades de mejora de información marina en México"
                  ),
                  p(
-                   "A meta-database of available ecological, social and economic data in Mexico will help facilitate efficient use of existing information and stimulate collaboration. A meta-database is a documentation of the sources of information instead of a database of the actual data. For example, a meta-database record might represent the sources (e.g., the institution hosting the data, a URL where the data could be assessed), types (e.g., fish abundance, temperature), location (e.g., reef in Caribbean) and time-frame (e.g., specific years, seasons, or a time-series). Such meta-database can help reveal trends in the availability of different types of data, identify existing data gaps, and facilitate researchers and managers to use all the available information for their studies or for decision making. Hence, this database can be an important instrument in the context of increasing collaboration among different disciplines. A researcher could identify data of interest within the meta-database, contact the right person or institute directly, and collaborate on new research. This way, the meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Such meta-database has been developed for Canada (Cisneros-Montemayor et al. 2016) and such experiences could be adapted for Mexico."
+                   "• Apoyar el acceso a la información mediante un portal de consulta de datos"
                  ),
                  p(
-                   "The meta-database can also be constantly updated when new datasets become available. As new projects materialize in Mexico, new information will be created and then potentially incorporated as a new entry in the metadata. This process will keep the database updated and constantly expanding. There is no requirement that corresponding datasets, which may be restricted or otherwise not be publicly available, be initially shared. This facilitates the prompt incorporation of any new information into the meta-database. Finally, besides being a useful resource for collaboration and analysis, the metadata will reflect the state of marine research in Mexico."
+                 "• Apoyar a la investigación en materia de cambio climático y los recursos marinos nacionales"
+                 )
                  ),
                  column(
-                   12,
+                   10,
                    align = "center",
                    img(
                      src = "flow_chart.png",
                      height = 150,
                      width = 600
                    )
+                   ),
+               column(
+                 10,
+                 align = "justified",
+                 offset = 1,
+                   p(h4("Individuos e Instituciones Participantes")),
+                   p(
+                     "Palacios-Abrantes, Juliano; Institute for the Oceans and Fisheries, University of British Columbia"
+                   ),
+                   p(
+                     "Andrés Cisneros-Montemayor; Institute for the Oceans and Fisheries, University of British Columbia"
+                   ),
+                   p(
+                     "Francisco Arreguín-Sánchez; Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional"
+                   ),
+                   p(
+                     "Laura Rodriguez, Environmental Defense Fund, México"
+                   ),
+                   p(
+                     "Miguel Ángel Cisneros-Mata; Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura "
+                   ),
+                   p(
+                     "William Cheung, Institute for the Oceans and Fisheries, University of British Columbia"
+                   )
+                 ),
+               column(
+                 10,
+                 align = "center",
+                 offset = 1,
+                 img(
+                     src = "ubc_logo.gif",
+                     height = 80,
+                     width = 70
+                   ),
+                   img(
+                     src = "ipn_logo.JPG",
+                     height = 80,
+                     width = 70
+                   ),
+                   img(
+                     src = "inapesca_logo.JPG",
+                     height = 100,
+                     width = 300
+                   ),
+                   img(
+                     src = "edf_logo.JPG",
+                     height = 100,
+                     width = 300
+                   )
                  )
                )
-             )
     ),
     #### INPUT DATA ####
     
@@ -344,23 +410,24 @@ shinyUI(
                    dataTableOutput('Metadata')
                    
                  ),
-                 tabPanel(
-                   p(h3("Data Available")),
-                   column(
-                     width=12,
-                     align = "center",
-                     numericInput("MMID_Download_Selection",
-                                  "Select the MMID to download",
-                                  value = 1,
-                                  min = 1,
-                                  max = "na",
-                                  step = 1,
-                                  width = '25%'),
-                     downloadButton('Data_Download', 
-                                    'Download Specific Data')
-                   ),
-                   dataTableOutput('Available_Data')
-                 ),
+                 #### Data TO download ####
+                 # tabPanel(
+                 #   p(h3("Data Available")),
+                 #   column(
+                 #     width=12,
+                 #     align = "center",
+                 #     numericInput("MMID_Download_Selection",
+                 #                  "Select the MMID to download",
+                 #                  value = 1,
+                 #                  min = 1,
+                 #                  max = "na",
+                 #                  step = 1,
+                 #                  width = '25%'),
+                 #     downloadButton('Data_Download', 
+                 #                    'Download Specific Data')
+                 #   ),
+                 #   dataTableOutput('Available_Data')
+                 # ),
                  tabPanel(
                    p(h3("Reference List")),
                    column(

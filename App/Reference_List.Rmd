@@ -20,7 +20,7 @@ library(readr)
 ```
 
 
-```{r Loading Database, echo=F, eval=F, warning=F,message=F}
+```{r Loading Database, echo=F, eval=T, warning=F,message=F}
 x <- read.csv("Reference.csv") 
 x <- x %>% 
   group_by(Nombre)
