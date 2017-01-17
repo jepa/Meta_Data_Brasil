@@ -73,7 +73,8 @@ shinyServer(function(input, output) {
               escape = FALSE,
               options = list(pageLength = 50,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 50, 100, 500, 1000)
+                             lengthMenu = c(10, 50, 100, 500, 1000),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
                              )
     )
   })
