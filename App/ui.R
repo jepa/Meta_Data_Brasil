@@ -32,82 +32,78 @@ shinyUI(
                  p(h3(
                    "Objetivos del proyecto"
                  )),
-                 p(
-                   "•Crear una meta base de datos que contenga información ecológica, económica, oceanográfica y social, referente al ambiente marino"
-                   ),
-                 p(
-                   "•Identificar tendencias en la disponibilidad de datos marinos en México"
-                   ),
-                 p(
-                   "• Identificar oportunidades de mejora de información marina en México"
+                 p("El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Asímismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejora de información marina en méxico. Por último, se pretende poyar el acceso a la información mediante un portal de consulta de datos."
                  ),
-                 p(
-                   "• Apoyar el acceso a la información mediante un portal de consulta de datos"
-                 ),
-                 p(
-                 "• Apoyar a la investigación en materia de cambio climático y los recursos marinos nacionales"
-                 )
-                 ),
+               p(strong("Cambio Climático"),
+                 "La disponibilidad de datos es clave para la investigación en materia de cambio climático. Es por esto que este proyecto pretende contribuir de manera substancial a la investigación que se realiza en México sobre los impactos del cambio climático en los recursos marinos y apoyar políticas públicas diseñadas para mejor manejar los recursos marinos del país."
+               )
+               ),
                  column(
-                   10,
+                   12,
                    align = "center",
                    img(
                      src = "flow_chart.png",
                      height = 150,
-                     width = 600
+                     width = 700
                    )
                    ),
                column(
                  10,
                  align = "justified",
                  offset = 1,
-                   p(h4("Individuos e Instituciones Participantes")),
-                   p(
-                     "Palacios-Abrantes, Juliano; Institute for the Oceans and Fisheries, University of British Columbia"
-                   ),
-                   p(
-                     "Andrés Cisneros-Montemayor; Institute for the Oceans and Fisheries, University of British Columbia"
-                   ),
-                   p(
-                     "Francisco Arreguín-Sánchez; Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional"
-                   ),
-                   p(
-                     "Laura Rodriguez, Environmental Defense Fund, México"
-                   ),
-                   p(
-                     "Miguel Ángel Cisneros-Mata; Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura "
-                   ),
-                   p(
-                     "William Cheung, Institute for the Oceans and Fisheries, University of British Columbia"
-                   )
+                   p(h3("Individuos e Instituciones Participantes")),
+                 p(strong(a(href="www.andres.com","Andrés Cisneros-Montemayor;")),
+                   "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
+                 p(strong(a(href="www.paco.com","Francisco Arreguín-Sánchez;")),
+                   "Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional"
+                 ),
+                 p(strong(a(href="www.mipagina.com","Juliano Palacios-Abrantes")),
+                 "Institute for the Oceans and Fisheries, University of British Columbia"
+                 ),
+                 p(strong(a(href="www.laura.com","Laura Rodriguez;")),
+                 "Environmental Defense Fund, México"
+                 ),
+                 p(strong(a(href="www.mac.com","Miguel Ángel Cisneros-Mata;")),
+                 "Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura"
+                 ),
+                 p(strong(a(href="www.william.com","William Cheung;")),
+                 "Institute for the Oceans and Fisheries, University of British Columbia"
+               )
+               ),
+               br(),
                column(
                  10,
                  align = "center",
                  offset = 1,
-                 img(
+                 a(href="www.ubc.ca",
+                   img(
                      src = "ubc_logo.gif",
                      height = 80,
                      width = 70
-                   ),
+                   )),
+                 a(href="www.ipn.mx",
                    img(
                      src = "ipn_logo.JPG",
                      height = 80,
                      width = 70
-                   ),
+                   )),
+                 a(href="www.inapesca.gob.mx",
                    img(
                      src = "inapesca_logo.JPG",
                      height = 100,
                      width = 300
-                   ),
+                   )),
+                 a(href="www.edf.com.mx",
                    img(
                      src = "edf_logo.JPG",
                      height = 100,
                      width = 300
-                   )
-                 )
+                   ))
                )
+             )
     ),
+    #.########################## ##### 
     #### INPUT DATA ####
     
     #### IMPORTANT INFORMATION FOR WHEN EDDITING THIS PART ####
@@ -393,22 +389,28 @@ shinyUI(
     #   )
     #   )
     # ),
+    #.########################## ##### 
     #### METADATA ####
     tabPanel("Metadata",
-             #### Instructions ####
-             p("Hola"),
+             h3(
+               "Metadata de Investigación Marina en México"
+             ),
+             p("A continuación le presentamos la base de metadatos que se ha recopilado desde Noviembre de 2016, aquí podrá consultar los datos que se han recopilado así como descargar la lista de referencias que se han consultado hasta la fecha."),
+             p(
+               "Si usted es autor o responsable de alguna información presente en esta tabla y encuentra un error, favor de comunicarse con nosotros."
+             ),
+             p(strong("Nota:"),"La información aquí presente no es terminal ya que el proyecto aún no termina y la información aún está siendo colectada"),
              column(
                width=12,
                align = "center",
                tabsetPanel(
                  id ="Data_Explorer",
                  tabPanel(
-                   p(h3("Base de Metadatos"))
-                   ),
+                   p(h4("Base de Metadatos")),
                    dataTableOutput('Metadata')
-                 ),
+                   ),
                  tabPanel(
-                   p(h3("Reference List")),
+                   p(h4("Reference List")),
                    column(
                      width = 12,
                      align = "center",
@@ -420,12 +422,13 @@ shinyUI(
                                   inline = TRUE),
                      downloadButton('downloadReport',
                                     "Download Reference List")
-                     ),
-                   column(
+                   ),
+                 column(
                      width = 12,
                      align = "left",
                    htmlOutput("Reference")
-                   )
+                 )
+                 )
                  )
                )
              ),
@@ -458,6 +461,7 @@ shinyUI(
                align = "center",
                p(h3("Resultados preeliminares (Cuantitativos y Cualitativos)"))
              ),
+             #.########################## ##### 
              #### PRELIMINARY RESULTS ####
              #### Quantitative Results####
              column(
@@ -536,16 +540,35 @@ shinyUI(
              plotOutput("Research_Field_Plot")
              )
     ),
-    tabPanel("Cómo Participar")
+    tabPanel("Cómo Participar"),
+    #.########################## ##### 
+    #### CONTACT ####
+    br(),
+    hr(),
+    column(12,
+           align = "center",
+           h5("Contact Information")
+           ),
+    column(3,
+           align = "center",
+           p(strong("Corresponding author:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
+    ),
+    column(3,
+           align = "center",
+           p(strong("Telephone:"), "+1-(778) 835 4298"),
+           strong("Skype:"), "jepa_88"
+           ),
+    column(5,
+           align ="justified",
+           p(strong("Address:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, BC V6T 1Z4")
+           ),
+    column(1,
+           align ="centered",
+           a(img(
+             src = "RG_Logo.png",
+             height = 40,
+             width = 40
+           ), href = "https://www.researchgate.net/profile/Juliano_Palacios_Abrantes2")
   )
 )
-
-
-
-
-
-
-
-
-
-
+)
