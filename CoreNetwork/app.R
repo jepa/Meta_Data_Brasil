@@ -114,7 +114,7 @@ server <- function(input, output) {
     simpleNetwork(networkData,
                   linkColour="red",
                   zoom=T,
-                  fontSize = 15)
+                  fontSize = 10)
     }else{
       if(input$information == "Institution"){
       if(input$members == "All"){
@@ -168,7 +168,8 @@ server <- function(input, output) {
         }
       }
       
-      simpleNetwork(networkData,
+      simpleNetwork(Data = networkData,
+                    linkDistance = 100,
                     linkColour="red",
                     zoom=T,
                     fontSize = 15)
