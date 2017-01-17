@@ -410,7 +410,7 @@ shinyUI(
                    dataTableOutput('Metadata')
                    ),
                  tabPanel(
-                   p(h4("Reference List")),
+                   p(h4("Referencias")),
                    column(
                      width = 12,
                      align = "center",
@@ -421,7 +421,7 @@ shinyUI(
                                     'Word'),
                                   inline = TRUE),
                      downloadButton('downloadReport',
-                                    "Download Reference List")
+                                    "Descargar Lista de Referencias")
                    ),
                  column(
                      width = 12,
@@ -435,7 +435,12 @@ shinyUI(
     #### PRELIMINARY RESULTS ####
     tabPanel("Resultados Preeliminares",
              #Wellcome / Instructions####
-             p("Hola"),
+             p(h3(
+               "Resultados Preeliminares de la Información Adquirida"
+               )),
+             p(
+               "A continuación se muestran datos preeliminares de la investigación en marina en México, dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian a menudo. Así mismo, estos resultados son parciales y no representan el total de la investigación marina en México."
+               ),
              column(
                width=4,
                align = "center",
@@ -473,12 +478,12 @@ shinyUI(
                            label= "Seleccione la Opción Deseada:",
                            choices = list("Area" = 1, 
                                           "Región" = 2,
-                                          "Locación" =3
+                                          "Localidad" =3
                            )
                ),
                plotOutput("Number_spp"),
                sliderInput("Num_Data_Range",
-                           "Seleccion el Número a Mostrar",
+                           "Seleccion el Número a Mostrar (Localidad)",
                            value=10,
                            min = 1,
                            max = 50),
@@ -519,9 +524,8 @@ shinyUI(
              #### Experimental Analysis ####
              column(width =12,
                     align = "center",
-                    p(h2("Análysis Experimental")),
                     selectInput("SE_E_Plot_Option", 
-                                label= "Choose To Show Plot:",
+                                label= "Seleccione la Categoría Deseada",
                                 choices = list("Area" = 1, 
                                                "Región" = 2,
                                                "Localidad" =3
@@ -540,27 +544,82 @@ shinyUI(
              plotOutput("Research_Field_Plot")
              )
     ),
-    tabPanel("Cómo Participar"),
+    #.########################## ##### 
+    #### PARTICIPATION ####
+    tabPanel(strong("Como Participar"),
+             h3("Colabora en el Desarollo de La Investigación Marina en México"),
+            p(" Estamos buscando cualquier fuente de información que contenga datos sobre
+             temas marinos en México. ¡No importa la fuente, pueden ser tus datos de
+             la tesis, de captura o algún reporte!"),
+            p("El proyecto se encuentra en una etapa de colaboración que consta en poblar la base de datos por lo que invitamos a cualquier persona interesada a colaborar con el proyecto a compartir información sobre sus datos."),
+            p("Es importante mencionar que",strong("no estamos copilando datos, si no que información sobre los mismos.")
+              ),
+            "Cuanta más gente esté involucrada, mejor podremos reflejar el estado de la investigación marina en México",
+            br(),
+            column(12,
+                   align="center",
+              p(h3(
+                "Tres Maneras de Colaborar"
+                   ))
+              ),
+            column(4,
+                   align="justified",
+                   h3(img(
+                     src = "Colaborar.png",
+                     height = 60,
+                     width = 60,
+                     "1. Comparte"
+                   )),
+                   p(
+                     "Para que el proyecto mejor refleje la investigación marina en México es necesario tener la mayor cantidad de información posible. Recuerda que no estamos colectando datos crudos, estamos colectando información sobre los datos"
+                     )
+                   ),
+            column(4,
+                   align="justified",
+                   h3(img(
+                     src = "Busca.png",
+                     height =60,
+                     width = 60,
+                     "2. Informa"
+                   )),
+                   p(
+                     "Estamos buscando cualquier fuente de información que contenga datos sobre
+                     temas marinos en México. No importa la fuente, pueden ser datos de tesis, publicaciones, monitoreos, literatura gris o algún reporte oficial"
+                   )
+            ),
+            column(4,
+                   align="justified",
+                   h3(img(
+                     src = "Comparte.png",
+                     height = 60,
+                     width = 60,
+                     "3. Habla"
+                   )),
+            p(
+              "Creemos que en México existe mucha información relevante al ambiente marino, sin embargo un pequeó grupo de personas no son capaces de capturar toda la información, cuanta más gente esté involucrada, más información podemos colectar y mejor podremos reflejar el estado actual de la investigación marina en México así como descubrir campos con falta de información."
+            )
+            )
+            ),
     #.########################## ##### 
     #### CONTACT ####
-    br(),
     hr(),
+    br(),
     column(12,
            align = "center",
-           h5("Contact Information")
+           h5("Información de Contacto")
            ),
     column(3,
            align = "center",
-           p(strong("Corresponding author:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
+           p(strong("Autor Corresponsal:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
     ),
     column(3,
            align = "center",
-           p(strong("Telephone:"), "+1-(778) 835 4298"),
+           p(strong("Teléfono:"), "+1 (778) 835 4298"),
            strong("Skype:"), "jepa_88"
            ),
     column(5,
            align ="justified",
-           p(strong("Address:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, BC V6T 1Z4")
+           p(strong("Dirección:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canadá, BC V6T 1Z4")
            ),
     column(1,
            align ="centered",

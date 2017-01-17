@@ -96,6 +96,8 @@ shinyServer(function(input, output) {
     
   })
   
+  
+  
   #Resultados iniciales ####
   
   
@@ -230,7 +232,7 @@ shinyServer(function(input, output) {
   })
   
   output$Number_spp <- renderPlot({
-    #### By Area####
+    #### Entries By Area####
     
     if(input$Plot_Option == 1){
       Spp <- datasetInput() %>% 
@@ -249,8 +251,8 @@ shinyServer(function(input, output) {
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Number of Data Points")+
-        xlab("Research Field")+
+        ylab("Número de Datos")+
+        xlab("Campo de Investigación")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
                                          angle=45),
@@ -278,8 +280,8 @@ shinyServer(function(input, output) {
                )) +
           geom_bar(stat="identity")+
           theme_classic() +
-          ylab("Number of Data Points")+
-          xlab("Region")+
+          ylab("Número de Datos")+
+          xlab("Región")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle = 45),
@@ -311,9 +313,9 @@ shinyServer(function(input, output) {
                  )) +
             geom_bar(stat="identity")+
             theme_classic() +
-            #coord_flip() +
-            ylab("Number of Data Points")+
-            xlab("Location Name")+
+            coord_flip() +
+            ylab("Número de Datos")+
+            xlab("Localidad")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle=45),
@@ -343,8 +345,8 @@ shinyServer(function(input, output) {
            ))+
       geom_bar(stat = "identity")+
       theme_classic() +
-      ylab("Number of Data Points")+
-      xlab("Social Economic Component")+
+      ylab("Número de Datos")+
+      xlab("Componente Socio Económico")+
       theme(axis.text.x = element_text(hjust = 1,
                                        size=14,
                                        angle= 45),
@@ -415,7 +417,7 @@ shinyServer(function(input, output) {
              ))+
         geom_bar()+
         theme_classic() +
-        ylab("Number of Data Points")+
+        ylab("Número de Datos")+
         xlab("Area")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
@@ -424,7 +426,7 @@ shinyServer(function(input, output) {
               legend.position = "top",
               axis.title = element_text(size=20,
                                         face="bold"))+ 
-        guides(fill = guide_legend(title = "Social Economic Component",
+        guides(fill = guide_legend(title = "Componente Socio-Económico",
                                    title.position = "left"))
     }else{
       #### By Region ####
@@ -440,8 +442,8 @@ shinyServer(function(input, output) {
                ))+
           geom_bar()+
           theme_classic() +
-          ylab("Number of Data Points")+
-          xlab("Region")+
+            ylab("Número de Datos")+
+          xlab("Región")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle= 45),
@@ -449,7 +451,7 @@ shinyServer(function(input, output) {
                 legend.position = "top",
                 axis.title = element_text(size=20,
                                           face="bold"))+ 
-          guides(fill = guide_legend(title = "Social Economic Component",
+          guides(fill = guide_legend(title = "Componente Socio-Económico",
                                      title.position = "left"))
       }else{
         #### By Location ####
@@ -466,8 +468,8 @@ shinyServer(function(input, output) {
                  ))+
             geom_bar()+
             theme_classic() +
-            ylab("Number of \nData Points")+
-            xlab("Location")+
+            ylab("Número de Datos")+
+            xlab("Localidad")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle= 45),
@@ -475,7 +477,7 @@ shinyServer(function(input, output) {
                   legend.position = "top",
                   axis.title = element_text(size=20,
                                             face="bold"))+ 
-            guides(fill = guide_legend(title = "Social Economic Component",
+            guides(fill = guide_legend(title = "Componente Socio-Económico",
                                        title.position = "left"))
           
         }
