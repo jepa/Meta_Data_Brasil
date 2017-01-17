@@ -1,5 +1,19 @@
 #### NOTA ####
+##############################
+##############################
+##############################
+##############################
+
+##### MUY IMPORTANTE ####
+
+#Para modificar la información de la página informativa TIENES que estar en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
+
 #Read ui.R for information between branches
+##############################
+##############################
+##############################
+##############################
+
 
 
 ####Libraries needed ####
