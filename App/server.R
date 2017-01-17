@@ -1,5 +1,8 @@
+#### NOTA ####
+#Read ui.R for information between branches
 
-####Libraries needed ####
+
+ #### Libraries needed ####
 
 library(shiny)
 library(leaflet) #For the maps
@@ -16,13 +19,14 @@ library(networkD3)
 
 #Functions #
 
-source('./Functions/Fun_Dat_links.r')
+#Commented for publication of project
+#source('Fun_Dat_links.r')
 
 #The begining #
 
 shinyServer(function(input, output) {
   
-  
+  ####.############### ####
   #### INPUT DATA TAB ####  
   
   # Upload datatable ####
@@ -34,38 +38,15 @@ shinyServer(function(input, output) {
     data
   })
   
-  # Mapa de localización ####
-  output$Location_Map <- renderLeaflet({
-    if (input$Location_Map == TRUE) {
-      leaflet() %>%
-        addTiles(
-          urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-          attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-        ) %>%
-        #Initial view #
-        setView(lng = -102.5528, 
-                lat = 23.6345,
-                zoom = 5) %>% 
-        #Adding Data localization ####
-      addMarkers(lng = input$Map_Long,
-                 lat= input$Map_Lat,
-                 popup=input$Short_Title)
-    }
-  })
-  
   
   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
+  ####.############### ####
   # METADATA TAB ####
   
   # Reading the Template ####
   datasetInput <- reactive({
     
-    # PATH FOR HALL 2000 
-    #library(xlsx)
-    #data <- read.xlsx("/Users/jpalacios/Documents/Box Sync/UBC/Metadata_Mexico/English/Templates/Template_1.5.xlsx","Template")
-    
-    #PATH FOR CARMELIA #
     data<- read.csv("./Template.csv", 
                     header = TRUE,
                     na="NA")
@@ -78,13 +59,13 @@ shinyServer(function(input, output) {
     
     #you will need this function on the "Functions" folder (it is already sourced at the beginning of the app)
     #Fun_Dat_links
-    x <- Ref_Links(datasetInput()$Reference,
-                   datasetInput()$Subject_name)
+    # x <- Ref_Links(datasetInput()$Reference,
+    #                datasetInput()$Subject_name)
     
     #Re order the datatable
-    Final <- datasetInput() %>% 
-      bind_cols(x) %>% 
-      select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
+     Final <- datasetInput() #%>% 
+    #   bind_cols(x) %>% 
+    #   select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
     
     #Show the datatable 
     datatable(Final,
@@ -93,7 +74,8 @@ shinyServer(function(input, output) {
               escape = FALSE,
               options = list(pageLength = 50,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 50, 100, 500, 1000)
+                             lengthMenu = c(10, 50, 100, 500, 1000),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
                              )
     )
   })
@@ -115,43 +97,8 @@ shinyServer(function(input, output) {
     
   })
   
-  # Download Data ####
-  #Specific Data #
-  #First we create a path where the data is saved
-  MMID_Data <- reactive({
-    Dfile = paste("./Data_Download/MMID_",
-                  input$MMID_Download_Selection, #THis includes the number
-                  '.csv',
-                  sep='')
-    read.csv(Dfile, header = TRUE)
-    
-  })
+  #Resultados iniciales ####
   
-  #This is just for the download button and the name of the file...
-  output$Data_Download <- downloadHandler(
-    filename = function() {  
-      paste("MMID_",
-            input$MMID_Download_Selection, 
-            '.csv',
-            sep='') 
-    },
-    content = function(file) {
-      write.csv(MMID_Data(), file)
-    }
-    
-  )
-  
-  # All Meta-dataset #
-  output$MMID_Download <- downloadHandler(
-    filename = function() { 
-      paste(input$MMID_Download, 
-            '.csv', 
-            sep='') 
-    },
-    content = function(file) {
-      write.csv(datasetInput(), file)
-    }
-  )
   
   #### Reference ####
   
@@ -182,7 +129,6 @@ shinyServer(function(input, output) {
   
   ##### Reference Display ####
   
-  
   getPage<-function() {
     return(includeHTML("./Reference/Reference_List.html"))
   }
@@ -192,6 +138,7 @@ shinyServer(function(input, output) {
   
   ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
+  ####.############### ####
   #### PRELIMINARY RESULTS TAB ####
   # Mapa de resultados ####
   
@@ -256,13 +203,15 @@ shinyServer(function(input, output) {
     
   })
   
+  ####.############### ####
   #### Quantitative Results ####
   # Number of entries ####
+  
   output$Number_Entries <- renderPrint({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
-      Number_entries$MMID[length(Number_entries$MMID)]
-      
+    Number_entries$MMID[length(Number_entries$MMID)]
+    
   })
   
   output$Number_Data_Points <- renderPrint({
@@ -271,9 +220,20 @@ shinyServer(function(input, output) {
     
   })
   
+  output$Sources <- renderPrint({
+     z<- datasetInput() %>% 
+      group_by(Compilation_Title) %>% 
+      summarise(sum(Data_Time_Points)) %>% 
+      select(-2) %>% 
+      filter(!is.na(Compilation_Title)) %>% 
+      mutate(z = 1)
+    
+    sum(z$z)
+    
+  })
   
   output$Number_spp <- renderPlot({
-    #### By Area####
+    #### Entries By Area####
     
     if(input$Plot_Option == 1){
       Spp <- datasetInput() %>% 
@@ -292,8 +252,8 @@ shinyServer(function(input, output) {
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Number of Data Points")+
-        xlab("Research Field")+
+        ylab("Número de Datos")+
+        xlab("Campo de Investigación")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
                                          angle=45),
@@ -321,8 +281,8 @@ shinyServer(function(input, output) {
                )) +
           geom_bar(stat="identity")+
           theme_classic() +
-          ylab("Number of Data Points")+
-          xlab("Region")+
+          ylab("Número de Datos")+
+          xlab("Región")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle = 45),
@@ -354,9 +314,9 @@ shinyServer(function(input, output) {
                  )) +
             geom_bar(stat="identity")+
             theme_classic() +
-            #coord_flip() +
-            ylab("Number of Data Points")+
-            xlab("Location Name")+
+            coord_flip() +
+            ylab("Número de Datos")+
+            xlab("Localidad")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle=45),
@@ -386,8 +346,8 @@ shinyServer(function(input, output) {
            ))+
       geom_bar(stat = "identity")+
       theme_classic() +
-      ylab("Number of Data Points")+
-      xlab("Social Economic Component")+
+      ylab("Número de Datos")+
+      xlab("Componente Socio Económico")+
       theme(axis.text.x = element_text(hjust = 1,
                                        size=14,
                                        angle= 45),
@@ -397,7 +357,7 @@ shinyServer(function(input, output) {
                                       face="bold"))
   })
   
-  
+  ####.############### ####
   #### Qualitative Analysis ####
   
   # Keywords_Plot ####
@@ -458,7 +418,7 @@ shinyServer(function(input, output) {
              ))+
         geom_bar()+
         theme_classic() +
-        ylab("Number of Data Points")+
+        ylab("Número de Datos")+
         xlab("Area")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
@@ -467,7 +427,7 @@ shinyServer(function(input, output) {
               legend.position = "top",
               axis.title = element_text(size=20,
                                         face="bold"))+ 
-        guides(fill = guide_legend(title = "Social Economic Component",
+        guides(fill = guide_legend(title = "Componente Socio-Económico",
                                    title.position = "left"))
     }else{
       #### By Region ####
@@ -483,8 +443,8 @@ shinyServer(function(input, output) {
                ))+
           geom_bar()+
           theme_classic() +
-          ylab("Number of Data Points")+
-          xlab("Region")+
+            ylab("Número de Datos")+
+          xlab("Región")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle= 45),
@@ -492,7 +452,7 @@ shinyServer(function(input, output) {
                 legend.position = "top",
                 axis.title = element_text(size=20,
                                           face="bold"))+ 
-          guides(fill = guide_legend(title = "Social Economic Component",
+          guides(fill = guide_legend(title = "Componente Socio-Económico",
                                      title.position = "left"))
       }else{
         #### By Location ####
@@ -509,8 +469,8 @@ shinyServer(function(input, output) {
                  ))+
             geom_bar()+
             theme_classic() +
-            ylab("Number of \nData Points")+
-            xlab("Location")+
+            ylab("Número de Datos")+
+            xlab("Localidad")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle= 45),
@@ -518,7 +478,7 @@ shinyServer(function(input, output) {
                   legend.position = "top",
                   axis.title = element_text(size=20,
                                             face="bold"))+ 
-            guides(fill = guide_legend(title = "Social Economic Component",
+            guides(fill = guide_legend(title = "Componente Socio-Económico",
                                        title.position = "left"))
           
         }
@@ -617,5 +577,9 @@ shinyServer(function(input, output) {
       }
     }
   })
+  ####.############### ####
+  #### Colaborar ####
+  
+  
 })
 
