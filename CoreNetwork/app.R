@@ -16,12 +16,18 @@ ui <- fluidPage(
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
       sidebarPanel(
-         selectInput("members",
+        selectInput("information",
+                    "Show Results by:",
+                    choices = c("Person",
+                                "Institution"),
+                    selected="Person"
+                    ),
+        selectInput("members",
                      "Core Group Member",
                      choices = c(
                        "Chore Group" = "All",
                        "Andres Cisneros" = "A",
-                       "Francisco Algo" = "P",
+                       "Francisco Arreguín" = "P",
                        "Juliano Palacios" ="J",
                        "Laura Rodriguez" = "L",
                        "Miguel Angel Cisneros" = "MAC",
@@ -44,7 +50,7 @@ server <- function(input, output) {
   
   RedInput <- reactive({
     
-    read.csv("./Red.csv")
+    read.csv("./Red.csv", header = TRUE)
     
   })
   
@@ -52,49 +58,50 @@ server <- function(input, output) {
     
     Red <- RedInput()
     
+    if(input$information == "Person"){
     if(input$members == "All"){
-      networkData <- data.frame(Red$CGM, Red$Contact) 
+      networkData <- data.frame(Red$CGM_Member, Red$Contact_Person) 
       
       }else{
         
         if(input$members == "L"){
-          networkData <- data.frame(Red$CGM, Red$Contact) 
+          networkData <- data.frame(Red$CGM_Member, Red$Contact_Person) 
         networkData <- networkData%>% 
-          filter(Red.CGM == "Laura")
+          filter(Red.CGM_Member == "Laura")
         
     }else{
       
       if(input$members == "A"){
-      networkData <- data.frame(Red$CGM, Red$Contact)
+      networkData <- data.frame(Red$CGM_Member, Red$Contact_Person)
       networkData <- networkData%>%
-        filter(Red.CGM == "Andres")
+        filter(Red.CGM_Member == "Andres")
       
     }else{
       
       if(input$members == "J"){
-      networkData <- data.frame(Red$CGM, Red$Contact)
+      networkData <- data.frame(Red$CGM_Member, Red$Contact_Person)
       networkData <- networkData%>%
-        filter(Red.CGM == "Juliano")
+        filter(Red.CGM_Member == "Juliano")
       
     }else{
       
       if(input$members == "MAC"){
-      networkData <- data.frame(Red$CGM, Red$Contact)
+      networkData <- data.frame(Red$CGM_Member, Red$Contact_Person)
       networkData <- networkData%>%
-        filter(Red.CGM == "Miguel Angel")
+        filter(Red.CGM_Member == "Miguel Angel")
       
     }else{
       
       if(input$members == "P"){
-      networkData <- data.frame(Red$CGM, Red$Contact)
+      networkData <- data.frame(Red$CGM_Member, Red$Contact_Person)
       networkData <- networkData%>%
-        filter(Red.CGM == "Paco")
+        filter(Red.CGM_Member == "Paco")
       
     }else{
       if(input$members == "W"){
-      networkData <- data.frame(Red$CGM, Red$Contact)
+      networkData <- data.frame(Red$CGM_Member, Red$Contact_Person)
       networkData <- networkData%>%
-        filter(Red.CGM == "William")
+        filter(Red.CGM_Member == "William")
       }
     }
     }
@@ -103,13 +110,73 @@ server <- function(input, output) {
     }
       }
     
+    
     simpleNetwork(networkData,
                   linkColour="red",
                   zoom=T,
                   fontSize = 15)
-  })
-  
+    }else{
+      if(input$information == "Institution"){
+      if(input$members == "All"){
+        networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution) 
+        
+      }else{
+        
+        if(input$members == "L"){
+          networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution) 
+          networkData <- networkData%>% 
+            filter(Red.CGM_Member == "Laura")
+          
+        }else{
+          
+          if(input$members == "A"){
+            networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution)
+            networkData <- networkData%>%
+              filter(Red.CGM_Member == "Andres")
+            
+          }else{
+            
+            if(input$members == "J"){
+              networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution)
+              networkData <- networkData%>%
+                filter(Red.CGM_Member == "Juliano")
+              
+            }else{
+              
+              if(input$members == "MAC"){
+                networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution)
+                networkData <- networkData%>%
+                  filter(Red.CGM_Member == "Miguel Angel")
+                
+              }else{
+                
+                if(input$members == "P"){
+                  networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution)
+                  networkData <- networkData%>%
+                    filter(Red.CGM_Member == "Paco")
+                  
+                }else{
+                  if(input$members == "W"){
+                    networkData <- data.frame(Red$CGM_Member, Red$Contact_Institution)
+                    networkData <- networkData%>%
+                      filter(Red.CGM_Member == "William")
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      
+      simpleNetwork(networkData,
+                    linkColour="red",
+                    zoom=T,
+                    fontSize = 15)
+      }
+    }
+    })
 }
+
 
 # Run the application 
 shinyApp(ui = ui, server = server)
