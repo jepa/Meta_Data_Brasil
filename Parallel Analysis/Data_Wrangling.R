@@ -231,4 +231,123 @@ UNAM_X <- UNAM %>%
   
 #write.csv(UNAM_X[18:21],"UNAM_MMID.csv")
 
+####################### END ########################
+# BALANZA COMERCIAL POR PRINCIPALES PRODUCTOS PESQUEROS, 2004 - 2013. Anuario Sagarpa Pg. 186
+
+#Exportacion
+Exp <- data.frame(matrix(c("Algas y Sargazos",
+              "Calamar","Camaron",
+              "Pulpo",
+              "Sardina y Macarela",
+              "Org. Acuats. Vivos"
+              ),ncol=1))
+colnames(Exp) <- ("Specie")
+
+Exp <-Exp %>% 
+  mutate(Volumen="Volumen de Exportacion de") %>% 
+  mutate(Valor="Valor de Exportacion de") %>% 
+  mutate(Year = "2004-2013") %>% 
+  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
+  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
+  mutate(Key.Vol = paste("Volumen; Exportacion; Balanza Comercial;",Specie)) %>% 
+  mutate(Key.Val = paste("Valor; Exportacion; Balanza Comercial;",Specie)) %>% 
+  select(-2:-4)
+  
+  
+#Importacion
+Imp <- data.frame(matrix(c("Derivados de Algas",
+                           "Calamar",
+                           "Camaron",
+                           "Salmon",
+                           "Org. Acuats. Vivos"
+),ncol=1))
+colnames(Imp) <- ("Specie")
+
+Imp <-Imp %>% 
+  mutate(Volumen="Volumen de Importacion de") %>% 
+  mutate(Valor="Valor de Importacion de") %>% 
+  mutate(Year = "2004-2013") %>% 
+  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
+  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
+  mutate(Key.Vol = paste("Volumen; Importacion; Balanza Comercial;",Specie)) %>% 
+  mutate(Key.Val = paste("Valor; Importacion; Balanza Comercial;",Specie)) %>% 
+  select(-2:-4)
+  
+Final <- bind_rows(Exp,Imp)
+write.csv(Final,"Balanza.csv")
+
+Disp <- data.frame(matrix(c("Tunidos (Fresco)",
+                            "Mojarra",
+                            "Camaron",
+                            "Ostion",
+                            "Tiburon y Cazon",
+                            "Otros",
+                            "Tunidos (Enlatado)",
+                            "Sardinas",
+                            "Harina y Aceite",
+                            "Total"
+                            
+                                   
+),ncol=1))
+colnames(Disp) <- ("Specie")
+
+Disp <-Disp %>% 
+  mutate(Legend="Disponibilidad Interna de") %>% 
+  mutate(Year = "1988-2013") %>% 
+  mutate(Final = paste(Legend,Specie,",",Year)) %>% 
+  mutate(Key = paste("Volumen; Disponibilidad; Interna; Fresco; Congelado; Enlatado; Reduccion;",Specie)) %>% 
+  select(-Legend,-Year)
+
+write.csv(Disp,"Disponibilidad.csv")
+
+####################### END ########################
+
+Embarcaciones <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Embarcaciones.csv")
+
+Emb1 <- Embarcaciones %>% 
+  mutate(Fin1= paste(Leyenda,Estado,Year)) %>%
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Total; Nacional; Pesca"))
+  select(10,11)
+Emb2 <- Embarcaciones %>% 
+  filter(Leyenda2 !="na") %>% 
+  mutate(Fin1= paste(Leyenda2,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca")) %>% 
+  select(10,11)
+Emb3 <- Embarcaciones %>% 
+  filter(Leyenda3 !="na") %>% 
+  mutate(Fin1= paste(Leyenda3,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Camaron")) %>% 
+  select(10,11)
+Emb4 <- Embarcaciones %>% 
+  filter(Leyenda4 !="na") %>% 
+  mutate(Fin1= paste(Leyenda4,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Atun; Tunidos")) %>% 
+  select(10,11)
+Emb5 <- Embarcaciones %>% 
+  filter(Leyenda5 !="na") %>% 
+  mutate(Fin1= paste(Leyenda5,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Sardina; Anchoveta")) %>%
+  mutate(Subject = Estado) %>% 
+  select(10,11,12)
+Emb6 <- Embarcaciones %>% 
+  filter(Leyenda6 !="na") %>% 
+  mutate(Fin1= paste(Leyenda6,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Escama")) %>%
+  mutate(Subject = Estado) %>% 
+  select(10,11,12)
+
+Emb7 <- Embarcaciones %>% 
+  filter(Leyenda7 !="na") %>% 
+  mutate(Fin1= paste(Leyenda7,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Rios; Estado; Pesca; Riberena")) %>%
+  mutate(Subject = Estado) %>% 
+  select(10,11,12)
+
+
+Final <- bind_rows(Emb1,Emb2,Emb3,Emb4,Emb5,Emb6,Emb7)
+
+  
+
+
+  
   
