@@ -1,9 +1,4 @@
-#### NOTA ####
-##########################################################################################
-##########################################################################################
-##########################################################################################
-##########################################################################################
-
+#________________________________________________________________________________________________________________________________________
 ##### MUY IMPORTANTE ####
 
 #Para modificar la información de la página informativa TIENES que estar en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
@@ -14,11 +9,7 @@
 # Input data map
 # Resutls map
 
-##########################################################################################
-##########################################################################################
-##########################################################################################
-##########################################################################################
-
+#________________________________________________________________________________________________________________________________________
 
 
 library(shiny)
@@ -27,7 +18,9 @@ library(DT)
 library(markdown)
 
 shinyUI(
+  ### Navigation bar
   navbarPage(
+    #Web page title
     "Metadata de Investigación Marina en México",
     #### Inicio ####
     tabPanel("Inicio",
@@ -57,33 +50,35 @@ shinyUI(
                  column(
                    12,
                    align = "center",
+                   # Flowchart Image
                    img(
                      src = "flow_chart.png",
                      height = 150,
                      width = 700
                    )
                    ),
+               # Core Group Infomation
                column(
                  10,
                  align = "justified",
                  offset = 1,
                    p(h3("Individuos e Instituciones Participantes")),
-                 p(strong(a(href="www.andres.com","Andrés Cisneros-Montemayor;")),
+                 p(strong(a(href="http://oceans.ubc.ca/andres-cisneros-montemayor/","Andrés Cisneros-Montemayor;")),
                    "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
-                 p(strong(a(href="www.paco.com","Francisco Arreguín-Sánchez;")),
+                 p(strong(a(href="http://www.informatica.sip.ipn.mx/semanainnovacion2013/docs/dr_FranciscoArreguinSanchez.pdf","Francisco Arreguín-Sánchez;")),
                    "Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional"
                  ),
-                 p(strong(a(href="www.mipagina.com","Juliano Palacios-Abrantes")),
+                 p(strong(a(href="https://jepa.shinyapps.io/jpalacios/","Juliano Palacios-Abrantes")),
                  "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
-                 p(strong(a(href="www.laura.com","Laura Rodriguez;")),
+                 p(strong(a(href="http://mexico.edf.org/personas/laura-f-rodriguez","Laura Rodriguez;")),
                  "Environmental Defense Fund, México"
                  ),
-                 p(strong(a(href="www.mac.com","Miguel Ángel Cisneros-Mata;")),
+                 p(strong(a(href="https://www.researchgate.net/profile/Miguel_Cisneros-Mata","Miguel Ángel Cisneros-Mata;")),
                  "Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura"
                  ),
-                 p(strong(a(href="www.william.com","William Cheung;")),
+                 p(strong(a(href="http://oceans.ubc.ca/william-cheung/","William Cheung;")),
                  "Institute for the Oceans and Fisheries, University of British Columbia"
                )
                ),
@@ -92,33 +87,73 @@ shinyUI(
                  10,
                  align = "center",
                  offset = 1,
-                 a(href="www.ubc.ca",
+                 a(href="http://www.ubc.ca/",
                    img(
                      src = "ubc_logo.gif",
                      height = 80,
                      width = 70
                    )),
-                 a(href="www.ipn.mx",
+                 a(href="http://www.ipn.mx",
                    img(
                      src = "ipn_logo.JPG",
                      height = 80,
                      width = 70
                    )),
-                 a(href="www.inapesca.gob.mx",
+                 a(href="http://www.inapesca.gob.mx",
                    img(
                      src = "inapesca_logo.JPG",
                      height = 100,
                      width = 300
                    )),
-                 a(href="www.edf.com.mx",
+                 a(href="http://mexico.edf.org/",
                    img(
                      src = "edf_logo.JPG",
                      height = 100,
                      width = 300
                    ))
                )
-             )
-    ),
+             ),
+             br(),
+             #Partners Information
+             column(
+               10,
+               align = "justified",
+               offset = 1,
+               p(h3("Partners")
+               )
+             ),
+             column(
+               10,
+               align = "center",
+               offset = 1,
+               a(href="http://datamares.ucsd.edu/en/about",
+                 img(
+                   src = "dataMares_Logo.png",
+                   height = 60,
+                   width = 200
+                 )),
+               a(href="http://monitoreonoroeste.mx/index.php",
+                 img(
+                   src = "Monitoreo_Logo.png",
+                   height = 60,
+                   width = 200
+                 ))#,
+               # a(href="www.inapesca.gob.mx",
+               #   img(
+               #     src = "inapesca_logo.JPG",
+               #     height = 100,
+               #     width = 300
+               #   )),
+               # a(href="www.edf.com.mx",
+               #   img(
+               #     src = "edf_logo.JPG",
+               #     height = 100,
+               #     width = 300
+               #   ))
+             ),
+             hr(),
+             br()
+    ), # Close first page
    #.########################## ##### 
     #### METADATA ####
     tabPanel("Metadata",
