@@ -113,8 +113,7 @@ shinyUI(
                    ))
                )
              ),
-             br(),
-             #Partners Information
+             #Partners Information####
              column(
                10,
                align = "justified",
@@ -150,9 +149,7 @@ shinyUI(
                #     height = 100,
                #     width = 300
                #   ))
-             ),
-             hr(),
-             br()
+             )
     ), # Close first page
    #.########################## ##### 
     #### METADATA ####
@@ -310,7 +307,7 @@ shinyUI(
              )
     ),
     #.########################## ##### 
-    #### PARTICIPATION ####
+    #### Collaboration ####
     tabPanel(strong("Collaboration"),
              h3("Collaborate in the Development of Marine Research in Mexico"),
             p("We are looking for any source of information that contains data on
@@ -321,7 +318,7 @@ shinyUI(
             "The more people involved, the better we can reflect the state of marine research in Mexico,",
             br(),
             column(12,
-                   align="center",
+                   align="justified",
               p(h3(
                 "Three Ways to Collaborate"
                    ))
@@ -370,14 +367,37 @@ shinyUI(
             p(
               "We believe that in Mexico there is a lot of information relevant to the marine environment, however a small group of people are not able to capture all the information. The more people are involved, the more information we can collect and the better we can reflect the current state of marine research in Mexico as well as discover fields with lack of information."
             )
+            ),
+            column(12,
+                   align = "justified",
+                   p(h3(
+                     "People and Institutions Collaborating"
+                     )),
+                   p(
+                     "While the vast mayority of the information collected until now is publically accessed online (See References), we have started recieving data information from un-published or non-available sources" 
+                   ),
+                   column(6,
+                          align = "center",
+                          p(h4(strong(
+                            "Institutions"
+                          ))),
+                          dataTableOutput("Institutions")
+            ),
+            column(6,
+                   align = "center",
+                   p(h4(strong(
+                     "People"
+                   ))),
+                   dataTableOutput("People")
+            )
             )
             ),
     #.########################## ##### 
     #### CONTACT ####
-    hr(),
-    br(),
     column(12,
            align = "center",
+           hr(),
+           br(),
            h5("Contact Information")
            ),
     column(3,
