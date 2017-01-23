@@ -172,7 +172,9 @@ server <- function(input, output) {
                     linkDistance = 100,
                     linkColour="red",
                     zoom=T,
-                    fontSize = 15)
+                    fontSize = 15,
+                    charge = -200
+                    )
       }
     }
     })
