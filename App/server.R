@@ -155,6 +155,7 @@ shinyServer(function(input, output) {
   output$Data_Map <- renderLeaflet({
     data = datasetInput() %>% 
       filter(!is.na(Lat))
+      
     leaflet(data=data) %>%
       addTiles(
         urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
