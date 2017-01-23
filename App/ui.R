@@ -28,23 +28,23 @@ shinyUI(
                column(
                  12,
                  align = "center",
-                 h1("Hacia la Creación de una Base de Metadatos de Investigación Marina en México")
+                 h1("Towards the Creation of a Meta-database of Marine Research in Mexico ")
                ),
                column(
                  10,
                  align = "justified",
                  offset = 1,
-                 p(h3("¡Bienvenidos!")),
+                 p(h3("Wellcome!")),
                  p(
-                   "La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir pero no siempre están disponibles al público o su existencia no es conocida. El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigaciónnovedosa en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información existente al mismo tiempo que estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país" 
+                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
                  ),
                  p(h3(
-                   "Objetivos del proyecto"
+                   "Proyect Objectives"
                  )),
-                 p("El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Asímismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejora de información marina en méxico. Por último, se pretende poyar el acceso a la información mediante un portal de consulta de datos."
+                 p("The main objective of this proyect is to create a meta-database for oceanographic, ecological, economic and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that should be addressed in the future. Finally, the meta database is expected to be public, self maintining and available for consultation"
                  ),
-               p(strong("Cambio Climático"),
-                 "La disponibilidad de datos es clave para la investigación en materia de cambio climático. Es por esto que este proyecto pretende contribuir de manera substancial a la investigación que se realiza en México sobre los impactos del cambio climático en los recursos marinos y apoyar políticas públicas diseñadas para mejor manejar los recursos marinos del país."
+               p(strong("Climate Change"),
+                 "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improoving our understanding that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
                )
                ),
                  column(
@@ -62,7 +62,7 @@ shinyUI(
                  10,
                  align = "justified",
                  offset = 1,
-                   p(h3("Individuos e Instituciones Participantes")),
+                   p(h3("Participants and Institutions")),
                  p(strong(a(href="http://oceans.ubc.ca/andres-cisneros-montemayor/","Andrés Cisneros-Montemayor;")),
                    "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
@@ -158,35 +158,35 @@ shinyUI(
     #### METADATA ####
     tabPanel("Metadata",
              h3(
-               "Metadata de Investigación Marina en México"
+               "Metadata of Marine research in Mexico"
              ),
-             p("A continuación le presentamos la base de metadatos que se ha recopilado desde Noviembre de 2016, aquí podrá consultar los datos que se han recopilado así como descargar la lista de referencias que se han consultado hasta la fecha."),
+             p("In this section you will find the metadata base that has been compiled since November 2016. In addition to surf the database, you can download the list of references that have been consulted to date."),
              p(
-               "Si usted es autor o responsable de alguna información presente en esta tabla y encuentra un error, favor de comunicarse con nosotros."
+               "If you are the author or responsible for any information in this database, and find an error, please contact us."
              ),
-             p(strong("Nota:"),"La información aquí presente no es terminal ya que el proyecto aún no termina y la información aún está siendo colectada"),
+             p(strong("Note:"),"The information here presented is partial. The project is not yet complete and the information is still being collected"),
              column(
                width=12,
                align = "center",
                tabsetPanel(
                  id ="Data_Explorer",
                  tabPanel(
-                   p(h4("Base de Metadatos")),
+                   p(h4("Metadata Base")),
                    dataTableOutput('Metadata')
                    ),
                  tabPanel(
-                   p(h4("Referencias")),
+                   p(h4("Reference List")),
                    column(
                      width = 12,
                      align = "center",
                      radioButtons('format',
-                                  'Seleccione el Formato',
+                                  'Select Format',
                                   c('PDF',
                                     'HTML',
                                     'Word'),
                                   inline = TRUE),
                      downloadButton('downloadReport',
-                                    "Descargar Lista de Referencias")
+                                    "Download Reference List")
                    ),
                  column(
                      width = 12,
@@ -198,30 +198,30 @@ shinyUI(
                )
              ),
     #### PRELIMINARY RESULTS ####
-    tabPanel("Resultados Preeliminares",
+    tabPanel("Preliminary Results",
              #Wellcome / Instructions####
              p(h3(
-               "Resultados Preeliminares de la Información Adquirida"
+               "Preliminary Results"
                )),
              p(
-               "A continuación se muestran datos preeliminares de la investigación en marina en México, dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian a menudo. Así mismo, estos resultados son parciales y no representan el total de la investigación marina en México."
+               "In this section you will be presented with some of the preliminary results. These results are directly related to the information that is being collected. Likewise, these results are partial and do not represent the total of marine research in Mexico."
                ),
              column(
                width=4,
                align = "center",
-               p(h3("Registros Capturados")),
+               p(h3("Registers")),
                p(h4(textOutput("Number_Entries")))
              ),
              column(
                width=4,
                align = "center",
-               p(h3("Número de Datos")),
+               p(h3("Data Number")),
                p(h4(textOutput("Number_Data_Points")))
              ),
              column(
                width=4,
                align = "center",
-               p(h3("Fuentes Consultadas")),
+               p(h3("References/Repositories")),
                p(h4(textOutput("Sources")))
              ),
              br(),
@@ -229,7 +229,7 @@ shinyUI(
              column(
                width = 12,
                align = "center",
-               p(h3("Resultados preeliminares (Cuantitativos y Cualitativos)"))
+               p(h3("Preeliminary Results (Quantitative & Qualitative)"))
              ),
              #.########################## ##### 
              #### PRELIMINARY RESULTS ####
@@ -237,10 +237,10 @@ shinyUI(
              column(
                width = 6,
                align= "center",
-               p(h3("Resultados Cuantitativos")),
-               p(h4("Número de datos por Unidad de Espacio")),
+               p(h3("Quantitative Results")),
+               p(h4("Data per Area")),
                selectInput("Plot_Option", 
-                           label= "Seleccione la Opción Deseada:",
+                           label= "Select one option:",
                            choices = list("Area" = 1, 
                                           "Región" = 2,
                                           "Localidad" =3
@@ -248,12 +248,12 @@ shinyUI(
                ),
                plotOutput("Number_spp"),
                sliderInput("Num_Data_Range",
-                           "Seleccion el Número a Mostrar (Localidad)",
+                           "Select the amount to display (Localidad)",
                            value=10,
                            min = 1,
                            max = 50),
                #### SE_Component ####
-               p(h4("Componente Social Económico")),
+               p(h4("Socio-Economic Component")),
                plotOutput("SE_Component")
              ),
              #### Qualitative Results####
@@ -261,10 +261,10 @@ shinyUI(
              column(
                width = 6,
                align= "center",
-               p(h3("Resultados Cualitativos")),
-               p(h4("Palabras Claves Más Repetidas")),
+               p(h3("Qualitative Results")),
+               p(h4("Frequent Keywords")),
                textInput("Keyword_Remove1",
-                         "Quite Cualquier Palabra",
+                         "Remove Any Word",
                          "",
                          width = '50%'),
                textInput("Keyword_Remove2",
@@ -272,11 +272,11 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Keywords_Plot"),
-               p(em("Nota: Es posible que no todas las palabras estén representadas")),
+               p(em("Note: It is possible that not all words are represented")),
                #### Subject_Name Word Cloud ####
-               p(h4("Categorías Más Repetidas")),
+               p(h4("Frequent Subjects")),
                textInput("Subject_Remove",
-                         "Quite Cualquier Palabra",
+                         "Remove Any Word",
                          "",
                          width = '50%'),
                textInput("Subject_Remove2",
@@ -284,13 +284,13 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Subject_name_Plot"),
-               p(em("Nota: Es posible que no todas las palabras estén representadas"))
+               p(em("Note: It is possible that not all words are represented"))
              ),
              #### Experimental Analysis ####
              column(width =12,
                     align = "center",
                     selectInput("SE_E_Plot_Option", 
-                                label= "Seleccione la Categoría Deseada",
+                                label= "Select an Option",
                                 choices = list("Area" = 1, 
                                                "Región" = 2,
                                                "Localidad" =3
@@ -299,7 +299,7 @@ shinyUI(
                     ),
              plotOutput("SE_Component_Area"),
              selectInput("Research_Field_Plot_Option", 
-                         label= "Seleccione la Opción Deseada:",
+                         label= "Select an Option:",
                          choices = list("Area" = 1, 
                                         "Region" = 2,
                                         "Location" =3
@@ -311,20 +311,19 @@ shinyUI(
     ),
     #.########################## ##### 
     #### PARTICIPATION ####
-    tabPanel(strong("Como Participar"),
-             h3("Colabora en el Desarollo de La Investigación Marina en México"),
-            p(" Estamos buscando cualquier fuente de información que contenga datos sobre
-             temas marinos en México. ¡No importa la fuente, pueden ser tus datos de
-             la tesis, de captura o algún reporte!"),
-            p("El proyecto se encuentra en una etapa de colaboración que consta en poblar la base de datos por lo que invitamos a cualquier persona interesada a colaborar con el proyecto a compartir información sobre sus datos."),
-            p("Es importante mencionar que",strong("no estamos copilando datos, si no que información sobre los mismos.")
+    tabPanel(strong("Collaboration"),
+             h3("Collaborate in the Development of Marine Research in Mexico"),
+            p("We are looking for any source of information that contains data on
+             Marine research in Mexico. It does not matter the source. It can be your thesis data, grey literature, or citizen science!"),
+            p("The project is on a collaborative stage that consists of populating the database so we invite anyone interested to collaborate with the project to share information about their data."),
+            p("It is important to mention that", strong ("we are not gathering hard data, but rather information about them.")
               ),
-            "Cuanta más gente esté involucrada, mejor podremos reflejar el estado de la investigación marina en México",
+            "The more people involved, the better we can reflect the state of marine research in Mexico,",
             br(),
             column(12,
                    align="center",
               p(h3(
-                "Tres Maneras de Colaborar"
+                "Three Ways to Collaborate"
                    ))
               ),
             column(4,
@@ -333,13 +332,13 @@ shinyUI(
                      src = "Colaborar.png",
                      height = 60,
                      width = 60,
-                     "1. Comparte"
+                     "1. Share"
                    )),
                    p(
-                     "Para que el proyecto mejor refleje la investigación marina en México es necesario tener la mayor cantidad de información posible. Recuerda que no estamos colectando datos crudos, estamos colectando información sobre los datos"
+                     "In order for the project to better reflect marine research in Mexico, it is necessary to have as much information as possible. Remember that we are not collecting raw data, we are collecting information about the data"
                      ),
                    downloadButton('downloadTemplate',
-                                  "Descargar Formato")
+                                  "Download Template")
                    ),
             column(4,
                    align="justified",
@@ -347,11 +346,10 @@ shinyUI(
                      src = "Busca.png",
                      height =60,
                      width = 60,
-                     "2. Informa"
+                     "2. Inform"
                    )),
                    p(
-                     "Estamos buscando cualquier fuente de información que contenga datos sobre
-                     temas marinos en México. No importa la fuente, pueden ser datos de tesis, publicaciones, monitoreos, literatura gris o algún reporte oficial"
+                     "We are looking for any source of information relevant to marine research in Mexico. No matter the source, they can be data of thesis, publications, monitoring, gray literature or official reports"
                    ),
                    a(img(
                      src = "Twitter_Logo.png",
@@ -359,7 +357,7 @@ shinyUI(
                      width = 40
                    ), href = "https://twitter.com/julianop_a"
                    ),
-                   "Correo Electrónico"
+                   "Email"
             ),
             column(4,
                    align="justified",
@@ -367,10 +365,10 @@ shinyUI(
                      src = "Comparte.png",
                      height = 60,
                      width = 60,
-                     "3. Habla"
+                     "3. Communicate"
                    )),
             p(
-              "Creemos que en México existe mucha información relevante al ambiente marino, sin embargo un pequeó grupo de personas no son capaces de capturar toda la información, cuanta más gente esté involucrada, más información podemos colectar y mejor podremos reflejar el estado actual de la investigación marina en México así como descubrir campos con falta de información."
+              "We believe that in Mexico there is a lot of information relevant to the marine environment, however a small group of people are not able to capture all the information. The more people are involved, the more information we can collect and the better we can reflect the current state of marine research in Mexico as well as discover fields with lack of information."
             )
             )
             ),
@@ -380,20 +378,20 @@ shinyUI(
     br(),
     column(12,
            align = "center",
-           h5("Información de Contacto")
+           h5("Contact Information")
            ),
     column(3,
            align = "center",
-           p(strong("Autor Corresponsal:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
+           p(strong("Corresponding author:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
     ),
     column(3,
            align = "center",
-           p(strong("Teléfono:"), "+1 (778) 835 4298"),
+           p(strong("Phone:"), "+1 (778) 835 4298"),
            strong("Skype:"), "jepa_88"
            ),
     column(4,
            align ="justified",
-           p(strong("Dirección:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canadá, BC V6T 1Z4")
+           p(strong("Address:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canadá, BC V6T 1Z4")
            ),
     column(2,
            align ="center",
