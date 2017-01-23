@@ -21,30 +21,30 @@ shinyUI(
   ### Navigation bar
   navbarPage(
     #Web page title
-    "Metadata de Investigación Marina en México",
+    "Meta-database of Marine Research in Mexico",
     #### Inicio ####
     tabPanel("Inicio",
              fluidRow(
                column(
                  12,
                  align = "center",
-                 h1("Towards the Creation of a Meta-database of Marine Research in Mexico ")
+                 h1("Towards the Creation of a Meta-database of Marine Research in Mexico")
                ),
                column(
                  10,
                  align = "justified",
                  offset = 1,
-                 p(h3("Wellcome!")),
+                 p(h3("Welcome!")),
                  p(
                    "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
                  ),
                  p(h3(
                    "Proyect Objectives"
                  )),
-                 p("The main objective of this proyect is to create a meta-database for oceanographic, ecological, economic and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that should be addressed in the future. Finally, the meta database is expected to be public, self maintining and available for consultation"
+                 p("The main objective of this project is to create a meta-database for oceanographic, ecological, economic and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that should be addressed in the future. Finally, the meta database is expected to be public, self-maintaining and available for consultation"
                  ),
                p(strong("Climate Change"),
-                 "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improoving our understanding that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
+                 "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improving our understanding that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
                )
                ),
                  column(
@@ -229,7 +229,7 @@ shinyUI(
              column(
                width = 12,
                align = "center",
-               p(h3("Preeliminary Results (Quantitative & Qualitative)"))
+               p(h3("Preliminary Results (Quantitative & Qualitative)"))
              ),
              #.########################## ##### 
              #### PRELIMINARY RESULTS ####
