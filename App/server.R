@@ -589,5 +589,71 @@ shinyServer(function(input, output) {
       }
     }
   })
+  #### Collaboration ###
+  output$Institutions <- renderDataTable({
+    
+   Inst_Table <- datasetInput() %>% 
+     group_by(Institution,
+              Compilation_Title) %>% 
+     summarise(x = n()) %>% 
+     filter(Institution != "na",
+            Institution != "Varios") %>% 
+     select(Institution,
+            Compilation_Title)
+   colnames(Inst_Table) <- c("Institution","Repository")
+    
+   
+    datatable(Inst_Table,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 5,
+                             autoWidth = TRUE,
+                             lengthMenu = c(10, 15, 20, 50)
+              )
+    )
+  })
+  
+  output$People <- renderDataTable({
+    
+#Create a Table with the authors
+  P_Table <- Template %>% 
+    group_by(Author,
+             Compilation_Title) %>% 
+    summarise(x = n()) %>% 
+    filter(Author != "na",
+           Author != "Varios") %>% 
+    select(Author,
+           Compilation_Title) 
+  
+  #Create a Table with the Institutions to remove duplications
+  I_Table <- datasetInput() %>% 
+    group_by(Institution,
+             Compilation_Title) %>% 
+    summarise(x = n()) %>% 
+    filter(Institution != "na",
+           Institution != "Varios") %>% 
+    select(Institution,
+           Compilation_Title)
+  
+  #Set names equal for "ati_join" function
+  colnames(P_Table) <- c("Institution","Repository")
+  
+  #Select those that are different from each other
+  F_Table <- anti_join(P_Table,I_Table,
+                  by ="Institution")
+  colnames(F_Table) <- c("Author","Repository")
+  
+  #Final datatable
+  datatable(F_Table,
+            rownames = FALSE,
+            filter = 'top',
+            escape = FALSE,
+            options = list(pageLength = 5,
+                           autoWidth = TRUE,
+                           lengthMenu = c(10, 15, 20, 50)
+                           )
+            )
+  })  
 })
 
