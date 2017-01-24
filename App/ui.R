@@ -23,7 +23,7 @@ shinyUI(
     #Web page title
     "Meta-database of Marine Research in Mexico",
     #### Inicio ####
-    tabPanel("Inicio",
+    tabPanel("Home",
              fluidRow(
                column(
                  12,
@@ -39,7 +39,7 @@ shinyUI(
                    "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
                  ),
                  p(h3(
-                   "Proyect Objectives"
+                   "Project Objectives"
                  )),
                  p("The main objective of this project is to create a meta-database for oceanographic, ecological, economic and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that should be addressed in the future. Finally, the meta database is expected to be public, self-maintaining and available for consultation"
                  ),
@@ -226,12 +226,13 @@ shinyUI(
              column(
                width = 12,
                align = "center",
-               p(h3("Time Series of Data Information Gathering)")),
+               #### Time Series ####
+               p(h3(
+                 "Time Series of Data Information Gathering"
+                    )),
                dygraphOutput("TFgraph"), #Timeframe graph
                p(h3("Preliminary Results (Quantitative & Qualitative)"))
              ),
-             #.########################## ##### 
-             #### PRELIMINARY RESULTS ####
              #### Quantitative Results####
              column(
                width = 6,
@@ -301,7 +302,7 @@ shinyUI(
                     ),
              plotOutput("SE_Component_Area"),
              br(),
-             p(h3("Data Points by Research Field and Geogrpahic Location")),
+             p(h3("Data Points by Research Field and Geographic  Location")),
              selectInput("Research_Field_Plot_Option", 
                          label= "Select an Option:",
                          choices = list("Area" = 1, 
@@ -381,7 +382,7 @@ shinyUI(
                      "People and Institutions Collaborating"
                      )),
                    p(
-                     "While the vast mayority of the information collected until now is publically accessed online (See References), we have started recieving data information from un-published or non-available sources" 
+                     "While the vast majority  of the information collected until now is publically accessed online (See References), we have started receiving data information from un-published or non-available sources" 
                    ),
                    column(6,
                           align = "center",
@@ -418,7 +419,7 @@ shinyUI(
            ),
     column(4,
            align ="justified",
-           p(strong("Address:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canadá, BC V6T 1Z4")
+           p(strong("Address:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canada, BC V6T 1Z4")
            ),
     column(2,
            align ="center",
