@@ -271,7 +271,7 @@ shinyServer(function(input, output) {
                                          angle=45),
               axis.text.y = element_text(size = 14),
               legend.position = "none",
-              axis.title = element_text(size=20,
+              axis.title = element_text(size=14,
                                         face="bold")
               
         )
@@ -300,7 +300,7 @@ shinyServer(function(input, output) {
                                            angle = 45),
                 axis.text.y = element_text(size = 14),
                 legend.position = "none",
-                axis.title = element_text(size=20,
+                axis.title = element_text(size=14,
                                           face="bold")
           )
         
@@ -334,7 +334,7 @@ shinyServer(function(input, output) {
                                              angle=45),
                   axis.text.y = element_text(size = 14),
                   legend.position = "none",
-                  axis.title = element_text(size=20,
+                  axis.title = element_text(size=14,
                                             face="bold")
             )
         }
@@ -365,7 +365,7 @@ shinyServer(function(input, output) {
                                        angle= 45),
             axis.text.y = element_text(size = 14),
             legend.position = "none",
-            axis.title = element_text(size=20,
+            axis.title = element_text(size=14,
                                       face="bold"))
   })
   
@@ -437,7 +437,7 @@ shinyServer(function(input, output) {
                                          angle= 45),
               axis.text.y = element_text(size = 14),
               legend.position = "top",
-              axis.title = element_text(size=20,
+              axis.title = element_text(size=14,
                                         face="bold"))+ 
         guides(fill = guide_legend(title = "Socioeconomic Component",
                                    title.position = "left"))
@@ -462,7 +462,7 @@ shinyServer(function(input, output) {
                                            angle= 45),
                 axis.text.y = element_text(size = 14),
                 legend.position = "top",
-                axis.title = element_text(size=20,
+                axis.title = element_text(size=14,
                                           face="bold"))+ 
           guides(fill = guide_legend(title = "Socioeconomic Component",
                                      title.position = "left"))
@@ -488,7 +488,7 @@ shinyServer(function(input, output) {
                                              angle= 45),
                   axis.text.y = element_text(size = 14),
                   legend.position = "top",
-                  axis.title = element_text(size=20,
+                  axis.title = element_text(size=14,
                                             face="bold"))+ 
             guides(fill = guide_legend(title = "Socioeconomic Component",
                                        title.position = "left"))
@@ -523,7 +523,7 @@ shinyServer(function(input, output) {
                                          angle= 45),
               axis.text.y = element_text(size = 14),
               legend.position = "top",
-              axis.title = element_text(size=20,
+              axis.title = element_text(size=14,
                                         face="bold"))+ 
         guides(fill = guide_legend(title = "Research Field",
                                    title.position = "left"))
@@ -551,7 +551,7 @@ shinyServer(function(input, output) {
                                            angle= 45),
                 axis.text.y = element_text(size = 14),
                 legend.position = "right",
-                axis.title = element_text(size=20,
+                axis.title = element_text(size=14,
                                           face="bold"))+ 
           guides(fill = guide_legend(title = "Research Field",
                                      title.position = "left"))
@@ -580,7 +580,7 @@ shinyServer(function(input, output) {
                                              angle= 45),
                   axis.text.y = element_text(size = 14),
                   legend.position = "top",
-                  axis.title = element_text(size=20,
+                  axis.title = element_text(size=14,
                                             face="bold"))+ 
             guides(fill = guide_legend(title = "Research Field",
                                        title.position = "left"))

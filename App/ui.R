@@ -234,8 +234,9 @@ shinyUI(
              column(
                width = 6,
                align= "center",
-               p(h3("Quantitative Results")),
-               p(h4("Data per Area")),
+               p(h2("Quantitative Results")),
+               br(),
+               p(h3("Data per Area")),
                selectInput("Plot_Option", 
                            label= "Select one option:",
                            choices = list("Area" = 1, 
@@ -250,7 +251,7 @@ shinyUI(
                            min = 1,
                            max = 50),
                #### SE_Component ####
-               p(h4("Socio-Economic Component")),
+               p(h3("Socio-Economic Component")),
                plotOutput("SE_Component")
              ),
              #### Qualitative Results####
@@ -258,8 +259,9 @@ shinyUI(
              column(
                width = 6,
                align= "center",
-               p(h3("Qualitative Results")),
-               p(h4("Frequent Keywords")),
+               p(h2("Qualitative Results")),
+               br(),
+               p(h3("Frequent Keywords")),
                textInput("Keyword_Remove1",
                          "Remove Any Word",
                          "",
@@ -271,7 +273,7 @@ shinyUI(
                plotOutput("Keywords_Plot"),
                p(em("Note: It is possible that not all words are represented")),
                #### Subject_Name Word Cloud ####
-               p(h4("Frequent Subjects")),
+               p(h3("Frequent Subjects")),
                textInput("Subject_Remove",
                          "Remove Any Word",
                          "",
@@ -286,6 +288,7 @@ shinyUI(
              #### Experimental Analysis ####
              column(width =12,
                     align = "center",
+                    p(h3("Data Points by Socioeconomic Component and Geogrpahic Location")),
                     selectInput("SE_E_Plot_Option", 
                                 label= "Select an Option",
                                 choices = list("Area" = 1, 
@@ -295,6 +298,8 @@ shinyUI(
                                 width = "20%"
                     ),
              plotOutput("SE_Component_Area"),
+             br(),
+             p(h3("Data Points by Research Field and Geogrpahic Location")),
              selectInput("Research_Field_Plot_Option", 
                          label= "Select an Option:",
                          choices = list("Area" = 1, 
