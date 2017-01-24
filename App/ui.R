@@ -226,6 +226,7 @@ shinyUI(
              column(
                width = 12,
                align = "center",
+               p(h3("Time Series of Data Information Gathering)")),
                dygraphOutput("TFgraph"), #Timeframe graph
                p(h3("Preliminary Results (Quantitative & Qualitative)"))
              ),
