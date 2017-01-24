@@ -194,7 +194,8 @@ shinyUI(
                  )
                  )
                )
-             ),
+             ), #Close second page
+   #.########################## ##### 
     #### PRELIMINARY RESULTS ####
     tabPanel("Preliminary Results",
              #Wellcome / Instructions####
@@ -225,8 +226,9 @@ shinyUI(
              br(),
              br(),
              column(
-               width = 12,
+               width = 8,
                align = "center",
+               offset = 2,
                #### Time Series ####
                p(h3(
                  "Time Series of Data Information Gathering"
@@ -289,9 +291,11 @@ shinyUI(
                plotOutput("Subject_name_Plot"),
                p(em("Note: It is possible that not all words are represented"))
              ),
+             br(),
              #### Experimental Analysis ####
-             column(width =12,
+             column(width =6,
                     align = "center",
+                    offset = 0,
                     p(h3("Data Points by Socioeconomic Component and Geogrpahic Location")),
                     selectInput("SE_E_Plot_Option", 
                                 label= "Select an Option",
@@ -301,8 +305,10 @@ shinyUI(
                                 ),
                                 width = "20%"
                     ),
-             plotOutput("SE_Component_Area"),
-             br(),
+             plotOutput("SE_Component_Area")
+             ),
+             column(width =6,
+                    align = "center",
              p(h3("Data Points by Research Field and Geographic  Location")),
              selectInput("Research_Field_Plot_Option", 
                          label= "Select an Option:",
@@ -377,8 +383,10 @@ shinyUI(
               "We believe that in Mexico there is a lot of information relevant to the marine environment, however a small group of people are not able to capture all the information. The more people are involved, the more information we can collect and the better we can reflect the current state of marine research in Mexico as well as discover fields with lack of information."
             )
             ),
+            #### People Collaborating ####
             column(12,
                    align = "justified",
+                   br(),
                    p(h3(
                      "People and Institutions Collaborating"
                      )),
