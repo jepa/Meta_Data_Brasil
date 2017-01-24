@@ -239,13 +239,13 @@ shinyUI(
                selectInput("Plot_Option", 
                            label= "Select one option:",
                            choices = list("Area" = 1, 
-                                          "Región" = 2,
-                                          "Localidad" =3
+                                          "Region" = 2,
+                                          "Location" =3
                            )
                ),
                plotOutput("Number_spp"),
                sliderInput("Num_Data_Range",
-                           "Select the amount to display (Localidad)",
+                           "Select the amount to display (Location)",
                            value=10,
                            min = 1,
                            max = 50),
@@ -289,8 +289,8 @@ shinyUI(
                     selectInput("SE_E_Plot_Option", 
                                 label= "Select an Option",
                                 choices = list("Area" = 1, 
-                                               "Región" = 2,
-                                               "Localidad" =3
+                                               "Region" = 2,
+                                               "Location" =3
                                 ),
                                 width = "20%"
                     ),

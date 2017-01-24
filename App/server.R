@@ -264,8 +264,8 @@ shinyServer(function(input, output) {
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Número de Datos")+
-        xlab("Campo de Investigación")+
+        ylab("Data Points")+
+        xlab("Research Field")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
                                          angle=45),
@@ -293,8 +293,8 @@ shinyServer(function(input, output) {
                )) +
           geom_bar(stat="identity")+
           theme_classic() +
-          ylab("Número de Datos")+
-          xlab("Región")+
+          ylab("Data Points")+
+          xlab("Region")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle = 45),
@@ -328,7 +328,7 @@ shinyServer(function(input, output) {
             theme_classic() +
             coord_flip() +
             ylab("Número de Datos")+
-            xlab("Localidad")+
+            xlab("Location")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle=45),
@@ -358,8 +358,8 @@ shinyServer(function(input, output) {
            ))+
       geom_bar(stat = "identity")+
       theme_classic() +
-      ylab("Número de Datos")+
-      xlab("Componente Socio Económico")+
+      ylab("Data Points")+
+      xlab("Socio-econimic Component")+
       theme(axis.text.x = element_text(hjust = 1,
                                        size=14,
                                        angle= 45),
@@ -430,7 +430,7 @@ shinyServer(function(input, output) {
              ))+
         geom_bar()+
         theme_classic() +
-        ylab("Número de Datos")+
+        ylab("Data Points")+
         xlab("Area")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
@@ -439,7 +439,7 @@ shinyServer(function(input, output) {
               legend.position = "top",
               axis.title = element_text(size=20,
                                         face="bold"))+ 
-        guides(fill = guide_legend(title = "Componente Socio-Económico",
+        guides(fill = guide_legend(title = "Socioeconomic Component",
                                    title.position = "left"))
     }else{
       #### By Region ####
@@ -456,7 +456,7 @@ shinyServer(function(input, output) {
           geom_bar()+
           theme_classic() +
             ylab("Número de Datos")+
-          xlab("Región")+
+          xlab("Region")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle= 45),
@@ -464,7 +464,7 @@ shinyServer(function(input, output) {
                 legend.position = "top",
                 axis.title = element_text(size=20,
                                           face="bold"))+ 
-          guides(fill = guide_legend(title = "Componente Socio-Económico",
+          guides(fill = guide_legend(title = "Socioeconomic Component",
                                      title.position = "left"))
       }else{
         #### By Location ####
@@ -482,7 +482,7 @@ shinyServer(function(input, output) {
             geom_bar()+
             theme_classic() +
             ylab("Número de Datos")+
-            xlab("Localidad")+
+            xlab("Location")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle= 45),
@@ -490,7 +490,7 @@ shinyServer(function(input, output) {
                   legend.position = "top",
                   axis.title = element_text(size=20,
                                             face="bold"))+ 
-            guides(fill = guide_legend(title = "Componente Socio-Económico",
+            guides(fill = guide_legend(title = "Socioeconomic Component",
                                        title.position = "left"))
           
         }
@@ -617,7 +617,7 @@ shinyServer(function(input, output) {
   output$People <- renderDataTable({
     
 #Create a Table with the authors
-  P_Table <- Template %>% 
+  P_Table <- datasetInput() %>% 
     group_by(Author,
              Compilation_Title) %>% 
     summarise(x = n()) %>% 
