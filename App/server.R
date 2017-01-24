@@ -29,6 +29,7 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 #library(xlsx)
 library(networkD3)
+library(dygraphs)
 
 
 #Functions #
@@ -153,67 +154,36 @@ shinyServer(function(input, output) {
   ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
   #### PRELIMINARY RESULTS TAB ####
-  # Mapa de resultados ####
   
-  # Data points shown in the map ###
-  #Fedecop information 
-  FEDECOOP <- paste(sep = "<br/>",
-                    "<b><a href='http://www.fedecoop.com.mx'>MetaID 342</a></b>",
-                    "Lobster Stock Assesment and Catch from FEDECOOP since 1970",
-                    "Private Dataset"
-  )
   
-  #### The Actual Map ####
-  #(requieres leaflet package)
-  output$Data_Map <- renderLeaflet({
-    data = datasetInput() %>% 
-      filter(!is.na(Lat))
-    leaflet(data=data) %>%
-      addTiles(
-        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-      ) %>%
-      #Initial view #
-      setView(lng = -102.5528, 
-              lat = 23.6345,
-              zoom = 5) %>% 
-      # Data examples as markers ####
-    addMarkers(lng = -109.4725,
-               lat = 24.6356, 
-               popup = "7654")%>%
-      addMarkers(lng = -95.8084852,
-                 lat = 20.5764432,
-                 popup = "MetaID 423"
-      )%>%
-      addMarkers(lng = -107.8084852,
-                 lat = 15.5764432,
-                 popup = "Meta ID = 343. Short Title: Buoy ID4: sst, salinity and currents since 1980"
-      )%>%
-      # Data examples as rectangles ####
-    addRectangles(
-      lng1=-107.607877, lat1=18.459820,
-      lng2=-110.557877, lat2=17.431188,
-      color="red",
-      fillColor = "red",
-      fillOpacity = 0,
-      popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
-    ) %>% 
-      addRectangles(
-        lng1=-115.507877, lat1=28.400000,
-        lng2=-115.557877, lat2=28.421188,
-        color="green",
-        fillColor = "green",
-        fillOpacity = 0.2,
-        popup = FEDECOOP
-      ) %>% 
-      #### Lat & Long in dataset ####
-    addMarkers(
-      lng = ~Long,
-      lat = ~Lat,
-      popup = ~as.character(MMID),
-      clusterOptions = markerClusterOptions()
-    )
+  #### Timeseries of data gathering ####
+  
+#Import dataframe (for now)
+  TFdatasetInput <- reactive({
     
+  x <- read.csv("ESTA.csv")
+  x <- x %>% 
+    select(-1)
+  
+  })
+  
+  #Creating the graph
+  output$TFgraph <- renderDygraph({
+  x <- TFdatasetInput()
+  Dt_Points <- ts(x,
+                  start=c(2016,11),
+                  end = c(2017,1), 
+                  frequency= 12)
+  
+  dygraph(Dt_Points) %>% #Creats the graph
+    dyOptions(stackedGraph = TRUE, #Makes it stacked
+              drawPoints = TRUE, #Shows each data point
+              pointSize = 4) %>% 
+    dyRangeSelector(height = 20) %>% 
+    dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
+    dyAxis("y", drawGrid = FALSE) %>% 
+    dyAxis("y", label = "Number of Data Points") %>%  #Labels
+    dyLegend(width = 600)
   })
   
   #### Quantitative Results ####
