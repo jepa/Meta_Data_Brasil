@@ -16,6 +16,7 @@ library(shiny)
 library(leaflet)
 library(DT)
 library(markdown)
+library(dygraphs)
 
 shinyUI(
   ### Navigation bar
