@@ -16,6 +16,7 @@ library(shiny)
 library(leaflet)
 library(DT)
 library(markdown)
+library(dygraphs)
 
 shinyUI(
   ### Navigation bar
@@ -125,12 +126,12 @@ shinyUI(
                10,
                align = "center",
                offset = 1,
-               a(href="http://datamares.ucsd.edu/en/about",
-                 img(
-                   src = "dataMares_Logo.png",
-                   height = 60,
-                   width = 200
-                 )),
+               # a(href="http://datamares.ucsd.edu/en/about",
+               #   img(
+               #     src = "dataMares_Logo.png",
+               #     height = 60,
+               #     width = 200
+               #   )),
                a(href="http://monitoreonoroeste.mx/index.php",
                  img(
                    src = "Monitoreo_Logo.png",
