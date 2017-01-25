@@ -37,7 +37,9 @@ shinyUI(
                  offset = 1,
                  p(h3("Welcome!")),
                  p(
-                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research." 
+                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research. A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Such meta-database has been developed for Canada and such experiences could be adapted for Mexico",
+                 a("(Cisneros-Montemayor et al. 2016).",
+                   href="http://www.nrcresearchpress.com/doi/pdf/10.1139/cjfas-2015-0573")
                  ),
                  p(h3(
                    "Project Objectives"
@@ -390,10 +392,27 @@ shinyUI(
               "We believe that in Mexico there is a lot of information relevant to the marine environment, however a small group of people are not able to capture all the information. The more people are involved, the more information we can collect and the better we can reflect the current state of marine research in Mexico as well as discover fields with lack of information."
             )
             ),
+            #### What do I win? ####
+            column(12,
+                   align = "justified",
+                   p(h3(
+                     "Benefits of Collaborating"
+                   )),
+                   p(
+                     "Data information sharing has a series of benefits to both the individual as well as society. Having your data information on the Metadata will increase your outreach. Your data could be potentially used by other researchers to answer different questions. This will ultimately foster collaboration among national and international researchers that could result in important advance for the country", 
+                     a("(Michener 2006).",
+                       href="http://www.sciencedirect.com/science/article/pii/S157495410500004X"
+                     )
+                   ),
+                   p(
+                     "As a community committed to the research of Mexico's marine environment, sharing our data brings important benefits. Building systems for managing and sharing data ensures preservation, stewardship and access to information",
+                     a("(Fridell et al., 2014).",
+                       href="http://datascience.codata.org/articles/abstract/10.2481/dsj.IFPDA-01/"), "It will also allow us to understand what information is out there, and identify fields of research that need to be further developed"
+                   )
+                   ),
             #### People Collaborating ####
             column(12,
                    align = "justified",
-                   br(),
                    p(h3(
                      "People and Institutions Collaborating"
                      )),
@@ -402,6 +421,7 @@ shinyUI(
                    ),
                    column(6,
                           align = "center",
+                          br(),
                           p(h4(strong(
                             "Institutions"
                           ))),
