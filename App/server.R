@@ -67,46 +67,43 @@ shinyServer(function(input, output) {
     data.frame(data)
   })
   
+  # Reading the Metadata_Key ####
+  Key_datasetInput <- reactive({
+    
+    K_data<- read.csv("./Metadata_Key.csv", 
+                    header = TRUE,
+                    na="NA")
+    data.frame(K_data)
+  })
   
   #Metadata Display ####
   output$Metadata <- renderDataTable({
-    
-    #you will need this function on the "Functions" folder (it is already sourced at the beginning of the app)
-    #Fun_Dat_links
-    # x <- Ref_Links(datasetInput()$Reference,
-    #                datasetInput()$Subject_name)
-    
-    #Re order the datatable
-     Final <- datasetInput() #%>% 
-    #   bind_cols(x) %>% 
-    #   select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
-    
-    #Show the datatable 
+     Final <- datasetInput()
+        #Show the datatable 
     datatable(Final,
               rownames = FALSE,
               filter = 'top',
               escape = FALSE,
-              options = list(pageLength = 50,
+              options = list(pageLength = 28,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 50, 100, 500, 1000)
+                             lengthMenu = c(10, 20,30)
                              )
     )
   })
   
-  # Data_Available Display ####
+  # Metadata_Key Display ####
   
-  output$Available_Data <- renderDataTable({
-    Data_Available <- datasetInput() %>% 
-      filter(Available_Metadata == "YES" )
+  output$Metadata_Key <- renderDataTable({
+    Metadata_Key <- Key_datasetInput() 
     
-    datatable(Data_Available,
+    datatable(Metadata_Key,
               rownames = FALSE,
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 50,
-                             autoWidth = TRUE,
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'))
-    )
+                             autoWidth = TRUE
+                             )
+              )
     
   })
   
