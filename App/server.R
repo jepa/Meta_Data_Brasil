@@ -112,7 +112,7 @@ shinyServer(function(input, output) {
   #Resultados iniciales ####
   
   
-  #### Reference ####
+  #### Reference download####
   
   output$downloadReport <- downloadHandler(
     filename = function() {
@@ -144,7 +144,8 @@ shinyServer(function(input, output) {
   getPage<-function() {
     return(includeHTML("./Reference/Reference_List.html"))
   }
-  output$Reference<-renderUI({getPage()
+  output$Reference<-renderPrint({
+    getPage()
     })
   
   
