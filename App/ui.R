@@ -44,8 +44,11 @@ shinyUI(
                  )),
                  p("The main objective of this project is to create a meta-database for oceanographic, ecological, economic and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that should be addressed in the future. Finally, the meta database is expected to be public, self-maintaining and available for consultation"
                  ),
-               p(strong("Climate Change"),
-                 "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improving our understanding that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
+               p(h4(
+                 "Climate Change"
+                    )),
+                 p(
+                   "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improving our understanding that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
                )
                ),
                  column(
@@ -172,6 +175,10 @@ shinyUI(
                    p(h4("Metadata Base")),
                    dataTableOutput('Metadata')
                    ),
+                 tabPanel(
+                   p(h4("Metadata Key")),
+                   dataTableOutput('Metadata_Key')
+                 ),
                  tabPanel(
                    p(h4("Reference List")),
                    column(
