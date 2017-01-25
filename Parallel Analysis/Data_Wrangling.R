@@ -230,5 +230,22 @@ UNAM_X <- UNAM %>%
   mutate(Velocidad_x = paste(Velocidad,Fecha,"(1992-1999)"))
   
 #write.csv(UNAM_X[18:21],"UNAM_MMID.csv")
+####################### END ########################
 
-  
+#### Random data points ####
+Inicio <- 759
+Final <- 903
+
+
+Elegidos <- sort(round(runif(
+  2,
+  min=Inicio,
+  max=Final),
+  digits = 0))
+
+#Elegidos_Origen <- Elegidos
+
+round(runif(1,min=1,max=4),
+      digits = 0)
+
+
