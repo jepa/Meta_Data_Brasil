@@ -303,7 +303,7 @@ shinyUI(
              column(width =6,
                     align = "center",
                     offset = 0,
-                    p(h3("Data Points by Socioeconomic Component and Geogrpahic Location")),
+                    p(h3("Data Points by Socioeconomic Component and Geographic Location")),
                     selectInput("SE_E_Plot_Option", 
                                 label= "Select an Option",
                                 choices = list("Area" = 1, 
