@@ -232,20 +232,30 @@ UNAM_X <- UNAM %>%
 #write.csv(UNAM_X[18:21],"UNAM_MMID.csv")
 ####################### END ########################
 
-#### Random data points ####
-Inicio <- 759
-Final <- 903
+#### Random data points Origen ####
+Inicio <- 1218
+Final <- 1246
 
 
 Elegidos <- sort(round(runif(
-  2,
+  3,
   min=Inicio,
   max=Final),
   digits = 0))
 
-#Elegidos_Origen <- Elegidos
 
-round(runif(1,min=1,max=4),
+
+round(runif(1,min=1,max=3),
       digits = 0)
 
 
+#Menudeo 907  912  916  926  927 935  942  945  956  970 987 993 989 999 1007 1014 1015 1019 1020 1038 1042
+
+#Destino de Venta 1051 1053 1056 1057 1162 1064 1170 1072 1074 1077 1080 1081 1093 1122 1132 1139  1150 1151 1166 1172
+
+#Punto de Cotizacion geografico (3): 1226 1227 1230
+
+####################### END ########################
+
+
+  
