@@ -114,39 +114,40 @@ shinyServer(function(input, output) {
   
   #### Reference download####
   
-  output$downloadReport <- downloadHandler(
-    filename = function() {
-      paste('Metadata Reference List', sep = '.', switch(
-        input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
-      ))
-    },
-    
-    content = function(file) {
-      src <- normalizePath('./Reference/Reference_List.Rmd')
-      
-      # temporarily switch to the temp dir, in case you do not have write
-      # permission to the current working directory
-      owd <- setwd(tempdir())
-      on.exit(setwd(owd))
-      file.copy(src, 'Reference_List.Rmd', overwrite = TRUE)
-      
-      library(rmarkdown)
-      out <- render('Reference_List.Rmd', switch(
-        input$format,
-        PDF = pdf_document(), HTML = html_document(), Word = word_document()
-      ))
-      file.rename(out, file)
-    }
-  )
-  
-  ##### Reference Display ####
-  
-  getPage<-function() {
-    return(includeHTML("./Reference/Reference_List.html"))
-  }
-  output$Reference<-renderPrint({
-    getPage()
-    })
+  # output$downloadReport <- downloadHandler(
+  #   filename = function() {
+  #     paste('Metadata Reference List', sep = '.', switch(
+  #       input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
+  #     ))
+  #   },
+  #   
+  #   content = function(file) {
+  #     src <- normalizePath('./Reference/Reference_List.Rmd')
+  #     
+  #     # temporarily switch to the temp dir, in case you do not have write
+  #     # permission to the current working directory
+  #     owd <- setwd(tempdir())
+  #     on.exit(setwd(owd))
+  #     file.copy(src, 'Reference_List.Rmd', overwrite = TRUE)
+  #     
+  #     library(rmarkdown)
+  #     out <- render('Reference_List.Rmd', switch(
+  #       input$format,
+  #       PDF = pdf_document(), HTML = html_document(), Word = word_document()
+  #     ))
+  #     file.rename(out, file)
+  #   }
+  # )
+  # 
+  # ##### Reference Display ####
+  # 
+  # getPage<-function() {
+  #   return(
+  #     includeHTML("./Reference/Reference_List.html"))
+  # }
+  # output$Reference<-renderPrint({
+  #   getPage()
+  #   })
   
   
   ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

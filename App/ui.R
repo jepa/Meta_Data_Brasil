@@ -180,27 +180,27 @@ shinyUI(
                  tabPanel(
                    p(h4("Metadata Key")),
                    dataTableOutput('Metadata_Key')
-                 ),
-                 tabPanel(
-                   p(h4("Reference List")),
-                   column(
-                     width = 12,
-                     align = "center",
-                     radioButtons('format',
-                                  'Select Format',
-                                  c('PDF',
-                                    'HTML',
-                                    'Word'),
-                                  inline = TRUE),
-                     downloadButton('downloadReport',
-                                    "Download Reference List")
-                   ),
-                 column(
-                     width = 12,
-                     align = "left",
-                   htmlOutput("Reference")
-                 )
-                 )
+                 )#,
+                 # tabPanel(
+                 #   p(h4("Reference List")),
+                 #   column(
+                 #     width = 12,
+                 #     align = "center",
+                 #     radioButtons('format',
+                 #                  'Select Format',
+                 #                  c('PDF',
+                 #                    'HTML',
+                 #                    'Word'),
+                 #                  inline = TRUE),
+                 #     downloadButton('downloadReport',
+                 #                    "Download Reference List")
+                 #   ),
+                 # column(
+                 #     width = 12,
+                 #     align = "left",
+                 #   htmlOutput("Reference")
+                 # )
+                 # )
                  )
                )
              ), #Close second page
@@ -417,7 +417,7 @@ shinyUI(
                      "People and Institutions Collaborating"
                      )),
                    p(
-                     "While the vast majority  of the information collected until now is publically accessed online (See References), we have started receiving data information from un-published or non-available sources" 
+                     "While the vast majority  of the information collected until now is publically accessed online, we have started receiving data information from un-published or non-available sources" 
                    ),
                    column(6,
                           align = "center",
