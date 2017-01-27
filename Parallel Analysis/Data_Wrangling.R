@@ -5,7 +5,7 @@
 
 
 #### NOTE Allways run this first ####
-#library(xlsx)
+library(xlsx)
 library(dplyr)
 library(tidyr)
 
@@ -96,7 +96,7 @@ Timeframe <- SAU %>%
   summarise(top = sum(Value)) %>% 
   group_by(common_name,scientific_name) %>% 
   summarise(inicio = min(year), fin = max(year))
-  
+
 #write.csv(Timeframe, "Timeframe.csv")
 
 #A as a final act, we put them together in one big table and save it
@@ -228,34 +228,258 @@ UNAM_X <- UNAM %>%
   mutate(Topografia_X = paste(Topografia,Fecha, "(1992-1999)")) %>% 
   mutate(Nivel_X = paste(Nivel,Fecha,"(1992-1999)")) %>% 
   mutate(Velocidad_x = paste(Velocidad,Fecha,"(1992-1999)"))
-  
+
 #write.csv(UNAM_X[18:21],"UNAM_MMID.csv")
-####################### END ########################
-
-#### Random data points Origen ####
-Inicio <- 1218
-Final <- 1246
-
-
-Elegidos <- sort(round(runif(
-  3,
-  min=Inicio,
-  max=Final),
-  digits = 0))
-
-
-
-round(runif(1,min=1,max=3),
-      digits = 0)
-
-
-#Menudeo 907  912  916  926  927 935  942  945  956  970 987 993 989 999 1007 1014 1015 1019 1020 1038 1042
-
-#Destino de Venta 1051 1053 1056 1057 1162 1064 1170 1072 1074 1077 1080 1081 1093 1122 1132 1139  1150 1151 1166 1172
-
-#Punto de Cotizacion geografico (3): 1226 1227 1230
 
 ####################### END ########################
+# BALANZA COMERCIAL POR PRINCIPALES PRODUCTOS PESQUEROS, 2004 - 2013. Anuario Sagarpa Pg. 186
+
+#Exportacion
+Exp <- data.frame(matrix(c("Algas y Sargazos",
+                           "Calamar","Camaron",
+                           "Pulpo",
+                           "Sardina y Macarela",
+                           "Org. Acuats. Vivos"
+),ncol=1))
+colnames(Exp) <- ("Specie")
+
+Exp <-Exp %>% 
+  mutate(Volumen="Volumen de Exportacion de") %>% 
+  mutate(Valor="Valor de Exportacion de") %>% 
+  mutate(Year = "2004-2013") %>% 
+  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
+  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
+  mutate(Key.Vol = paste("Volumen; Exportacion; Balanza Comercial;",Specie)) %>% 
+  mutate(Key.Val = paste("Valor; Exportacion; Balanza Comercial;",Specie)) %>% 
+  select(-2:-4)
 
 
-  
+#Importacion
+Imp <- data.frame(matrix(c("Derivados de Algas",
+                           "Calamar",
+                           "Camaron",
+                           "Salmon",
+                           "Org. Acuats. Vivos"
+),ncol=1))
+colnames(Imp) <- ("Specie")
+
+Imp <-Imp %>% 
+  mutate(Volumen="Volumen de Importacion de") %>% 
+  mutate(Valor="Valor de Importacion de") %>% 
+  mutate(Year = "2004-2013") %>% 
+  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
+  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
+  mutate(Key.Vol = paste("Volumen; Importacion; Balanza Comercial;",Specie)) %>% 
+  mutate(Key.Val = paste("Valor; Importacion; Balanza Comercial;",Specie)) %>% 
+  select(-2:-4)
+
+Final <- bind_rows(Exp,Imp)
+write.csv(Final,"Balanza.csv")
+
+Disp <- data.frame(matrix(c("Tunidos (Fresco)",
+                            "Mojarra",
+                            "Camaron",
+                            "Ostion",
+                            "Tiburon y Cazon",
+                            "Otros",
+                            "Tunidos (Enlatado)",
+                            "Sardinas",
+                            "Harina y Aceite",
+                            "Total"
+                            
+                            
+),ncol=1))
+colnames(Disp) <- ("Specie")
+
+Disp <-Disp %>% 
+  mutate(Legend="Disponibilidad Interna de") %>% 
+  mutate(Year = "1988-2013") %>% 
+  mutate(Final = paste(Legend,Specie,",",Year)) %>% 
+  mutate(Key = paste("Volumen; Disponibilidad; Interna; Fresco; Congelado; Enlatado; Reduccion;",Specie)) %>% 
+  select(-Legend,-Year)
+
+write.csv(Disp,"Disponibilidad.csv")
+
+####################### END ########################
+
+#### CONAPESCA ####
+
+# ANUARIO CONAPESCA EMBARCACIONES REGISTRADAS POR PRINCIPALES PESQUERÍAS, SEGÚN LITORAL Y ENTIDAD FEDERATIVA, 2013 (UNIDADES)
+
+Embarcaciones <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Embarcaciones.csv")
+
+Emb1 <- Embarcaciones %>% 
+  mutate(Fin1= paste(Leyenda,Estado,"2013")) %>%
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Total; Nacional; Pesca")) %>% 
+  mutate(Subject = Estado) %>% 
+  select(Fin1,Key,Subject)
+Emb2 <- Embarcaciones %>% 
+  mutate(Fin1= paste(Leyenda2,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca")) %>% 
+  mutate(Subject = Estado) %>% 
+  select(10,11,Subject)
+Emb3 <- Embarcaciones %>% 
+  filter(Leyenda3 !="na") %>% 
+  mutate(Fin1= paste(Leyenda3,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Camaron")) %>% 
+  mutate(Subject = Estado) %>% 
+  select(10,11,Subject)
+Emb4 <- Embarcaciones %>% 
+  filter(Leyenda4 !="na") %>% 
+  mutate(Fin1= paste(Leyenda4,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Atun; Tunidos")) %>% 
+  mutate(Subject = Estado) %>% 
+  select(10,11,Subject)
+Emb5 <- Embarcaciones %>% 
+  filter(Leyenda5 !="na") %>% 
+  mutate(Fin1= paste(Leyenda5,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Sardina; Anchoveta")) %>%
+  mutate(Subject = Estado) %>% 
+  select(10,11,12)
+Emb6 <- Embarcaciones %>% 
+  filter(Leyenda6 !="na") %>% 
+  mutate(Fin1= paste(Leyenda6,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Altura; Estado; Pesca; Escama")) %>%
+  mutate(Subject = Estado) %>% 
+  select(10,11,12)
+
+Emb7 <- Embarcaciones %>% 
+  filter(Leyenda7 !="na") %>% 
+  mutate(Fin1= paste(Leyenda7,Estado,Year))%>% 
+  mutate(Key = paste(Estado, "Embarcaciones; Principales Pesqeurias; Rios; Estado; Pesca; Riberena")) %>%
+  mutate(Subject = Estado) %>% 
+  select(10,11,12)
+
+
+Final <- bind_rows(Emb1,Emb2,Emb3,Emb4,Emb5,Emb6,Emb7)
+#write.csv(Final, "Embarcaciones.csv")
+
+#POBLACIÓN REGISTRADA EN LA CAPTURA Y ACUACULTURA,SEGÚN LITORAL Y ENTIDAD FEDERATIVA 2003-2013
+
+Pescadores <- Embarcaciones %>% 
+  select(Estado) %>% 
+  arrange(Estado) %>% 
+  mutate(Titulo="Poblacion Registrada en Captura y Acuacultura en") %>% 
+  mutate(Fecha ="(2003-2013)") %>% 
+  mutate(Fin = paste(Titulo,Estado,Fecha)) %>% 
+  mutate(Key =paste("Poblacion; Acuacultura; Pesca; Captura; Pescador; Poblacion; Registro;",Estado))
+
+#write.csv(Pescadores, "Pescadores.csv")
+
+
+#FINANCIAMIENTO AL SECTOR PESQUERO POR FIRA-FOPESCA POR ENTIDAD FEDERATIVA 2004 - 2013.
+
+FIRA <- Embarcaciones %>% 
+  select(Estado) %>% 
+  arrange(Estado) %>% 
+  mutate(Titulo="Financiamiento al sector pesquero de") %>% 
+  mutate(Fecha ="(2004-2013)") %>% 
+  mutate(Fin = paste(Titulo,Estado,Fecha)) %>% 
+  mutate(Key =paste("Sector pesquero; Pesca; Presupuesto; Financiamiento; FIRA;FOPESCA;",Estado))
+
+write.csv(FIRA, "FIRA.csv")
+
+#SERIE HISTORICA DE INVERSION EN EL PROYECTO DE RETIRO VOLUNTARIO DE EMBARCACIONES CAMARONERAS 2008 - 2013.
+
+Retiro <- Embarcaciones %>% 
+  select(Estado) %>% 
+  arrange(Estado) %>% 
+  filter(Estado =="Baja California"|
+           Estado == "Campeche"|
+           Estado == "Colima"|
+           Estado == "Chiapas"|
+           Estado == "Guerrero"|
+           Estado == "Nayarit"|
+           Estado == "Oaxaca"|
+           Estado == "Quintana Roo"|
+           Estado == "Sinaloa"|
+           Estado == "Sonora"|
+           Estado == "Tabasco"|
+           Estado == "Tamaulipas"|
+           Estado == "Veracruz"|
+           Estado == "Yucatan") %>% 
+  mutate(Titulo="Inversion en Retiro Voluntario de Embarcaciones Camaroneras de") %>% 
+  mutate(Fecha ="(2008-2013)") %>% 
+  mutate(Fin = paste(Titulo,Estado,Fecha)) %>% 
+  mutate(Key =paste("Inversion; Retiro Voluntario; Camaron; Proyecto; Embarcacion;",Estado))
+
+#write.csv(Retiro, "Retiro.csv")
+
+
+#SERIE HISTORICA DE MONTOS RECAUDADOS POR PERMISOS DE PESCA DEPORTIVA SEGUN ENTIDAD FEDERATIVA 2008 - 2013.
+
+Permisos <- Embarcaciones %>% 
+  select(Estado) %>% 
+  arrange(Estado) %>% 
+  mutate(Titulo="Monto Recaudado por Premisos de Pesca Deportiva en") %>% 
+  mutate(Fecha ="(2008-2013)") %>% 
+  mutate(Fin = paste(Titulo,Estado,Fecha)) %>% 
+  mutate(Key =paste("Monto; Total; Premisos; Pesca; Deportiva; Pesos;",Estado))
+
+#write.csv(Permisos, "Permisos.csv")  
+
+
+# Allocation of random numbers to the SE data
+
+Lista <- c(3,3,3,3,3,3,3 # <- Random datapoints generaed before
+           ,3
+           ,3
+           ,3
+           ,3
+           ,3
+           ,3
+           ,3
+           ,3
+           ,3
+           ,6
+           ,6
+           ,6
+           ,9
+           ,9
+           ,9
+           ,9
+           ,9
+           ,9
+           ,9
+           ,9
+           ,12
+           ,12
+           ,12
+           ,12
+           ,12
+           ,12
+           ,15
+           ,15
+           ,18
+           ,18
+           ,18
+           ,18
+           ,18
+           ,21
+           ,21
+           ,21
+           ,24
+           ,27
+           ,27
+           ,27
+           ,33
+           ,33
+           ,39
+           ,42
+           ,48
+           ,48
+           ,51
+           ,54
+           ,54
+           ,54
+           ,54
+           ,54
+           ,54
+           ,54
+           ,57)
+
+SE <- data.frame(sample(Lista, #List of random numbers
+                        426, #Number of entries to substitute
+                        replace = TRUE)) # <- random allocation of the datapoints to all data (expcluding those that generatedd the random numbers)
+
+#write.csv(SE,"SE.csv")
