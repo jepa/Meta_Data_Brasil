@@ -92,15 +92,22 @@ shinyServer(function(input, output) {
   })
   
   #Metadata Summary Display ####
+  source('Fun_Dat_links.R')
   output$Metadata_Summary <- renderDataTable({
-    Summary <- datasetInput() %>% 
-      select(MMID,
-             Short_Title,
-             Author,
-             Subject_name,
-             Reference)
+
+      x <- Ref_Links(datasetInput()$Reference,
+                     datasetInput()$Subject_name)
+      
+      #Re order the datatable
+      Final <- datasetInput() %>% 
+      bind_cols(x) %>% 
+        select(MMID,
+               Short_Title,
+               Author,
+               Link)
+     
     #Show the datatable 
-    datatable(Summary,
+    datatable(Final,
               rownames = FALSE,
               filter = 'top',
               escape = FALSE,
