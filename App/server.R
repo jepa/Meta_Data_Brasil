@@ -6,7 +6,7 @@
 
 ##### MUY IMPORTANTE ####
 
-#Para modificar la información de la página informativa TIENES que estar en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
+#Para modificar la información de la página informativa TIENES que Data_Curver en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
 
 #Read ui.R for information between branches
 ##############################
@@ -187,7 +187,7 @@ shinyServer(function(input, output) {
 #Import dataframe (for now)
   TFdatasetInput <- reactive({
     
-  x <- read.csv("ESTA.csv")
+  x <- read.csv("Data_Curve.csv")
   x <- x %>% 
     select(-1)
   
