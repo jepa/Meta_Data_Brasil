@@ -91,6 +91,26 @@ shinyServer(function(input, output) {
     )
   })
   
+  #Metadata Summary Display ####
+  output$Metadata_Summary <- renderDataTable({
+    Summary <- datasetInput() %>% 
+      select(MMID,
+             Short_Title,
+             Author,
+             Subject_name,
+             Reference)
+    #Show the datatable 
+    datatable(Summary,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 25,
+                             autoWidth = TRUE,
+                             lengthMenu = c(50, 100, 200,500)
+              )
+    )
+  })
+  
   # Metadata_Key Display ####
   
   output$Metadata_Key <- renderDataTable({

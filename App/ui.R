@@ -178,6 +178,10 @@ shinyUI(
                    dataTableOutput('Metadata')
                    ),
                  tabPanel(
+                   p(h4("Base Summary")),
+                   dataTableOutput('Metadata_Summary')
+                   ),
+                 tabPanel(
                    p(h4("Metadata Key")),
                    dataTableOutput('Metadata_Key')
                  )#,
