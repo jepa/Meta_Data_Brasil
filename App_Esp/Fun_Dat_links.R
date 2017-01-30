@@ -9,7 +9,7 @@ Ref_Links <- function(Link,Reference){
  
   Result = paste("<a href=",Link,">",Reference,"</a>") 
   Result = data.frame(Result)  
-  colnames(Result) <- "Go to Source"
+  colnames(Result) <- "Link"
   
   return(Result)
   }

@@ -29,6 +29,7 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 #library(xlsx)
 library(networkD3)
+library(dygraphs)
 
 
 #Functions #
@@ -66,156 +67,109 @@ shinyServer(function(input, output) {
     data.frame(data)
   })
   
+  # Reading the Metadata_Key ####
+  Key_datasetInput <- reactive({
+    
+    K_data<- read.csv("./Metadata_Key.csv", 
+                      header = TRUE,
+                      na="NA")
+    data.frame(K_data)
+  })
   
   #Metadata Display ####
   output$Metadata <- renderDataTable({
+    Final <- datasetInput()
+    #Show the datatable 
+    datatable(Final,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 28,
+                             autoWidth = TRUE,
+                             lengthMenu = c(10, 20,30),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+              )
+    )
+  })
+  
+  #Metadata Summary Display ####
+  source('Fun_Dat_links.R')
+  output$Metadata_Summary <- renderDataTable({
     
-    #you will need this function on the "Functions" folder (it is already sourced at the beginning of the app)
-    #Fun_Dat_links
-    # x <- Ref_Links(datasetInput()$Reference,
-    #                datasetInput()$Subject_name)
+    x <- Ref_Links(datasetInput()$Reference,
+                   datasetInput()$Subject_name)
     
     #Re order the datatable
-     Final <- datasetInput() #%>% 
-    #   bind_cols(x) %>% 
-    #   select(-Reference) #Elminates the original Reference column (not applicable if downloaded)
+    Final <- datasetInput() %>% 
+      bind_cols(x) %>% 
+      select(MMID,
+             Short_Title,
+             Author,
+             Link)
     
     #Show the datatable 
     datatable(Final,
               rownames = FALSE,
               filter = 'top',
               escape = FALSE,
-              options = list(pageLength = 50,
+              options = list(pageLength = 25,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 50, 100, 500, 1000),
+                             lengthMenu = c(50, 100, 200,500),
                              language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
-                             )
+              )
     )
   })
   
-  # Data_Available Display ####
+  # Metadata_Key Display ####
   
-  output$Available_Data <- renderDataTable({
-    Data_Available <- datasetInput() %>% 
-      filter(Available_Metadata == "YES" )
+  output$Metadata_Key <- renderDataTable({
+    Metadata_Key <- Key_datasetInput() 
     
-    datatable(Data_Available,
+    datatable(Metadata_Key,
               rownames = FALSE,
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 50,
                              autoWidth = TRUE,
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json'))
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+              )
     )
     
   })
-  
-  
-  
-  #Resultados iniciales ####
-  
-  
-  #### Reference ####
-  
-  output$downloadReport <- downloadHandler(
-    filename = function() {
-      paste('Metadata Reference List', sep = '.', switch(
-        input$format, PDF = 'pdf', HTML = 'html', Word = 'docx'
-      ))
-    },
-    
-    content = function(file) {
-      src <- normalizePath('./Reference/Reference_List.Rmd')
-      
-      # temporarily switch to the temp dir, in case you do not have write
-      # permission to the current working directory
-      owd <- setwd(tempdir())
-      on.exit(setwd(owd))
-      file.copy(src, 'Reference_List.Rmd', overwrite = TRUE)
-      
-      library(rmarkdown)
-      out <- render('Reference_List.Rmd', switch(
-        input$format,
-        PDF = pdf_document(), HTML = html_document(), Word = word_document()
-      ))
-      file.rename(out, file)
-    }
-  )
-  
-  ##### Reference Display ####
-  
-  getPage<-function() {
-    return(includeHTML("./Reference/Reference_List.html"))
-  }
-  output$Reference<-renderUI({getPage()
-    })
-  
-  
-  ##@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
   #### PRELIMINARY RESULTS TAB ####
   # Mapa de resultados ####
   
-  # Data points shown in the map ###
-  #Fedecop information 
-  FEDECOOP <- paste(sep = "<br/>",
-                    "<b><a href='http://www.fedecoop.com.mx'>MetaID 342</a></b>",
-                    "Lobster Stock Assesment and Catch from FEDECOOP since 1970",
-                    "Private Dataset"
-  )
+  #### Timeseries of data gathering ####
   
-  #### The Actual Map ####
-  #(requieres leaflet package)
-  output$Data_Map <- renderLeaflet({
-    data = datasetInput() %>% 
-      filter(!is.na(Lat))
-    leaflet(data=data) %>%
-      addTiles(
-        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-      ) %>%
-      #Initial view #
-      setView(lng = -102.5528, 
-              lat = 23.6345,
-              zoom = 5) %>% 
-      # Data examples as markers ####
-    addMarkers(lng = -109.4725,
-               lat = 24.6356, 
-               popup = "7654")%>%
-      addMarkers(lng = -95.8084852,
-                 lat = 20.5764432,
-                 popup = "MetaID 423"
-      )%>%
-      addMarkers(lng = -107.8084852,
-                 lat = 15.5764432,
-                 popup = "Meta ID = 343. Short Title: Buoy ID4: sst, salinity and currents since 1980"
-      )%>%
-      # Data examples as rectangles ####
-    addRectangles(
-      lng1=-107.607877, lat1=18.459820,
-      lng2=-110.557877, lat2=17.431188,
-      color="red",
-      fillColor = "red",
-      fillOpacity = 0,
-      popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
-    ) %>% 
-      addRectangles(
-        lng1=-115.507877, lat1=28.400000,
-        lng2=-115.557877, lat2=28.421188,
-        color="green",
-        fillColor = "green",
-        fillOpacity = 0.2,
-        popup = FEDECOOP
-      ) %>% 
-      #### Lat & Long in dataset ####
-    addMarkers(
-      lng = ~Long,
-      lat = ~Lat,
-      popup = ~as.character(MMID),
-      clusterOptions = markerClusterOptions()
-    )
+  #Import dataframe (for now)
+  TFdatasetInput <- reactive({
+    
+    x <- read.csv("Data_Curve.csv")
+    x <- x %>% 
+      select(-1)
     
   })
+  
+  #Creating the graph
+  output$TFgraph <- renderDygraph({
+    x <- TFdatasetInput()
+    Dt_Points <- ts(x,
+                    start=c(2016,11),
+                    end = c(2017,1), 
+                    frequency= 12)
+    
+    dygraph(Dt_Points) %>% #Creats the graph
+      dyOptions(stackedGraph = TRUE, #Makes it stacked
+                drawPoints = TRUE, #Shows each data point
+                pointSize = 4) %>% 
+      dyRangeSelector(height = 20) %>% 
+      dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
+      dyAxis("y", drawGrid = FALSE) %>% 
+      dyAxis("y", label = "Number of Data Points") %>%  #Labels
+      dyLegend(width = 600)
+  })
+  
   
   #### Quantitative Results ####
   # Number of entries ####
@@ -234,7 +188,7 @@ shinyServer(function(input, output) {
   })
   
   output$Sources <- renderPrint({
-     z<- datasetInput() %>% 
+    z<- datasetInput() %>% 
       group_by(Compilation_Title) %>% 
       summarise(sum(Data_Time_Points)) %>% 
       select(-2) %>% 
@@ -343,33 +297,6 @@ shinyServer(function(input, output) {
     }
   })
   
-  #### SE_Component ####
-  output$SE_Component <- renderPlot({
-    Se_Plot <- datasetInput() %>% 
-      filter(!is.na(SE_Interaction)) %>% 
-      filter(SE_Interaction != "Otros") %>% 
-      group_by(SE_Interaction) %>% 
-      summarise(Value = sum(Data_Time_Points,na.rm=T))
-    
-    ggplot(data=Se_Plot,
-           aes(
-             y = Value,
-             x = SE_Interaction,
-             fill =SE_Interaction
-           ))+
-      geom_bar(stat = "identity")+
-      theme_classic() +
-      ylab("Número de Datos")+
-      xlab("Componente Socio Económico")+
-      theme(axis.text.x = element_text(hjust = 1,
-                                       size=14,
-                                       angle= 45),
-            axis.text.y = element_text(size = 14),
-            legend.position = "none",
-            axis.title = element_text(size=20,
-                                      face="bold"))
-  })
-  
   
   #### Qualitative Analysis ####
   
@@ -394,201 +321,73 @@ shinyServer(function(input, output) {
     
   })
   
-  #### Subject_Name Word Cloud ####
-  
-  output$Subject_name_Plot <- renderPlot({
-    Words <- datasetInput()
-    WordsCorpus <- Corpus(VectorSource(Words$Subject_name)) #Selects only Subject_name
-    WordsCorpus <- tm_map(WordsCorpus, PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
+  #### Collaboration ###
+  output$Institutions <- renderDataTable({
     
-    Word_Remove <- c(input$Subject_Remove,input$Subject_Remove2)
+    Inst_Table <- datasetInput() %>% 
+      group_by(Institution,
+               Compilation_Title) %>% 
+      summarise(x = n()) %>% 
+      filter(Institution != "na",
+             Institution != "Varios") %>% 
+      select(Institution,
+             Compilation_Title)
+    colnames(Inst_Table) <- c("Institution","Repository")
     
-    #Removes a word of user preference 
-    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 
-    #
     
-    wordcloud(WordsCorpus, #Plots the words
-              max.words = 100,
-              random.order = FALSE,
-              colors=brewer.pal(8, "Dark2"))
-    
+    datatable(Inst_Table,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 5,
+                             autoWidth = TRUE,
+                             lengthMenu = c(10, 15, 20, 50),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+              )
+    )
   })
   
-  #### Experimental Analysis ####  
-  
-  output$SE_Component_Area <- renderPlot({
+  output$People <- renderDataTable({
     
-    #### By Area ####
-    Se_Plot <- datasetInput() %>% 
-      filter(!is.na(Area))
+    #Create a Table with the authors
+    P_Table <- datasetInput() %>% 
+      group_by(Author,
+               Compilation_Title) %>% 
+      summarise(x = n()) %>% 
+      filter(Author != "na",
+             Author != "Varios") %>% 
+      select(Author,
+             Compilation_Title) 
     
-    if(input$SE_E_Plot_Option == 1){
-      ggplot(data=Se_Plot,
-             aes(
-               x=Area,
-               fill= SE_Interaction
-             ))+
-        geom_bar()+
-        theme_classic() +
-        ylab("Número de Datos")+
-        xlab("Area")+
-        theme(axis.text.x = element_text(hjust = 1,
-                                         size=14,
-                                         angle= 45),
-              axis.text.y = element_text(size = 14),
-              legend.position = "top",
-              axis.title = element_text(size=20,
-                                        face="bold"))+ 
-        guides(fill = guide_legend(title = "Componente Socio-Económico",
-                                   title.position = "left"))
-    }else{
-      #### By Region ####
-      
-      if(input$SE_E_Plot_Option == 2){
-        Se_Plot <- datasetInput() %>% 
-          filter(!is.na(Region))
-        
-          ggplot(data=Se_Plot,
-               aes(
-                 x=Region,
-                 fill= SE_Interaction
-               ))+
-          geom_bar()+
-          theme_classic() +
-            ylab("Número de Datos")+
-          xlab("Región")+
-          theme(axis.text.x = element_text(hjust = 1,
-                                           size=14,
-                                           angle= 45),
-                axis.text.y = element_text(size = 14),
-                legend.position = "top",
-                axis.title = element_text(size=20,
-                                          face="bold"))+ 
-          guides(fill = guide_legend(title = "Componente Socio-Económico",
-                                     title.position = "left"))
-      }else{
-        #### By Location ####
-        
-        if(input$SE_E_Plot_Option == 3){
-          
-          Se_Plot <- datasetInput() %>% 
-            filter(!is.na(Location))
-          
-          ggplot(data=Se_Plot,
-                 aes(
-                   x=Location,
-                   fill= SE_Interaction
-                 ))+
-            geom_bar()+
-            theme_classic() +
-            ylab("Número de Datos")+
-            xlab("Localidad")+
-            theme(axis.text.x = element_text(hjust = 1,
-                                             size=14,
-                                             angle= 45),
-                  axis.text.y = element_text(size = 14),
-                  legend.position = "top",
-                  axis.title = element_text(size=20,
-                                            face="bold"))+ 
-            guides(fill = guide_legend(title = "Componente Socio-Económico",
-                                       title.position = "left"))
-          
-        }
-      }
-    }
-  })
-  
-  ## Research Field Plot ####
-  output$Research_Field_Plot <- renderPlot({
+    #Create a Table with the Institutions to remove duplications
+    I_Table <- datasetInput() %>% 
+      group_by(Institution,
+               Compilation_Title) %>% 
+      summarise(x = n()) %>% 
+      filter(Institution != "na",
+             Institution != "Varios") %>% 
+      select(Institution,
+             Compilation_Title)
     
-    #### By Area ####
-    Se_Plot <- datasetInput() %>% 
-      filter(!is.na(Area)) %>% 
-      group_by(Area,Research_Field) %>% 
-      summarise(Entradas = sum(Data_Time_Points,na.rm=T))
+    #Set names equal for "ati_join" function
+    colnames(P_Table) <- c("Institution","Repository")
     
-    if(input$Research_Field_Plot_Option == 1){
-      ggplot(data=Se_Plot,
-             aes(
-               x=Area,
-               y=Entradas,
-               fill= Research_Field
-             ))+
-        geom_bar(stat = "identity")+
-        theme_classic() +
-        ylab("Number of Data Points")+
-        xlab("Area")+
-        theme(axis.text.x = element_text(hjust = 1,
-                                         size=14,
-                                         angle= 45),
-              axis.text.y = element_text(size = 14),
-              legend.position = "top",
-              axis.title = element_text(size=20,
-                                        face="bold"))+ 
-        guides(fill = guide_legend(title = "Research Field",
-                                   title.position = "left"))
-    }else{
-      #### By Region ####
-      
-      if(input$Research_Field_Plot_Option == 2){
-        Se_Plot <- datasetInput() %>% 
-          filter(!is.na(Region)) %>% 
-          group_by(Region,Research_Field) %>% 
-          summarise(Entradas = sum(Data_Time_Points,na.rm=T))
-        
-        ggplot(data=Se_Plot,
-               aes(
-                 x=Region,
-                 y= Entradas,
-                 fill= Research_Field
-               ))+
-          geom_bar(stat = "identity")+
-          theme_classic() +
-          ylab("Number of Data Points")+
-          xlab("Region")+
-          theme(axis.text.x = element_text(hjust = 1,
-                                           size=14,
-                                           angle= 45),
-                axis.text.y = element_text(size = 14),
-                legend.position = "right",
-                axis.title = element_text(size=20,
-                                          face="bold"))+ 
-          guides(fill = guide_legend(title = "Research Field",
-                                     title.position = "left"))
-      }else{
-        #### By Location ####
-        
-        if(input$Research_Field_Plot_Option == 3){
-          
-          Se_Plot <- datasetInput() %>% 
-            filter(!is.na(Location)) %>% 
-            group_by(Location,Research_Field) %>% 
-            summarise(Entradas = sum(Data_Time_Points,na.rm=T))
-          
-          ggplot(data=Se_Plot,
-                 aes(
-                   x=Location,
-                   y = Entradas,
-                   fill= Research_Field
-                 ))+
-            geom_bar(stat = "identity")+
-            theme_classic() +
-            ylab("Number of \nData Points")+
-            xlab("Location")+
-            theme(axis.text.x = element_text(hjust = 1,
-                                             size=14,
-                                             angle= 45),
-                  axis.text.y = element_text(size = 14),
-                  legend.position = "top",
-                  axis.title = element_text(size=20,
-                                            face="bold"))+ 
-            guides(fill = guide_legend(title = "Research Field",
-                                       title.position = "left"))
-          
-        }
-      }
-    }
-  })
+    #Select those that are different from each other
+    F_Table <- anti_join(P_Table,I_Table,
+                         by ="Institution")
+    colnames(F_Table) <- c("Author","Repository")
+    
+    #Final datatable
+    datatable(F_Table,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 5,
+                             autoWidth = TRUE,
+                             lengthMenu = c(10, 15, 20, 50),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+              )
+    )
+  })  
 })
 

@@ -16,6 +16,7 @@ library(shiny)
 library(leaflet)
 library(DT)
 library(markdown)
+library(dygraphs)
 
 shinyUI(
   ### Navigation bar
@@ -330,7 +331,6 @@ shinyUI(
             p(
               "Creemos que en México existe mucha información relevante al ambiente marino, sin embargo un pequeó grupo de personas no son capaces de capturar toda la información, cuanta más gente esté involucrada, más información podemos colectar y mejor podremos reflejar el estado actual de la investigación marina en México así como descubrir campos con falta de información."
             )
-            )
             ),
    #### What do I win? ####
    column(12,
@@ -374,6 +374,7 @@ shinyUI(
                  ))),
                  dataTableOutput("People")
           )
+   )
   ),
     #.########################## ##### 
     #### CONTACT ####
