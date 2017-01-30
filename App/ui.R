@@ -178,7 +178,7 @@ shinyUI(
                    dataTableOutput('Metadata')
                    ),
                  tabPanel(
-                   p(h4("Base Summary")),
+                   p(h4("Quick Link")),
                    dataTableOutput('Metadata_Summary')
                    ),
                  tabPanel(
@@ -221,19 +221,19 @@ shinyUI(
              column(
                width=4,
                align = "center",
-               p(h3("Registers")),
+               p(h3("Records")),
                p(h4(textOutput("Number_Entries")))
              ),
              column(
                width=4,
                align = "center",
-               p(h3("Data Number")),
+               p(h3("Data Points")),
                p(h4(textOutput("Number_Data_Points")))
              ),
              column(
                width=4,
                align = "center",
-               p(h3("References/Repositories")),
+               p(h3("Repositories")),
                p(h4(textOutput("Sources")))
              ),
              br(),
@@ -268,11 +268,8 @@ shinyUI(
                            "Select the amount to display (Location)",
                            value=10,
                            min = 1,
-                           max = 50),
-               #### SE_Component ####
-               p(h3("Socio-Economic Component")),
-               plotOutput("SE_Component")
-             ),
+                           max = 50)
+               ),
              #### Qualitative Results####
              ####Keywords Word Cloud####
              column(
@@ -290,49 +287,9 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Keywords_Plot"),
-               p(em("Note: It is possible that not all words are represented")),
-               #### Subject_Name Word Cloud ####
-               p(h3("Frequent Subjects")),
-               textInput("Subject_Remove",
-                         "Remove Any Word",
-                         "",
-                         width = '50%'),
-               textInput("Subject_Remove2",
-                         "",
-                         "",
-                         width = '50%'),
-               plotOutput("Subject_name_Plot"),
                p(em("Note: It is possible that not all words are represented"))
-             ),
-             br(),
-             #### Experimental Analysis ####
-             column(width =6,
-                    align = "center",
-                    offset = 0,
-                    p(h3("Data Points by Socioeconomic Component and Geographic Location")),
-                    selectInput("SE_E_Plot_Option", 
-                                label= "Select an Option",
-                                choices = list("Area" = 1, 
-                                               "Region" = 2,
-                                               "Location" =3
-                                ),
-                                width = "20%"
-                    ),
-             plotOutput("SE_Component_Area")
-             ),
-             column(width =6,
-                    align = "center",
-             p(h3("Data Points by Research Field and Geographic  Location")),
-             selectInput("Research_Field_Plot_Option", 
-                         label= "Select an Option:",
-                         choices = list("Area" = 1, 
-                                        "Region" = 2,
-                                        "Location" =3
-                         ),
-                         width = "20%"
-             ),
-             plotOutput("Research_Field_Plot")
-             )
+              
+    )
     ),
     #.########################## ##### 
     #### Collaboration ####
