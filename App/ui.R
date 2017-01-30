@@ -131,12 +131,12 @@ shinyUI(
                10,
                align = "center",
                offset = 1,
-               # a(href="http://datamares.ucsd.edu/en/about",
-               #   img(
-               #     src = "dataMares_Logo.png",
-               #     height = 60,
-               #     width = 200
-               #   )),
+               a(href="http://datamares.ucsd.edu/en/about",
+                 img(
+                   src = "dataMares_Logo.png",
+                   height = 60,
+                   width = 200
+                 )),
                a(href="http://monitoreonoroeste.mx/index.php",
                  img(
                    src = "Monitoreo_Logo.png",
@@ -184,27 +184,7 @@ shinyUI(
                  tabPanel(
                    p(h4("Metadata Key")),
                    dataTableOutput('Metadata_Key')
-                 )#,
-                 # tabPanel(
-                 #   p(h4("Reference List")),
-                 #   column(
-                 #     width = 12,
-                 #     align = "center",
-                 #     radioButtons('format',
-                 #                  'Select Format',
-                 #                  c('PDF',
-                 #                    'HTML',
-                 #                    'Word'),
-                 #                  inline = TRUE),
-                 #     downloadButton('downloadReport',
-                 #                    "Download Reference List")
-                 #   ),
-                 # column(
-                 #     width = 12,
-                 #     align = "left",
-                 #   htmlOutput("Reference")
-                 # )
-                 # )
+                 )
                  )
                )
              ), #Close second page
