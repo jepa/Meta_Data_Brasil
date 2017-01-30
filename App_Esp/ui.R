@@ -171,32 +171,20 @@ shinyUI(
                tabsetPanel(
                  id ="Data_Explorer",
                  tabPanel(
-                   p(h4("Base de Metadatos")),
+                   p(h4("Base de Metadata")),
                    dataTableOutput('Metadata')
-                   ),
+                 ),
                  tabPanel(
-                   p(h4("Referencias")),
-                   column(
-                     width = 12,
-                     align = "center",
-                     radioButtons('format',
-                                  'Seleccione el Formato',
-                                  c('PDF',
-                                    'HTML',
-                                    'Word'),
-                                  inline = TRUE),
-                     downloadButton('downloadReport',
-                                    "Descargar Lista de Referencias")
-                   ),
-                 column(
-                     width = 12,
-                     align = "left",
-                   htmlOutput("Reference")
-                 )
-                 )
+                   p(h4("Metadata Resumida")),
+                   dataTableOutput('Metadata_Summary')
+                 ),
+                 tabPanel(
+                   p(h4("Glosario Metadata")),
+                   dataTableOutput('Metadata_Key')
                  )
                )
-             ),
+             )
+    ), #Close second page
     #### PRELIMINARY RESULTS ####
     tabPanel("Resultados Preeliminares",
              #Wellcome / Instructions####
@@ -227,20 +215,25 @@ shinyUI(
              br(),
              br(),
              column(
-               width = 12,
+               width = 8,
                align = "center",
-               p(h3("Resultados preliminares (Cuantitativos y Cualitativos)"))
+               offset = 2,
+               #### Time Series ####
+               p(h3(
+                 "Serie de Tiempo de Incorporación de Información"
+               )),
+               dygraphOutput("TFgraph"), #Timeframe graph
+               p(h3("Resultados Preeliminares "))
              ),
-             #.########################## ##### 
-             #### PRELIMINARY RESULTS ####
              #### Quantitative Results####
              column(
                width = 6,
                align= "center",
-               p(h3("Resultados Cuantitativos")),
-               p(h4("Número de datos por Unidad de Espacio")),
+               p(h2("Resultados Cuantitativos")),
+               br(),
+               p(h3("Datos por Area")),
                selectInput("Plot_Option", 
-                           label= "Seleccione la Opción Deseada:",
+                           label= "Seleccione una opción:",
                            choices = list("Area" = 1, 
                                           "Región" = 2,
                                           "Localidad" =3
@@ -248,23 +241,21 @@ shinyUI(
                ),
                plotOutput("Number_spp"),
                sliderInput("Num_Data_Range",
-                           "Seleccion el Número a Mostrar (Localidad)",
+                           "Selecciona el Número de Localidades",
                            value=10,
                            min = 1,
-                           max = 50),
-               #### SE_Component ####
-               p(h4("Componente Social Económico")),
-               plotOutput("SE_Component")
+                           max = 50)
              ),
              #### Qualitative Results####
              ####Keywords Word Cloud####
              column(
                width = 6,
                align= "center",
-               p(h3("Resultados Cualitativos")),
-               p(h4("Palabras Claves Más Repetidas")),
+               p(h2("Resultados Cualitativos")),
+               br(),
+               p(h3("Palabras Clave Frecuentes")),
                textInput("Keyword_Remove1",
-                         "Quite Cualquier Palabra",
+                         "Excluya Cualquier Palabra",
                          "",
                          width = '50%'),
                textInput("Keyword_Remove2",
@@ -272,41 +263,8 @@ shinyUI(
                          "",
                          width = '50%'),
                plotOutput("Keywords_Plot"),
-               p(em("Nota: Es posible que no todas las palabras estén representadas")),
-               #### Subject_Name Word Cloud ####
-               p(h4("Categorías Más Repetidas")),
-               textInput("Subject_Remove",
-                         "Quite Cualquier Palabra",
-                         "",
-                         width = '50%'),
-               textInput("Subject_Remove2",
-                         "",
-                         "",
-                         width = '50%'),
-               plotOutput("Subject_name_Plot"),
-               p(em("Nota: Es posible que no todas las palabras estén representadas"))
-             ),
-             #### Experimental Analysis ####
-             column(width =12,
-                    align = "center",
-                    selectInput("SE_E_Plot_Option", 
-                                label= "Seleccione la Categoría Deseada",
-                                choices = list("Area" = 1, 
-                                               "Región" = 2,
-                                               "Localidad" =3
-                                ),
-                                width = "20%"
-                    ),
-             plotOutput("SE_Component_Area"),
-             selectInput("Research_Field_Plot_Option", 
-                         label= "Seleccione la Opción Deseada:",
-                         choices = list("Area" = 1, 
-                                        "Region" = 2,
-                                        "Location" =3
-                         ),
-                         width = "20%"
-             ),
-             plotOutput("Research_Field_Plot")
+               p(em("Nota: Es posible que no todas las palabras se encuentren en la gráfica"))
+               
              )
     ),
     #.########################## ##### 
@@ -374,6 +332,49 @@ shinyUI(
             )
             )
             ),
+   #### What do I win? ####
+   column(12,
+          align = "justified",
+          p(h3(
+            "Beneficios de Colaboración"
+          )),
+          p(
+            "El intercambio de información sobre datos tiene una serie de beneficios tanto para los individuos como para la sociedad en si. Al tener la información sobre sus datos en los metadatos aumentará su alcance ya que otros investigadores podrán entrar en contacto con usted en busca de colaboración. Al mismo tiempo, esto fomentará la colaboración entre investigadores nacionales e internacionales que podría dar lugar a un importante avance para el país", 
+            a("(Michener 2006).",
+              href="http://www.sciencedirect.com/science/article/pii/S157495410500004X"
+            )
+          ),
+          p(
+            "Como partde de una comunidad comprometida con la investigación del medio ambiente marino mexicano, compartir nuestros datos trae importantes beneficios. La creación de sistemas para administrar y compartir datos asegura la preservación, administración y acceso a la información",
+            a("(Fridell et al., 2014).",
+              href="http://datascience.codata.org/articles/abstract/10.2481/dsj.IFPDA-01/"), "También nos permitirá entender qué información marina existe en México, e identificar campos de investigación prioritarios para el desarollo marino y de recursos naturales del país."
+          )
+   ),
+   #### People Collaborating ####
+   column(12,
+          align = "justified",
+          p(h3(
+            "Personas e Instituciones Colaborando"
+          )),
+          p(
+            "Si bien la gran mayoría de la información recopilada hasta ahora es de acceso público en línea (internet), hemos comenzado a recibir información de datos de fuentes no publicadas o simplemente no disponibles en internet" 
+          ),
+          column(6,
+                 align = "center",
+                 br(),
+                 p(h4(strong(
+                   "Instituciones"
+                 ))),
+                 dataTableOutput("Institutions")
+          ),
+          column(6,
+                 align = "center",
+                 p(h4(strong(
+                   "Personas"
+                 ))),
+                 dataTableOutput("People")
+          )
+  ),
     #.########################## ##### 
     #### CONTACT ####
     hr(),
