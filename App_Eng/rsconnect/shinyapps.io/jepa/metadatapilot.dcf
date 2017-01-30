@@ -1,0 +1,11 @@
+name: metadatapilot
+title: MetadataPilot
+account: jepa
+server: shinyapps.io
+appId: 149935
+bundleId: 693240
+url: https://jepa.shinyapps.io/metadatapilot/
+when: 1485548446.8307
+asMultiple: FALSE
+asStatic: FALSE
+ignoredFiles: Data_Curve_B.csv|Reference_List.html|Data_Download/.DS_Store|Data_Download/.gitignore|Data_Download/MMID_1246.pdf|Data_Download/MMID_2.csv|Data_Download/MMID_483.csv|Data_Download/MMID_485.csv|Data_Download/MMID_558.csv|Data_Download/Pseudorca_c_Distribution.png|Protocol/.DS_Store|Protocol/Protocol.html|Protocol/Protocol.pdf|Protocol/Protocol.Rmd|Protocol/Images/.DS_Store|Protocol/Images/Mexico_Regions.png|Protocol/Images/MMID_630_Map.png|Protocol/Images/MMID_633_Map.png|Reference/Reference_List.html|Reference/Reference_List.pdf

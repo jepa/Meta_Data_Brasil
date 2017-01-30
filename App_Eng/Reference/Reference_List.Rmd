@@ -1,0 +1,417 @@
+---
+title: "Lista de Referencias de Metadata de Investigación Marina en México"
+date: "17/12/2016"
+author: "Juliano Palacios Abrantes"
+output:
+  html_document:
+    theme: lumen
+    toc: yes
+    toc_depth: '2'
+  pdf_document:
+    number_sections: no
+    toc: yes
+    toc_depth: 2
+---
+
+```{r Library, echo=F, eval=T, message=F, warning=F}
+library(knitr)
+library(dplyr)
+library(readr)
+```
+
+
+```{r Loading Database, echo=F, eval=F, warning=F,message=F}
+x <- read.csv("Reference.csv") 
+x <- x %>% 
+  group_by(Nombre)
+#kable(x)
+
+
+# x <- read_csv("~/Documents/Github/Meta_Data_Mexico/App/Data/Reference.csv") 
+# x <- x %>% 
+#   group_by(Nombre)
+
+#head(x[2])
+References <- levels(x$Nombre)
+
+
+  
+```
+
+```{r Reference Template, echo=F, eval=F}
+
+#Tis is the reference template. Add a new template for each new reference added to the metadata. Change "Template" for the next number....
+
+Ref_Template <- References[Template]
+ReferenceTemplate  <- x %>% 
+  filter(Nombre == Ref_Template) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_Template <- kable(align ="c",
+                   col.names = c("Compilation","Org","Institution","Publication Year"),
+                   ReferenceTemplate)
+
+Cita_Template <- x %>% 
+  filter(Nombre == Ref_Template) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+                    
+Link_Template <- paste(Cita_Template$Org,Cita_Template$Repositorio)
+
+## Copy and paste the following part outside the chunk
+
+#`r Ref_Template`
+
+`r Summary_Template`
+
+### Abstract
+
+
+### Link
+
+`r Link_Template`
+
+```
+
+
+
+# Introduction
+This list is made based on the *"Compilation Title"* variable of the metadata. As explained in the *"Protocol"*, the *Compilation Title* is a category that englobes different data in one webpage, book, or report.
+
+\clearpage
+
+```{r Reference 1 CONAPESCA, echo=F, eval=T, warning=F,message=F}
+
+Ref_1 <- References[1]
+Reference1  <- x %>% 
+  filter(Nombre == Ref_1) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_1 <- kable(align ="c" ,col.names = c("Compilation","Institution","Access","Publication Year"),Reference1)
+
+Cita_1 <- x %>% 
+  filter(Nombre == Ref_1) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_1 <- x$Resumen[1]
+
+                    
+Link_1 <- paste(Cita_1$Org,Cita_1$Repositorio)
+
+```
+
+#`r Ref_1`
+
+
+`r Summary_1`
+
+### Abstract
+`r Abstract_1`
+
+
+### Link
+
+`r Link_1`
+
+
+```{r Reference 2 CONAPESCA, echo=F, eval=T, warning=F,message=F}
+
+Ref_2 <- References[2]
+Reference2  <- x %>% 
+  filter(Nombre == Ref_2) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_2 <- kable(align ="c" ,col.names = c("Compilation","Institution","Access","Publication Year"),Reference2)
+
+Cita_2 <- x %>% 
+  filter(Nombre == Ref_2) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_2 <- x %>% 
+  filter(Nombre == Ref_2) %>% 
+  select(Resumen)
+
+                    
+Link_2 <- paste(Cita_2$Org,Cita_2$Repositorio)
+
+```
+
+#`r Ref_2`
+
+`r Summary_2`
+
+### Abstract
+`r Abstract_2`
+
+
+### Link
+
+`r Link_2`
+
+```{r Reference 3 CONABIO, echo=F, eval=T, warning=F,message=F}
+
+
+Ref_3 <- References[3]
+Reference3  <- x %>% 
+  filter(Nombre == Ref_3) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_3 <- kable(align ="c" ,Reference3,
+                   col.names = c("Compilation","Org","Institution","Publication Year"))
+
+Cita_3 <- x %>% 
+  filter(Nombre == Ref_3) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_3 <- x$Resumen[3]
+
+                    
+Link_3 <- paste(Cita_3$Org,Cita_3$Repositorio)
+
+```
+
+#`r Ref_3`
+
+`r Summary_3`
+
+### Abstract
+`r Abstract_3`
+
+
+### Link
+
+`r Link_3`
+
+```{r Reference 4 DataMares, echo=F, eval=T, warning=F,message=F}
+
+
+Ref_4 <- References[4]
+Reference4  <- x %>% 
+  filter(Nombre == Ref_4) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_4 <- kable(align ="c" ,col.names = c("Compilation","Org","Institution","Publication Year"),Reference4)
+
+Cita_4 <- x %>% 
+  filter(Nombre == Ref_4) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_4 <- x$Resumen[4]
+
+                    
+Link_4 <- paste(Cita_4$Org,Cita_4$Repositorio)
+
+```
+
+#`r Ref_4`
+
+`r Summary_4`
+
+### Abstract
+`r Abstract_4`
+
+
+### Link
+
+`r Link_4`
+
+```{r Reference 5 MMM, echo=F, eval=T, warning=F,message=F}
+
+
+Ref_5 <- References[5]
+Reference5  <- x %>% 
+  filter(Nombre == Ref_5) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_5 <- kable(align ="c" ,col.names = c("Compilation","Org","Institution","Publication Year"),Reference5)
+
+Cita_5 <- x %>% 
+  filter(Nombre == Ref_5) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_5 <- x$Resumen[5]
+
+                    
+Link_5 <- paste(Cita_5$Org,Cita_5$Repositorio)
+
+```
+
+#`r Ref_5`
+
+`r Summary_5`
+
+### Abstract
+
+`r Abstract_5`
+
+
+### Link
+
+`r Link_5`
+
+```{r Reference 6 SATMO, echo=F, eval=T, warning=F,message=F}
+
+
+Ref_6 <- References[6]
+Reference6  <- x %>% 
+  filter(Nombre == Ref_6) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_6 <- kable(align ="c" ,col.names = c("Compilation","Org","Institution","Publication Year"),Reference6)
+
+Cita_6 <- x %>% 
+  filter(Nombre == Ref_6) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_6 <- x$Resumen[6]
+                    
+Link_6 <- paste(Cita_6$Org,Cita_6$Repositorio)
+
+```
+
+#`r Ref_6`
+
+`r Summary_6`
+
+### Abstract
+`r Abstract_6`
+
+### Link
+`r Link_6`
+
+```{r Reference 7 SAU, echo=F, eval=T, warning=F,message=F}
+
+
+Ref_7 <- References[7]
+Reference7  <- x %>% 
+  filter(Nombre == Ref_7) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_7 <- kable(align ="c",
+                   col.names = c("Compilation","Org","Institution","Publication Year"),
+                   Reference7)
+
+Cita_7 <- x %>% 
+  filter(Nombre == Ref_7) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_7 <- x$Resumen[7]
+                    
+Link_7 <- paste(Cita_7$Org,Cita_7$Repositorio)
+
+```
+
+#`r Ref_7`
+
+`r Summary_7`
+
+### Abstract
+`r Abstract_7`
+
+### Link
+
+`r Link_7`
+
+```{r Reference 8, echo=F, eval=T, warning=F,message=F}
+
+#Tis is the reference 8. Add a new 8 for each new reference added to the metadata. Change "8" for the next number....
+
+Ref_8 <- References[8]
+Reference8  <- x %>% 
+  filter(Nombre == Ref_8) %>% 
+  slice(1) %>% 
+  select(
+         Nombre,
+         Org,
+         Acceso,
+         Year
+         )
+  
+Summary_8 <- kable(align ="c",
+                   col.names = c("Compilation","Org","Institution","Publication Year"),
+                   Reference8)
+
+Cita_8 <- x %>% 
+  filter(Nombre == Ref_8) %>% 
+  slice(1) %>% 
+  select(Repositorio,
+         Org)
+
+Abstract_8 <- x$Resumen[8]
+                    
+Link_8 <- paste(Cita_8$Org,Cita_8$Repositorio)
+
+```
+
+#`r Ref_8`
+`r Summary_8`
+
+### Abstract
+`r Abstract_8
+
+### Link
+
+`r Link_8`
