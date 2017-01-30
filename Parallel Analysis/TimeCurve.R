@@ -37,6 +37,8 @@ dygraph(XX) %>%
 
 #### Metadatabase ####
 
+#### Data Enteries #### 
+
 # Division of data inout by excell sheet (aprox.) #
 #T_1_Oct <- 4
 #T_1.3_Nov <- 595
@@ -58,7 +60,7 @@ T1 <- Template %>%
   group_by(Research_Field) %>% 
   summarise(n=n()) %>% 
   filter(Research_Field !="na",
-           Research_Field != "Marine") %>% 
+         Research_Field != "Marine") %>% 
   bind_rows(y)
 
 Tt1<-data.frame(t(T1)) %>% 
@@ -79,10 +81,10 @@ T2 <- Template %>%
   group_by(Research_Field) %>% 
   summarise(n=n()) %>% 
   filter(Research_Field !="na",
-           Research_Field != "Marine") %>% 
+         Research_Field != "Marine") %>% 
   bind_rows(x)
 
-Tt2<-matrix(data.frame(t(T2)))%>% 
+Tt2<-data.frame(t(T2))%>% 
   slice(2)
 colnames(Tt2) <- T2$Research_Field
 
@@ -97,32 +99,89 @@ T3 <- Template %>%
 
 Tt3<-data.frame(t(T3)) %>% 
   slice(2)
-colnames(Tt3) <- T2$Research_Field
+colnames(Tt3) <- T3$Research_Field
 
 
 # Bind all edditions
 TT <- cbind(T1,T2,T3)
 TTt <-rbind(Tt1,Tt2,Tt3)
 
-write.csv(Ttt,"ESTA.csv")
+#write.csv(ESTA,"ESTA.csv")
 
-#### STARTT HERE ####
-# For now the other method does not work because I don't wanna deal wiht factors and integers...
-TTt <- read_csv("~/Documents/Github/Meta_Data_Mexico/ESTA.csv", 
-                 +     col_types = cols(Aquaculture = col_number(), 
-                                        +         Conservation = col_number(), Fisheries = col_number(), 
-                                        +         Oceanography = col_number(), Sociology = col_number()))
+#### Data Points ####
+
+yy <- data.frame(matrix(c("Conservation",0),nrow = 1))
+colnames(yy) <- c("Research_Field","n")
+yy$n<- as.numeric(as.factor(yy$n))
+
+T1_DP <- Template %>% 
+  filter(MMID <= 595) %>% 
+  group_by(Research_Field) %>% 
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>%  
+  filter(Research_Field !="na",
+         Research_Field != "Marine") %>% 
+  bind_rows(yy)
+
+Tt1_DP<-data.frame(t(T1_DP)) %>% 
+  slice(2)
+colnames(Tt1_DP) <- T1_DP$Research_Field
+
+
+###
+#I needed to add Aquaculture manually since there is no data collected this month
+
+xx <- data.frame(matrix(c("Aquaculture",0),nrow = 1))
+colnames(xx) <- c("Research_Field","n")
+xx$n<- as.numeric(as.factor(xx$n))
+#
+T2_DP <- Template %>% 
+  filter(MMID >= 595) %>% 
+  filter(MMID <= 1000) %>% 
+  group_by(Research_Field) %>% 
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>%  
+  filter(Research_Field !="na",
+         Research_Field != "Marine") %>% 
+  bind_rows(xx)
+
+Tt2_DP<-data.frame(t(T2_DP))%>% 
+  slice(2)
+colnames(Tt2_DP) <- T2_DP$Research_Field
+
+###
+
+T3_DP <- Template %>% 
+  filter(MMID >= 1000) %>% 
+  filter(MMID <= 1602) %>% 
+  group_by(Research_Field) %>% 
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>%  
+  filter(Research_Field !="na")
+
+Tt3_DP<-data.frame(t(T3_DP)) %>% 
+  slice(2)
+colnames(Tt3_DP) <- T3_DP$Research_Field
+
+
+# Bind all edditions
+# TT <- cbind(T1,T2,T3)
+TTt_DP <-rbind(Tt1_DP,Tt2_DP,Tt3_DP)
+
+#write.csv(TTt_DP,"ESTA2.csv")
+
 
 # Convert them to ts
-D_Points <- ts(TT,
-               start=c(2016,10),
-               end = c(2017,12), 
-               frequency= 12)
+# D_Points <- ts(TT,
+#                start=c(2016,10),
+#                end = c(2017,12), 
+#                frequency= 12)
 
-Dt_Points <- ts(ESTA,
-               start=c(2016,11),
-               end = c(2017,1), 
-               frequency= 12)
+#### START HERE FOR DATA POINTS ####
+
+# Import ESTA2 dataset 
+
+Dt_Points <- ts(ESTA2,
+                start=c(2016,11),
+                end = c(2017,1), 
+                frequency= 12)
 
 dygraph(Dt_Points) %>% #Creats the graph
   dyOptions(stackedGraph = TRUE, #Makes it stacked
@@ -133,4 +192,4 @@ dygraph(Dt_Points) %>% #Creats the graph
   dyAxis("y", drawGrid = FALSE) %>% 
   dyAxis("y", label = "Number of Data Points") %>%  #Labels
   dyLegend(width = 600)
-  
+
