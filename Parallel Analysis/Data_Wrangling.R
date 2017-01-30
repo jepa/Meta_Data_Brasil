@@ -483,3 +483,10 @@ SE <- data.frame(sample(Lista, #List of random numbers
                         replace = TRUE)) # <- random allocation of the datapoints to all data (expcluding those that generatedd the random numbers)
 
 #write.csv(SE,"SE.csv")
+
+
+####################### END ########################
+
+Nom <- NOMS %>% 
+  mutate(Title= paste(Titulo,Comun,"(",Especie,")")) 
+         
