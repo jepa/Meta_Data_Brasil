@@ -8,6 +8,7 @@
 library(xlsx)
 library(dplyr)
 library(tidyr)
+library(data.table)
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
@@ -487,6 +488,12 @@ SE <- data.frame(sample(Lista, #List of random numbers
 
 ####################### END ########################
 
+NOMS <- fread("./Parallel Analysis/NOMS.csv")
+
 Nom <- NOMS %>% 
-  mutate(Title= paste(Titulo,Comun,"(",Especie,")")) 
-         
+  mutate(Title= paste(Titulo,Comun,"(",Especie,")")) %>%
+           mutate(key = paste("Nom; Veda; Temporal; SEMARNAT; Secretaria; Medio; Ambiente; Recursos; Naturales; Conservacion; Proteccion;",Comun,Especie))
+  
+write.csv(Nom, "NOM.csv")         
+
+####################### END ########################
