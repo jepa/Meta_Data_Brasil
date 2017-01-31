@@ -17,11 +17,13 @@ meta <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template.csv")
 
 #ts_subset(meta,"",1900,2050)
 
-ts_subset<- function(Data,Start_Year,End_Year,Category){
+ts_subset<- function(Data,Start_Year,End_Year,Category="NA"){
   
-Data <- Data %>%
-    filter(Research_Field == "Fisheries")
-
+  library(dplyr)  #<- For data wrangling
+  library(dygraphs)
+# Data <- Data %>%
+#     filter(Research_Field == "Fisheries")
+  
 tdat= na.omit(Data[,c("Start_Year","End_Year")]) #Subset columns with 
 tdat$Start_Year<- as.numeric(as.character(tdat$Start_Year))
 tdat$End_Year<- as.numeric(as.character(tdat$End_Year))
@@ -66,7 +68,7 @@ return(tsplot)
 }
 
 
-C <- ts_subset(meta,1900,2050,"Conservation")
+C <- ts_subset(Template,1900,2050,"Conservation")
 Fi <- ts_subset(meta,1900,2050,"Fisheries")
 O <- ts_subset(meta,1900,2050,"Oceanography")
 S <- ts_subset(meta,1900,2050,"Sociology")

@@ -269,6 +269,15 @@ shinyUI(
                plotOutput("Keywords_Plot"),
                p(em("Note: It is possible that not all words are represented"))
               
+    ),
+    column(
+      width = 8,
+      align= "center",
+      offset = 2,
+      p(h3(
+        "Reconstruction of Historic Data from Metadata"
+      )),
+      dygraphOutput("TSgraph")
     )
     ),
     #.########################## ##### 

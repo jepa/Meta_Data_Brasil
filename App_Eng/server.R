@@ -168,6 +168,11 @@ shinyServer(function(input, output) {
     dyLegend(width = 600)
   })
   
+  source('ts_fun.R')
+  output$TSgraph <- renderDygraph({
+    ts_plot(datasetInput(),1900,2050)
+  })
+  
   #### Quantitative Results ####
   # Number of entries ####
   
