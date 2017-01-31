@@ -1,6 +1,11 @@
-#### Codigo de Andres para Temporal analysis ####
+#### Andres Cisnero's code for Temporal analysis of the data ####
+# With my own modifications in sections that say: "mi cuchara" or otherwise commented with a (J)
 
-meta <- Template
+#Libraries and Dataset #
+library(dplyr)  #<- For data wrangling
+library(dygraphs) # <- for interactive TS graphs
+
+meta <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template.csv") 
 
 #---Temporal dataset coverage--------------------------
 
@@ -13,21 +18,43 @@ tdat$End_Year<- as.numeric(as.character(tdat$End_Year))
 #start and end year data
 years= 1900:2050 #Limit time span considered
 
-#x = tdat[1,1]:tdat[1,2] #First full time series
-x = 1950:2010
+#x = tdat[1,1]:tdat[1,2] #First full time series #<- not working for me (J) So this should work as well:
+x <- tdat$Start_Year[1]:tdat$End_Year[1] # <- (J)
+#It works!
+
 ts= cbind( years, !is.na(match(years, x))==1 ) #Flag years in time series
 for(i in 2:dim(tdat)[1]) #Repeat for all data
 {
   #x= tdat[i,1] : tdat[i,2]
-  x = 1950:2010
+  x <- tdat$Start_Year[i]:tdat$End_Year[i]
   ts= cbind(ts, !is.na(match(years, x))==1)
 }
 tssum= cbind(ts[,1], rowSums(ts[,2:dim(ts)[2]]) ) #Sum over years
 
+
+### Un poco de "mi cuchara" ####
+
+J <- data.frame(tssum) #<- Converts to data.frame
+
+#Transforms the results to time series
+J_TS <- ts(J$X2,
+          start=c(1900,1),
+          end = c(2050,12), 
+          frequency= 1)
+
+#Plots it "nicelly"
+dygraph(J_TS) %>%
+  dySeries("V1", label = "Data Points") %>%
+  dyOptions(stackedGraph = TRUE) %>%
+  dyRangeSelector(height = 20)
+
+### End of "Mi cuchara ####
+
+
 #Fig Temporal Coverage
 ftc= function()
 {
-  xpos= barplot(tssum[,2], ylim= c(0,max(tssum[,2])+50), xlab="Year", ylab="# Assessments",
+  xpos= barplot(tssum[,2], ylim= c(0,max(tssum[,2])+50), xlab="Year", ylab="# Data Points",
                 col="slategrey", border="slategrey")
   axis(1, at=xpos[c(1,seq(16,151,15))], labels=c(1900,seq(1915,2050,15)))
 }
@@ -37,32 +64,35 @@ dev.off()
 
 
 #Matplot total and ecological assessments
-x= subset(meta, Area=="Atlantic" | Area=="Pacific" )
-tdat= na.omit(x[,c("Start_Year","End_Year")])
+xx= subset(meta, Area=="Atlantic" | Area=="Pacific" ) # <- (J) changed the area for the Mexico metadata
+
+tdat= na.omit(xx[,c("Start_Year","End_Year")])
 years= 1900:2050
-#x= tdat[1,1]:tdat[1,2]
-x <- 1950:2010
-ts= cbind( years, !is.na(match(years, x))==1 )
+
+#x= tdat[i,1] : tdat[i,2] # <- (J) Not working for me (??)
+x <- tdat$Start_Year[1]:tdat$End_Year[1] # <- (J)
+
+ts= cbind( years, !is.na(match(years, xx))==1 )
 for(i in 2:dim(tdat)[1])
 {
   #x= tdat[i,1] : tdat[i,2]
-  x <- 1950:2010
-  ts= cbind(ts, !is.na(match(years, x))==1)
+  x <- tdat$Start_Year[1]:tdat$End_Year[1]
+  ts= cbind(ts, !is.na(match(years, xx))==1)
 }
 tdat.eco= cbind(ts[,1], rowSums(ts[,2:dim(ts)[2]]) )
 colnames(tdat.eco)= c("Year","Value")
 
-
-#Frequency of years in all data (from OC Metadata)
+#Frequency of years in all data (from Metadata)
 tdat= na.omit(meta[,c("Start_Year","End_Year")])
 years= 1900:2050
 #x= tdat[1,1]:tdat[1,2]
-x <- 1950:2010
+x <- tdat$Start_Year[1]:tdat$End_Year[1]
+
 ts= cbind( years, !is.na(match(years, x))==1 )
 for(i in 2:dim(tdat)[1])
 {
   #x= tdat[i,1] : tdat[i,2]
-  x <- 1950:2010
+  x <- tdat$Start_Year[1]:tdat$End_Year[1]
   ts= cbind(ts, !is.na(match(years, x))==1)
 }
 tdat= cbind(ts[,1], rowSums(ts[,2:dim(ts)[2]]) )
