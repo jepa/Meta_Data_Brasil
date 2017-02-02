@@ -37,38 +37,38 @@ shinyUI(
                  offset = 1,
                  p(h3("Welcome!")),
                  p(
-                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. The availability of data is often perceived as a gap in advancing research and policy discussion. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research. A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Such meta-database has been developed for Canada and such experiences could be adapted for Mexico",
-                 a("(Cisneros-Montemayor et al. 2016).",
-                   href="http://www.nrcresearchpress.com/doi/pdf/10.1139/cjfas-2015-0573")
+                   "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. Limited information is often perceived as a barrier in advancing research and policy discussions. However, in many cases, this can be a result of a lack of knowledge about the existence and availability of these data. In Mexico, numerous information regarding the seas and coasts has been produced by academic institutions, government, and NGOs both inside and outside the country. While diverse barriers can compromise the exchange of information among stakeholders, having publicly accessible descriptions of existing data is a huge step towards increasing collaboration and innovative research. A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Similar meta-databases have been previously developed (for example, for Canada) and such experiences can be readily be adapted for Mexico",
+                   a("(Cisneros-Montemayor et al. 2016).",
+                     href="http://www.nrcresearchpress.com/doi/pdf/10.1139/cjfas-2015-0573")
                  ),
                  p(h3(
                    "Project Objectives"
                  )),
-                 p("The main objective of this project is to create a meta-database for oceanographic, ecological, economic and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that should be addressed in the future. Finally, the meta database is expected to be public, self-maintaining and available for consultation"
+                 p("The main objective of this project is to create a meta-database for oceanographic, ecological, economic, fisheries and social data for marine ecosystems and marine-related sectors of Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that can be addressed in the future. Finally, the meta-database will be public and available for consultation, and is expected to be largely self-maintaining"
                  ),
-               p(h4(
-                 "Climate Change"
-                    )),
+                 p(h4(
+                   "Climate Change"
+                 )),
                  p(
-                   "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improving our understanding that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
-               )
+                   "Data availability is key to climate change research. That is why this project intends to contribute substantially to the research carried out in Mexico on the impacts of climate change. By improving our understanding of the effects that climate change will have on marine resources, we can support policies designed to better manage the country's marine resources."
+                 )
                ),
-                 column(
-                   12,
-                   align = "center",
-                   # Flowchart Image
-                   img(
-                     src = "flow_chart.png",
-                     height = 150,
-                     width = 700
-                   )
-                   ),
+               column(
+                 12,
+                 align = "center",
+                 # Flowchart Image
+                 img(
+                   src = "flow_chart.png",
+                   height = 150,
+                   width = 700
+                 )
+               ),
                # Core Group Infomation
                column(
                  10,
                  align = "justified",
                  offset = 1,
-                   p(h3("Participants and Institutions")),
+                 p(h3("Participants and Institutions")),
                  p(strong(a(href="http://oceans.ubc.ca/andres-cisneros-montemayor/","Andrés Cisneros-Montemayor;")),
                    "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
@@ -76,17 +76,17 @@ shinyUI(
                    "Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional"
                  ),
                  p(strong(a(href="https://jepa.shinyapps.io/jpalacios/","Juliano Palacios-Abrantes")),
-                 "Institute for the Oceans and Fisheries, University of British Columbia"
+                   "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
                  p(strong(a(href="http://mexico.edf.org/personas/laura-f-rodriguez","Laura Rodriguez;")),
-                 "Environmental Defense Fund, México"
+                   "Environmental Defense Fund, México"
                  ),
                  p(strong(a(href="https://www.researchgate.net/profile/Miguel_Cisneros-Mata","Miguel Ángel Cisneros-Mata;")),
-                 "Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura"
+                   "Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura"
                  ),
                  p(strong(a(href="http://oceans.ubc.ca/william-cheung/","William Cheung;")),
-                 "Institute for the Oceans and Fisheries, University of British Columbia"
-               )
+                   "Institute for the Oceans and Fisheries, University of British Columbia"
+                 )
                ),
                br(),
                column(
@@ -157,17 +157,17 @@ shinyUI(
                #   ))
              )
     ), # Close first page
-   #.########################## ##### 
+    #.########################## ##### 
     #### METADATA ####
     tabPanel("Metadata",
              h3(
                "Metadata of Marine research in Mexico"
              ),
-             p("In this section you will find the metadata base that has been compiled since November 2016. In addition to surf the database, you can download the list of references that have been consulted to date."),
+             p("In this section you will find the meta-database that has been compiled since November 2016. In addition to surfing the database, you can download the list of references that have been consulted to date."),
              p(
-               "If you are the author or responsible for any information in this database, and find an error, please contact us."
+               "If you find an error, or an author wishing to make changes to records included in the meta-database, please contact us."
              ),
-             p(strong("Note:"),"The information here presented is partial. The project is not yet complete and the information is still being collected"),
+             p(strong("Note:"),"The information here presented is partial. The project is ongoing and information is still being collected"),
              column(
                width=12,
                align = "center",
@@ -176,28 +176,28 @@ shinyUI(
                  tabPanel(
                    p(h4("Metadata Base")),
                    dataTableOutput('Metadata')
-                   ),
+                 ),
                  tabPanel(
                    p(h4("Quick Link")),
                    dataTableOutput('Metadata_Summary')
-                   ),
+                 ),
                  tabPanel(
                    p(h4("Metadata Key")),
                    dataTableOutput('Metadata_Key')
                  )
-                 )
                )
-             ), #Close second page
-   #.########################## ##### 
+             )
+    ), #Close second page
+    #.########################## ##### 
     #### PRELIMINARY RESULTS ####
     tabPanel("Preliminary Results",
              #Wellcome / Instructions####
              p(h3(
                "Preliminary Results"
-               )),
+             )),
              p(
-               "In this section you will be presented with some of the preliminary results. These results are directly related to the information that is being collected. Likewise, these results are partial and do not represent the total of marine research in Mexico."
-               ),
+               "In this section you will be presented with some preliminary results. These results are directly related to the information that is being collected and do not represent all marine research in Mexico."
+             ),
              column(
                width=4,
                align = "center",
@@ -225,7 +225,7 @@ shinyUI(
                #### Time Series ####
                p(h3(
                  "Time Series of Data Information Gathering"
-                    )),
+               )),
                dygraphOutput("TFgraph"), #Timeframe graph
                p(h3("Preliminary Results (Quantitative & Qualitative)"))
              ),
@@ -249,7 +249,7 @@ shinyUI(
                            value=10,
                            min = 1,
                            max = 50)
-               ),
+             ),
              #### Qualitative Results####
              ####Keywords Word Cloud####
              column(
@@ -268,124 +268,124 @@ shinyUI(
                          width = '50%'),
                plotOutput("Keywords_Plot"),
                p(em("Note: It is possible that not all words are represented"))
-              
-    ),
-    column(
-      width = 8,
-      align= "center",
-      offset = 2,
-      p(h3(
-        "Reconstruction of Historic Data from Metadata"
-      )),
-      dygraphOutput("TSgraph")
-    )
+               
+             ),
+             column(
+               width = 8,
+               align= "center",
+               offset = 2,
+               p(h3(
+                 "Reconstruction of Historic Data from Metadata"
+               )),
+               dygraphOutput("TSgraph")
+             )
     ),
     #.########################## ##### 
     #### Collaboration ####
     tabPanel(strong("Collaboration"),
              h3("Collaborate in the Development of Marine Research in Mexico"),
-            p("We are looking for any source of information that contains data on
-             Marine research in Mexico. It does not matter the source. It can be your thesis data, grey literature, or citizen science!"),
-            p("The project is on a collaborative stage that consists of populating the database so we invite anyone interested to collaborate with the project to share information about their data."),
-            p("It is important to mention that", strong ("we are not gathering hard data, but rather information about them.")
-              ),
-            "The more people involved, the better we can reflect the state of marine research in Mexico,",
-            br(),
-            column(12,
-                   align="justified",
-              p(h3(
-                "Three Ways to Collaborate"
-                   ))
-              ),
-            column(4,
-                   align="justified",
-                   h3(img(
-                     src = "Colaborar.png",
-                     height = 60,
-                     width = 60,
-                     "1. Share"
-                   )),
-                   p(
-                     "In order for the project to better reflect marine research in Mexico, it is necessary to have as much information as possible. Remember that we are not collecting raw data, we are collecting information about the data"
-                     ),
-                   downloadButton('downloadTemplate',
-                                  "Download Template")
-                   ),
-            column(4,
-                   align="justified",
-                   h3(img(
-                     src = "Busca.png",
-                     height =60,
-                     width = 60,
-                     "2. Inform"
-                   )),
-                   p(
-                     "We are looking for any source of information relevant to marine research in Mexico. No matter the source, they can be data of thesis, publications, monitoring, gray literature or official reports"
-                   ),
-                   a(img(
-                     src = "Twitter_Logo.png",
-                     height = 40,
-                     width = 40
-                   ), href = "https://twitter.com/julianop_a"
-                   ),
-                   "Email"
-            ),
-            column(4,
-                   align="justified",
-                   h3(img(
-                     src = "Comparte.png",
-                     height = 60,
-                     width = 60,
-                     "3. Communicate"
-                   )),
-            p(
-              "We believe that in Mexico there is a lot of information relevant to the marine environment, however a small group of people are not able to capture all the information. The more people are involved, the more information we can collect and the better we can reflect the current state of marine research in Mexico as well as discover fields with lack of information."
-            )
-            ),
-            #### What do I win? ####
-            column(12,
-                   align = "justified",
-                   p(h3(
-                     "Benefits of Collaborating"
-                   )),
-                   p(
-                     "Data information sharing has a series of benefits to both the individual as well as society. Having your data information on the Metadata will increase your outreach. Your data could be potentially used by other researchers to answer different questions. This will ultimately foster collaboration among national and international researchers that could result in important advance for the country", 
-                     a("(Michener 2006).",
-                       href="http://www.sciencedirect.com/science/article/pii/S157495410500004X"
-                     )
-                   ),
-                   p(
-                     "As a community committed to the research of Mexico's marine environment, sharing our data brings important benefits. Building systems for managing and sharing data ensures preservation, stewardship and access to information",
-                     a("(Fridell et al., 2014).",
-                       href="http://datascience.codata.org/articles/abstract/10.2481/dsj.IFPDA-01/"), "It will also allow us to understand what information is out there, and identify fields of research that need to be further developed"
-                   )
-                   ),
-            #### People Collaborating ####
-            column(12,
-                   align = "justified",
-                   p(h3(
-                     "People and Institutions Collaborating"
-                     )),
-                   p(
-                     "While the vast majority  of the information collected until now is publically accessed online, we have started receiving data information from un-published or non-available sources" 
-                   ),
-                   column(6,
-                          align = "center",
-                          br(),
-                          p(h4(strong(
-                            "Institutions"
-                          ))),
-                          dataTableOutput("Institutions")
-            ),
-            column(6,
-                   align = "center",
-                   p(h4(strong(
-                     "People"
-                   ))),
-                   dataTableOutput("People")
-            )
-            )
-            ),
+             p("We are looking for any available information regarding
+               marine research in Mexico, regardless of the source. It can be your thesis data, grey literature, or citizen science!"),
+             p("The project depends on wide collaboration to populate the database, so we invite anyone interested in collaborating with the project to contact us and share information about their data."),
+             p("It is important to mention that", strong ("we are not gathering hard data, but rather information about them.")
+             ),
+             "The more people involved, the better we can reflect the state of marine research in Mexico",
+             br(),
+             column(12,
+                    align="justified",
+                    p(h3(
+                      "Three Ways to Collaborate"
+                    ))
+             ),
+             column(4,
+                    align="justified",
+                    h3(img(
+                      src = "Colaborar.png",
+                      height = 60,
+                      width = 60,
+                      "1. Share"
+                    )),
+                    p(
+                      "In order for the project to better reflect marine research in Mexico, it is necessary to have as much information as possible. Remember that we are not collecting raw data, we are collecting information about what data exists"
+                    ),
+                    downloadButton('downloadTemplate',
+                                   "Download Template")
+             ),
+             column(4,
+                    align="justified",
+                    h3(img(
+                      src = "Busca.png",
+                      height =60,
+                      width = 60,
+                      "2. Inform"
+                    )),
+                    p(
+                      "We are looking for any source of information relevant to marine research in Mexico. No matter the source, they can be data from dissertations, publications, monitoring programs, gray literature or official reports"
+                    ),
+                    a(img(
+                      src = "Twitter_Logo.png",
+                      height = 40,
+                      width = 40
+                    ), href = "https://twitter.com/julianop_a"
+                    ),
+                    "Email"
+             ),
+             column(4,
+                    align="justified",
+                    h3(img(
+                      src = "Comparte.png",
+                      height = 60,
+                      width = 60,
+                      "3. Communicate"
+                    )),
+                    p(
+                      "We believe that in Mexico there is a lot of existing information relevant to the marine environment, however a small group of people are not able to capture all the information. The more people are involved, the more information we can collect and the better we can reflect the current state of marine research in Mexico, as well as highlight fields with limited information."
+                    )
+             ),
+             #### What do I win? ####
+             column(12,
+                    align = "justified",
+                    p(h3(
+                      "Benefits of Collaborating"
+                    )),
+                    p(
+                      "Data information sharing has many benefits to both individuals and society. Having your data information included in the Metadata will increase the visibility of your research. Your data could be potentially be useful for other researchers to answer different questions, and they would contact you directly. This will ultimately foster collaboration among national and international researchers that could result in important advances for the country", 
+                      a("(Michener 2006).",
+                        href="http://www.sciencedirect.com/science/article/pii/S157495410500004X"
+                      )
+                    ),
+                    p(
+                      "As a community committed to research of Mexico's marine environment, sharing our data brings important benefits. Building systems for managing and sharing data ensures preservation, stewardship and access to information",
+                      a("(Fridell et al., 2014).",
+                        href="http://datascience.codata.org/articles/abstract/10.2481/dsj.IFPDA-01/"), "It will also allow us to understand what information is out there, and identify fields of research that need to be further developed"
+                    )
+             ),
+             #### People Collaborating ####
+             column(12,
+                    align = "justified",
+                    p(h3(
+                      "People and Institutions Collaborating"
+                    )),
+                    p(
+                      "While the vast majority  of the information collected so far is publically accessible online, we have started receiving data information from unpublished or otherwise not readily-available sources" 
+                    ),
+                    column(6,
+                           align = "center",
+                           br(),
+                           p(h4(strong(
+                             "Institutions"
+                           ))),
+                           dataTableOutput("Institutions")
+                    ),
+                    column(6,
+                           align = "center",
+                           p(h4(strong(
+                             "People"
+                           ))),
+                           dataTableOutput("People")
+                    )
+             )
+             ),
     #.########################## ##### 
     #### CONTACT ####
     column(12,
@@ -393,7 +393,7 @@ shinyUI(
            hr(),
            br(),
            h5("Contact Information")
-           ),
+    ),
     column(3,
            align = "center",
            p(strong("Corresponding author:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
@@ -402,20 +402,20 @@ shinyUI(
            align = "center",
            p(strong("Phone:"), "+1 (778) 835 4298"),
            strong("Skype:"), "jepa_88"
-           ),
+    ),
     column(4,
            align ="justified",
            p(strong("Address:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canada, BC V6T 1Z4")
-           ),
+    ),
     column(2,
            align ="center",
            p(strong("Research Gate:")),
-             p(a(img(
+           p(a(img(
              src = "RG_Logo.png",
              height = 40,
              width = 40
            ), href = "https://www.researchgate.net/profile/Juliano_Palacios_Abrantes2")
-  )
+           )
     )
-)
-)
+  )
+  )
