@@ -9,6 +9,7 @@ library(xlsx)
 library(dplyr)
 library(tidyr)
 library(data.table)
+library(leaflet)
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
@@ -497,3 +498,12 @@ Nom <- NOMS %>%
 write.csv(Nom, "NOM.csv")         
 
 ####################### END ########################
+
+#### NOAA Data of Gulf of Mexico ####
+leaflet() %>%
+  addTiles(
+    urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+    attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  ) %>%
+  setView(lng = -1.1876785510153815, 
+          lat = 24.35286044345318, zoom = 1)
