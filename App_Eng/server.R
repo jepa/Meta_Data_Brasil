@@ -39,7 +39,7 @@ library(dygraphs)
 
 #The begining #
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
   
   #### INPUT DATA TAB ####  
@@ -55,6 +55,22 @@ shinyServer(function(input, output) {
   
   
   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+  
+  # HOME PAGE ####
+  #Number of points
+  
+  output$Datapoints_Intro <- renderText({
+    Number_entries <- datasetInput()
+    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
+    
+  })
+  
+  observeEvent(input$Collaborate_But, {
+    updateNavbarPage(session,
+                      inputId = "MMM_Nav_Bar", 
+                      selected = "Collaborate")
+  })
+  
   
   # METADATA TAB ####
   
@@ -176,20 +192,20 @@ shinyServer(function(input, output) {
   #### Quantitative Results ####
   # Number of entries ####
   
-  output$Number_Entries <- renderPrint({
+  output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
-    Number_entries$MMID[length(Number_entries$MMID)]
+    paste(Number_entries$MMID[length(Number_entries$MMID)])
     
   })
   
-  output$Number_Data_Points <- renderPrint({
+  output$Number_Data_Points <- renderText({
     Number_entries <- datasetInput()
-    sum(Number_entries$Data_Time_Points,na.rm=T)
+    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
     
   })
   
-  output$Sources <- renderPrint({
+  output$Sources <- renderText({
      z<- datasetInput() %>% 
       group_by(Compilation_Title) %>% 
       summarise(sum(Data_Time_Points)) %>% 
@@ -197,7 +213,7 @@ shinyServer(function(input, output) {
       filter(!is.na(Compilation_Title)) %>% 
       mutate(z = 1)
     
-    sum(z$z)
+    paste(sum(z$z))
     
   })
   
