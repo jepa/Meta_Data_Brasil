@@ -20,37 +20,105 @@ library(dygraphs)
 
 shinyUI(
   ### Navigation bar
-  navbarPage(
-    #Web page title
-    "Metadata de Investigación Marina en México",
-    #### Inicio ####
-    tabPanel("Inicio",
-             fluidRow(
-               column(
-                 12,
-                 align = "center",
-                 h1("Hacia la Creación de una Base de Metadatos de Investigación Marina en México")
-               ),
-               column(
-                 10,
-                 align = "justified",
-                 offset = 1,
-                 p(h3("¡Bienvenidos!")),
-                 p(
-                   "La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir pero no siempre están disponibles al público o su existencia no es conocida. El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigación novedosa en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información existente al mismo tiempo que estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país" 
-                 ),
+  navbarPage(id = "MMM_Nav_Bar",
+             #Web page title
+             "Meta-database of Marine Research in Mexico",
+             #### HOME ####
+             tabPanel("Home",
+                      fluidRow(
+                        column(
+                          12,
+                          align = "center",
+                          h1("Hacia la creación de una base de metadatos de investigación marina en México"),
+                          img(
+                            src = "Portada.jpg",
+                            height = 500,
+                            width = 800
+                          )
+                        ),
+                        column(
+                          8,
+                          align = "justified",
+                          offset = 2,
+                          p(h3("Bienvenidos")),
+                          p(
+                            "El proyecto de meta-base de datos en investigación marina tiene como objetivo crear una meta-base de datos de todos los datos de investigación marina desarrollados en México. Una base de metadas compende información sobre los datos colectados, en lugar de una base de datos de los datos reales. Desde octubre de 2016 hemos recolectado más de 30,000 datos, de 12 repositorios on-line y colaborado con más de 17 profesionales de diferentes disciplinas. Sin embargo, aún estamos buscando cualquier información disponible sobre investigación marina en México, independientemente de la fuente. Los datos pueden provenir de distintas fuentes como: datos de la tesis, literatura gris, o capturados por pescadores o voluntarios"
+                          )
+                        ),
+                        column(
+                          8,
+                          align = "center",
+                          offset = 2,
+                          p(strong(h4(
+                            "¡Cuantas más personas participen, mejor podremos reflejar el estado de la investigación marina en México!"
+                          ))),
+                          p(actionButton("Collaborate_But", "¿Cómo puedo colaborar?"))
+                        ),
+                        #Partners Information####
+                        column(
+                          8,
+                          align = "justified",
+                          offset = 2,
+                          p(h3("Red de Metadatos")
+                          )
+                        ),
+                        column(
+                          8,
+                          align = "center",
+                          offset = 2,
+                          a(href="http://datamares.ucsd.edu/en/about",
+                            img(
+                              src = "dataMares_Logo.png",
+                              height = 60,
+                              width = 200
+                            )),
+                          a(href="http://monitoreonoroeste.mx/index.php",
+                            img(
+                              src = "Monitoreo_Logo.png",
+                              height = 60,
+                              width = 200
+                            ))#,
+                          # a(href="www.inapesca.gob.mx",
+                          #   img(
+                          #     src = "inapesca_logo.JPG",
+                          #     height = 80,
+                          #     width = 300
+                          #   )),
+                          # a(href="www.edf.com.mx",
+                          #   img(
+                          #     src = "edf_logo.JPG",
+                          #     height = 80,
+                          #     width = 300
+                          #   ))
+                        )
+                      )
+             ),
+             #### PROJECT DESCRIPTION ####
+             tabPanel("El Proyecto",
+                      fluidRow(
+                        column(
+                          8,
+                          align = "justified",
+                          offset = 2,
+                          p(h3("El Proyecto")),
+                          p(
+                   "La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir pero no siempre están disponibles al público o su existencia no es conocida. El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigación novedosa en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información existente al mismo tiempo que estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país. Así mismo, tiene el potencial de facilitar el proceso de mejoras en materia de políticas publicas. Previamente se han desarrollado bases de datos similares (por ejemplo, para Canadá) y esas experiencias pueden adaptarse fácilmente a México",
+                   a("(Cisneros-Montemayor et al. 2016).",
+                     href="http://www.nrcresearchpress.com/doi/pdf/8.1139/cjfas-2015-0573")
+                          ),
                  p(h3(
                    "Objetivos del proyecto"
                  )),
-                 p("El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Así mismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejora de información marina en México. Por último, se pretende poyar el acceso a la información mediante un portal de consulta de datos."
+                 p("El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Así mismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejora de información marina en México. Por último, se pretende poyar el acceso a la información mediante un portal de consulta de metadatos."
                  ),
-               p(strong("Cambio Climático"),
-                 "La disponibilidad de datos es clave para la investigación en materia de cambio climático. Es por esto que este proyecto pretende contribuir de manera substancial a la investigación que se realiza en México sobre los impactos del cambio climático en los recursos marinos y apoyar políticas públicas diseñadas para mejor manejar los recursos marinos del país."
+                 p(
+                 "La disponibilidad de datos es clave no sólo para comprender mejor los ambientes marinos y costeros de México, sino que también para identificar las brechas de conocimiento apoyando así, a la prioritización de la investigación en México. Por ejemplo, la disponobilidad de información facilitará el manejo de recursos marinos y las políticas de conservación para los ecosistemas marinos y los recursos pesqueros vulnerables al cambio climático"
                )
                ),
                  column(
-                   12,
+                   8,
                    align = "center",
+                   offset = 2,
                    # Flowchart Image
                    img(
                      src = "flow_chart.png",
@@ -60,34 +128,37 @@ shinyUI(
                    ),
                # Core Group Infomation
                column(
-                 10,
+                 8,
                  align = "justified",
-                 offset = 1,
-                   p(h3("Individuos e Instituciones Participantes")),
+                 offset = 2,
+                 p(h3(
+                   "Investigadores Principales"
+                 )
+                 ),
                  p(strong(a(href="http://oceans.ubc.ca/andres-cisneros-montemayor/","Andrés Cisneros-Montemayor;")),
                    "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
                  p(strong(a(href="http://www.informatica.sip.ipn.mx/semanainnovacion2013/docs/dr_FranciscoArreguinSanchez.pdf","Francisco Arreguín-Sánchez;")),
                    "Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional"
                  ),
-                 p(strong(a(href="https://jepa.shinyapps.io/jpalacios/","Juliano Palacios-Abrantes")),
-                 "Institute for the Oceans and Fisheries, University of British Columbia"
+                 p(strong(a(href="https://jepa.shinyapps.io/jpalacios/","Juliano Palacios-Abrantes;")),
+                   "Institute for the Oceans and Fisheries, University of British Columbia"
                  ),
                  p(strong(a(href="http://mexico.edf.org/personas/laura-f-rodriguez","Laura Rodriguez;")),
-                 "Environmental Defense Fund, México"
+                   "Environmental Defense Fund, México"
                  ),
                  p(strong(a(href="https://www.researchgate.net/profile/Miguel_Cisneros-Mata","Miguel Ángel Cisneros-Mata;")),
-                 "Centro Regional de Investigación Pesqueras, Guaymas, Instituto Nacional de Pesca y Acuacultura"
+                   "Centro Regional de Investigaciones Pesqueras, Guaymas. Instituto Nacional de Pesca."
                  ),
                  p(strong(a(href="http://oceans.ubc.ca/william-cheung/","William Cheung;")),
-                 "Institute for the Oceans and Fisheries, University of British Columbia"
-               )
+                   "Institute for the Oceans and Fisheries, University of British Columbia"
+                 )
                ),
                br(),
                column(
-                 10,
+                 8,
                  align = "center",
-                 offset = 1,
+                 offset = 2,
                  a(href="http://www.ubc.ca/",
                    img(
                      src = "ubc_logo.gif",
@@ -117,16 +188,16 @@ shinyUI(
              br(),
              #Partners Information
              column(
-               10,
+               8,
                align = "justified",
-               offset = 1,
+               offset = 2,
                p(h3("Partners")
                )
              ),
              column(
-               10,
+               8,
                align = "center",
-               offset = 1,
+               offset = 2,
                a(href="http://datamares.ucsd.edu/en/about",
                  img(
                    src = "dataMares_Logo.png",
@@ -167,8 +238,9 @@ shinyUI(
              ),
              p(strong("Nota:"),"La información aquí presente no es terminal ya que el proyecto aún no termina y la información aún está siendo colectada"),
              column(
-               width=12,
-               align = "center",
+               width=8,
+               offset = 2,
+               align = "justified",
                tabsetPanel(
                  id ="Data_Explorer",
                  tabPanel(
@@ -187,30 +259,36 @@ shinyUI(
              )
     ), #Close second page
     #### PRELIMINARY RESULTS ####
-    tabPanel("Resultados Preeliminares",
-             #Wellcome / Instructions####
-             p(h3(
-               "Resultados Preeliminares de la Información Adquirida"
-               )),
+   tabPanel("Resultados Preeliminares",
+            #Wellcome / Instructions####
+            column(
+              width=8,
+              offset = 2,
+              align = "justified",
+              p(h3(
+                "Resultados Preeliminares"
+              )),
              p(
                "A continuación se muestran datos preliminares de la investigación en marina en México, dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian a menudo. Así mismo, estos resultados son parciales y no representan el total de la investigación marina en México."
-               ),
+               )
+             ),
              column(
-               width=4,
+               width=3,
                align = "center",
+               offset = 1,
                p(h3("Registros Capturados")),
                p(h4(textOutput("Number_Entries")))
              ),
              column(
-               width=4,
+               width=3,
                align = "center",
                p(h3("Número de Datos")),
                p(h4(textOutput("Number_Data_Points")))
              ),
              column(
-               width=4,
+               width=3,
                align = "center",
-               p(h3("Fuentes Consultadas")),
+               p(h3("Repositorios Consultados")),
                p(h4(textOutput("Sources")))
              ),
              br(),
@@ -228,7 +306,8 @@ shinyUI(
              ),
              #### Quantitative Results####
              column(
-               width = 6,
+               width = 4,
+               offset = 2,
                align= "center",
                p(h2("Resultados Cuantitativos")),
                br(),
@@ -250,7 +329,7 @@ shinyUI(
              #### Qualitative Results####
              ####Keywords Word Cloud####
              column(
-               width = 6,
+               width = 4,
                align= "center",
                p(h2("Resultados Cualitativos")),
                br(),
@@ -266,28 +345,45 @@ shinyUI(
                plotOutput("Keywords_Plot"),
                p(em("Nota: Es posible que no todas las palabras se encuentren en la gráfica"))
                
-             )
-    ),
+             ),
+             column(
+               width = 8,
+               align= "center",
+               offset = 2,
+               p(h3(
+                 "Reconstruction of Historic Data from Metadata"
+               )),
+               dygraphOutput("TSgraph")
+            )
+            ),
     #.########################## ##### 
     #### PARTICIPATION ####
-    tabPanel(strong("Como Participar"),
+   tabPanel(id="Collaboration",
+            value="Collaborate",
+      strong("Como Participar"),
+      column(8,
+             align="justified",
+             offset = 2,
              h3("Colabora en el Desarollo de La Investigación Marina en México"),
-            p(" Estamos buscando cualquier fuente de información que contenga datos sobre
+            p("Estamos buscando cualquier fuente de información que contenga datos sobre
              temas marinos en México. ¡No importa la fuente, pueden ser tus datos de
              la tesis, de captura o algún reporte!"),
             p("El proyecto se encuentra en una etapa de colaboración que consta en poblar la base de datos por lo que invitamos a cualquier persona interesada a colaborar con el proyecto a compartir información sobre sus datos."),
             p("Es importante mencionar que",strong("no estamos copilando datos, si no que información sobre los mismos.")
               ),
-            "Cuanta más gente esté involucrada, mejor podremos reflejar el estado de la investigación marina en México",
+            "Cuanta más gente esté involucrada, mejor podremos reflejar el estado de la investigación marina en México"
+            ),
             br(),
-            column(12,
-                   align="center",
-              p(h3(
+            column(8,
+                   align="justified",
+                   offset = 2,
+                   p(h3(
                 "Tres Maneras de Colaborar"
                    ))
               ),
-            column(4,
+            column(3,
                    align="justified",
+                   offset = 2,
                    h3(img(
                      src = "Colaborar.png",
                      height = 60,
@@ -300,7 +396,7 @@ shinyUI(
                    downloadButton('downloadTemplate',
                                   "Descargar Formato")
                    ),
-            column(4,
+            column(2,
                    align="justified",
                    h3(img(
                      src = "Busca.png",
@@ -320,21 +416,22 @@ shinyUI(
                    ),
                    "Correo Electrónico"
             ),
-            column(4,
+            column(3,
                    align="justified",
                    h3(img(
                      src = "Comparte.png",
                      height = 60,
                      width = 60,
-                     "3. Habla"
+                     "3. Difunde"
                    )),
             p(
               "Creemos que en México existe mucha información relevante al ambiente marino, sin embargo un pequeó grupo de personas no son capaces de capturar toda la información, cuanta más gente esté involucrada, más información podemos colectar y mejor podremos reflejar el estado actual de la investigación marina en México así como descubrir campos con falta de información."
             )
             ),
    #### What do I win? ####
-   column(12,
+   column(8,
           align = "justified",
+          offset = 2,
           p(h3(
             "Beneficios de Colaboración"
           )),
@@ -351,10 +448,11 @@ shinyUI(
           )
    ),
    #### People Collaborating ####
-   column(12,
+   column(8,
           align = "justified",
+          offset = 2,
           p(h3(
-            "Personas e Instituciones Colaborando"
+            "Colaboradores"
           )),
           p(
             "Si bien la gran mayoría de la información recopilada hasta ahora es de acceso público en línea (internet), hemos comenzado a recibir información de datos de fuentes no publicadas o simplemente no disponibles en internet" 
@@ -374,30 +472,50 @@ shinyUI(
                  ))),
                  dataTableOutput("People")
           )
-   )
+   
+  )
+  ),
+  #### DATA POINTS ####
+  column(8,
+         align = "center",
+         absolutePanel(
+           top = 50,
+           bottom = 20,
+           right = 20,
+           #width = "25%",
+           draggable = TRUE,
+           fixed = TRUE,
+           wellPanel(
+             strong("Data Points collected:"),
+             textOutput("Datapoints_Intro")
+           )
+         )
   ),
     #.########################## ##### 
     #### CONTACT ####
     hr(),
     br(),
-    column(12,
+    column(8,
            align = "center",
+           offset = 2,
            h5("Información de Contacto")
            ),
-    column(3,
+    column(2,
            align = "center",
+           offset = 2,
            p(strong("Autor Corresponsal:"),"Juliano Palacios j.palacios@oceans.ubc.ca")
     ),
-    column(3,
+    column(2,
            align = "center",
+           offset = 2,
            p(strong("Teléfono:"), "+1 (778) 835 4298"),
            strong("Skype:"), "jepa_88"
            ),
-    column(4,
+    column(3,
            align ="justified",
            p(strong("Dirección:"), "Changing Oceans Research Unit, The Institute for Oceans and Fisheries, University of British Columbia. 2202 Main Mall, Vancouver, Canadá, BC V6T 1Z4")
            ),
-    column(2,
+    column(1,
            align ="center",
            p(strong("Research Gate:")),
              p(a(img(

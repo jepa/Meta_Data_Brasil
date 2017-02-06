@@ -6,7 +6,7 @@
 
 ##### MUY IMPORTANTE ####
 
-#Para modificar la información de la página informativa TIENES que estar en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
+#Para modificar la información de la página informativa TIENES que Data_Curver en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
 
 #Read ui.R for information between branches
 ##############################
@@ -30,6 +30,7 @@ library(tm) #For Word Mining
 #library(xlsx)
 library(networkD3)
 library(dygraphs)
+library(data.table)
 
 
 #Functions #
@@ -39,7 +40,7 @@ library(dygraphs)
 
 #The begining #
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
   
   
   #### INPUT DATA TAB ####  
@@ -56,15 +57,29 @@ shinyServer(function(input, output) {
   
   #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
   
+  # HOME PAGE ####
+  #Number of points
+  
+  output$Datapoints_Intro <- renderText({
+    Number_entries <- datasetInput()
+    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
+    
+  })
+  
+  observeEvent(input$Collaborate_But, {
+    updateNavbarPage(session,
+                     inputId = "MMM_Nav_Bar", 
+                     selected = "Collaborate")
+  })
+  
+  
   # METADATA TAB ####
   
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- read.csv("./Template.csv", 
-                    header = TRUE,
-                    na="NA")
-    data.frame(data)
+    data<- fread("./Template.csv")
+    #data.frame(data)
   })
   
   # Reading the Metadata_Key ####
@@ -86,8 +101,7 @@ shinyServer(function(input, output) {
               escape = FALSE,
               options = list(pageLength = 28,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 20,30),
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                             lengthMenu = c(10, 20,30)
               )
     )
   })
@@ -114,8 +128,7 @@ shinyServer(function(input, output) {
               escape = FALSE,
               options = list(pageLength = 25,
                              autoWidth = TRUE,
-                             lengthMenu = c(50, 100, 200,500),
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                             lengthMenu = c(50, 100, 200,500)
               )
     )
   })
@@ -130,15 +143,15 @@ shinyServer(function(input, output) {
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 50,
-                             autoWidth = TRUE,
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                             autoWidth = TRUE
               )
     )
     
   })
   
+  
   #### PRELIMINARY RESULTS TAB ####
-  # Mapa de resultados ####
+  
   
   #### Timeseries of data gathering ####
   
@@ -170,24 +183,28 @@ shinyServer(function(input, output) {
       dyLegend(width = 600)
   })
   
+  source('ts_fun.R')
+  output$TSgraph <- renderDygraph({
+    ts_plot(datasetInput(),1900,2050)
+  })
   
   #### Quantitative Results ####
   # Number of entries ####
   
-  output$Number_Entries <- renderPrint({
+  output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
-    Number_entries$MMID[length(Number_entries$MMID)]
+    paste(Number_entries$MMID[length(Number_entries$MMID)])
     
   })
   
-  output$Number_Data_Points <- renderPrint({
+  output$Number_Data_Points <- renderText({
     Number_entries <- datasetInput()
-    sum(Number_entries$Data_Time_Points,na.rm=T)
+    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
     
   })
   
-  output$Sources <- renderPrint({
+  output$Sources <- renderText({
     z<- datasetInput() %>% 
       group_by(Compilation_Title) %>% 
       summarise(sum(Data_Time_Points)) %>% 
@@ -195,7 +212,7 @@ shinyServer(function(input, output) {
       filter(!is.na(Compilation_Title)) %>% 
       mutate(z = 1)
     
-    sum(z$z)
+    paste(sum(z$z))
     
   })
   
@@ -219,14 +236,14 @@ shinyServer(function(input, output) {
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Número de Datos")+
-        xlab("Campo de Investigación")+
+        ylab("Data Points")+
+        xlab("Research Field")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
                                          angle=45),
               axis.text.y = element_text(size = 14),
               legend.position = "none",
-              axis.title = element_text(size=20,
+              axis.title = element_text(size=14,
                                         face="bold")
               
         )
@@ -248,14 +265,14 @@ shinyServer(function(input, output) {
                )) +
           geom_bar(stat="identity")+
           theme_classic() +
-          ylab("Número de Datos")+
-          xlab("Región")+
+          ylab("Data Points")+
+          xlab("Region")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle = 45),
                 axis.text.y = element_text(size = 14),
                 legend.position = "none",
-                axis.title = element_text(size=20,
+                axis.title = element_text(size=14,
                                           face="bold")
           )
         
@@ -283,13 +300,13 @@ shinyServer(function(input, output) {
             theme_classic() +
             coord_flip() +
             ylab("Número de Datos")+
-            xlab("Localidad")+
+            xlab("Location")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle=45),
                   axis.text.y = element_text(size = 14),
                   legend.position = "none",
-                  axis.title = element_text(size=20,
+                  axis.title = element_text(size=14,
                                             face="bold")
             )
         }
@@ -321,6 +338,7 @@ shinyServer(function(input, output) {
     
   })
   
+  
   #### Collaboration ###
   output$Institutions <- renderDataTable({
     
@@ -341,8 +359,7 @@ shinyServer(function(input, output) {
               escape = FALSE,
               options = list(pageLength = 5,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 15, 20, 50),
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                             lengthMenu = c(10, 15, 20, 50)
               )
     )
   })
@@ -384,8 +401,7 @@ shinyServer(function(input, output) {
               escape = FALSE,
               options = list(pageLength = 5,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 15, 20, 50),
-                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+                             lengthMenu = c(10, 15, 20, 50)
               )
     )
   })  
