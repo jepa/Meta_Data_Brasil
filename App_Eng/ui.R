@@ -152,6 +152,7 @@ shinyUI(
                  )
                ),
                br(),
+               # Partners information
                column(
                  8,
                  align = "center",
