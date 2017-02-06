@@ -22,10 +22,10 @@ shinyUI(
   ### Navigation bar
   navbarPage(id = "MMM_Nav_Bar",
              #Web page title
-             "Meta-database of Marine Research in Mexico",
+             "Metadatos de Investigación Marina en México",
              #### HOME ####
              tabPanel("Home",
-                      fluidRow(
+                      fluidRow( 
                         column(
                           12,
                           align = "center",
@@ -42,7 +42,7 @@ shinyUI(
                           offset = 2,
                           p(h3("Bienvenidos")),
                           p(
-                            "El proyecto de meta-base de datos en investigación marina tiene como objetivo crear una meta-base de datos de todos los datos de investigación marina desarrollados en México. Una base de metadas compende información sobre los datos colectados, en lugar de una base de datos de los datos reales. Desde octubre de 2016 hemos recolectado más de 30,000 datos, de 12 repositorios on-line y colaborado con más de 17 profesionales de diferentes disciplinas. Sin embargo, aún estamos buscando cualquier información disponible sobre investigación marina en México, independientemente de la fuente. Los datos pueden provenir de distintas fuentes como: datos de la tesis, literatura gris, o capturados por pescadores o voluntarios"
+                            "El proyecto de metadatos de investigación marina en México tiene como objetivo crear una meta-base de datos de todos los datos de investigación marina desarrollados en México. Una base de metadatos está compuesta por información sobre datos colectados, en lugar d los datos reales. Desde octubre de 2016 hemos recolectado más de 30,000 datos, de 12 repositorios y colaborado con más de 17 profesionales de diferentes disciplinas e instituciónes. Sin embargo, seguimos buscando cualquier información disponible sobre investigación marina en México, independientemente de la fuente. Los datos pueden haberse originado de distintas maneras, por ejemplo: datos de tesis, literatura gris, o capturados por pescadores o voluntarios"
                           )
                         ),
                         column(
@@ -59,7 +59,7 @@ shinyUI(
                           8,
                           align = "justified",
                           offset = 2,
-                          p(h3("Red de Metadatos")
+                          p(h3("Red de metadatos")
                           )
                         ),
                         column(
@@ -100,11 +100,11 @@ shinyUI(
                           8,
                           align = "justified",
                           offset = 2,
-                          p(h3("El Proyecto")),
+                          p(h3("El proyecto")),
                           p(
-                   "La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir pero no siempre están disponibles al público o su existencia no es conocida. El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigación novedosa en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información existente al mismo tiempo que estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país. Así mismo, tiene el potencial de facilitar el proceso de mejoras en materia de políticas publicas. Previamente se han desarrollado bases de datos similares (por ejemplo, para Canadá) y esas experiencias pueden adaptarse fácilmente a México",
+                   "La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir pero no siempre están disponibles al público o su existencia no es conocida. El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigación novedosa en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información, estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país y apoyará en el proceso de mejoras en materia de políticas publicas. Previamente se han desarrollado bases de datos similares (por ejemplo, para Canadá) y esas experiencias pueden adaptarse fácilmente a México",
                    a("(Cisneros-Montemayor et al. 2016).",
-                     href="http://www.nrcresearchpress.com/doi/pdf/8.1139/cjfas-2015-0573")
+                     href="http://www.nrcresearchpress.com/doi/pdf/10.1139/cjfas-2015-0573")
                           ),
                  p(h3(
                    "Objetivos del proyecto"
@@ -126,13 +126,13 @@ shinyUI(
                      width = 700
                    )
                    ),
-               # Core Group Infomation
+               # Core Group Infomation ####
                column(
                  8,
                  align = "justified",
                  offset = 2,
                  p(h3(
-                   "Investigadores Principales"
+                   "Investigadores principales"
                  )
                  ),
                  p(strong(a(href="http://oceans.ubc.ca/andres-cisneros-montemayor/","Andrés Cisneros-Montemayor;")),
@@ -179,60 +179,20 @@ shinyUI(
                    )),
                  a(href="http://mexico.edf.org/",
                    img(
-                     src = "edf_logo.JPG",
+                     src = "edf_logo.jpg",
                      height = 100,
-                     width = 300
+                     width = 250
                    ))
                )
-             ),
-             br(),
-             #Partners Information
-             column(
-               8,
-               align = "justified",
-               offset = 2,
-               p(h3("Partners")
-               )
-             ),
-             column(
-               8,
-               align = "center",
-               offset = 2,
-               a(href="http://datamares.ucsd.edu/en/about",
-                 img(
-                   src = "dataMares_Logo.png",
-                   height = 60,
-                   width = 200
-                 )),
-               a(href="http://monitoreonoroeste.mx/index.php",
-                 img(
-                   src = "Monitoreo_Logo.png",
-                   height = 60,
-                   width = 200
-                 ))#,
-               # a(href="www.inapesca.gob.mx",
-               #   img(
-               #     src = "inapesca_logo.JPG",
-               #     height = 100,
-               #     width = 300
-               #   )),
-               # a(href="www.edf.com.mx",
-               #   img(
-               #     src = "edf_logo.JPG",
-               #     height = 100,
-               #     width = 300
-               #   ))
-             ),
-             hr(),
-             br()
-    ), # Close first page
+    )
+    ), # Close second page
    #.########################## ##### 
     #### METADATA ####
     tabPanel("Metadata",
              h3(
                "Metadata de Investigación Marina en México"
              ),
-             p("A continuación le presentamos la base de metadatos que se ha recopilado desde Noviembre de 2016, aquí podrá consultar los datos que se han recopilado así como descargar la lista de referencias que se han consultado hasta la fecha."),
+             p("A continuación le presentamos la base de metadatos que se ha recopilado desde Noviembre de 2016, aquí podrá consultar la información que se ha recopilado hasta ahora así como la referencia para cada uno de los datos."),
              p(
                "Si usted es autor o responsable de alguna información presente en esta tabla y encuentra un error, favor de comunicarse con nosotros."
              ),
@@ -269,7 +229,7 @@ shinyUI(
                 "Resultados Preeliminares"
               )),
              p(
-               "A continuación se muestran datos preliminares de la investigación en marina en México, dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian a menudo. Así mismo, estos resultados son parciales y no representan el total de la investigación marina en México."
+               "En esta sección se muestran algunos de los resultados previos relacionados con la investigación marina en México. Dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian a menudo. Así mismo, estos resultados son parciales y no representan el total de la investigación marina en México."
                )
              ),
              column(
@@ -351,7 +311,7 @@ shinyUI(
                align= "center",
                offset = 2,
                p(h3(
-                 "Reconstruction of Historic Data from Metadata"
+                 "Histórico de Datos Reconstruído Desde la Metadata"
                )),
                dygraphOutput("TSgraph")
             )
@@ -479,25 +439,27 @@ shinyUI(
   column(8,
          align = "center",
          absolutePanel(
-           top = 50,
+           top = 100,
            bottom = 20,
-           right = 20,
+           right = 5,
            #width = "25%",
            draggable = TRUE,
            fixed = TRUE,
            wellPanel(
-             strong("Data Points collected:"),
-             textOutput("Datapoints_Intro")
+             strong("Datos Colectados:"),
+             textOutput("Datapoints_Intro"),
+             "Actualizado:",
+             textOutput("date")
            )
          )
   ),
     #.########################## ##### 
     #### CONTACT ####
-    hr(),
-    br(),
     column(8,
            align = "center",
            offset = 2,
+           hr(),
+           br(),
            h5("Información de Contacto")
            ),
     column(2,
@@ -507,7 +469,6 @@ shinyUI(
     ),
     column(2,
            align = "center",
-           offset = 2,
            p(strong("Teléfono:"), "+1 (778) 835 4298"),
            strong("Skype:"), "jepa_88"
            ),
@@ -522,7 +483,7 @@ shinyUI(
              src = "RG_Logo.png",
              height = 40,
              width = 40
-           ), href = "https://www.researchgate.net/profile/Juliano_Palacios_Abrantes2")
+           ), href = "https://www.researchgate.net/project/Metadata-base-of-marine-research-in-Mexico-trends-and-applications")
   )
     )
 )

@@ -179,7 +179,7 @@ shinyServer(function(input, output, session) {
       dyRangeSelector(height = 20) %>% 
       dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
       dyAxis("y", drawGrid = FALSE) %>% 
-      dyAxis("y", label = "Number of Data Points") %>%  #Labels
+      dyAxis("y", label = "Información colectada (n Datos)") %>%  #Labels
       dyLegend(width = 600)
   })
   
@@ -190,6 +190,11 @@ shinyServer(function(input, output, session) {
   
   #### Quantitative Results ####
   # Number of entries ####
+  
+  output$date <- renderText({
+    paste(Sys.Date())
+    
+  })
   
   output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
@@ -236,8 +241,8 @@ shinyServer(function(input, output, session) {
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Data Points")+
-        xlab("Research Field")+
+        ylab("Datos")+
+        xlab("Campo de Investigación")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
                                          angle=45),
@@ -265,8 +270,8 @@ shinyServer(function(input, output, session) {
                )) +
           geom_bar(stat="identity")+
           theme_classic() +
-          ylab("Data Points")+
-          xlab("Region")+
+          ylab("Datos")+
+          xlab("Región")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
                                            angle = 45),
@@ -299,8 +304,8 @@ shinyServer(function(input, output, session) {
             geom_bar(stat="identity")+
             theme_classic() +
             coord_flip() +
-            ylab("Número de Datos")+
-            xlab("Location")+
+            ylab("Datos")+
+            xlab("Localidad")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
                                              angle=45),
@@ -387,7 +392,7 @@ shinyServer(function(input, output, session) {
              Compilation_Title)
     
     #Set names equal for "ati_join" function
-    colnames(P_Table) <- c("Institution","Repository")
+    colnames(P_Table) <- c("Institucion","Repository")
     
     #Select those that are different from each other
     F_Table <- anti_join(P_Table,I_Table,
