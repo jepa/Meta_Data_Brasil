@@ -30,6 +30,7 @@ library(tm) #For Word Mining
 #library(xlsx)
 library(networkD3)
 library(dygraphs)
+library(data.table)
 
 
 #Functions #
@@ -77,10 +78,8 @@ shinyServer(function(input, output, session) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- read.csv("./Template.csv", 
-                    header = TRUE,
-                    na="NA")
-    data.frame(data)
+    data<- fread("./Template.csv")
+    #data.frame(data)
   })
   
   # Reading the Metadata_Key ####
