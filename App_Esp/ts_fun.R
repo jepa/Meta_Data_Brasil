@@ -34,15 +34,15 @@ ts_plot<- function(Data,Start_Year,End_Year,Category="NA"){
   
   #Plots it "nicelly"
   tsplot<- dygraph(J_TS) %>% #Creats the graph
-    dySeries( "V1", label= "Data Points") %>%
+    dySeries( "V1", label= "Datos") %>%
     dyOptions(stackedGraph = TRUE, #Makes it stacked
               drawPoints = TRUE, #Shows each data point
               pointSize = 4) %>%
     dyRangeSelector(height = 20) %>%
     dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
     dyAxis("y", drawGrid = FALSE) %>%
-    dyAxis("y", label = "Records in Metadata") %>%  #Labels
-    dyAxis("x", label = "Years") %>%
+    dyAxis("y", label = "Datos de Metadata") %>%  #Labels
+    dyAxis("x", label = "Año") %>%
     dyRangeSelector(dateWindow = c("1950-01-01", "2017-01-01")) %>% 
     dyLegend(width = 600)
   
