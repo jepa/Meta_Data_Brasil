@@ -499,11 +499,12 @@ write.csv(Nom, "NOM.csv")
 
 ####################### END ########################
 
-#### NOAA Data of Gulf of Mexico ####
-leaflet() %>%
-  addTiles(
-    urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-    attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
-  ) %>%
-  setView(lng = -1.1876785510153815, 
-          lat = 24.35286044345318, zoom = 1)
+#### Paco's Catch Data from the past ####
+
+Paco <- fread("./Data/Paco_Data.csv")
+
+PacoC <- Paco %>% 
+  mutate(Titulo_C = paste(Titulo,Especie,Fin)) %>% 
+  mutate(Key= paste(Key,Especie))
+           
+write.csv(PacoC,"Paco.csv")
