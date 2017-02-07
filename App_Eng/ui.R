@@ -104,7 +104,7 @@ shinyUI(
                  p(
                    "Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. Limited information is often perceived as a barrier in advancing research and policy discussions. However, in many cases, this can be a result of a lack of knowledge about the existence and availability of these data. In Mexico, numerous information regarding the seas and coasts has been produced by academic institutions, government, and NGOs both inside and outside the country. While diverse barriers can compromise the exchange of information among stakeholders, having publicly accessible descriptions of existing data is a huge step towards increasing collaboration and innovative research. A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region (shown in the diagram below). Similar meta-databases have been previously developed (for example, for Canada) and such experiences can be readily be adapted for Mexico",
                    a("(Cisneros-Montemayor et al. 2016).",
-                     href="http://www.nrcresearchpress.com/doi/pdf/8.1139/cjfas-2015-0573")
+                     href="http://www.nrcresearchpress.com/doi/pdf/10.1139/cjfas-2015-0573")
                  ),
                  p(h3(
                    "Project Objectives"
