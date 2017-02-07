@@ -392,7 +392,7 @@ shinyServer(function(input, output, session) {
              Compilation_Title)
     
     #Set names equal for "ati_join" function
-    colnames(P_Table) <- c("Institucion","Repository")
+    colnames(P_Table) <- c("Institution","Repository")
     
     #Select those that are different from each other
     F_Table <- anti_join(P_Table,I_Table,

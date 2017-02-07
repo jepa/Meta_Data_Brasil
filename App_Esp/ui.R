@@ -1,13 +1,6 @@
 #________________________________________________________________________________________________________________________________________
-##### MUY IMPORTANTE ####
 
-#Para modificar la información de la página informativa TIENES que estar en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
-
-# This version of the app is modified to be publish online. Some things are commented like;
-
-# Data to download
-# Input data map
-# Resutls map
+# Ui en español, fue actualizada el lunes 6 de Febrero de 2017. Con el Template 1.8
 
 #________________________________________________________________________________________________________________________________________
 
