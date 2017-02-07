@@ -43,15 +43,11 @@ library(data.table)
 shinyServer(function(input, output, session) {
   
   
-  #### INPUT DATA TAB ####  
-  
-  # Upload datatable ####
-  myData <- reactive({
-    inFile <- input$Data_Upload
-    if (is.null(inFile)) return(NULL)
-    data <- read.csv(inFile$datapath,
-                     header = TRUE)
-    data
+  # Reading the Template ####
+  datasetInput <- reactive({
+    
+    data<- fread("./Template.csv")
+    #data.frame(data)
   })
   
   
@@ -74,13 +70,6 @@ shinyServer(function(input, output, session) {
   
   
   # METADATA TAB ####
-  
-  # Reading the Template ####
-  datasetInput <- reactive({
-    
-    data<- fread("./Template.csv")
-    #data.frame(data)
-  })
   
   # Reading the Metadata_Key ####
   Key_datasetInput <- reactive({
