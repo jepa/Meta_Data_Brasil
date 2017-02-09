@@ -101,7 +101,8 @@ shinyServer(function(input, output, session) {
               escape = FALSE,
               options = list(pageLength = 28,
                              autoWidth = TRUE,
-                             lengthMenu = c(10, 20,30)
+                             lengthMenu = c(10, 20,30),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
               )
     )
   })
@@ -128,7 +129,8 @@ shinyServer(function(input, output, session) {
               escape = FALSE,
               options = list(pageLength = 25,
                              autoWidth = TRUE,
-                             lengthMenu = c(50, 100, 200,500)
+                             lengthMenu = c(50, 100, 200,500),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
               )
     )
   })
@@ -143,7 +145,8 @@ shinyServer(function(input, output, session) {
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 50,
-                             autoWidth = TRUE
+                             autoWidth = TRUE,
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
               )
     )
     
