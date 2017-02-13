@@ -347,7 +347,26 @@ shinyServer(function(input, output, session) {
   })
   
   
-  #### Collaboration ###
+  #### Collaboration ####
+  
+  #### Template Download ####
+  
+  TempInput <- reactive({
+    
+    data<- fread("./Data_Download/Metadata_Template.csv")
+    data.frame(data)
+  })
+  
+  output$downloadTemp <- downloadHandler(
+    filename = function() { 
+      paste(input$dataset, 'MIM_Template',".csv", sep='') 
+    },
+    content = function(file) {
+      write.csv(TempInput(), file)
+    }
+  )
+  
+  #### Colaborating ####
   output$Institutions <- renderDataTable({
     
     Inst_Table <- datasetInput() %>% 
