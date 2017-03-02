@@ -172,7 +172,7 @@ shinyServer(function(input, output, session) {
     x <- TFdatasetInput()
     Dt_Points <- ts(x,
                     start=c(2016,11),
-                    end = c(2017,1), 
+                    end = c(2017,3), 
                     frequency= 12)
     
     dygraph(Dt_Points) %>% #Creats the graph
@@ -186,10 +186,6 @@ shinyServer(function(input, output, session) {
       dyLegend(width = 600)
   })
   
-  source('ts_fun.R')
-  output$TSgraph <- renderDygraph({
-    ts_plot(datasetInput(),1900,2050)
-  })
   
   #### Quantitative Results ####
   # Number of entries ####
@@ -346,6 +342,15 @@ shinyServer(function(input, output, session) {
     
   })
   
+  #### Reconstruction of historic data ####
+  source('ts_fun.R')
+  output$TSgraph <- renderDygraph({
+    
+    Hist <- datasetInput() %>% 
+      filter(MMID <=2861) #Filtrar los Brusca y demas
+    
+    ts_plot(Hist,1900,2050)
+  })
   
   #### Collaboration ###
   output$Institutions <- renderDataTable({

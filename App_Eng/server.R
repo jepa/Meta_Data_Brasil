@@ -156,9 +156,10 @@ shinyServer(function(input, output, session) {
   #Creating the graph
   output$TFgraph <- renderDygraph({
   x <- TFdatasetInput()
+  
   Dt_Points <- ts(x,
                   start=c(2016,11),
-                  end = c(2017,1), 
+                  end = c(2017,3), 
                   frequency= 12)
   
   dygraph(Dt_Points) %>% #Creats the graph
@@ -174,7 +175,10 @@ shinyServer(function(input, output, session) {
   
   source('ts_fun.R')
   output$TSgraph <- renderDygraph({
-    ts_plot(datasetInput(),1900,2050)
+    
+    Hist <- datasetInput() %>% 
+      filter(MMID <=2861)
+    ts_plot(Hist,1900,2050)
   })
   
   #### Quantitative Results ####

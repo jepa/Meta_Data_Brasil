@@ -15,6 +15,7 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 #library(xlsx)
 library(networkD3)
+library(data.table)
 
 
 #Functions #
@@ -485,6 +486,33 @@ shinyServer(function(input, output) {
         }
       }
     }
+  })
+  
+  #### Research_Field ####
+  output$RF_Plot <- renderPlot({
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(Research_Field)) %>% 
+      #filter(Research_Field != "Otros") %>% 
+      group_by(Research_Field) %>% 
+      summarise(Value = sum(Data_Time_Points,na.rm=T))
+    
+    ggplot(data=Se_Plot,
+           aes(
+             y = Value,
+             x = Research_Field,
+             fill =Research_Field
+           ))+
+      geom_bar(stat = "identity")+
+      theme_classic() +
+      ylab("Número de Datos")+
+      xlab("Campos de Investigación")+
+      theme(axis.text.x = element_text(hjust = 1,
+                                       size=14,
+                                       angle= 45),
+            axis.text.y = element_text(size = 14),
+            legend.position = "none",
+            axis.title = element_text(size=20,
+                                      face="bold"))
   })
   
   ## Research Field Plot ####

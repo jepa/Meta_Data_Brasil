@@ -17,7 +17,7 @@ setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 #### Sea Around Us Data, Pacific ####
 
-# Title ####
+# Title ###
 
 #I'm trying to add the text "catch of" and "In mexico" to every single row of the SAU database so I only need to copy and paste and not go manually row by row...
 
@@ -67,7 +67,7 @@ Keywords_F <- data.frame(paste(Keywords$KW,
 #write.csv(Keywords_F, "Keywords_F.csv")
 
 
-# Number of observations per species ####
+# Number of observations per species ###
 #Now I need to figure out how many observations exists for each species, this should be easy, however..
 
 Observations <- SAU %>% 
@@ -89,7 +89,7 @@ Haliotis <- SAU %>%
 
 
 
-#Timeframe ####
+#Timeframe ###
 # And now... when does it starts and when does it finishes?
 
 Timeframe <- SAU %>% 
@@ -112,10 +112,9 @@ colnames(Final_SAU_Pacific) <- c("Short Title","Keywords","Number Data Points", 
 #write.csv(Final_SAU_Pacific, "Final_SAU_Pacific.csv")
 
 ####################### END ########################
-
 #### Sea Around Us Data, Atlantic ####
 
-# Title ####
+# Title ###
 
 #I'm trying to add the text "catch of" and "In mexico" to every single row of the SAU database so I only need to copy and paste and not go manually row by row...
 
@@ -163,7 +162,7 @@ Keywords_F <- data.frame(paste(Keywords$KW,
 #write.csv(Keywords_F, "Keywords_F.csv")
 
 
-# Number of observations per species ####
+# Number of observations per species ###
 
 
 Observations_A <- SAU_A %>% 
@@ -175,7 +174,7 @@ Observations_A <- SAU_A %>%
   summarise(Data_Points =sum(Value2))
 
 
-#Timeframe ####
+#Timeframe ###
 # And now... when does it starts and when does it finishes?
 
 Timeframe_A <- SAU_A %>% 
@@ -191,8 +190,7 @@ Timeframe_A <- SAU_A %>%
 Final_SAU_Atlantic <- data.frame(a,Keywords_F,Timeframe_A,Observations_A$Data_Points)
 #write.csv(Final_SAU_Atlantic, "Final_SAU_Atlantic.csv")
 ####################### END ########################
-
-#### Prices ####
+#### Prices SE ####
 #http://www.economia-sniim.gob.mx/SNIIM-PESCA/Consolidados.asp
 
 Price <- read.csv("./Data/Precios.csv")
@@ -216,7 +214,6 @@ Precio_d_Venta <- Price %>%
 #write.csv(Precio_d_Venta, "Precio_d_Venta.csv")
 
 ####################### END ########################
-
 # Atlas UNAM ####
 UNAM <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/UNAM.csv") %>% 
   select(1:13)
@@ -234,76 +231,6 @@ UNAM_X <- UNAM %>%
 #write.csv(UNAM_X[18:21],"UNAM_MMID.csv")
 
 ####################### END ########################
-# BALANZA COMERCIAL POR PRINCIPALES PRODUCTOS PESQUEROS, 2004 - 2013. Anuario Sagarpa Pg. 186
-
-#Exportacion
-Exp <- data.frame(matrix(c("Algas y Sargazos",
-                           "Calamar","Camaron",
-                           "Pulpo",
-                           "Sardina y Macarela",
-                           "Org. Acuats. Vivos"
-),ncol=1))
-colnames(Exp) <- ("Specie")
-
-Exp <-Exp %>% 
-  mutate(Volumen="Volumen de Exportacion de") %>% 
-  mutate(Valor="Valor de Exportacion de") %>% 
-  mutate(Year = "2004-2013") %>% 
-  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
-  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
-  mutate(Key.Vol = paste("Volumen; Exportacion; Balanza Comercial;",Specie)) %>% 
-  mutate(Key.Val = paste("Valor; Exportacion; Balanza Comercial;",Specie)) %>% 
-  select(-2:-4)
-
-
-#Importacion
-Imp <- data.frame(matrix(c("Derivados de Algas",
-                           "Calamar",
-                           "Camaron",
-                           "Salmon",
-                           "Org. Acuats. Vivos"
-),ncol=1))
-colnames(Imp) <- ("Specie")
-
-Imp <-Imp %>% 
-  mutate(Volumen="Volumen de Importacion de") %>% 
-  mutate(Valor="Valor de Importacion de") %>% 
-  mutate(Year = "2004-2013") %>% 
-  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
-  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
-  mutate(Key.Vol = paste("Volumen; Importacion; Balanza Comercial;",Specie)) %>% 
-  mutate(Key.Val = paste("Valor; Importacion; Balanza Comercial;",Specie)) %>% 
-  select(-2:-4)
-
-Final <- bind_rows(Exp,Imp)
-write.csv(Final,"Balanza.csv")
-
-Disp <- data.frame(matrix(c("Tunidos (Fresco)",
-                            "Mojarra",
-                            "Camaron",
-                            "Ostion",
-                            "Tiburon y Cazon",
-                            "Otros",
-                            "Tunidos (Enlatado)",
-                            "Sardinas",
-                            "Harina y Aceite",
-                            "Total"
-                            
-                            
-),ncol=1))
-colnames(Disp) <- ("Specie")
-
-Disp <-Disp %>% 
-  mutate(Legend="Disponibilidad Interna de") %>% 
-  mutate(Year = "1988-2013") %>% 
-  mutate(Final = paste(Legend,Specie,",",Year)) %>% 
-  mutate(Key = paste("Volumen; Disponibilidad; Interna; Fresco; Congelado; Enlatado; Reduccion;",Specie)) %>% 
-  select(-Legend,-Year)
-
-write.csv(Disp,"Disponibilidad.csv")
-
-####################### END ########################
-
 #### CONAPESCA ####
 
 # ANUARIO CONAPESCA EMBARCACIONES REGISTRADAS POR PRINCIPALES PESQUERÍAS, SEGÚN LITORAL Y ENTIDAD FEDERATIVA, 2013 (UNIDADES)
@@ -487,8 +414,77 @@ SE <- data.frame(sample(Lista, #List of random numbers
 #write.csv(SE,"SE.csv")
 
 
-####################### END ########################
+# BALANZA COMERCIAL ####
+#POR PRINCIPALES PRODUCTOS PESQUEROS, 2004 - 2013. Anuario Sagarpa Pg. 186
 
+#Exportacion
+Exp <- data.frame(matrix(c("Algas y Sargazos",
+                           "Calamar","Camaron",
+                           "Pulpo",
+                           "Sardina y Macarela",
+                           "Org. Acuats. Vivos"
+),ncol=1))
+colnames(Exp) <- ("Specie")
+
+Exp <-Exp %>% 
+  mutate(Volumen="Volumen de Exportacion de") %>% 
+  mutate(Valor="Valor de Exportacion de") %>% 
+  mutate(Year = "2004-2013") %>% 
+  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
+  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
+  mutate(Key.Vol = paste("Volumen; Exportacion; Balanza Comercial;",Specie)) %>% 
+  mutate(Key.Val = paste("Valor; Exportacion; Balanza Comercial;",Specie)) %>% 
+  select(-2:-4)
+
+
+#Importacion
+Imp <- data.frame(matrix(c("Derivados de Algas",
+                           "Calamar",
+                           "Camaron",
+                           "Salmon",
+                           "Org. Acuats. Vivos"
+),ncol=1))
+colnames(Imp) <- ("Specie")
+
+Imp <-Imp %>% 
+  mutate(Volumen="Volumen de Importacion de") %>% 
+  mutate(Valor="Valor de Importacion de") %>% 
+  mutate(Year = "2004-2013") %>% 
+  mutate(Vol.Final = paste(Volumen,Specie,Year)) %>% 
+  mutate(Val.Final = paste(Valor,Specie,Year)) %>% 
+  mutate(Key.Vol = paste("Volumen; Importacion; Balanza Comercial;",Specie)) %>% 
+  mutate(Key.Val = paste("Valor; Importacion; Balanza Comercial;",Specie)) %>% 
+  select(-2:-4)
+
+Final <- bind_rows(Exp,Imp)
+write.csv(Final,"Balanza.csv")
+
+Disp <- data.frame(matrix(c("Tunidos (Fresco)",
+                            "Mojarra",
+                            "Camaron",
+                            "Ostion",
+                            "Tiburon y Cazon",
+                            "Otros",
+                            "Tunidos (Enlatado)",
+                            "Sardinas",
+                            "Harina y Aceite",
+                            "Total"
+                            
+                            
+),ncol=1))
+colnames(Disp) <- ("Specie")
+
+Disp <-Disp %>% 
+  mutate(Legend="Disponibilidad Interna de") %>% 
+  mutate(Year = "1988-2013") %>% 
+  mutate(Final = paste(Legend,Specie,",",Year)) %>% 
+  mutate(Key = paste("Volumen; Disponibilidad; Interna; Fresco; Congelado; Enlatado; Reduccion;",Specie)) %>% 
+  select(-Legend,-Year)
+
+write.csv(Disp,"Disponibilidad.csv")
+
+####################### END ########################
+#### NOMS ####
 NOMS <- fread("./Parallel Analysis/NOMS.csv")
 
 Nom <- NOMS %>% 
@@ -498,7 +494,6 @@ Nom <- NOMS %>%
 write.csv(Nom, "NOM.csv")         
 
 ####################### END ########################
-
 #### Paco's Catch Data from the past ####
 
 Paco <- fread("./Data/Paco_Data.csv")
@@ -508,3 +503,316 @@ PacoC <- Paco %>%
   mutate(Key= paste(Key,Especie))
            
 write.csv(PacoC,"Paco.csv")
+
+####################### END ########################
+### Catalogo Algas Marinas Vol I ####
+O_Data <- fread("./Data/Catalogo_I.csv")
+
+N_Data <- data.frame(Especie =c( 
+                       "Valoniopsis hancockii",
+                     "Valoniopsis pachynema",
+                     "Bryopsis corticulans",
+                     "Bryopsis galapagensis",
+                     "Bryopsis hypnoides",
+                     "Bryopsis muscosa",
+                     "Bryopsis pennata (pennata)",
+                     "Bryopsis pennata",
+                     "Bryopsis plumosa",
+                     "Derbesia hollenbergii",
+                     "Derbesia lamourouxii",
+                     "Derbesia marina",
+                     "Derbesia prolifica",
+                     "Derbesia tenuissima",
+                     "Derbesia turbinata",
+                     "Pseudobryopsis hainanensis",
+                     "Caulerpa ambigua (ambiguia)",
+                     "Caulerpa ambigua (luxurians)",
+                     "Caulerpa arenicola",
+                     "Caulerpa cupressoides (cupressoides)",
+                     "Caulerpa cupressoides (lycopodium)",
+                     "Caulerpa fastigiata",
+                     "Caulerpa imbricata",
+                     "Caulerpa mexicana",
+                     "Caulerpa mexicana (pectinata)",
+                     "Caulerpa peltata",
+                     "Caulerpa racemosa",
+                     "Caulerpa racemosa (racemosa)",
+                     "Caulerpa racemosa (macrophysa)",
+                     "Caulerpa racemosa (occidentalis)",
+                     "Caulerpa racemosa (turninata)",
+                     "Caulerpa sertularioides",
+                     "Caulerpa sertularioides (brevipes)",
+                     "Caulerpa sertularioides (longiseta)",
+                     "Caulerpa vanbosseae",
+                     "Caulerpa verticillata",
+                     "Codium amplivesciculatum",
+                     "Codium brandegeei",
+                     "Codium dawsonii",
+                     "Codium decorticatum",
+                     "Codium dichotomum",
+                     "Codium fragile",
+                     "Codium giraffa",
+                     "Codium hubbsii",
+                     "Codium isabelae",
+                     "Codium johnstonei",
+                     "Codium latum",
+                     "Codium picturatum",
+                     "Codium schmiederi",
+                     "Codium setchellii",
+                     "Codium simulans",
+                     "Halimeda cuneata",
+                     "Halimeda discoidea",
+                     "Halimeda hederacea",
+                     "Halimeda opuntia",
+                     "Halimeda scabra",
+                     "Halimeda tuna",
+                     "Ostreobium quekettii",
+                     "Chlorodesmis caespitosa",
+                     "Chlorodesmis hildebrandtii",
+                     "Geppella decussata",
+                     "Penicillus sibogae",
+                     "Batophora oerstedii",
+                     "Neomeris annulata",
+                     "Neomeris van-bosseae",
+                     "Acetabularia calyculus",
+                     "Acetabularia crenulata",
+                     "Acetabularia farlowii",
+                     "Acetabularia parvula",
+                     "Acetabularia pusilla",
+                     "Pilinella californica",
+                     "Pilinia maritima"
+                     )
+)
+
+F_Data <- bind_rows(O_Data,
+                    N_Data
+                   ) %>% 
+  select(Especie) %>% 
+  mutate(InicioA ="Distribucion de") %>% 
+  mutate(InicioB ="Primer registro ") %>% 
+  mutate(Fin = "en la costa del Pacifico") %>% 
+  mutate(KeyA ="Distribucion; Alga; Bentos; Bentonica; Catalogo; Chlorophycota") %>% 
+  mutate(KeyB ="Primer Registro; Alga; Bentos; Bentonica; Catalogo; Chlorophycota") %>% 
+  mutate(Registro_A =paste(InicioA,Especie,Fin)) %>% 
+  mutate(Registro_B =paste(InicioB,Especie,Fin)) %>% 
+  select(1,5:8)
+
+#write.csv(F_Data,"Catalogo_I_Data.csv")
+
+### Catalogo Algas Marinas Vol II ####
+
+N_Data <- data.table(Especie =c(
+  "Asteronema breviarticulatum",
+  "Ectocarpus acutus",
+  "Ectocarpus bryantii",
+  "Ectocarpus chantransoides",
+  "Ectocarpus commensalis",
+  "Ectocarpus corticulatus",
+  "Ectocarpus ensenadanus",
+  "Ectocarpus gonodioide",
+  "Ectocarpus hancockii",
+  "Ectocarpus siliculosus (siliculosus)",
+  "Ectocarpus siliculosus (confervoides)",
+  "Ectocarpus siliculosus (dasycarpus)",
+  "Ectocarpus siliculosus (pygmaeus)",
+  "Ectocarpus siliculosus (subulatus)",
+  "Ectocarpus simulans",
+  "Ectocarpus sonorensis",
+  "Feldmannia hemispherica",
+  "Feldmannia indica",
+  "Feldmannia irregularis",
+  "Feldmannia simplex",
+  "Hincksia granulosa",
+  "Hincksia mitchelliae",
+  "Hincksia rallsiae",
+  "Hincksia sandriana",
+  "Hincksia saundersii",
+  "Kuetzingiella elachistaeformis",
+  "Pilocladus codicola",
+  "Spongonema tomentosum",
+  "Streblonema investiens",
+  "Streblonema penetrale",
+  "Streblonema transfixum",
+  "Bachelotia antillarum",
+  "Diplura simulans",
+  "Endoplura aurea",
+  "Hapalospongidion gelatinosum",
+  "Hapalospongidion pangoense",
+  "Hapterophycus anastomosans",
+  "Hapterophycus canaliculatus",
+  "Petroderma maculiforme",
+  "Pseudolithoderma nigrum",
+  "Ralfsia californica",
+  "Ralfsia confusa",
+  "Ralfsia fungiformis",
+  "Ralfsia hancockii",
+  "Ralfsia hesperia",
+  "Ralfsia integra",
+  "Ralfsia pacifica",
+  "Sphacelaria brevicornis",
+  "Sphacelaria californica",
+  "Sphacelaria divaricata",
+  "Sphacelaria masonii",
+  "Sphacelaria novae-hollandiae",
+  "Sphacelaria rigidula",
+  "Sphacelaria tribuloides",
+  "Dictyopteris delicatula",
+  "Dictyopteris johnstonei",
+  "Dictyopteris polypodioides",
+  "Dictyopteris repens",
+  "Dictyopteris undulata",
+  "Dictyota bartayresiana",
+  "Dictyota binghamiae",
+  "Dictyota cervicornis",
+  "Dictyota ciliolata",
+  "Dictyota concrescens",
+  "Dictyota crenulata",
+  "Dictyota dichotoma",
+  "Dictyota divaricata",
+  "Dictyota flabellata",
+  "Dictyota friabilis",
+  "Dictyota linearis",
+  "Dictyota masonii",
+  "Dictyota okamurae",
+  "Dictyota pinnata",
+  "Dictyota volubilis",
+  "Lobophora variegata",
+  "Pachydictyon coriaceum",
+  "Padina caulescens",
+  "Padina concrescens",
+  "Padina crispata",
+  "Padina durvillei",
+  "Padina mexicana (mexicana)",
+  "Padina mexicana (erecta)",
+  "Padina ramonribae",
+  "Padina sanctae-crucis",
+  "Spatoglossum howellii",
+  "Spatoglossum lanceolatum", 
+  "Spatoglossum schroederi",
+  "Spatoglossum subflabellatum",
+  "Taonia lennebackerae",
+  "Zonaria farlowii",
+  "Cutleria cylindrica",
+  "Cutleria hancockii",
+  "Haplogloia andersonii",
+  "Ishige sinicola",
+  "Leathesia marina",
+  "Leathesia nana",
+  "Myriactula johnstonii",
+  "Myriactula marchantiae",
+  "Petrospongium rugosum",
+  "Halothrix lumbricalis",
+  "Hecatonema streblonematoides",
+  "Nemacystus brandegeei",
+  "Chnoospora implexa",
+  "Chnoospora minima",
+  "Chnoospora pannosa",
+  "Colpomenia peregrina",
+  "Colpomenia phaeodactyla",
+  "Colpomenia ramosa",
+  "Colpomenia sinuosa (sinuosa)",
+  "Colpomenia sinuosa (expansa)",
+  "Colpomenia tuberculata",
+  "Compsonema immixtum",
+  "Compsonema intricatum",
+  "Compsonema secundum (secundum)",
+  "Compsonema secundum (terminale)",
+  "Compsonema serpens",
+  "Hydroclathrus clathratus",
+  "Petalonia binghamiae",
+  "Petalonia fascia",
+  "Rosenvingea antillarum",
+  "Rosenvingea intricata",
+  "Rosenvingea sanctae-crucis",
+  "Scytosiphon dotyi",
+  "Scytosiphon gracilis",
+  "Scytosiphon lomentaria",
+  "Stragularia clavata",
+  "Coilodesme californica",
+  "Coilodesme rigida",
+  "Coilodesme rigida",
+  "Asperococcus fistulosus",
+  "Halorhipis winstonii",
+  "Melanosiphon intestinalis",
+  "Punctaria hesperia",
+  "Soranthera ulvoidea",
+  "Carpomitra costata",
+  "Sporochnus bolleanus",
+  "Sporochnus pedunculatus",
+  "Desmarestia herbacea",
+  "Desmarestia latifrons",
+  "Desmarestia mexicana",
+  "Desmarestia tabacoides",
+  "Desmarestia viridis",
+  "Egregia australis",
+  "Egregia laevi",
+  "Egregia menziesii",
+  "Eisenia arborea",
+  "Eisenia desmarestioides",
+  "Pterygophora californica",
+  "Undaria pinnatifida",
+  "Agarum fimbriatum",
+  "Laminaria farlowii",
+  "Laminaria setchellii",
+  "Dictyoneurum reticulatum",
+  "Macrocystis angustifolia",
+  "Macrocystis pyrifera",
+  "Pelagophycus porra",
+  "Cystoseira neglecta",
+  "Cystoseira setchellii",
+  "Halidrys dioica",
+  "Stolonophora brandegeei",
+  "Hesperophycus californicus",
+  "Silvetia compressa",
+  "Silvetia compressa",
+  "Sargassum acinacifolium",
+  "Sargassum agardhianum",
+  "Sargassum brandegeei",
+  "Sargassum filicinum",
+  "Sargassum herporhizum",
+  "Sargassum horridum",
+  "Sargassum howellii",
+  "Sargassum johnstonii",
+  "Sargassum johnstonii (gracile)",
+  "Sargassum macdougalii",
+  "Sargassum muticum",
+  "Sargassum pacificum (pacificum)",
+  "Sargassum pacificum (megaphyllum)",
+  "Sargassum palmeri",
+  "Sargassum sinicola (sinicola)",
+  "Sargassum sinicola (camouii)",
+  "Sargassum sonorense",
+  "Sargassum templetonii",
+  "Sargassum vizcainense",
+  "Sargassum vizcainense"
+)
+)
+
+F_Data <- N_Data %>% 
+  mutate(InicioA ="Distribucion de") %>% 
+  mutate(InicioB ="Primer registro ") %>% 
+  mutate(Fin = "en la costa del Pacifico") %>% 
+  mutate(KeyA ="Distribucion; Alga; Bentos; Bentonica; Catalogo; Phaeophycota") %>% 
+  mutate(KeyB ="Primer Registro; Alga; Bentos; Bentonica; Catalogo; Phaeophycota") %>% 
+  mutate(Registro_A =paste(InicioA,Especie,Fin)) %>% 
+  mutate(Registro_B =paste(InicioB,Especie,Fin)) %>% 
+  select(1,5:8)
+
+write.csv(F_Data,"Catalogo_II_Data.csv")
+
+###################### END ########################
+
+#### Macro Invertebrates ####
+
+Brusca <- fread("./Data/Brusca.csv")
+
+Inv <- Brusca %>% 
+  mutate(TituloI = paste(Inicio,Genus,Species,Fin)) %>% 
+  mutate(TituloII = paste(Inicio_II,Genus,Species)) %>% 
+  mutate(Keywords = paste(Key,Common_synonyns)) %>% 
+  mutate(Subject = paste(Genus,Species)) %>% 
+  select(TituloI,TituloII,Keywords,Subject)
+
+write.csv(Inv, "Inv_Brusca.csv")
+
+###################### END ########################

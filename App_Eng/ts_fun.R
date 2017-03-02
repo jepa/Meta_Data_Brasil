@@ -49,3 +49,4 @@ ts_plot<- function(Data,Start_Year,End_Year,Category="NA"){
   return(tsplot)
   
 }
+#ts_plot(Template2,1900,2050)

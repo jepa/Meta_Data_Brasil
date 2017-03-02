@@ -464,6 +464,8 @@ shinyUI(
              #### Experimental Analysis ####
              column(width =12,
                     align = "center",
+                    p(h4("Research Field")),
+                    plotOutput("RF_Plot"),
                     p(h2("Experimental Analysis")),
                     selectInput("SE_E_Plot_Option", 
                                 label= "Choose To Show Plot:",
