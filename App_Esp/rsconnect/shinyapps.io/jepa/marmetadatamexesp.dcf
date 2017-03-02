@@ -3,8 +3,14 @@ title: marmetadatamexesp
 account: jepa
 server: shinyapps.io
 appId: 155793
+<<<<<<< HEAD
 bundleId: 730470
 url: https://jepa.shinyapps.io/marmetadatamexesp/
 when: 1488415890.43651
+=======
+bundleId: 709205
+url: https://jepa.shinyapps.io/marmetadatamexesp/
+when: 1486948474.29256
+>>>>>>> 804f009599598c55e48b894b28014c7b8ef88e6e
 asMultiple: FALSE
 asStatic: FALSE
