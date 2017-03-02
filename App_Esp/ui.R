@@ -11,7 +11,9 @@ library(DT)
 library(markdown)
 library(dygraphs)
 
+ 
 shinyUI(
+  
   ### Navigation bar
   navbarPage(id = "MMM_Nav_Bar",
              #Web page title
@@ -35,7 +37,7 @@ shinyUI(
                           offset = 2,
                           p(h3("Bienvenidos")),
                           p(
-                            "El proyecto de metadatos de investigación marina en México tiene como objetivo crear una base de metadatos respecto a toda la informaci?n de investigación marina desarrollada en México. Una base de metadatos está compuesta por información sobre datos existentes, en lugar de los datos en si. Desde octubre de 2016 hemos recolectado más de 30,000 datos individuales, incluyendo 12 repositorios existentes y colaborado con m?ltiples invetigadores y representates de diferentes disciplinas e instituciónes. Sin embargo, seguimos buscando cualquier información disponible sobre investigación marina en México, independientemente de la fuente. Los datos pueden haberse originado de distintas maneras, por ejemplo: datos de tesis, literatura gris, o capturados por pescadores o voluntarios"
+                            "El proyecto de metadatos de investigación marina en México tiene como objetivo crear una base de metadatos respecto a toda la información de investigación marina desarrollada en México. Una base de metadatos está compuesta por información sobre datos existentes, en lugar de los datos en si. Desde octubre de 2016 hemos recolectado más de 30,000 datos individuales, incluyendo 12 repositorios existentes y colaborado con múltiples invetigadores y representates de diferentes disciplinas e instituciónes. Sin embargo, seguimos buscando cualquier información disponible sobre investigación marina en México, independientemente de la fuente. Los datos pueden haberse originado de distintas maneras, por ejemplo: datos de tesis, literatura gris, o capturados por pescadores o voluntarios"
                           )
                         ),
                         column(
@@ -102,7 +104,7 @@ shinyUI(
                           p(h3(
                             "Objetivos del proyecto"
                           )),
-                          p("El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Así mismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejorar la información marina en México. Por último, se pretende fomentar el acceso a la información mediante un portal de consulta de metadatos en l?nea."
+                          p("El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Así mismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejorar la información marina en México. Por último, se pretende fomentar el acceso a la información mediante un portal de consulta de metadatos en línea."
                           ),
                           p(
                             "La disponibilidad de datos es clave no sólo para comprender mejor los ambientes marinos y costeros de México, sino también para identificar las brechas de conocimiento, apoyando así a la prioritización de la investigación en México. Por ejemplo, la disponobilidad de información facilitará el manejo de recursos marinos y las políticas de conservación para los ecosistemas marinos y los recursos pesqueros vulnerables al cambio climático"
@@ -346,7 +348,7 @@ shinyUI(
                              p(
                                "Para que el proyecto mejor refleje la investigación marina en México es necesario tener la mayor cantidad de información posible. Recuerda que no estamos colectando datos crudos, estamos colectando información acerca de los datos"
                              ),
-                             downloadButton('downloadTemplate',
+                             downloadButton('downloadTemp',
                                             "Descargar Formato")
                       ),
                       column(2,
@@ -367,7 +369,7 @@ shinyUI(
                                width = 40
                              ), href = "https://twitter.com/julianop_a"
                              ),
-                             "Correo Electrónico"
+                             "Correo: j.palacios@oceans.ubc.ca"
                              ),
                       column(3,
                              align="justified",
@@ -428,6 +430,11 @@ shinyUI(
                              
                       )
   ),
+  navbarMenu("Idioma",
+             tabPanel(a("Inglés",
+                        href="https://jepa.shinyapps.io/marmetadatamexeng/")
+             )
+  ),
   #### DATA POINTS ####
   column(8,
          align = "center",
@@ -446,7 +453,7 @@ shinyUI(
            )
          )
   ),
-  #.########################## ##### 
+  #.########################## #####
   #### CONTACT ####
   column(8,
          align = "center",

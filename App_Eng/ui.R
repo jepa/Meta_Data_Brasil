@@ -356,8 +356,11 @@ shinyUI(
                     p(
                       "In order for the project to better reflect marine research in Mexico, it is necessary to have as much information as possible. Remember that we are not collecting raw data, we are collecting information about what data exists"
                     ),
-                    downloadButton('downloadTemplate',
+                    # p("Donwload"),
+                    downloadButton('downloadTemp',
                                    "Download Template")
+                    # downloadButton('downloadIns',
+                    #                "Instructions")
              ),
              column(2,
                     align="justified",
@@ -376,7 +379,7 @@ shinyUI(
                       width = 40
                     ), href = "https://twitter.com/julianop_a"
                     ),
-                    "Email"
+                    "Email: j.palacios@oceans.ubc.ca"
              ),
              column(3,
                     align="justified",
@@ -439,10 +442,15 @@ shinyUI(
              
              ), # CLose Collaboration tab
     #### DATA POINTS ####
-    column(8,
+    navbarMenu("Language",
+               tabPanel(a("Spanish",
+                          href="https://jepa.shinyapps.io/marmetadatamexesp/")
+               )
+    ),
+  column(8,
            align = "center",
     absolutePanel(
-      top = 50,
+      top = 100,
       bottom = 20,
       right = 20,
       #width = "25%",
@@ -450,7 +458,9 @@ shinyUI(
       fixed = TRUE,
       wellPanel(
         strong("Data Points collected:"),
-      textOutput("Datapoints_Intro")
+      textOutput("Datapoints_Intro"),
+      "Last updated:",
+      textOutput("date")
      )
     )
     ),
@@ -488,5 +498,5 @@ shinyUI(
            )
     
     )
-  )
+  )  
   )

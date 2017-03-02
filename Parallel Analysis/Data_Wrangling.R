@@ -496,10 +496,11 @@ write.csv(Nom, "NOM.csv")
 ####################### END ########################
 #### Paco's Catch Data from the past ####
 
-Paco <- fread("./Data/Paco_Data.csv")
+Paco <- fread("./Paco.csv")
 
 PacoC <- Paco %>% 
-  mutate(Titulo_C = paste(Titulo,Especie,Fin)) %>% 
+  mutate(Y = paste("(1956-2009)")) %>% 
+  mutate(Titulo_C = paste(Titulo,Especie,"en",Fin,Y)) %>% 
   mutate(Key= paste(Key,Especie))
            
 write.csv(PacoC,"Paco.csv")
