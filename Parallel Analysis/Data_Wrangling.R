@@ -817,3 +817,34 @@ Inv <- Brusca %>%
 write.csv(Inv, "Inv_Brusca.csv")
 
 ###################### END ########################
+
+# Pedroche et al ####
+#I had to reshape the Pedroche et al dataset from the .text file he sent. I will then add this new dataset with the Template
+
+# First <- Read Pedroche's dataset
+Data <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Names&Dates.csv")
+
+# Second <- Eliminate those entries that have no year record                
+Clean_D <- Data %>% 
+  filter(!is.na(Year1))
+
+# Third <- Stack all years in one single column
+Stacked_D <- stack(Clean_D[3:61])
+colnames(Stacked_D) <- c("Start_Year","xf")
+Stacked_D$Start_Year <- as.numeric(Stacked_D$Start_Year)
+
+# Final Step <- Select only the starting year and create an Ending Year
+Final_D <- Stacked_D %>% 
+  select(Start_Year) %>% 
+  mutate(End_Year=Start_Year)
+
+#Just for checking
+
+# source('~/Documents/Github/Meta_Data_Mexico/App_Eng/ts_fun.R')
+# ts_subset(Final_D,
+#           min(Final_D$Start_Year,na.rm = T),
+#           max(Final_D$End_Year,na.rm = T))
+
+#
+
+write(Final_D, "Final_D.csv")
