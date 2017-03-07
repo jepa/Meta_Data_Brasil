@@ -1,20 +1,14 @@
-#### NOTA ####
-##############################
-##############################
-##############################
-##############################
+#### Server for Metadata APP ####
 
-##### MUY IMPORTANTE ####
+# This script is part of the Metadata of Marine Research in Mexico app.
+#Started on October, 2016
+#Juliano Palacios Abrantes, j.palacios@oceans.ubc.ca
+#________________________________________________________________________#
 
-#Para modificar la información de la página informativa TIENES que Data_Curver en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
+#### NOTES ####
+# everything you do here, you have to miror in the "App_Esp". If the spanish webpage is stil on-line.
 
-#Read ui.R for information between branches
-##############################
-##############################
-##############################
-##############################
-
-
+#_______________________________ END NOTES __________________________________#
 
 ####Libraries needed ####
 
@@ -32,18 +26,20 @@ library(networkD3)
 library(dygraphs)
 library(data.table)
 
+#________________________________________________________________________#
 
 #Functions #
 
-#Commented for publication of project
-#source('Fun_Dat_links.r')
+# This function is needed to create the dataset with the quick links
+source('Fun_Dat_links.R')
+source('ts_fun.R')
 
-#The begining #
+##### shinyServer #####
 
 shinyServer(function(input, output, session) {
   
   
-  # Reading the Template ####
+##### Template #####
   datasetInput <- reactive({
     
     data<- fread("./Template.csv")
@@ -51,32 +47,38 @@ shinyServer(function(input, output, session) {
   })
   
   
-  #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#_______________ END ___________________________ #
   
-  # HOME PAGE ####
-  #Number of points
+#### HOME PAGE ####
   
+### Floating Panel ####
+  
+  # Number of datapoints 
   output$Datapoints_Intro <- renderText({
     Number_entries <- datasetInput()
     paste(sum(Number_entries$Data_Time_Points,na.rm=T))
     
   })
   
+  # Date updated
   output$date <- renderText({
     paste(Sys.Date())
     
   })
   
-  ####
+  #_______________ END ___________________________ #
   
-  observeEvent(input$Collaborate_But, {
+#### Collaborate buttons ####
+  
+  observeEvent(input$Collaborate_But, { #<- observeEvent allows you to navegate within the app. NOTE: you have to give the destination a name
     updateNavbarPage(session,
-                      inputId = "MMM_Nav_Bar", 
-                      selected = "Collaborate")
+                      inputId = "MMM_Nav_Bar",
+                      selected = "Collaborate") # <- destination name
   })
   
+#_______________ HOME PAGE END ___________________________ #
   
-  # METADATA TAB ####
+#### METADATA TAB ####
   
   # Reading the Metadata_Key ####
   Key_datasetInput <- reactive({
@@ -87,7 +89,9 @@ shinyServer(function(input, output, session) {
     data.frame(K_data)
   })
   
-  #Metadata Display ####
+  #_____________________ END ___________________________ #
+  
+#Metadata Display ####
   output$Metadata <- renderDataTable({
      Final <- datasetInput()
         #Show the datatable 
@@ -102,8 +106,11 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  #Metadata Summary Display ####
-  source('Fun_Dat_links.R')
+#_____________________ END ___________________________ #
+  
+#Metadata Summary Display ####
+  # This section uses the function: 'Fun_Dat_links.R' loaded at the begining
+  
   output$Metadata_Summary <- renderDataTable({
 
       x <- Ref_Links(datasetInput()$Reference,
@@ -129,7 +136,9 @@ shinyServer(function(input, output, session) {
     )
   })
   
-  # Metadata_Key Display ####
+#_____________________ END ___________________________ #
+
+    # Metadata_Key Display ####
   
   output$Metadata_Key <- renderDataTable({
     Metadata_Key <- Key_datasetInput() 
@@ -145,9 +154,11 @@ shinyServer(function(input, output, session) {
     
   })
   
+#_____________________ END ___________________________ #  
   
-    #### PRELIMINARY RESULTS TAB ####
-  
+#_____________________ METADATA TAB END ___________________________ #  
+
+#### PRELIMINARY RESULTS ####
   
   #### Timeseries of data gathering ####
   
@@ -160,13 +171,14 @@ shinyServer(function(input, output, session) {
   
   })
   
-  #Creating the graph
+  #Creating TS graph
+  
   output$TFgraph <- renderDygraph({
   x <- TFdatasetInput()
   
   Dt_Points <- ts(x,
                   start=c(2016,11),
-                  end = c(2017,3), 
+                  end = c(2017,3), # <- this has to be changed everytime we add a month
                   frequency= 12)
   
   dygraph(Dt_Points) %>% #Creats the graph
@@ -180,17 +192,19 @@ shinyServer(function(input, output, session) {
     dyLegend(width = 600)
   })
   
-  source('ts_fun.R')
   output$TSgraph <- renderDygraph({
     
     Hist <- datasetInput() %>% 
-      filter(MMID <=2861)
+      filter(MMID <=2861) # <- Temporary fix for Brusca (+) data...
     ts_plot(Hist,1900,2050)
   })
   
-  #### Quantitative Results ####
-  # Number of entries ####
+  #_____________________ END ___________________________ #  
   
+  
+  #### Quantitative Analysis ####
+  
+  # Number of entries ####
   output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
@@ -198,12 +212,18 @@ shinyServer(function(input, output, session) {
     
   })
   
+#_____________________ END ___________________________ #  
+  
+  # Number of Data Points ####
   output$Number_Data_Points <- renderText({
     Number_entries <- datasetInput()
     paste(sum(Number_entries$Data_Time_Points,na.rm=T))
     
   })
+
+#_____________________ END ___________________________ #  
   
+  # Number of Repositories ####
   output$Sources <- renderText({
      z<- datasetInput() %>% 
       group_by(Compilation_Title) %>% 
@@ -216,8 +236,13 @@ shinyServer(function(input, output, session) {
     
   })
   
+  #_____________________ END ___________________________ #    
+  
+  
+  #### Spatial Plot ####
+  
+  #### By Area ####
   output$Number_spp <- renderPlot({
-    #### Entries By Area####
     
     if(input$Plot_Option == 1){
       Spp <- datasetInput() %>% 
@@ -249,7 +274,7 @@ shinyServer(function(input, output, session) {
         )
       
     }else{
-      #### By Region####
+      #### By Region ####
       if(input$Plot_Option == 2){
         Spp2 <- datasetInput() %>%
           group_by(Region) %>%
@@ -277,7 +302,7 @@ shinyServer(function(input, output, session) {
           )
         
       }else{
-        #### By Location####
+        #### By Location ####
         if(input$Plot_Option == 3){
           Spp3 <- datasetInput() %>%
             filter(Location != "na") %>% 
@@ -314,6 +339,7 @@ shinyServer(function(input, output, session) {
     }
   })
   
+#_____________________ END ___________________________ #
   
   #### Qualitative Analysis ####
   
@@ -322,13 +348,18 @@ shinyServer(function(input, output, session) {
   output$Keywords_Plot <- renderPlot({
     Words <- datasetInput()
     WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-    WordsCorpus <- tm_map(WordsCorpus, PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
+    WordsCorpus <- tm_map(WordsCorpus, 
+                          PlainTextDocument) #Converts to plain text
+    WordsCorpus <- tm_map(WordsCorpus, 
+                          removePunctuation) #Removes punctuation
     
-    Word_Remove <- c(input$Keyword_Remove1,input$Keyword_Remove2)
+    Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
+                     input$Keyword_Remove2)
     
     #Removes a word of user preference 
-    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 
+    WordsCorpus <- tm_map(WordsCorpus,
+                          removeWords,
+                          Word_Remove ) 
     #
     
     wordcloud(WordsCorpus, #Plots the words
@@ -338,9 +369,13 @@ shinyServer(function(input, output, session) {
     
   })
   
-
-  #### Collaboration ####
+  #_____________________ END ___________________________ #
   
+  #_____________________ END PREELIMINARY RESULTS ___________________________ #
+  
+  #### COLLABORATION ####
+  
+  #### Download Metadata Template ####
   TempInput <- reactive({
     
     data<- fread("./Data_Download/Metadata_Template.csv")
@@ -355,6 +390,10 @@ shinyServer(function(input, output, session) {
       write.csv(TempInput(), file)
     }
   )
+  
+#_____________________ END ___________________________ #
+  
+  #### Institutions ####
   
   output$Institutions <- renderDataTable({
     
@@ -379,6 +418,10 @@ shinyServer(function(input, output, session) {
               )
     )
   })
+  
+  #_____________________ END ___________________________ #
+  
+  #### Researchers ####
   
   output$People <- renderDataTable({
     
@@ -421,5 +464,10 @@ shinyServer(function(input, output, session) {
                            )
             )
   })  
-})
+
+#_____________________ END ___________________________ #
+  
+#_____________________ END COLLABORATION ___________________________ #
+  
+}) #<- END OF SERVER ! 
 
