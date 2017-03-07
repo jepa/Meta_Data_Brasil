@@ -1,9 +1,16 @@
-#________________________________________________________________________________________________________________________________________
+#### Server for Metadata APP ####
 
-# Ui en español, fue actualizada el lunes 6 de Febrero de 2017. Con el Template 1.8
+# This script is part of the Metadata of Marine Research in Mexico app.
+#Started on October, 2016
+#Juliano Palacios Abrantes, j.palacios@oceans.ubc.ca
+#________________________________________________________________________#
 
-#________________________________________________________________________________________________________________________________________
+#### NOTES ####
+# everything you do here, you have to miror in the "App_Esp". If the spanish webpage is stil on-line.
 
+#_______________________________ END NOTES __________________________________#
+
+####Libraries needed ####
 
 library(shiny)
 library(leaflet)

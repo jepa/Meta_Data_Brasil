@@ -1,17 +1,16 @@
-#________________________________________________________________________________________________________________________________________
-##### MUY IMPORTANTE ####
+#### UI for Metadata APP ####
 
-#Para modificar la información de la página informativa TIENES que estar en la "branch" Internet, de github. si no, vas a modificar la versión pensada para cuándo los datos estén listos.
+# This script is part of the Metadata of Marine Research in Mexico app.
+#Started on October, 2016
+#Juliano Palacios Abrantes, j.palacios@oceans.ubc.ca
+#________________________________________________________________________#
 
-# This version of the app is modified to be publish online. Some things are commented like;
+#### NOTES ####
+# Everything you do here, you have to miror in the "App_Esp". If the spanish webpage is stil on-line.
 
-# Data to download
-# Input data map
-# Resutls map
+#_______________________________ END NOTES __________________________________#
 
-#________________________________________________________________________________________________________________________________________
-
-
+####Libraries needed ####
 library(shiny)
 library(leaflet)
 library(DT)
