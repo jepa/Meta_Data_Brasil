@@ -195,12 +195,6 @@ shinyServer(function(input, output, session) {
       dyLegend(width = 600)
   })
   
-  output$TSgraph <- renderDygraph({
-    
-    Hist <- datasetInput() %>% 
-      filter(MMID <=2861) # <- Temporary fix for Brusca (+) data...
-    ts_plot(Hist,1900,2050)
-  })
   
   #_____________________ END ___________________________ #  
   
@@ -373,6 +367,36 @@ shinyServer(function(input, output, session) {
   })
   
   #_____________________ END ___________________________ #
+  
+  #### Timeseries of data History ####
+  
+  PedroData <- reactive({
+    
+    Pedroche<- fread("./Pedroche_Hist.csv")
+    Pedroche <- Pedroche %>% 
+      select(-1)
+    
+  })
+  
+  output$TSgraph <- renderDygraph({
+    
+    Hist <- datasetInput() %>%
+      filter(MMID <=2861) %>%
+      select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+    
+    #Reads Predoche fixed data from the Parallel Analysis
+    
+    # #Join both datasets and removes NA's
+    Fin_Plot <- PedroData() %>%
+      bind_rows(Hist) %>%
+      filter(!is.na(Start_Year))
+    
+    
+    #Plots the Historic contribution
+    ts_plot(Fin_Plot,1920,2020)
+  })
+  
+  #_____________________ END ___________________________ #  
   
   #_____________________ END PREELIMINARY RESULTS ___________________________ #
   

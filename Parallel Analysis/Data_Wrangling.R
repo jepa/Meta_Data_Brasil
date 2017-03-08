@@ -826,7 +826,7 @@ Data <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Nam
 
 # Second <- Eliminate those entries that have no year record                
 Clean_D <- Data %>% 
-  filter(!is.na(Year1))
+  filter(!is.na(Y1))
 
 # Third <- Stack all years in one single column
 Stacked_D <- stack(Clean_D[3:61])
@@ -847,6 +847,7 @@ Final_D <- Stacked_D %>%
 
 #
 
-write(Final_D, "Final_D.csv")
+
+write.csv(Final_D, "Pedroche_Hist.csv")
 
 

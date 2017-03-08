@@ -1,6 +1,6 @@
 ts_plot<- function(Data,Start_Year,End_Year,Category="NA"){
   
-  library(dplyr)  #<- For data wrangling
+  #library(dplyr)  #<- For data wrangling
   library(dygraphs)
   # Data <- Data %>%
   #     filter(Research_Field == "Fisheries")
@@ -38,12 +38,12 @@ ts_plot<- function(Data,Start_Year,End_Year,Category="NA"){
     dyOptions(stackedGraph = TRUE, #Makes it stacked
               drawPoints = TRUE, #Shows each data point
               pointSize = 4) %>%
-    dyRangeSelector(height = 20) %>%
+    #dyRangeSelector(height = 20) %>%
     dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
     dyAxis("y", drawGrid = FALSE) %>%
     dyAxis("y", label = "Datos de Metadata") %>%  #Labels
     dyAxis("x", label = "Año") %>%
-    dyRangeSelector(dateWindow = c("1950-01-01", "2017-01-01")) %>% 
+    #dyRangeSelector(dateWindow = c("1950-01-01", "2017-01-01")) %>% 
     dyLegend(width = 600)
   
   return(tsplot)

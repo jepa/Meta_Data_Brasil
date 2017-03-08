@@ -42,8 +42,13 @@ shinyServer(function(input, output, session) {
 ##### Template #####
   datasetInput <- reactive({
     
-    data<- fread("./Template.csv")
-    #data.frame(data)
+    data<- fread("./Template.csv",
+                 colClasses = c(Location = 'character',
+                                Notes = 'character')
+                 )
+    
+                 
+    data.frame(data)
   })
   
   
@@ -162,51 +167,34 @@ shinyServer(function(input, output, session) {
   
   #### Timeseries of data gathering ####
   
-#Import dataframe (for now)
-  TFdatasetInput <- reactive({
-    
-  x <- read.csv("Data_Curve.csv")
-  x <- x %>% 
-    select(-1)
-  
-  })
+# Import dataframe (for now)
+TFdatasetInput <- reactive({
+
+x <- fread("Data_Curve.csv")
+x <- x %>%
+  select(-1)
+
+})
   
   #Creating TS graph
   
   output$TFgraph <- renderDygraph({
   x <- TFdatasetInput()
-  
+
   Dt_Points <- ts(x,
                   start=c(2016,11),
                   end = c(2017,3), # <- this has to be changed everytime we add a month
                   frequency= 12)
-  
+
   dygraph(Dt_Points) %>% #Creats the graph
     dyOptions(stackedGraph = TRUE, #Makes it stacked
               drawPoints = TRUE, #Shows each data point
-              pointSize = 4) %>% 
-    dyRangeSelector(height = 20) %>% 
+              pointSize = 4) %>%
+    dyRangeSelector(height = 20) %>%
     dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
-    dyAxis("y", drawGrid = FALSE) %>% 
+    dyAxis("y", drawGrid = FALSE) %>%
     dyAxis("y", label = "Number of Data Points") %>%  #Labels
     dyLegend(width = 600)
-  })
-  
-  #_____________________ END ___________________________ #  
-  
-  #### Timeseries of data History ####
-  
-  # BruscaData <- reactive({
-  #   
-  #   data<- fread("./Template.csv")
-  #   #data.frame(data)
-  # })
-  
-  output$TSgraph <- renderDygraph({
-    
-    Hist <- datasetInput() %>% 
-      filter(MMID <=2861) # <- Temporary fix for Brusca (+) data...
-    ts_plot(Hist,1900,2050)
   })
   
   #_____________________ END ___________________________ #  
@@ -372,14 +360,46 @@ shinyServer(function(input, output, session) {
                           Word_Remove ) 
     #
     
-    wordcloud(WordsCorpus, #Plots the words
+    suppressWarnings(wordcloud(WordsCorpus, #Plots the words
               max.words = 100,
               random.order = FALSE,
-              colors=brewer.pal(8, "Dark2"))
+              colors=brewer.pal(8, "Dark2")
+              )
+    )
     
   })
   
   #_____________________ END ___________________________ #
+  
+  #### Timeseries of data History ####
+  
+  PedroData <- reactive({
+    
+    Pedroche<- fread("./Pedroche_Hist.csv")
+    Pedroche <- Pedroche %>% 
+      select(-1)
+    
+  })
+  
+  output$TSgraph <- renderDygraph({
+    
+    Hist <- datasetInput() %>%
+      filter(MMID <=2861) %>%
+      select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+
+    #Reads Predoche fixed data from the Parallel Analysis
+    
+    # #Join both datasets and removes NA's
+    Fin_Plot <- PedroData() %>%
+      bind_rows(Hist) %>%
+      filter(!is.na(Start_Year))
+      
+    
+    #Plots the Historic contribution
+    ts_plot(Fin_Plot,1920,2020)
+  })
+  
+  #_____________________ END ___________________________ #  
   
   #_____________________ END PREELIMINARY RESULTS ___________________________ #
   
