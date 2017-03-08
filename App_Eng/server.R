@@ -192,6 +192,16 @@ shinyServer(function(input, output, session) {
     dyLegend(width = 600)
   })
   
+  #_____________________ END ___________________________ #  
+  
+  #### Timeseries of data History ####
+  
+  # BruscaData <- reactive({
+  #   
+  #   data<- fread("./Template.csv")
+  #   #data.frame(data)
+  # })
+  
   output$TSgraph <- renderDygraph({
     
     Hist <- datasetInput() %>% 
