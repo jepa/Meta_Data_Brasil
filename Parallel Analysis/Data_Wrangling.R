@@ -818,7 +818,7 @@ write.csv(Inv, "Inv_Brusca.csv")
 
 ###################### END ########################
 
-# Pedroche et al ####
+#### Pedroche et al ####
 #I had to reshape the Pedroche et al dataset from the .text file he sent. I will then add this new dataset with the Template
 
 # First <- Read Pedroche's dataset
@@ -851,3 +851,56 @@ Final_D <- Stacked_D %>%
 write.csv(Final_D, "Pedroche_Hist.csv")
 
 
+
+
+#### Rolando Batista 
+#Template 1.9
+
+Species <-(c("Macroalgae",
+"Sponges",
+"Cnidarians",
+"Flatworms",
+"Nemerteans",
+"Annelids",
+"Crustaceans",
+"Mollusks",
+"Bryozoans",
+"Echinoderms",
+"Fish",
+"Amphibian and reptilian",
+"Birds",
+"Mammals"
+))
+Especies <-(c("Macroalgas",
+             "Esponjas",
+             "Cnidarios",
+             "Plantelmintos",
+             "Nematodos",
+             "Anelidos",
+             "Crustaceos",
+             "Moluscos",
+             "Bryozoos",
+             "Equinodermos",
+             "Peces",
+             "Anfibios y Reptiles",
+             "Pajaros",
+             "Mamiferos"
+))
+Initial <- "Number of"
+Final <- "in Oaxaca State"
+
+Table <- data.table(
+  Name = Species,
+  Initial,
+  Final
+)
+
+F_Table <- Table %>% 
+  mutate(Title= paste(Initial,Species,Final)) %>% 
+  mutate(Keywords = paste(Especies,"Oaxaca","Abundancia","Grupo taxonomico","Diversidad","Especies", sep="; ")) %>% 
+  select(Title,
+         Keywords,
+         Name) 
+  
+#write.csv(F_Table, "F_Table.csv")
+###################### END ########################
