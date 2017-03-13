@@ -907,8 +907,9 @@ F_Table <- Table %>%
 
 ##### Andres ####
 #Template 1.10
+# No lo logre, por ahora...
 
-Andres <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Andres.csv")
+Andres <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Carajo.csv")
 Andres$Estado <-as.character(as.factor(Andres$Estado))
 
 A <- Andres %>% 
@@ -916,17 +917,21 @@ A <- Andres %>%
 
 Ta <- A %>% 
   group_by(Estado) %>% 
-  summarise(n=n()) %>% 
-  slice(-33)
-  
-  arrange(Estado)
-
+  summarise(n=n())
 
 y <- data.table(rep(MP$Estado[1], each=Ta$n[1]))
-for(i in 2:nrow(Ta)){
+for(i in 1:nrow(Ta)){
   x <- data.table(rep(MP$Estado[i], each=Ta$n[i]))
   y <- bind_rows(y,x)
 }
+
+ys <- y %>% 
+  group_by(V1) %>% 
+  summarise(n=n())
+
+NAs <- filter(yyy, is.na(V1))
+
+
 
 yy <- data.table(rep(MP$Region[1], each=Ta$n[1]))
 for(i in 2:nrow(Ta)){
@@ -943,4 +948,9 @@ yyy <- bind_rows(yyy,x)
 FIN <- bind_cols(y,yy,yyy)
 
 
-write.csv(FIN,"AndresFin.csv")
+#write.csv(FIN,"AndresFin.csv")
+
+
+
+
+
