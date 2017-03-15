@@ -950,7 +950,24 @@ FIN <- bind_cols(y,yy,yyy)
 
 #write.csv(FIN,"AndresFin.csv")
 
+###################### END ########################
+# GOb.mx info
+
+#Embarcaciones en zonas de ballenas
+
+EmbB <- Emb %>% 
+  group_by(ENTIDAD_FEDERATIVA) %>% 
+  summarise(n=n())
+
+EmbA <- Emb %>% 
+  group_by(ENTIDAD_FEDERATIVA) %>% 
+  summarise(n=n())
+
+EmbF <- EmbB %>% 
+  select(-2) %>% 
+  mutate(paste("Numero de Embarcaciones en zonas con presencia de ballenas en",ENTIDAD_FEDERATIVA)) %>% 
+  slice(-4) %>% 
+  mutate(paste("Embarcaciones; Ballenas; Colision; Presencia;",ENTIDAD_FEDERATIVA))
 
 
-
-
+write.csv(EmbF,"Embarcaciones.csv")
