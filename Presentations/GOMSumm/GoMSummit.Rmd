@@ -25,11 +25,11 @@ library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
 
-data<- fread("~/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv",
+data<- fread("./Template.csv",
                  colClasses = c(Location = 'character',
                                 Notes = 'character')
                  )
-K_data<- read.csv("~/Documents/Github/Meta_Data_Mexico/App_Eng/Metadata_Key.csv",
+K_data<- read.csv("./Metadata_Key.csv",
                     header = TRUE,
                     na="NA")
 
@@ -120,7 +120,7 @@ shinyApp(ui = ui, server = server)
 
 ```{r Current Status, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
-x <- fread("~/Documents/Github/Meta_Data_Mexico/App_Eng/Data_Curve.csv")
+x <- fread("./Data_Curve.csv")
 x <- x %>%
   select(-1)
 
