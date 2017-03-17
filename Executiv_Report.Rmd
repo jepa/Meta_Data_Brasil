@@ -1,0 +1,158 @@
+---
+title: "Base de metadatos de la investigación marina en México"
+author: ''
+date: "15/3/2017"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+### Investigadores Principales:
+-	Dr. Andrés Cisneros-Montemayor, Institute of Oceans and Fisheries, University of British Columbia
+-	Dr. Francisco Arreguín-Sánchez (IPN/CICIMAR)
+-	Juliano Palacios-Abrantes, Institute of Oceans and Fisheries, University of British Columbia
+-	Dr. Laura Rodríguez, Environmental Defense Fund México
+-	Dr. William Cheung, Institute of Oceans and Fisheries, University of British Columbia
+
+
+#Resumen ejecutivo
+
+La investigación y manejo de los recursos marinos es cada vez más dependiente de diversos indicadores biológicos, ecológicos, económicos y sociales. En México, dichos indicadores pueden existir, pero no siempre están disponibles al público o su existencia no es conocida.  El estar al tanto de qué datos existen para diversos temas o regiones es un enorme paso para incrementar la colaboración e investigación que apoya la toma de decisión en México. Una base de metadatos compuesta por información relacionada a la ecología, sociología y economía, enfocada a los sistemas marinos en México, facilitará el uso eficiente de la información existente al mismo tiempo que estimulará la colaboración entre distintos sectores interesados en el desarrollo marino del país. Dicha base de metadatos estará compuesta por información sobre datos existentes, en lugar de contener los datos en sí. Este proyecto tiene como objetivo crear una base de metadatos sobre datos relacionados a la investigación marina en México. Así mismo, se pretende identificar información faltante con el objetivo de informar dónde se debería de enfocar la investigación futura. Finalmente, se espera que el producto final esté disponible a cualquier persona interesada en la investigación marina en México. Así, al no estarse colectando datos mas información sobre los mismos, en un marco de creciente interdisciplinariedad, un investigador podría identificar datos de interés dentro de la base de metadatos, contactar directamente a la persona indicada, y colaborar en una nueva investigación que informe políticas pertinentes para alguna comunidad o región. Desde noviembre de 2016 se ha colectado información sobre más de 140 mil datos generados entre 1930 y 2017 (Figura 1), siendo el océano Pacífico el litoral con más información hasta ahora (Figura 2). Dichos datos provienen de más de 20 fuentes de libre acceso e publicaciones científicas siendo pesquerías y ecología las disciplinas con más registros. Las especies con más información al momento son camarón y lisa y el estado con más datos son Veracruz y Sinaloa. A pesar de tener una respuesta positiva de más de 60 individuos de la comunidad científica y distintas instituciones gubernamentales y no gubernamentales (Tabla 1), aún falta mucha información por recopilar. La incorporación de actores clave como el INAPESCA es fundamental para crear una base que en verdad refleje la información existente en México. La incorporación de investigadores renombrados con extensa experiencia en el desarrollo de los mares mexicanos así como la incorporación de agencias gubernamentales cono INAPESCA, CONABIO, entre otras, es fundamental para crear una base de metadatos que en verdad refleje la información existente en México. Cuantas más personas e instituciones aporten a la base de metadatos, mejor se podrá reflejar el estado de la investigación marina en México.
+
+
+#Anexo; Imágenes y Tablas
+
+```{r LibraryData, echo=F,eval=T,message=F,warning=F}
+
+library(dplyr)
+library(dygraphs)
+library(data.table)
+library(ggplot2)
+Template <- fread("~/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv")
+
+# Needed for Historic reconstruction
+Pedroche<- fread("./App_Eng/Pedroche_Hist.csv")
+```
+
+
+```{r Historial, echo=F,eval=T,message=F,warning=F}
+
+Pedroche <- Pedroche %>% 
+  select(-1)
+Hist <- Template %>%
+  filter(MMID <=2861) %>%
+  select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+
+    #Reads Predoche fixed data from the Parallel Analysis
+    
+    # #Join both datasets and removes NA's
+    Fin_Plot <- Pedroche %>%
+      bind_rows(Hist) %>%
+      filter(!is.na(Start_Year))
+      
+    #### Codigo Andres ####
+    tdat= na.omit(Fin_Plot[,c("Start_Year","End_Year")]) #Subset columns with 
+tdat$Start_Year<- as.numeric(as.character(tdat$Start_Year))
+tdat$End_Year<- as.numeric(as.character(tdat$End_Year))
+#mean(tdat$Start_Year) #just checking they are number
+#mean(tdat$End_Year) #just checking they are number
+
+#start and end year data
+years= 1930:2020 #Limit time span considered
+
+#x = tdat[1,1]:tdat[1,2] #First full time series #<- not working for me (J) So this should work as well:
+x <- tdat$Start_Year[1]:tdat$End_Year[1] # <- (J)
+#It works!
+
+ts= cbind( years, !is.na(match(years, x))==1 ) #Flag years in time series
+for(i in 2:dim(tdat)[1]) #Repeat for all data
+{
+  #x= tdat[i,1] : tdat[i,2]
+  x <- tdat$Start_Year[i]:tdat$End_Year[i]
+  ts= cbind(ts, !is.na(match(years, x))==1)
+}
+tssum= cbind(ts[,1], rowSums(ts[,2:dim(ts)[2]]) ) #Sum over years
+gtssum <- data.frame(tssum)
+
+ggplot(gtssum, aes(X1, X2)) +
+  geom_line() +
+  xlab("Año") +
+  ylab("Numero de datos")+
+  ggtitle("Histórico de Datos Marinos Creados en México")+
+  theme_classic()+
+  scale_x_discrete(limits =c(seq(1930,2020,10)))
+
+```
+
+
+```{r Fig2, echo=F,eval=T}
+
+AreaEsp <- data.frame(c(
+  Esp=
+    "Atlántico",
+  "Terrestre",
+  "Nacional",
+  "Pacífico"
+  )
+)
+colnames(AreaEsp) <- "AreaEsp"
+
+Area <- Template %>%   
+  group_by(Area) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  filter(Area !="TBD") %>% 
+  filter(Area !="NA") %>% 
+  bind_cols(AreaEsp)
+  
+
+
+ggplot(data= Area,
+             aes(
+               x=reorder(AreaEsp, -Value),
+               y=Value,
+               fill=Area
+             )) +
+        geom_bar(stat="identity")+
+        theme_classic() +
+  ylab("Número de Datos")+
+        xlab("Area")+
+        theme(axis.text.x = element_text(
+                                         size=12),
+              axis.text.y = element_text(size = 12),
+              legend.position = "none",
+              axis.title = element_text(size=14,
+                                        face="bold")
+        ) +
+  ggtitle("Número de Datos por Litoral en México")
+
+
+```
+Nota, Nacional se refiere a datos que comprenden 2 o más litorales. Terrestre se refiere a datos en estados sin litoral.
+
+```{r Tab1, echo=F,eval=T}
+
+Ta <- Template %>%   
+  group_by(Author) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  select(-2) %>% 
+  slice(1:20)
+
+Tb <- Template %>%   
+  group_by(Author) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  select(-2) %>% 
+  slice(21:40)
+
+Tc <- Template %>%   
+  group_by(Author) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  select(-2) %>% 
+  slice(41:60)
+
+Tf <- bind_cols(Ta,Tb,Tc)
+
+  
+knitr::kable(Tf,
+             caption="Autores e Instituciones que han aportando datos a la base de Metadatos")
+
+```
