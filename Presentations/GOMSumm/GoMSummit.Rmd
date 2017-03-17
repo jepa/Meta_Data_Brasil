@@ -4,7 +4,9 @@ subtitle: "State of The Gulf of Mexico Summit 2017"
 author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
 date: "14/3/2017 | Harte Research Institute, Texas A&M University"
 output:
-  ioslides_presentation
+
+  ioslides_presentation: 
+    keep_md: yes
 runtime: shiny
 logo: choru_logo.PNG
 widescreen: TRUE
@@ -39,7 +41,7 @@ K_data<- read.csv("~/Documents/Github/Meta_Data_Mexico/App_Eng/Metadata_Key.csv"
 
 <img src="Images/FlowC.PNG" width=400 height=400>
 
-- Increasingly depending on multidiciplinary research
+- Increasingly depending on multidisciplinary research
 
 - Biology, Ecology, Oceanography, Economy, etc!
 
