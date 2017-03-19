@@ -58,7 +58,7 @@ x <- x %>%
 
 </div>
 
-## Objectives
+## Project Objectives
 
 > 1.	Design a framework for the meta-database of marine ecosystems and marine-related research of Mexico
 
@@ -172,7 +172,7 @@ zz <- paste(sum(z$z))
 
 </div>
 
-## Preliminar Results for the Gulf of Mexico {.smaller}
+## Preliminary Results for the Gulf of Mexico {.smaller}
 
 ```{r CurrentStatusb, eval=T, echo=F, warning=F,message=F}
 
@@ -223,11 +223,11 @@ G_zz <- paste(sum(G_z$z))
 
 <div class="centered">
 
-> The Metadata has **`r G_Number_entriess`** Records, from **`r G_zz`** repositories, resulting in **`r G_Number_dp`** data points
+> The dataset has **`r G_Number_entriess`** metadata records, from **`r G_zz`** repositories, resulting in **`r G_Number_dp`** data points
 
-### **Institutions Collaborating**
+### **Sources of Data**
 
-<img src="Images/Logos2.PNG" width=750 height=300>
+<img src="Images/Logos3.PNG" width=750 height=300>
 
 > - <img src="Images/Gom.PNG" width=570 height=80>
 
@@ -321,6 +321,8 @@ Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
 
 <img src="Images/Logos_PI.PNG" width=700 height=110>
+
+Project's Webpage: http://jepa.shinyapps.io/marmetadatamexeng/
 
 </div>
 
