@@ -3,7 +3,10 @@ title: "Meta-database of Marine Research in Mexico"
 subtitle: "State of The Gulf of Mexico Summit 2017"
 author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
 date: "14/3/2017 | Harte Research Institute, Texas A&M University"
-output: ioslides_presentation
+output: 
+  ioslides_presentation: 
+    logo: choru_logo.png
+    widescreen: yes
 runtime: shiny
 ---
 
@@ -27,6 +30,9 @@ K_data<- read.csv("./Metadata_Key.csv",
                   header = TRUE,
                   na="NA")
 
+x <- fread("./Data_Curve.csv")
+x <- x %>%
+  select(-1)
 ```
 
 
@@ -46,12 +52,20 @@ K_data<- read.csv("./Metadata_Key.csv",
 </div>
 
 <div class="centered">
+<div class="green2">
+
 > - A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region
+
 </div>
+
 ## Objectives
 
 > 1.	Design a framework for the meta-database of marine ecosystems and marine-related research of Mexico
+
+<div class="green2">
 > 2.	**Identify available data sources and incorporate into developed meta-database framework**
+</div>
+
 > 3.	Identify the major trends in marine data availability in Mexico 
 > 4.	Identify information and research gaps that should be addressed in the future
 > 5.	Develop protocols for public sharing of the meta-database and inclusion of new information in the future
@@ -86,7 +100,7 @@ server <- function(input, output) {
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 50,
-                             autoWidth = TRUE
+                             autoWidth = FALSE
               )
     )
     
@@ -99,7 +113,7 @@ server <- function(input, output) {
               filter = 'top',
               escape = FALSE,
               options = list(pageLength = 28,
-                             autoWidth = TRUE,
+                             autoWidth = FALSE,
                              lengthMenu = c(10, 20,30)
               )
     )
@@ -116,10 +130,6 @@ shinyApp(ui = ui, server = server)
 <div class="centered">
 
 ```{r Current Status, eval=T, echo=F, warning=F,message=F, fig.align="center"}
-
-x <- fread("./Data_Curve.csv")
-x <- x %>%
-  select(-1)
 
 xx <- ts(x,
          start=c(2016,11),
