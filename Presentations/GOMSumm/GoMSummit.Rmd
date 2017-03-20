@@ -182,7 +182,7 @@ G_Number_entries <- data %>%
   filter(MMID != "na") %>%
   filter(Area =="Atlantic")
 
-G_Number_entriess <- paste(G_Number_entries$MMID[length(G_Number_entries$MMID)])
+G_Number_entriess <- paste(nrow(G_Number_entries))
 #
 #   # Number of Data Points ####
 G_Number_dp <- paste(sum(G_Number_entries$Data_Time_Points,na.rm=T))
@@ -196,42 +196,39 @@ G_z<- data %>%
   filter(!is.na(Compilation_Title)) %>%
   mutate(z = 1)
 
+Reps <- G_z$Compilation_Title
+
 G_zz <- paste(sum(G_z$z))
 
-#     #### Repositories ####
-# Inst_Table <- data %>%
-#       filter(Area =="Atlantic") %>%
-#      group_by(Institution,
-#               Compilation_Title) %>%
-#      summarise(x = n()) %>%
-#      filter(Institution != "na",
-#             Institution != "Varios") %>%
-#      select(Institution,
-#             Compilation_Title)
-#    colnames(Inst_Table) <- c("Institution","Repository")
-#
-#
-# Repositories <- datatable(Inst_Table,
-#               rownames = FALSE,
-#               escape = FALSE,
-#               options = list(dom="t"
-#               )
-#     )
+G_Per <- sum(G_Number_entries$Data_Time_Points,na.rm=T)
+N_Per <- sum(Number_entries$Data_Time_Points,na.rm=T)
+Percentage <- round((G_Per/N_Per)*100,digits = 2)
+
 
 
 ```
 
 <div class="centered">
 
-> The dataset has **`r G_Number_entriess`** metadata records, from **`r G_zz`** repositories, resulting in **`r G_Number_dp`** data points
+> The dataset has **`r G_Number_entriess`** metadata records, from **`r G_zz`** repositories, resulting in **`r G_Number_dp`** data points. 
 
 ### **Sources of Data**
 
 <img src="Images/Logos3.PNG" width=750 height=300>
 
+> - **That is only *`r Percentage`*% of total metadata records!**
 > - <img src="Images/Gom.PNG" width=570 height=80>
 
 </div>
+
+
+<div class="notes">
+Current Repositories:
+
+`r Reps`
+
+</div>
+
 
 ## Preliminary Results for the Gulf of Mexico (cont.)
 
@@ -266,7 +263,7 @@ ggplot(data=Se_Plot,
   scale_x_discrete("Region", labels = c("Campeche B \n Caribe","West G.\n Mexico"))
 ```
 
-*Note: not all data is represented in plots* 
+*Note: not all data are represented in plots* 
 
 ```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
@@ -320,7 +317,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 
 - **Collaborators:**
-Arreguín-Sánchez, Francisco; Cheung W., William; Cisneros-Mata, Miguel A; Cisneros-Montemayor, Andres; Rodriguez; Laura
+Arreguín-Sánchez, Francisco; Cheung W., William; Cisneros-Mata, Miguel A; Cisneros-Montemayor, Andres; Rodriguez, Laura
 
 <img src="Images/Logos_PI.PNG" width=700 height=110>
 
