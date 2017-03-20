@@ -39,7 +39,7 @@ x <- x %>%
 ## Project Background
 <div class="columns-2">
 
-<img src="Images/FlowC.PNG" width=400 height=400>
+<img src="Images/Flow.PNG" width=400 height=400>
 
 - Increasingly depending on multidisciplinary research
 
@@ -60,15 +60,15 @@ x <- x %>%
 
 ## Project Objectives
 
-> 1.	Design a framework for the meta-database of marine ecosystems and marine-related research of Mexico
+> -	Design a framework for the meta-database of marine ecosystems and marine-related research of Mexico
 
 <div class="green2">
-> 2.	**Identify available data sources and incorporate into developed meta-database framework**
+> -	**Identify available data sources and incorporate into developed meta-database framework**
 </div>
 
-> 3.	Identify the major trends in marine data availability in Mexico 
-> 4.	Identify information and research gaps that should be addressed in the future
-> 5.	Develop protocols for public sharing of the meta-database and inclusion of new information in the future
+> -	Identify the major trends in marine data availability in Mexico 
+> -	Identify information and research gaps that should be addressed in the future
+> -	Develop protocols for public sharing of the meta-database and inclusion of new information in the future
 
 ## Metadata Structure
 
@@ -233,7 +233,7 @@ G_zz <- paste(sum(G_z$z))
 
 </div>
 
-## Preliminar Results for the Gulf of Mexico (cont.)
+## Preliminary Results for the Gulf of Mexico (cont.)
 
 <div class="columns-2">
 
@@ -264,9 +264,9 @@ ggplot(data=Se_Plot,
                              title.position = "top"),
          col = guide_legend(nrow = 3))+
   scale_x_discrete("Region", labels = c("Campeche B \n Caribe","West G.\n Mexico"))
-
 ```
 
+*Note: not all data is represented in plots* 
 
 ```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
@@ -292,6 +292,8 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 ```
 
+
+    
 </div>
 
 
@@ -307,9 +309,9 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 >- **Share:** Remember that we are looking for data information and not the data itself!
 
->- **Inform** We are looking for any source of information relevant to marine research in Mexico.
+>- **Inform:** We are looking for any source of information relevant to marine research in Mexico.
 
->- **Communicate** A large multidisciplinary group of collaborators will certainly contribute to a successful project
+>- **Communicate:** A large multidisciplinary group of collaborators will certainly contribute to a successful project
 
 ## Thank you !
 
@@ -318,7 +320,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 
 - **Collaborators:**
-Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
+Arreguín-Sánchez, Francisco; Cheung W., William; Cisneros-Mata, Miguel A; Cisneros-Montemayor, Andres; Rodriguez; Laura
 
 <img src="Images/Logos_PI.PNG" width=700 height=110>
 
