@@ -246,7 +246,8 @@ x <- x %>%
       Spp <- datasetInput() %>% 
         group_by(Area) %>% 
         summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
-        filter(Area !="na") # %>% 
+        filter(Area !="na") %>% 
+        filter(Area != "TBD") 
       # filter(Entradas >= input$Num_Data_Range[1]) %>% 
       # filter(Entradas <= input$Num_Data_Range[2])
       
@@ -278,7 +279,8 @@ x <- x %>%
           group_by(Region) %>%
           summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
           filter(Region != "na") %>% 
-          filter(Region != "")
+          filter(Region != "") %>% 
+          filter(Region != "TBD")
         
         ggplot(data= Spp2,
                aes(
@@ -322,7 +324,7 @@ x <- x %>%
             geom_bar(stat="identity")+
             theme_classic() +
             coord_flip() +
-            ylab("Número de Datos")+
+            ylab("Data Points")+
             xlab("Location")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
