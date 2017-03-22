@@ -600,6 +600,21 @@ F_Data <- bind_rows(O_Data,
 
 #write.csv(F_Data,"Catalogo_I_Data.csv")
 
+
+### Catalogo Algas Marinas Vol I (REMASTERIZADO) ####
+O_Data <- fread("./Data/O_Data.csv")
+
+F_Data <- O_Data %>% 
+  select(1,2) %>% 
+  mutate(Especie = paste(V1,V2)) %>% 
+  group_by(Especie) %>% 
+  summarise(N=n()) %>% 
+  mutate(Nombre = paste("Distribucion de", Especie, "en la costa del Pacifico")) %>% 
+  select(-2)
+  
+
+write.csv(F_Data,"O_Data.csv")
+
 ### Catalogo Algas Marinas Vol II ####
 
 N_Data <- data.table(Especie =c(
