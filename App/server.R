@@ -48,7 +48,7 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- read.csv("./Template.csv", 
+    data<- read.csv("./Templateb.csv", 
                     header = TRUE,
                     na="NA")
     data.frame(data)

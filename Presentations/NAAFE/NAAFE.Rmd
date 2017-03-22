@@ -38,38 +38,36 @@ x <- x %>%
 ## Introducción
 <div class="columns-2">
 
-<img src="Images/FlowC.PNG" width=400 height=400>
+<img src="Images/Flow.PNG" width=400 height=400>
 
-- Aumento en la investigación multidisciplinar 
+- Aumento en la investigación multidisciplinaria
 
-- Biología, Ecología, Oceanografía, Economía, etc!
+- Biología, Ecología, Oceanografía, Economía, etc
 
 - ¿Falta de datos? o ¿falta de disponibilidad de datos?
 
-  - Sin importar cuál sea, el resultado puede bloquear el progreso
+- **Sin importar cuál sea, el resultado puede bloquear el progreso**
 
 </div>
 
 <div class="centered">
 <div class="green2">
 
-> - Una Base de metadatos fomenta la colaboración y facilita el proceso de apoyo a la toma de decisiones relevante a cualquier comunidad o región del país
+> - Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
 
 </div>
 
 ## Objetivos del Proyecto
 
-> 1. Diseñar la estructura de la base de metadatos de investigación relacionada con ecosistemas marinos y temas relacionados en México
+> - Diseñar la estructura de la base de metadatos de investigación relacionada con ecosistemas marinos y temas relacionados en México
 
 <div class="green2">
-> 2.** Identificar fuentes de datos disponibles e incorporar los metadatos de los mismos a la estructura**
-
-
+> - **Identificar fuentes de datos disponibles e incorporar los metadatos de los mismos a la estructura**
 </div>
 
-> 3. Identificar tendencias en la disponibilidad de datos en México
-> 4. Identificar información y vaciós de la misma que deberían ser tratados a futuro
-> 5. Desarrollar protocolos para la publicación de la base de metadatos así como la incorporación de nuevos  registros
+> - Identificar tendencias en la disponibilidad de datos en México
+> - Identificar información y vaciós de la misma que deberían ser tratados a futuro
+> - Desarrollar protocolos para la publicación de la base de metadatos así como la incorporación de nuevos  registros
 
 ## Estructura de los Metadatos
 
@@ -170,16 +168,17 @@ zz <- paste(sum(z$z))
 
 ```
 
-
 >- Desde noviembre se han colectado: **`r Number_entriess`** registros, de **`r zz`** repositorios que equivalen a **`r Number_dp`** datos de investigación marina en México
 
 </div>
 
-### Fuentes de Información
+## Fuentes de Información
 
-<img src="Images/Logos3.PNG" width=750 height=300>
+<div class="centered">
 
-> - <img src="Images/Unete.jpg" width=570 height=80>
+> - <img src="Images/Logos.PNG" width=750 height=300>
+
+> - <img src="Images/Unete.jpg" width=570 height=250>
 
 </div>
 
@@ -341,7 +340,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 
 
-## Direct Collaboration
+## Colaboración
 
 <div class="centered">
 <div class="green2">
@@ -358,7 +357,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
   - - Repositorios públicos
   - - Voluntarios
 
->- **Difunde:** El éxito de este proyecto dependerá, en parte, de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
+>- **Difunde:** Parte del éxito de este proyecto depende de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
 
 ## ¡Gracias!
 
