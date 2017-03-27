@@ -5,7 +5,7 @@
 
 
 #### NOTE Allways run this first ####
-library(xlsx)
+#library(xlsx)
 library(dplyr)
 library(tidyr)
 library(data.table)
@@ -986,3 +986,23 @@ EmbF <- EmbB %>%
 
 
 write.csv(EmbF,"Embarcaciones.csv")
+###################### END ########################
+# COBI information for the Caribbeean
+# March 26, 2017; La Paz, Mexico
+
+COBI <- read.csv("Data/Cobi_Imp.csv")
+
+C_F <- COBI %>% 
+  mutate(AbundanciaA = paste("Abundancia de", Especies, "en Punta Herrero, Sian Kaan")) %>% 
+  mutate(AbundanciaB = paste("Abundancia de", Especies, "en Maria Elena, Sian Kaan")) %>% 
+  mutate(AbundanciaC = paste("Abundancia de", Especies, "en Puerto Morelos")) %>% 
+  mutate(AbundanciaD = paste("Abundancia de", Especies, "en Banco Chinchorro")) %>% 
+  mutate(Key = paste(Comun,"Abundancia; Ausencia; Presencia; Quinta Roo; Yucatan; Monitoreo, Peces, Invertebrado")) %>% 
+  mutate(TallaI = paste("Talla de", Especies, "en Punta Herrero, Sian Kaan")) %>% 
+  mutate(TallaII = paste("Talla de", Especies, "en Maria Elena, Sian Kaan")) %>% 
+  mutate(TallaIII = paste("Talla de", Especies, "en Puerto Morelos")) %>% 
+  mutate(TallaIIII = paste("Talla de", Especies, "en Banco Chinchorro")) %>% 
+  mutate(Key = paste(Comun,"Tallas; Quinta Roo; Yucatan; Monitoreo, Peces, Invertebrado"))
+  
+
+write.csv(C_F, "Cobi_Out.csv")
