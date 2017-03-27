@@ -1,12 +1,13 @@
 ---
 title: "Meta-database of Marine Research in Mexico"
-subtitle: "State of The Gulf of Mexico Summit 2017"
-author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
+author: Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British
+  Columbia
 date: "14/3/2017 | Harte Research Institute, Texas A&M University"
-output: 
-  ioslides_presentation: 
+output:
+  ioslides_presentation:
     logo: choru_logo.png
     widescreen: yes
+subtitle: State of The Gulf of Mexico Summit 2017
 runtime: shiny
 ---
 
@@ -238,6 +239,8 @@ Current Repositories:
 
 Se_Plot <- data %>%
   filter(Area == "Atlantic") %>%
+  filter(Research_Field != "Fisheries; Aquaculture") %>% 
+  filter(Research_Field != "Fisheries; Conservation") %>% 
   filter(!is.na(Region)) %>%
   group_by(Research_Field,Region) %>%
   summarise(Entradas = sum(Data_Time_Points,na.rm=T))
@@ -252,15 +255,18 @@ ggplot(data=Se_Plot,
   theme_classic() +
   ylab("Number of Data Points")+
   theme(axis.text.x = element_text(
-    size=12),
-    axis.text.y = element_text(size = 12),
-    legend.position = "bottom",
-    axis.title = element_text(size=12,
+    size=15),
+    axis.text.y = element_text(size = 18),
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20),
+    legend.position = "right",
+    axis.title = element_text(size=18,
                               face="bold"))+
   guides(fill = guide_legend(title = "Research Field",
                              title.position = "top"),
          col = guide_legend(nrow = 3))+
   scale_x_discrete("Region", labels = c("Campeche B \n Caribe","West G.\n Mexico"))
+                   
 ```
 
 *Note: not all data are represented in plots* 
@@ -268,7 +274,7 @@ ggplot(data=Se_Plot,
 ```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
 Words <- data %>%
-  filter(Area=="Atlantic")
+  filter(Area == "Atlantic")
 WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
 WordsCorpus <- tm_map(WordsCorpus,
                       PlainTextDocument) #Converts to plain text
