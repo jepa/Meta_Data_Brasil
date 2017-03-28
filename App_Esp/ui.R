@@ -173,12 +173,13 @@ shinyUI(
                               height = 80,
                               width = 70
                             )),
-                          a(href="http://www.inapesca.gob.mx",
-                            img(
-                              src = "inapesca_logo.JPG",
-                              height = 100,
-                              width = 300
-                            )),
+                          # Bloqueado hasta nuevo aviso de INAPESCA
+                          # a(href="http://www.inapesca.gob.mx",
+                          #   img(
+                          #     src = "inapesca_logo.JPG",
+                          #     height = 100,
+                          #     width = 300
+                          #   )),
                           a(href="http://mexico.edf.org/",
                             img(
                               src = "edf_logo.jpg",

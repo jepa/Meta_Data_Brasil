@@ -125,7 +125,7 @@ shinyUI(
                    width = 700
                  )
                ),
-               # Core Group Infomation
+               # Core Group Infomation ####
                column(
                  8,
                  align = "justified",
@@ -168,12 +168,13 @@ shinyUI(
                      height = 80,
                      width = 70
                    )),
-                 a(href="http://www.inapesca.gob.mx",
-                   img(
-                     src = "inapesca_logo.JPG",
-                     height = 80,
-                     width = 300
-                   )),
+                 #Blocked until further information (INAPESCA)
+                 # a(href="http://www.inapesca.gob.mx",
+                 #   img(
+                 #     src = "inapesca_logo.JPG",
+                 #     height = 80,
+                 #     width = 300
+                 #   )),
                  a(href="http://mexico.edf.org/",
                    img(
                      src = "edf_logo.JPG",
