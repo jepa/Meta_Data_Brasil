@@ -1104,5 +1104,16 @@ Negro_Clr <- Data_G_Negro %>%
 write.csv(Negro_Clr, "Omar_Out_II.csv")
 
 
+###################### END ########################
 
-  
+#### CONAPESCA ####
+#### Script para intentar analizar los datos de conapesca a nivel descrcagas ####
+# Function "Conapesca_Data
+
+
+source("Functions/CON_Dat_Fun.r")
+CON <- fread("Data/Conapesca.csv",
+                   header = TRUE
+)
+
+Conapesca_Data(CON)
