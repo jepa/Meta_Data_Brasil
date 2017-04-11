@@ -13,8 +13,8 @@ library(leaflet)
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
-#________________________________________________________#
 
+#________________________________________________________#
 #### Sea Around Us Data, Pacific ####
 
 # Title ###
@@ -1006,3 +1006,103 @@ C_F <- COBI %>%
   
 
 write.csv(C_F, "Cobi_Out.csv")
+
+###################### END ########################
+# Hector Reyes Labs
+## Luis Hernandez data
+# April 4, 2017; La Paz, Mexico
+
+Luis <- read.csv("Data/Luis_In.csv")
+
+Luis_Out <- Luis %>% 
+  mutate(I_Pacifico = paste("Abundancia de",Especie,"en arrecifes del Pacifico")) %>% 
+  mutate(K_Pacifico =paste("Arrecife; Abundancia; Presencia; Ausencia; Monitoreo;",Tipo)) %>% 
+  mutate(I_Cozumel = paste("Abundancia de",Especie,"en Cozumel")) %>% 
+  mutate(K_Cozumel =paste("Abundancia; Presencia; Ausencia; Monitoreo; Arrecife;",Tipo)) 
+
+#write.csv(Luis_Out,"Luis_Out.csv")
+  
+
+## Violeta data
+# April 4, 2017; La Paz, Mexico
+
+V <- read.csv("Data/Violeta_In.csv")
+
+LL <- paste(V$Localidades[1:31], sep = "")
+
+V_Peces <- V %>% 
+  select(Peces) %>% 
+  mutate(I_P_A = paste("Abundancia de",Peces,"en el Golfo de California")) %>% 
+  mutate(K_P_A =paste("Abundancia; Presencia; Ausencia; Monitoreo; PANGAS",Peces)) %>% 
+  mutate(I_P_T = paste("Talla de",Peces,"en el Golfo de California")) %>% 
+  mutate(K_P_T =paste("Tallas; Tamano; Monitoreo; PANGAS",Peces))
+
+V_Inv <- V %>% 
+  select(Invertebrados) %>% 
+  mutate(I_I_A = paste("Abundancia de",Invertebrados,"en el Golfo de California")) %>% 
+  mutate(K_I_A =paste("Abundancia; Presencia; Ausencia; Monitoreo; PANGAS",Invertebrados)) %>% 
+  mutate(I_I_T = paste("Talla de",Invertebrados,"en el Golfo de California")) %>% 
+  mutate(K_I_T =paste("Tallas; Tamano; Monitoreo; PANGAS",Invertebrados))
+    
+V_Out <- bind_cols(V_Peces,V_Inv)  
+  
+
+#write.csv(V_Out,"V_Out.csv")
+
+## Omar Species data
+# April 4, 2017; La Paz, Mexico
+
+O_Spp_I <- read.csv("Data/Omar_In_I.csv")
+
+#Esto resuelve el problema de los "cf."s
+O_Spp <- read.csv("Data/Omar_In.csv")
+
+O_cf <- O_Spp %>% 
+  filter(X == "cf.") %>% 
+  mutate(CF_Spp =paste(LIST,X,X.1)) %>% 
+  select(CF_Spp)
+
+colnames(O_cf) <- "Name"
+
+# La base completa
+
+O_Clean <- O_Spp_I %>% 
+  select(1,2) %>% 
+  filter(!is.na(Genero)) %>% 
+  mutate(Name =paste(Genero,Especie)) %>% 
+  filter(Especie != "cf.") %>% 
+  bind_rows(O_cf) %>% 
+  mutate(Inicio =paste("Presencia de",Name, "En Mexico")) %>% 
+  mutate(Key =paste("Presencia; Diatomeas; Check list; Pacifico; Caribe; epilithic; epipsammic; epipelic; epiphytic; floristics; grazers; tychoplankton",Name))
+
+#write.csv(O_Clean, "Omar_Out.csv")
+
+# Diatomeas de Guerrero Negro
+
+Data_G_Negro <- read.csv("Data/Omar_In_II.csv",
+                         header = FALSE)
+
+Negro_cf <- Data_G_Negro %>% 
+  filter(V2 == "cf.") %>% 
+  mutate(CF_Spp =paste(V1,V2,V3)) %>% 
+  select(CF_Spp)
+
+colnames(Negro_cf) <- "Name"
+
+Negro_Clr <- Data_G_Negro %>% 
+  filter(V1 != "Class") %>% 
+  filter(V1 != "Family:") %>% 
+  filter(V1 != "Order:") %>% 
+  filter(V2 != "cf.") %>% 
+  slice(-1) %>% 
+  select(1,2) %>% 
+  mutate(Name = paste(V1,V2)) %>% 
+  bind_rows(Negro_cf) %>% 
+  mutate(Inicio = paste("Presencia de",Name, "en la Laguna Guerrero Negro, BC-BCS")) %>% 
+  mutate(Key = paste("Bacillariophyta; Biogeografia; Reserva de la Biosfera; Area protegida; Biodiversidad; Floristica de diatomeas; Laguna costera; Sistematica; Taxonomia",Name))
+
+write.csv(Negro_Clr, "Omar_Out_II.csv")
+
+
+
+  
