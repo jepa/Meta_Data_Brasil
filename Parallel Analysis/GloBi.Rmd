@@ -1,0 +1,182 @@
+---
+title: "GloBI data"
+author: "Juliano Palacios Abrantes"
+date: "4/13/2017"
+output:
+  html_document: 
+    keep_md: yes
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(dplyr)
+library(tidyr)
+library(data.table)
+library("sp") 
+library(ggmap)
+# Rglobi library
+#devtools::install_github("ropensci/rglobi")
+library(rglobi)
+library(ggplot2)
+
+#Spatial stuff
+library("rgdal") # for ogrInfo() and readOGR()
+library("tools") # for file_path_sans_ext()
+#Reads GloBi data
+
+# Data <- fread("Data/taxonCache.tsv",
+#               header = TRUE
+# )
+
+# Read 1007695 rows and 9 (of 9) columns from 0.452 GB file in 00:00:06
+
+```
+
+# Introduction
+
+This script was made to incorporate [GLoBI](http://www.globalbioticinteractions.org) data to the [Metadata](https://jepa.shinyapps.io/marmetadatamexeng/).
+
+It uses the package rglobi to take data from GloBI taxa [reference](http://www.globalbioticinteractions.org/references) list and aggregate them by species (154,257 taxa).
+
+## Isolate marine organisms
+
+The way I came to isolate marine-related species was to delimit the species to Mexico's EEZ area.
+
+```{r Mexico EEZ, echo=FALSE, eval =F}
+
+# Load Mexico's EEZs 
+# Data from (http://www.marineregions.org/downloads.php)
+
+# The path
+path_eez_world <- ("/Users/jpalacios/Documents/Box Sync/UBC/Oceans_Project/Distribution/Old_Data/World_EEZ_v8_2014")
+#The File
+fnam_eez_world <- "World_EEZ_v8_2014_HR.shp"
+#Load it!
+eez_world <- readOGR(dsn = path_eez_world,
+                     layer =file_path_sans_ext(fnam_eez_world))
+
+#Fortify function to get a data.frame
+fortify.shape <- function(x){
+  x@data$id <- rownames(x@data)
+  x.f = fortify(x, region = "id")
+  x.join <- inner_join(x.f, x@data, by = "id")
+}
+
+#### The actual EEZ ####
+
+# Extract the EEZ for Mexico:
+eez_p <- eez_world[eez_world@data$Country == "Mexico", ]
+
+# Fortify the shapefile data:
+eez_p <- fortify(eez_p)
+
+# Get Mexico's EEZ
+eez_Mex <- eez_p %>% 
+  filter(piece == 1 | # Pacific side
+           piece == 2) # Atlantic Side
+
+#write.csv(eez_Mex, "eez_Mex.csv")
+
+#### Check Step ####
+# Just checking It is the map we want
+# Pacific <-  Piece 1
+# Atlantic <- Piece 2
+# ggplot() +
+#   geom_path(data = filter(eez_Mex,
+#                           piece == 2),
+#             aes(x = long,
+#                 y = lat,
+#                 group = group),
+#             colour = "red", size = 0.75)
+
+#____________________________Check End_____________________________#
+
+```
+
+```{r Part 2, echo =T, eval=T }
+
+EEZ_Mex <- fread("./Data/eez_Mex.csv")
+
+
+# Get all taxa on the list (From WoRMS; http://www.marinespecies.org/aphia.php?p=browser)
+Taxa <- c(
+  "Animalia",
+  "Archea",
+  "Bacteria",
+  "Chromista",
+  "Fungi",
+  "Monera",
+  "Plantae",
+  "Protozoa",
+  "Viruses"
+)
+
+#Set an initial subset for the GloBi data
+Lat_N  <-  35 #Latitude_North
+Lat_S  <-  15 #Latitude_South
+Long_W <- -122 #Longitude_West
+Long_E <- -90 #Longitude_East
+
+# First Subset: Get all species interactions from GloBi within that first Area
+
+# Don't know how to import all so will just make a function for it:
+import.fun <- function(Taxa){
+for (i in 1:length(Taxa)){ 
+  
+  x <- get_interactions_by_taxa(
+    sourcetaxon = Taxa[i],
+    bbox = c(
+      Long_W,
+      Lat_S,
+      Long_E,
+      Lat_N
+    ),
+    returnobservations = T
+  )
+Name <- paste(Taxa[i])
+  assign( x = Name, value = x, envir = .GlobalEnv)
+}
+ # return(Name)
+}
+
+#____ End Function _____________________________________#
+
+#Call function
+import.fun(Taxa)
+
+#Join everything in one single table
+Subset_One <- bind_rows(Animalia,
+                         Bacteria,
+                         Chromista,
+                         Fungi,
+                         Plantae,
+                         Protozoa,
+                         Viruses)
+
+
+### Second subset (Inside EEZ) ####
+#From that initial subset (Subset_One), mark those that are located within Mexico's EEZ
+
+In_EEZ_Mex <-data.frame(point.in.polygon(Subset_One$longitude,
+                                    Subset_One$latitude,
+                                    EEZ_Mex$long,
+                                    EEZ_Mex$lat))
+colnames(In_EEZ_Mex) <- "EEZ"
+
+#Note <- 1 is present| 0 is ausent
+
+# Add a column to Original Subseted Data with this information and then filter only thos present:
+  
+Meta_GloBi_I <- Subset_One %>% 
+  bind_cols(In_EEZ_Mex) %>% 
+    filter(EEZ == 1)  %>% 
+    select(-EEZ)
+
+```
+
+
+## Observations
+- The final table returns 824 observations which seem like a very small number
+- The **r get_interactions_by_taxa** function gave me 1024 for both *Animalia* and *Plantae* which makes me think it has some kind of limit.

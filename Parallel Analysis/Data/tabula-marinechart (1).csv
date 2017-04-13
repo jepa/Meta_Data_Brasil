@@ -1,0 +1,72 @@
+KINGDOM,SUBKINGDOM,PHYLUM  CLASS,,MARINE EXAMPLES
+MONERA,Archaeobacteria,‘thermoacidophiles’,,thermobacteria (chemobacteria)
+"",Eubacteria,Schizonta,,photobacteria (bioluminescent bacteria)
+"",,Cyanonta,,cyanobacteria (blue-green algae)
+PROTISTA,Protophyta,Pyrrophyta,,dinoflagellates (incl. zooxanthellae)
+"",,Chrysophyta,,diatom (golden-brown algae)
+"",Protozoa,Sarcodina Actinopodea,,radiolarians
+"",,Rhizopodea,,foraminiferans
+FUNGI,Ascomycota,,,"molds, lichens (symbiosis with algae/cyanobacter"
+PLANTAE,‘seaweeds’,Chlorophyta,,green algae
+"",,Phaeophyta,,brown algae (incl. kelps)
+"",,Rhodophyta,,red algae (incl. coralline algae)
+"",Tracheophyta,Anthophyta,,flowering plants (incl. sea grass & mangroves)
+ANIMALIA,Parazoa,Porifera Calcispongiae,,calcareous sponges
+"",,Hyalospongiae,,glass sponges
+"",,Demospongiae,,bath sponges
+"",Metazoa,Cnidaria Hydrozoa,,hydrozoans (incl. man-of-war & siphonophore)
+"",,Scyphozoa,,true jellyfishes
+"",,Anthozoa,,sea anemones & corals
+"",,Ctenophora,,comb jellies
+"",,Platyhelminthes Turbellaria,,planarians
+"",,Cestoda,,tapeworms
+"",,(Trematoda),,no marine species (flukes)
+"",,Nemertea,,ribbon worms
+"",,Nematoda,,roundworms
+"",,Priapulida,,priapulid worms
+"",,Mollusca Polyplacophora,,chitons
+"",,Scaphopoda,,tusk shells
+"",,Gastropoda,,snails & nudibranchs
+"",,Bivalvia,,"clams, mussels, oysters, scallops, shipworms"
+"",,Cephalopoda,,"octopuses, squids, cuttlefish, nautiluses"
+"",,Annelida Polychaeta,,polychaetes (incl. feather-duster & tubeworms)
+"",,(Oligochaeta),,no marine species (earthworms)
+"",,(Hirudinea),,no marine species (leeches)
+KINGDOM  Subkingdom,,PHYLUM,CLASS MARINE EXAMPLES
+ANIMALIA Metazoa,,Arthropoda,Merostomata horseshoe crabs
+"(continued)",,,Pycnogonida sea spiders
+"",,,"Crustacea crabs, lobsters, shrimps, barnacles"
+"",,,Insecta insects (incl. water striders)
+"",,,"(Arachnida) no marine species (spiders, scorpions, ticks, mites"
+"",,,(Chilopoda) no marine species (centipedes)
+"",,,(Diplopoda) no marine species (millipedes)
+"",,Pogonophora,Riftia worms
+"",,Brachiopoda,lampshells
+"",,Echiura,spoon worms
+"",,Sipunculida,peanut worms
+"",,Echinodermata,Crinoidea sea lilies & feather stars
+"",,,Echinoidea sea urchins & sand dollars
+"",,,Asteroidea seastars
+"",,,Ophiuroidea brittle & basket stars
+"",,,Holothuroidea sea cucumbers
+"",,Chordata,Subphy. Urochordata tunicates
+"",,,Subphy. Cephalochordata lancelets
+"",,,Subphy. Vertebrata vertebrates (details below)
+SUBPHYLUM  SUPERCLASS,,CLASS,ORDER MARINE EXAMPLES
+VERTEBRATA Pisces,,Agnatha,jawless fishes (hagfishes & lampreys)
+"",,Chondrichthyes,"cartilaginous fishes (shark, ray, skate, ratfish)"
+"",,Osteichthyes,"bony fishes (coelacanth, lungfishes, ray-finned)"
+Tetrapoda,,(Amphibia),no marine species (frogs & salamanders)
+"",,Reptilia,Chelonia sea turtles
+"",,,Squamata sea snakes & marine lizards
+"",,,Crocodilia marine crocodiles
+"",,Aves,Sphenisciformes penguins
+"",,,"Procellariiformes tubenoses (albatrosses, petrels, shearwaters)"
+"",,,"Pelicaniformes pelicans (incl. cormorants, frigatebirds, boobies)"
+"",,,Charadriiformes gulls (incl. terns & puffins)
+"",,Mammalia,Cetacea toothed whales (Suborder Odontoceti)
+"",,,baleen whales (Suborder Mysticeti)
+"",,,"Carnivora seals, sea lions, walruses (Suborder Pinnepedia)"
+"",,,sea otters (Suborder Fissipedia)
+"",,,Sirenia manatees
+"",,,Primata humans
