@@ -1,0 +1,185 @@
+---
+title: 'Meta-Database of Marine Research in Mexico: Trends and Applications'
+author: Palacios-Abrantes, J; Arreguín-Sánchez, F; Cisneros, A; Cisneros-Mata, M.A;
+  Rodríguez, L.
+date: "4/12/2017"
+output:
+  pdf_document: default
+  word_document: default
+subtitle: Draft
+---
+
+```{r setup, eval=T, echo=F, warning=F,message=F}
+
+#Libraries 
+library(dplyr)
+library(knitr)
+library(data.table)
+library(ggplot2)
+
+#Data needed
+
+# Template (Updates from App)
+Template <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv",
+                 colClasses = c(Location = 'character',
+                                Notes = 'character')
+                 )
+
+```
+
+# Introduction
+
+Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data [cita]. The availability of data is often perceived as a gap in advancing research and policy discussion [cita]. However, in many cases, this is largely a result of the lack of knowledge about the availability of these data. In Mexico, numerous information covering the seas and coasts can be found in academic institutions, government, and NGOs located (physically) both inside and outside the country. While diverse barriers often compromise the exchange of information among stakeholders, having publicly accessible description on existing data is a huge step towards increasing collaboration and innovative research [cita].
+
+Data availability is key not only to better understand Mexico's marine and coastal environments, but to identify knowledge gaps so that research can be prioritized. This will facilitate furnishing management and conservation policies, for example, for marine habitats and fisheries resources vulnerable to climate change. 
+
+Metadata has bennn blablabla... A meta-database is a documentation of the sources of information instead of a database of the actual data.
+
+We created a meta-database for oceanographic, ecological, economic, fisheries and social data for marine ecosystems and marine-related sectors of Mexico. We then analized the information collected in order to determine trends and data gaps in Mexico. Finally, the metadatabase is an oppen source repository for public consultation and sharing. We believe that a meta-database will help facilitate efficient use of existing information and stimulate collaboration. 
+
+ 
+# Materials and Methods
+## Data Compilation
+
+## Data Sources
+
+# Results
+
+```{r Results, eval=T, echo=F}
+
+Number_entries <- Template %>% 
+      filter(MMID != "na")
+
+# Number of metadata registers    
+Registers <- Number_entries$MMID[length(Number_entries$MMID)]
+# Number of Data Points ####
+Data_Points <- sum(Number_entries$Data_Time_Points,na.rm=T)
+#Number of Repositories ####
+ z<- Template %>% 
+      group_by(Compilation_Title) %>% 
+      summarise(sum(Data_Time_Points)) %>% 
+      select(-2) %>% 
+      filter(!is.na(Compilation_Title)) %>% 
+      mutate(z = 1)
+    
+Repo <- sum(z$z)
+
+#Disciplines (Sociology. eg.)
+Dis <- levels(Template$Research_Field)
+
+#### Species Information ####
+
+Species <- Number_entries %>%
+  filter(Subject_name !="TBD") %>% 
+  filter(Subject_name != "Multiple Especies") %>% 
+  group_by(Subject_name) %>% 
+  summarise(x=sum(Data_Time_Points)) %>% 
+  arrange(-x)
+
+Mean <- mean(Species$x,
+             na.rm = T)
+SD <- sd(Species$x,
+             na.rm = T)
+
+```
+
+## General Numbers
+The metadatabase has `r Registers` records containing information for about `r Data_Points` data points, from `r Repo` repositories. Data gathered was on 5 major disciplines: `Dis` from witch *Fisheries* was the most abundant (Figure 1).
+
+```{r Fig1, eval=T, echo=F, fig.align="center",fig.height=4,fig.width=4,fig.cap="Number of data points per research field."}
+
+Research_F <- Template %>% 
+  filter(MMID != "na") %>% 
+  group_by(Research_Field) %>% 
+  summarise(Entradas = sum(Data_Time_Points,
+                           na.rm=T)) %>% 
+  filter(Research_Field != "")
+  
+      
+      ggplot(data= Research_F,
+             aes(
+               x=reorder(Research_Field, -Entradas),
+               y=Entradas,
+               fill=Research_Field
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Data Points")+
+        xlab("Research Field")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         #size=11,
+                                         angle=45))#,
+              # axis.text.y = element_text(size = 11),
+              # legend.position = "none",
+              # axis.title = element_text(size=12)
+        # )
+
+```
+
+## Subject Analysis
+There is a total of `r nrow(Species)` subjects in the metadata. The subject that has the most amount of data points is `Species[1,1]` with `Species[1,2]` units. However, at the species level, *Thunnus albacares* (Albacore tuna) is the most repited one with `r Species[42,2]` records. The data distribution is very diverse since the mean data point is `r Mean`(sd `r SD`). This is mainly because a large amount of records are one observation of species lists.
+
+
+```{r Geographic, echo = F, eval= T}
+
+#Geo Area#
+Geo <- Template %>% 
+        group_by(Area) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Area !="na") %>% 
+        filter(Area != "TBD") 
+Pacific <- Geo %>% 
+  filter(Area =="Pacific")
+
+Atlantic <- Geo %>% 
+  filter(Area =="Pacific")
+
+#Geo Region#
+Geo_R <- Template %>% 
+        group_by(Region) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Region !="NA") %>% 
+        filter(Region != "TBD") %>% 
+  arrange(desc(Entradas))
+
+GC_R <- Geo_R %>% 
+  filter(Region =="Gulf of California")
+
+BC_R <- Geo_R %>% 
+  filter(Region =="Banco Campeche Caribe")
+      
+```
+
+## Geographic Analysis
+In terms of regional data distribution, data points where evenly distributed between both the Pacific (`r Pacific[1,2]`) and the Atlantic oceans (`r Atlantic[1,2]`). However, the great mayority of datapoints are reported at a National level (`r Geo[1,2]`). At a more detailed level we find that there is a clear dominance of data from both the Gulf of California (`r GC_R[1,2]`) and the Campeche Bank (`r BC_R[1,2]`), in respect to the other zones determined by the working group.
+
+```{r Fig2, eval=T, echo=F, fig.align="center",fig.height=4,fig.width=4,fig.cap="OPTION 1. Number of data points per geographic area for each research field."}
+
+Geo_Plot <- Template %>% 
+        group_by(Area,Research_Field) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Area !="na") %>% 
+        filter(Area != "TBD") 
+
+ggplot(data= Geo_Plot,
+             aes(
+               x=reorder(Area, -Entradas),
+               y=Entradas,
+               fill=Research_Field
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Data Points")+
+        xlab("Research Field")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         angle=45))#,
+                                         # size=11,),
+              # axis.text.y = element_text(size = 11),
+              # legend.position = "top",
+              # axis.title = element_text(size=11))
+                                        
+```
+# Discussion
+# Literature Review

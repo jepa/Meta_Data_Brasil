@@ -234,6 +234,9 @@ shinyUI(
              )),
              p(
                "In this section you will be presented with some preliminary results. These results are directly related to the information that is being collected and do not represent all marine research in Mexico."
+             ),
+             p(strong("Note:"),"Due to the size of the metadata base this section takes a few seconds (~ 20) to load.",
+               style = "color:red"
              )
              ),
              column(

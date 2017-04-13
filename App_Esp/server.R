@@ -356,7 +356,8 @@ shinyServer(function(input, output, session) {
     #Removes a word of user preference 
     WordsCorpus <- tm_map(WordsCorpus,
                           removeWords,
-                          Word_Remove ) 
+                          Word_Remove )
+    
     #
     
     wordcloud(WordsCorpus, #Plots the words
@@ -497,7 +498,6 @@ shinyServer(function(input, output, session) {
   #_____________________ END ___________________________ #
   
   #_____________________ END COLLABORATION ___________________________ #
-  
-  
+
 }) #<- END OF SERVER ! 
 

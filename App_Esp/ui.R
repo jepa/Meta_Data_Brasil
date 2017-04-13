@@ -20,9 +20,8 @@ library(dygraphs)
 
  
 shinyUI(
-  
   ### Navigation bar
-  navbarPage(id = "MMM_Nav_Bar",
+  navbarPage("",
              #Web page title
              "Metadatos de Investigación Marina en México",
              #### HOME ####
@@ -233,7 +232,10 @@ shinyUI(
                         )),
                         p(
                           "En esta sección se muestran algunos de los resultados previos relacionados con la investigación marina en México. Dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian constantemente mientras crece la base de metadatos. Asímismo, estos resultados son parciales y no representan el total de la investigación marina en México."
-                        )
+                        ),
+                        p(strong("Nota:"),"Debido al tamaño de la base de metadatos esta sección tarda algunos segundos (~20) en cargar.",
+                          style = "color:red"
+                          )
                       ),
                       column(
                         width=3,
@@ -321,10 +323,11 @@ shinyUI(
              ),
              #.########################## ##### 
              #### PARTICIPATION ####
-             tabPanel(id="Collaboration",
-                      value="Collaborate",
-                      strong("Como Participar"),
-                      column(8,
+             navbarMenu(strong("Como Participar"),
+             tabPanel(strong("Como Participar"),
+                        id="Collaboration",
+                        value="Collaborate",
+                        column(8,
                              align="justified",
                              offset = 2,
                              h3("Colabora en el Desarollo de La Investigación Marina en México"),
@@ -435,13 +438,26 @@ shinyUI(
                                     ))),
                                     dataTableOutput("People")
                              )
-                             
                       )
   ),
+  tabPanel("Poster",
+           column(10,
+                  align = "center",
+                  p(h4(strong(
+                    "¡Copia y Comparte!"))),
+           img(
+             src = "Poster.jpg",
+             height = 1000,
+             width = 600
+           )
+           )
+  )
+  ),
+  #### IDIOMA ####
   navbarMenu("Idioma",
              tabPanel(a("Inglés",
                         href="https://jepa.shinyapps.io/marmetadatamexeng/")
-             )
+                      )
   ),
   #### DATA POINTS ####
   column(8,
@@ -496,3 +512,4 @@ shinyUI(
   )
 )
 )
+

@@ -10,6 +10,7 @@ library(dplyr)
 library(tidyr)
 library(data.table)
 library(leaflet)
+library(dataone)
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
@@ -1108,12 +1109,38 @@ write.csv(Negro_Clr, "Omar_Out_II.csv")
 
 #### CONAPESCA ####
 #### Script para intentar analizar los datos de conapesca a nivel descrcagas ####
-# Function "Conapesca_Data
-
+# Function "CON_Dat_Fun.r"
+#Falta ahora incorporar la funcion de Tim (Go Tim!)
 
 source("Functions/CON_Dat_Fun.r")
-CON <- fread("Data/Conapesca.csv",
+Data <- fread("Data/Plantas.csv",
                    header = TRUE
 )
 
-Conapesca_Data(CON)
+Conapesca_Data(Data)
+
+
+###################### END ########################
+
+#### Dataone ####
+#dataone::downloadCert(CertificateManager())
+#/DC=org/DC=cilogon/O=GitHub/CN=Juliano Palacios Abrantes A140271
+help("dataone")
+
+return <- "id,title, keywords, isPublic, author, contactOrganization,beginDate, endDate, scientificName, dataUrl"
+
+
+
+cn <- CNode("PROD") # Usage form DataOne No need to change
+# Ask for the id, title and abstract
+queryParams <- list(q="keywords:Mexico",
+                    fq="keywords:marine",
+                    fl=return,
+                    rows="6500"
+                    ) 
+result <- query(cn, 
+                solrQuery=queryParams, 
+                as="data.frame",
+                parse=FALSE)
+
+
