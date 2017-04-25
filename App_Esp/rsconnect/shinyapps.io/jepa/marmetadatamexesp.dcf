@@ -3,8 +3,9 @@ title: marmetadatamexesp
 account: jepa
 server: shinyapps.io
 appId: 155793
-bundleId: 787044
+bundleId: 803832
 url: https://jepa.shinyapps.io/marmetadatamexesp/
-when: 1492017698.26789
+when: 1493157124.23893
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: Presentations/.DS_Store|Presentations/Generic/.DS_Store|Presentations/Generic/choru_logo.png|Presentations/Generic/NAAFE.Rmd|Presentations/Generic/Data/Glosario.csv|Presentations/Generic/Images/.DS_Store|Presentations/Generic/Images/Colabora.png|Presentations/Generic/Images/FAO.png|Presentations/Generic/Images/Flow.png|Presentations/Generic/Images/Gom.png|Presentations/Generic/Images/Logos_PI.png|Presentations/Generic/Images/Logos.png|Presentations/Generic/Images/Logos3.png|Presentations/Generic/Images/Questions.png|Presentations/Generic/Images/unete.jpg
