@@ -1104,6 +1104,18 @@ Negro_Clr <- Data_G_Negro %>%
 
 write.csv(Negro_Clr, "Omar_Out_II.csv")
 
+# David Extrangero
+D_Peces <- read.csv("Data/David_Spp_In.csv",
+                         header = TRUE)
+
+Table <- D_Peces %>% 
+  mutate(Name =paste(Genero,Especie)) %>% 
+  mutate(Inicio = paste("Presencia de",Name,"en el Golfo de California")) %>% 
+  mutate(Key = paste("Abundancia; Peces; Vertebrados; Presencia; Ausencia")) %>% 
+  mutate(Inicio_II = paste("Diversidad Funccional de",Name,"en el Golfo de California")) %>% 
+  mutate(Key_II = paste("Nicho; Funcional; Redundancia; Peces; Vertebrados"))
+
+#write.csv(Table, "David_Spp.csv")
 
 ###################### END ########################
 

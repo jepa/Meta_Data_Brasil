@@ -1,0 +1,25 @@
+---
+title: "Hacia la creación de una base de datos de investigación marina en México"
+author: "Juliano Palacios Abrantes"
+date: "28/4/2017"
+output: pdf_document
+---
+
+### Investigadores Principales
+
+- Dr. Andrés Cisneros-Montemayor; Institute for the Oceans and Fisheries, University of British Columbia
+- Dr. Francisco Arreguín-Sánchez; Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional
+- Juliano Palacios-Abrantes; Institute for the Oceans and Fisheries, University of British Columbia
+- Dr. Laura Rodriguez; Environmental Defense Fund, México
+- Dr. Miguel Ángel Cisneros-Mata; Centro Regional de Investigaciones Pesqueras, Guaymas. Instituto Nacional de Pesca.
+- Dr. William Cheung; Institute for the Oceans and Fisheries, University of British Columbia
+
+### Objetivo del proyecto
+
+El objetivo principal de este proyecto es crear una base de metadatos que contenga información sobre datos ecológicos, económicos, oceanográficos y sociales, referentes al ambiente marino. Así mismo, se pretende identificar tendencias en la disponibilidad de datos marinos en México e identificar oportunidades de mejorar la información marina en México. Por último, se pretende fomentar el acceso a la información mediante un portal de consulta de metadatos en línea.
+
+Así, al no estarse colectando datos más información sobre los mismos, en un marco de creciente interdisciplinariedad, un investigador podría identificar datos de interés dentro de la base de metadatos, contactar directamente a la persona indicada, y colaborar en una nueva investigación que informe políticas pertinentes para alguna comunidad o región.
+
+### Mensaje directo
+
+El proyecto se encuentra en una etapa de colaboración que consiste en hacer crecer la base de datos, por lo que invitamos a cualquier persona interesada a colaborar con el proyecto a compartir información sobre sus datos u ofrecer comentarios para el desarrollo del proyecto. Es importante mencionar que no estamos copilando datos, si no que información sobre los mismos. Cuanta más gente esté involucrada, mejor podremos reflejar el estado de la investigación marina en México
