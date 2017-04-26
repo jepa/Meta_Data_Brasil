@@ -1,0 +1,382 @@
+---
+title: "Hacia la creación de una base de datos de investigación marina en México"
+author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
+date: "28/4/2017 | Centro de Investigación Científica y de Educación Superior de Ensenada, Baja California"
+output: 
+  ioslides_presentation: 
+    logo: choru_logo.png
+    widescreen: yes
+runtime: shiny
+---
+
+```{r packages and data, eval=T, echo=F, warning=F, message=F}
+
+library(data.table)
+library(networkD3)
+library(dygraphs)
+library(dplyr)
+library(DT)
+library(ggplot2)
+library(wordcloud) #For Word Mining
+#install.packages('tm')
+library(tm) #For Word Mining
+
+data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
+             colClasses = c(Location = 'character',
+                            Notes = 'character')
+)
+K_data<- read.csv("./Data/GLosario.csv",
+                  header = TRUE,
+                  na="NA")
+
+x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Data_Curve.csv")
+x <- x %>%
+  select(-1)
+```
+
+
+## Introducción
+<div class="columns-2">
+
+<img src="Images/Flow.PNG" width=400 height=400>
+
+- Aumento en la investigación multidisciplinaria
+
+- Biología, Ecología, Oceanografía, Economía, etc
+
+- ¿Falta de datos? o ¿falta de disponibilidad de datos?
+
+- **Sin importar cuál sea, el resultado puede bloquear el progreso**
+
+</div>
+
+<div class="centered">
+<div class="green2">
+
+> - Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+
+</div>
+
+## Objetivos del Proyecto
+
+> - Diseñar la estructura de la base de metadatos de investigación relacionada con ecosistemas marinos y temas relacionados en México
+
+<div class="green2">
+> - **Identificar fuentes de datos disponibles e incorporar los metadatos de los mismos a la estructura**
+</div>
+
+> - Identificar tendencias en la disponibilidad de datos en México
+> - Identificar información y vaciós de la misma que deberían ser tratados a futuro
+> - Desarrollar protocolos para la publicación de la base de metadatos así como la incorporación de nuevos  registros
+
+## Estructura de los Metadatos {.biger}
+
+```{r Metadata display, eval=T, echo=F, warning=F,message=F}
+library(shiny)
+
+
+ui <- fluidPage(
+  tabsetPanel(
+    id ="Data_Explorer",
+    tabPanel(
+      p("Glosario Metadatos"),
+      dataTableOutput("Metadata_Key")
+    ),
+    tabPanel(
+      p("Metadatos"),
+      dataTableOutput("datatable")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  output$Metadata_Key <- renderDataTable({
+    
+    
+    datatable(K_data,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 50,
+                             autoWidth = FALSE,
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+              )
+    )
+    
+  })
+  
+  output$datatable <- renderDataTable({
+    
+    datatable(data,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 28,
+                             autoWidth = FALSE,
+                             lengthMenu = c(10, 20,30),
+                             language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
+              )
+    )
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
+
+## Estado actual de la base
+
+<div class="centered">
+
+```{r Current Status, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+xx <- ts(x,
+         start=c(2016,11),
+         end = c(2017,4), # <- this has to be changed everytime we add a month
+         frequency= 12)
+
+dygraph(xx) %>% #Creats the graph
+  dyOptions(stackedGraph = TRUE, #Makes it stacked
+            drawPoints = TRUE, #Shows each data point
+            pointSize = 4) %>%
+  dyRangeSelector(height = 20) %>%
+  dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
+  dyAxis("y", drawGrid = FALSE) %>%
+  dyAxis("y", label = "Número de Registros") %>%  #Labels
+  dyLegend(width = 600)
+
+## Solid numbers ####
+# Number of entries ####
+Number_entries <- data %>%
+  filter(MMID != "na")
+Number_entriess <- paste(Number_entries$MMID[length(Number_entries$MMID)])
+
+# Number of Data Points ####
+Number_dp <- paste(sum(Number_entries$Data_Time_Points,na.rm=T))
+
+# Number of Repositories ####
+z<- data %>%
+  group_by(Compilation_Title) %>%
+  summarise(sum(Data_Time_Points)) %>%
+  select(-2) %>%
+  filter(!is.na(Compilation_Title)) %>%
+  mutate(z = 1)
+
+zz <- paste(sum(z$z))
+
+```
+
+>- Desde noviembre se han colectado: **`r Number_entriess`** registros, de **`r zz`** repositorios que equivalen a **`r Number_dp`** datos de investigación marina en México
+
+</div>
+
+## Fuentes de Información
+
+<div class="centered">
+
+> - <img src="Images/Logos.PNG" width=750 height=300>
+
+> - <img src="Images/Unete.jpg" width=570 height=250>
+
+</div>
+
+## Resultados preliminares {.smaller}
+
+
+```{r Preeliminarya, eval=T, echo=F, warning=F,message=F, fig.width=5.5,fig.height=4.5, fig.align="center"}
+
+ui <- fluidPage(
+sidebarLayout(
+      sidebarPanel(
+        selectInput(
+          "Plot_Option", 
+          label= "Resolución Espacial:",
+          choices = list("Area" = 1,
+                         "Región" = 2,
+                         "Localidad" =3
+                        )
+        )
+      ),
+        mainPanel(
+          plotOutput("Number_spp")
+      )
+   )
+)
+
+server <- function(input, output) {
+output$Number_spp <- renderPlot({
+  
+    if(input$Plot_Option == 1){
+      Spp <- data %>% 
+        filter(Area != "TBD") %>% 
+        group_by(Area) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Area !="na") # %>% 
+      # filter(Entradas >= input$Num_Data_Range[1]) %>% 
+      # filter(Entradas <= input$Num_Data_Range[2])
+      
+      ggplot(data= Spp,
+             aes(
+               x=reorder(Area, -Entradas),
+               y=Entradas,
+               fill=Area
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Números de Datos")+
+        xlab("Campo de Investigación")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         size=14,
+                                         angle=45),
+              axis.text.y = element_text(size = 14),
+              legend.position = "none",
+              axis.title = element_text(size=14,
+                                        face="bold")
+              
+        )
+      
+    }else{
+      #### By Region ####
+      if(input$Plot_Option == 2){
+        Spp2 <- data %>%
+          filter(Region != "TBD") %>% 
+          group_by(Region) %>%
+          summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+          filter(Region != "na") %>% 
+          filter(Region != "")
+        
+        ggplot(data= Spp2,
+               aes(
+                 x=reorder(Region, -Value),
+                 y=Value,
+                 fill=Region
+               )) +
+          geom_bar(stat="identity")+
+          theme_classic() +
+          ylab("Número de Datos")+
+          xlab("Región")+
+          theme(axis.text.x = element_text(hjust = 1,
+                                           size=14,
+                                           angle = 45),
+                axis.text.y = element_text(size = 14),
+                legend.position = "none",
+                axis.title = element_text(size=14,
+                                          face="bold")
+          )
+        
+      }else{
+        #### By Location ####
+        if(input$Plot_Option == 3){
+          Spp3 <- data %>%
+            filter(Location != "na") %>% 
+            filter(Location != "Multiple States") %>% 
+            group_by(Location) %>%
+            summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+            arrange(desc(Value))
+          
+          Head_Spp3 <- head(Spp3,5) %>% 
+            arrange(desc(Value))
+          
+          
+          ggplot(data= Head_Spp3,
+                 aes(
+                   x=reorder(Location, -Value),
+                   y=Value,
+                   fill=Location
+                 )) +
+            geom_bar(stat="identity")+
+            theme_classic() +
+            coord_flip() +
+            ylab("Número de Datos")+
+            xlab("Localidad")+
+            theme(axis.text.x = element_text(hjust = 1,
+                                             size=14,
+                                             angle=45),
+                  axis.text.y = element_text(size = 14),
+                  legend.position = "none",
+                  axis.title = element_text(size=14,
+                                            face="bold")
+            )
+        }
+      }
+    }
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
+
+***
+
+### Palabras clave más frecuentes
+
+```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+Words <- data
+WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
+WordsCorpus <- tm_map(WordsCorpus,
+                      PlainTextDocument) #Converts to plain text
+WordsCorpus <- tm_map(WordsCorpus,
+                      removePunctuation) #Removes punctuation
+
+#Removes a word of user preference
+# WordsCorpus <- tm_map(WordsCorpus,
+#                       removeWords)
+#
+
+suppressWarnings(wordcloud(WordsCorpus, #Plots the words
+                           max.words = 100,
+                           random.order = FALSE,
+                           colors=brewer.pal(8, "Dark2")
+)
+)
+
+```
+
+
+
+## Colaboración
+
+<div class="centered">
+<div class="green2">
+
+**¡Cuantas más personas participen, mejor podremos reflejar el estado de la investigación marina en México!**
+
+</div>
+</div>
+
+<div class="columns-2">
+<img src="Images/Colabora.png" width=250 height=500>
+
+>- **Comparte:** Recuerda que sólo estamos recopilando **información** sobre los datos
+
+>- **Informa:** Estamos buscando por cualquier fuente de datos relevante a los ecosistemas marinos en México.
+  - - Publicaciones científicas
+  - - Repositorios públicos
+  - - Voluntarios
+
+>- **Difunde:** Parte del éxito de este proyecto depende de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
+
+</div>
+
+## ¡Gracias!
+
+<div class="centered">
+
+Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
+
+- **Colaboradores:**
+Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
+
+<img src="Images/Logos_PI.PNG" width=700 height=110>
+
+Página del proyecto: https://jepa.shinyapps.io/marmetadatamexesp/
+
+</div>
+
+# ¿Preguntas?

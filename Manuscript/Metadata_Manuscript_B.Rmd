@@ -1,0 +1,201 @@
+---
+title: 'Meta-Database of Marine Research in Mexico: Trends and Applications'
+author: Palacios-Abrantes, J; Arreguín-Sánchez, F; Cisneros, A; Cisneros-Mata, M.A;
+  Rodríguez, L.
+date: "4/12/2017"
+output:
+  word_document: default
+  pdf_document: default
+subtitle: Draft
+---
+
+```{r setup, eval=T, echo=F, warning=F,message=F}
+
+#Libraries 
+library(dplyr)
+library(knitr)
+library(data.table)
+library(ggplot2)
+
+#Data needed
+
+# Template (Updates from App)
+Template <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv",
+                 colClasses = c(Location = 'character',
+                                Notes = 'character')
+                 )
+
+```
+
+# Introduction
+
+Climate change has been globally reshaping the marine ecosystem for the last century in different ways [Poloczanska, et al., 2013; Weatherdon et al 2016]. Increase on surface water temperature has been linked to both biomass change, and distribution shifts of marine fishes [Arreguín-Sánchez et al., 2016; Cheung et al., 2015]; coral bleaching on most reefs in the world [cita], and tropic mismatch in the water column [Edwards and Richardson, 2004]. Such effects are projected to continue and intensify if anthropogenic emissions are not mitigated [IPCC, william 1.5, Gatuso et al., 2015]. 
+
+<!-- ### Link with human populations -->
+These ecosystem change is already having repercussions on human populations, specially on those who directly relie on marine resources [Pershing et al., 2015; Weatherdon et al 2016]. Some coastal communities depending on fish have seen their catch change [Arreguín-Sánchez et al., 2016]; and global projections suggest it will continue to shift (Cheung et al., 20XX). This will impact coastal communities on both economic and food security aspects, particular those on developing nations [Lam et al., 2016; Vermeulen et al., 2014]. Climate change is also expected to reduce ecosystem services provided by already disturbed ecosystems like mangrove forests and coral reefs. Diminishing their mitigation efficiency, hence, increasing the risk of natural catastrophes in coastal communities [cita]
+
+<!-- ### Why is it important for Mexico -->
+These sociology-ecological relations are particularly important for coastal nations like Mexico. With over 11 thousand kilometers of coastline, Mexico's coast houses XXX families [INEGI]. Communities that live in the coast directly depend on landings for food [cita], coral reefs and marine protected areas for tourism [Alburto et al., 2011], and other ecosystem services [Lee et al., 2011; Palumbi et al., 2009]. It is essential that Mexico incorporates climate change to the political agenda in order to  foster adaptive capacity while incorporating sounding adaptation and mitigation plans [Mertz et al., 2009; Pershing et al., 2015; Rice and Garcia, 2011].
+
+<!-- ### Talking about mitigation plans and Data -->
+Adaptive capacity, as defined by the Intergovernmental Panel on Climate Change (IPCC) is the "The ability of a system to adjust to climate change (including climate variability and extremes) to moderate potential damages, to take advantage of opportunities, or to cope with the consequences." There are several research-based frameworks on climate change adaptation [cita]. Generally speaking, adaptation can be achieved in two non-exclusive ways: (i) building capacity among local communities to adjust, moderate and even take advantage of environmental changes and (ii) trough the implementation of policies that foster that adaptive process [Adger et al., 2005; IPCC, 2016]. In 2016 Mexico's government worked with the UNFCCC to produce a climate change adaptation strategy for mid-century [SEMARNAT-INECC, 2016]. This strategy is supported by the Climate Change Law (*Ley General de Cambio Climatico*) that serves as a framework for the development and implementation of public policies for  adaptation to climate change and the mitigation of greenhouse of gases [DOF, 2012].
+
+The production and availability of natural and socio-economic data is a key component of the actions needed to achieve those goals [Mertz et al., 2009; Moser et al., 2010]. As a result, data availability has been identified as a common barrier in many steps of the adaptive management process, from the planning stage to outcome evaluation [Moser et al., 2010].  
+
+In Mexico, numerous information covering the seas and coasts can be found in academic institutions (UNIMAR; UCSD) and NGOs (COBI; TNC) located (physically) both inside and outside the country, as well as government agencies (CONABIO; CONAPESCA). However, there is an overall assumption that in developing nations data are often limited and perceived as lacking [cita]. In many cases, this is largely a result of the lack of knowledge about the availability of these data, rather than a complete (or partially) lack of it [cita]. Data availability is key not only to better understand Mexico's marine and coastal environments, but to identify knowledge gaps so that research can be prioritized [Reichman et al., 2011]. This will facilitate furnishing management and conservation policies for marine resources and coastal habitats vulnerable to climate change. 
+
+<!-- ### Metadata  -->
+Management of data and metadata (the information about every aspect of the data that is required to understand it) is a huge step to ensure proper preservation, stewardship, and access to information [Michener et al., 1997; Vincent et al., 2010]. And while diverse barriers often compromise the exchange of data among stakeholders [Reichman et al., 2011], having publicly accessible description on existing data (and metadata) is a huge step towards increasing collaboration for innovative research [Michener et al.,m 2006]. Having proper metadata increases data longevity, foster collaboration, and help examine analysis of the data itself; all important aspect of climate change studies [Michener et al., 2006]. The standardization of information trough metadata specifications provide guidance for consistently describing data objects and data types (e.g., methods, units of measurement, and details of experimental design) [Reichman et al., 2011]. Moreover, it allows the creation of a catalog that holds data or information of different disciplines. Countries like Canada have recently created nation-wide repositories of marine-related research metadata [Cisneros-Montemayor, 2016]. 
+
+Several initiatives in different levels of society in Mexico are currently working on grouping data-sets and information in single repositories. University level projects like The Gulf of Mexico Species Interactions database [GoMexSI] and DataMares [DataMares] are collecting information from specific areas (the gulfs of Mexico and California, respectively). Non-governmental organizations are also contributing with initiatives like MonitoreoNoroeste that focus on marine monitoring data [FMCN]. Finally, the National Commission for the Knowledge of Biodiversity (CONABIO) hold an important and robust list of biological and social data related to both marine and terrestrial environments [CONABIO]. Moreover, as part of a cutting-edge initiative, Mexico has recently created an information system solely devoted to climate change [SICC].
+
+<!-- ### What we actually did -->
+
+These initiatives are examples of successful efforts to make marine data in Mexico available. However, there is still a lot of work to do. Most of the repositories available cover geographic areas or are topic specific. Those that are actually nation-wide are often limited or also topic-specific. Hence, the current project aimed to create a meta-database for oceanographic, ecological, economic, fisheries and social data for marine ecosystems and marine-related sectors of Mexico. The information collected was then analyzed in order to determine trends and data gaps in Mexico. Finally, using fisheries as an example we **somehow** evaluated Mexico's position in relation to climate change data and identified fields of improvement. It is worth mention that the meta-database is an open source repository for public consultation and sharing. We believe that the meta-database of marine research will help facilitate efficient use of existing information and stimulate collaboration among multiple stakeholders. 
+
+ 
+# Materials and Methods
+## Data Compilation
+
+## Data Sources
+
+# Results
+
+```{r Results, eval=T, echo=F}
+
+Number_entries <- Template %>% 
+      filter(MMID != "na")
+
+# Number of metadata registers    
+Registers <- Number_entries$MMID[length(Number_entries$MMID)]
+# Number of Data Points ####
+Data_Points <- sum(Number_entries$Data_Time_Points,na.rm=T)
+#Number of Repositories ####
+ z<- Template %>% 
+      group_by(Compilation_Title) %>% 
+      summarise(sum(Data_Time_Points)) %>% 
+      select(-2) %>% 
+      filter(!is.na(Compilation_Title)) %>% 
+      mutate(z = 1)
+    
+Repo <- sum(z$z)
+
+#Disciplines (Sociology. eg.)
+Dis <- levels(Template$Research_Field)
+
+#### Species Information ####
+
+Species <- Number_entries %>%
+  filter(Subject_name !="TBD") %>% 
+  filter(Subject_name != "Multiple Especies") %>% 
+  group_by(Subject_name) %>% 
+  summarise(x=sum(Data_Time_Points)) %>% 
+  arrange(-x)
+
+Mean <- mean(Species$x,
+             na.rm = T)
+SD <- sd(Species$x,
+             na.rm = T)
+
+```
+
+## General Numbers
+The meta-database has `r Registers` records containing information for about `r Data_Points` data points, from `r Repo` repositories. Data gathered was on 5 major disciplines: `Dis` from witch *Fisheries* was the most abundant (Figure 1).
+
+```{r Fig1, eval=T, echo=F, fig.align="center",fig.height=4,fig.width=4,fig.cap="Number of data points per research field."}
+
+Research_F <- Template %>% 
+  filter(MMID != "na") %>% 
+  group_by(Research_Field) %>% 
+  summarise(Entradas = sum(Data_Time_Points,
+                           na.rm=T)) %>% 
+  filter(Research_Field != "")
+  
+      
+      ggplot(data= Research_F,
+             aes(
+               x=reorder(Research_Field, -Entradas),
+               y=Entradas,
+               fill=Research_Field
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Data Points")+
+        xlab("Research Field")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         #size=11,
+                                         angle=45))#,
+              # axis.text.y = element_text(size = 11),
+              # legend.position = "none",
+              # axis.title = element_text(size=12)
+        # )
+
+```
+
+## Subject Analysis
+There is a total of `r nrow(Species)` subjects in the metadata. The subject that has the most amount of data points is `Species[1,1]` with `Species[1,2]` units. However, at the species level, *Thunnus albacares* (Albacore tuna) is the most repeated one with `r Species[42,2]` records. The data distribution is very diverse since the mean data point is `r Mean`(sd `r SD`). This is mainly because a large amount of records are one observation of species lists.
+
+
+```{r Geographic, echo = F, eval= T}
+
+#Geo Area#
+Geo <- Template %>% 
+        group_by(Area) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Area !="na") %>% 
+        filter(Area != "TBD") 
+Pacific <- Geo %>% 
+  filter(Area =="Pacific")
+
+Atlantic <- Geo %>% 
+  filter(Area =="Pacific")
+
+#Geo Region#
+Geo_R <- Template %>% 
+        group_by(Region) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Region !="NA") %>% 
+        filter(Region != "TBD") %>% 
+  arrange(desc(Entradas))
+
+GC_R <- Geo_R %>% 
+  filter(Region =="Gulf of California")
+
+BC_R <- Geo_R %>% 
+  filter(Region =="Banco Campeche Caribe")
+      
+```
+
+## Geographic Analysis
+In terms of regional data distribution, data points where evenly distributed between both the Pacific (`r Pacific[1,2]`) and the Atlantic oceans (`r Atlantic[1,2]`). However, the great majority of data points are reported at a National level (`r Geo[1,2]`). At a more detailed level we find that there is a clear dominance of data from both the Gulf of California (`r GC_R[1,2]`) and the Campeche Bank (`r BC_R[1,2]`), in respect to the other zones determined by the working group.
+
+```{r Fig2, eval=T, echo=F, fig.align="center",fig.height=4,fig.width=4,fig.cap="OPTION 1. Number of data points per geographic area for each research field."}
+
+Geo_Plot <- Template %>% 
+        group_by(Area,Research_Field) %>% 
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+        filter(Area !="na") %>% 
+        filter(Area != "TBD") 
+
+ggplot(data= Geo_Plot,
+             aes(
+               x=reorder(Area, -Entradas),
+               y=Entradas,
+               fill=Research_Field
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Data Points")+
+        xlab("Research Field")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         angle=45))#,
+                                         # size=11,),
+              # axis.text.y = element_text(size = 11),
+              # legend.position = "top",
+              # axis.title = element_text(size=11))
+                                        
+```
+# Discussion
+# Literature Review
