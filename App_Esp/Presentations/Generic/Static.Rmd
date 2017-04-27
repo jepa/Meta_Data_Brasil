@@ -6,7 +6,8 @@ output:
   ioslides_presentation: 
     logo: choru_logo.png
     widescreen: yes
-    css: Untitled.css
+    css: Fondo.css
+    toc: true
 ---
 
 ```{r packages and data, eval=T, echo=F, warning=F, message=F}
@@ -19,6 +20,7 @@ library(ggplot2)
 library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
+library(pander)
 
 data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
              colClasses = c(Location = 'character',
@@ -31,28 +33,71 @@ K_data<- read.csv("./Data/GLosario.csv",
 x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Data_Curve.csv")
 x <- x %>%
   select(-1)
+  
+source('ts_fun.R')
+  
+  
 ```
 
+## Agenda {.emphasized}
 
-## Introducción
+>* Introducción
+>* * Motivación
+>* * Objetivos del proyecto
+>* Estructura de la base de metadatos
+>* Estado actual de la base
+>* Resultados preeliminares
+>* Como colaborar
+
+## Motivación del proyecto
+
+<div class="centered">
+
+> <img src="Images/Climate_Fish.PNG" width=700 height=250> 
+
+> <img src="Images/EDF_CC.jpg" width=700 height=200>
+
+***
+
 <div class="columns-2">
 
 <img src="Images/Flow.PNG" width=400 height=400>
 
-- Aumento en la investigación multidisciplinaria
+>- Aumento en la investigación multidisciplinaria
 
-- Biología, Ecología, Oceanografía, Economía, etc
+>- Biología, Ecología, Oceanografía, Economía, etc
 
-- ¿Falta de datos? o ¿falta de disponibilidad de datos?
+>- ¿Falta de datos? o ¿falta de disponibilidad de datos?
 
-- **Sin importar cuál sea, el resultado puede bloquear el progreso**
+<div class="black">
 
+>- **Sin importar cuál sea, el resultado puede bloquear el progreso**
+
+</div>
 </div>
 
 <div class="centered">
 <div class="green2">
 
-> - Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+
+<div class="footer" style="margin-top:-200px;font-size:80%;">
+
+>- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+
+</div>
+</div>
+
+## Data Vs Metadata
+
+- **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE)
+
+- **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo. 
+    - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos...
+
+<div class="centered">
+
+<img src="Images/metadata.jpg" width=450 height=250>
+
 
 </div>
 
@@ -75,10 +120,10 @@ x <- x %>%
  Title <- names(data)
 kable(
   data.table(
-  V1 = Title[1:7],
-  V2 = Title[8:14],
-  V3 = Title[15:21],
-  V3 = Title[22:28]
+  "Estructura" = Title[1:7],
+  "Estructura" = Title[8:14],
+  Estructura = Title[15:21],
+  "Estructura" = Title[22:28]
 ),
 col.names = NA
 )
@@ -127,21 +172,61 @@ zz <- paste(sum(z$z))
 
 ```
 
+<div class="green2">
+
 >- Desde noviembre se han colectado: **`r Number_entriess`** registros, de **`r zz`** repositorios que equivalen a **`r Number_dp`** datos de investigación marina en México
 
+</div>
 </div>
 
 ## Fuentes de Información
 
-<div class="centered">
+```{r Info_Academia, eval=T, echo=F}
 
-> - <img src="Images/Logos.PNG" width=750 height=300>
+Aca <- data %>% 
+  filter(Institution_Type=="Academic") %>% 
+  group_by(Institution) %>% 
+  summarise(n=n()) %>% 
+  select(Institution)
 
-> - <img src="Images/Unete.jpg" width=570 height=250>
+kable(
+  data.table(
+  "Academicas" = Aca$Institution[1:6],
+  "Academicas" = Aca$Institution[7:12]
+),
+col.names = NA,
+align = "c"
+)
 
-</div>
+
+```
+
+***
+
+```{r Info_Gobierno, eval=T, echo=F}
+
+Gov <- data %>% 
+  filter(Institution_Type=="GOV") %>% 
+  group_by(Institution) %>% 
+  summarise(n=n()) %>% 
+  select(Institution)
+
+kable(
+  data.table(
+  "Gobierno" = Gov$Institution[1:6],
+  "Gobierno" = Gov$Institution[7:12]
+),
+col.names = NA,
+align = "c"
+)
+
+```
+
 
 ## Resultados preliminares {.smaller}
+
+Se pueden generar resultados con cierta característica espacial
+* Desde muy generales (e.g Pacífico) hasta muy detallados (e.g. Laguna de Términos)
 
 ```{r Preeliminarya, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
 
@@ -208,8 +293,69 @@ gridExtra::grid.arrange(
 ```
 
 ***
+Se pueden hacer preguntas más específicoas por ejemplo: 
+* ¿Qué tipo de investigación se hace en donde?
 
-### Palabras clave más frecuentes
+```{r Research_field, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+
+Se_Plot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area,Research_Field) %>% 
+  summarise(Entradas = n())
+
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Area,
+         y=Entradas,
+         fill= Research_Field
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Número de\n registros")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+                                   size=14
+                                   ),
+        axis.text.y = element_text(size = 14),
+        legend.position = "top",
+        axis.title = element_text(size=20,
+                                  face="bold"))+ 
+  guides(fill = guide_legend(title = "Research Field",
+                             title.position = "left"))
+```
+
+***
+Podemos hacer una reconstrucción de los datos generados en México en los últimos años.
+
+```{r Historic_Data, echo=F,eval=T}
+Pedroche<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Pedroche_Hist.csv")
+Pedroche <- Pedroche %>% 
+  select(-1)
+  
+    
+    Hist <- data %>%
+      filter(MMID <=2861) %>%
+      select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+    
+    #Reads Predoche fixed data from the Parallel Analysis
+    
+    # #Join both datasets and removes NA's
+    Fin_Plot <- Pedroche%>%
+      bind_rows(Hist) %>%
+      filter(!is.na(Start_Year))
+    
+
+    #Plots the Historic contribution
+    ts_plot(Fin_Plot,1920,2020)
+
+```    
+    
+## Palabras clave más frecuentes
+    
+También se puede utilizar para hacer exploración más cualitativa o para hacer comunicación.
 
 ```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
@@ -235,7 +381,19 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 ```
 
 
-## Colaboración
+<div class="columns-2">
+
+>- <img src="Images/Colabora.png" width=300 height=400>
+
+>- **Informa:** Estamos buscando por cualquier fuente de datos relevante a los ecosistemas marinos en México.
+
+>- **Difunde:** Parte del éxito de este proyecto depende de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
+
+<div class="green2">
+>- **No** estamos colectando datos si no que **Información** sobre los mismos
+</div>
+
+***
 
 <div class="centered">
 <div class="green2">
@@ -245,15 +403,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 </div>
 </div>
 
-<div class="columns-2">
-
->- <img src="Images/Colabora.png" width=300 height=400>
-
->- **Informa:** Estamos buscando por cualquier fuente de datos relevante a los ecosistemas marinos en México.
-
->- **Difunde:** Parte del éxito de este proyecto depende de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
-
-</div>
+<img src="Images/Fish.png" width=900 height=400>
 
 ## ¡Gracias!
 
@@ -264,7 +414,7 @@ Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 - **Colaboradores:**
 Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
 
-<img src="Images/Logos_PI.PNG" width=400 height=110>
+<img src="Images/Logos_PI.PNG" width=500 height=110>
 
 Página del proyecto: https://jepa.shinyapps.io/marmetadatamexesp/
 

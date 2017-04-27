@@ -1,0 +1,14 @@
+.footer {
+    color: green; background: #E8E8E8;
+    position: fixed; top: 100%;
+    text-align:center; width:90%;
+}
+
+#Agenda {
+   color: black;
+}
+
+.emphasized {
+   font-size: 1.2em;
+}
+

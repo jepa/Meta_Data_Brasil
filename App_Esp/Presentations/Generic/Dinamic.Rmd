@@ -6,20 +6,21 @@ output:
   ioslides_presentation: 
     logo: choru_logo.png
     widescreen: yes
+    toc: yes
 runtime: shiny
 ---
 
 ```{r packages and data, eval=T, echo=F, warning=F, message=F}
 
 library(data.table)
-library(networkD3)
 library(dygraphs)
+library(knitr)
 library(dplyr)
-library(DT)
 library(ggplot2)
 library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
+library(pander)
 
 data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
              colClasses = c(Location = 'character',
@@ -32,31 +33,73 @@ K_data<- read.csv("./Data/GLosario.csv",
 x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Data_Curve.csv")
 x <- x %>%
   select(-1)
+  
+source('ts_fun.R')
+  
+  
 ```
 
+## Agenda {.emphasized}
 
-## Introducción
+>* Introducción
+>* * Motivación
+>* * Datos V.s. Metadatos
+>* * Objetivos del proyecto
+>* Estructura de la base de metadatos
+>* Estado actual de la base
+>* Resultados preeliminares
+>* Como colaborar
+
+## Motivación del proyecto
+
+<div class="centered">
+
+> <img src="Images/Climate_Fish.PNG" width=700 height=250> 
+
+> <img src="Images/EDF_CC.jpg" width=700 height=200>
+
+***
+
 <div class="columns-2">
 
 <img src="Images/Flow.PNG" width=400 height=400>
 
-- Aumento en la investigación multidisciplinaria
+>- Aumento en la investigación multidisciplinaria
 
-- Biología, Ecología, Oceanografía, Economía, etc
+>- Biología, Ecología, Oceanografía, Economía, etc
 
-- ¿Falta de datos? o ¿falta de disponibilidad de datos?
+>- ¿Falta de datos? o ¿falta de disponibilidad de datos?
 
-- **Sin importar cuál sea, el resultado puede bloquear el progreso**
+<div class="black">
 
+>- **Sin importar cuál sea, el resultado puede bloquear el progreso**
+
+</div>
 </div>
 
 <div class="centered">
 <div class="green2">
 
-> - Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+<div class="footer" style="margin-top:-200px;font-size:80%;">
+
+>- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
 
 </div>
+</div>
 
+## Data Vs Metadata
+
+- **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE)
+
+- **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo. 
+    - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos...
+
+<div class="centered">
+
+<img src="Images/metadata.jpg" width=450 height=250>
+
+
+</div>
 ## Objetivos del Proyecto
 
 > - Diseñar la estructura de la base de metadatos de investigación relacionada con ecosistemas marinos y temas relacionados en México
@@ -92,8 +135,8 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   output$Metadata_Key <- renderDataTable({
-    
-    
+
+
     datatable(K_data,
               rownames = FALSE,
               filter = 'top',
@@ -103,11 +146,11 @@ server <- function(input, output) {
                              language = list(url = '//cdn.datatables.net/plug-ins/1.10.11/i18n/Spanish.json')
               )
     )
-    
+
   })
-  
+
   output$datatable <- renderDataTable({
-    
+
     datatable(data,
               rownames = FALSE,
               filter = 'top',
@@ -174,28 +217,75 @@ zz <- paste(sum(z$z))
 
 ## Fuentes de Información
 
-<div class="centered">
+```{r Info_Academia, eval=F, echo=F}
 
-> - <img src="Images/Logos.PNG" width=750 height=300>
+Aca <- data %>% 
+  filter(Institution_Type=="Academic") %>% 
+  group_by(Institution) %>% 
+  summarise(n=n()) %>% 
+  select(Institution)
 
-> - <img src="Images/Unete.jpg" width=570 height=250>
+kable(
+  data.table(
+  "Academicas" = Aca$Institution[1:6],
+  "Academicas" = Aca$Institution[7:12]
+),
+col.names = NA,
+align = "c"
+)
 
-</div>
+
+```
+
+***
+
+```{r Info_Gobierno, eval=T, echo=F}
+
+Gov <- data %>% 
+  filter(Institution_Type=="GOV") %>% 
+  group_by(Institution) %>% 
+  summarise(n=n()) %>% 
+  select(Institution)
+
+kable(
+  data.table(
+  "Gobierno" = Gov$Institution[1:6],
+  "Gobierno" = Gov$Institution[7:12]
+),
+col.names = NA,
+align = "c"
+)
+
+```
+
 
 ## Resultados preliminares {.smaller}
 
+* Se pueden generar resultados con cierta característica espacial.
+* Por tema de investigación
+* Por tipo de dato
 
-```{r Preeliminarya, eval=T, echo=F, warning=F,message=F, fig.width=5.5,fig.height=4.5, fig.align="center"}
+```{r Preeliminar_a, eval=F, echo=F, warning=F,message=F, fig.width=5.5,fig.height=4.5, fig.align="center"}
 
 ui <- fluidPage(
 sidebarLayout(
       sidebarPanel(
         selectInput(
-          "Plot_Option", 
+          "Plot_Option",
           label= "Resolución Espacial:",
           choices = list("Area" = 1,
                          "Región" = 2,
                          "Localidad" =3
+                        )
+        ),
+        selectInput(
+          "Plot_Type",
+          label= "Otras Opciones:",
+          choices = list(
+            "Select" = 0,
+            "Disciplina" = 1,
+            "Interacción SE" = 2,
+            "Fuente de Info" = 3
                         )
         )
       ),
@@ -207,16 +297,16 @@ sidebarLayout(
 
 server <- function(input, output) {
 output$Number_spp <- renderPlot({
-  
-    if(input$Plot_Option == 1){
-      Spp <- data %>% 
-        filter(Area != "TBD") %>% 
-        group_by(Area) %>% 
-        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
-        filter(Area !="na") # %>% 
-      # filter(Entradas >= input$Num_Data_Range[1]) %>% 
+
+    if(input$Plot_Type == 0 & input$Plot_Option == 1){
+      Spp <- data %>%
+        filter(Area != "TBD") %>%
+        group_by(Area) %>%
+        summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>%
+        filter(Area !="na") # %>%
+      # filter(Entradas >= input$Num_Data_Range[1]) %>%
       # filter(Entradas <= input$Num_Data_Range[2])
-      
+
       ggplot(data= Spp,
              aes(
                x=reorder(Area, -Entradas),
@@ -235,19 +325,19 @@ output$Number_spp <- renderPlot({
               legend.position = "none",
               axis.title = element_text(size=14,
                                         face="bold")
-              
+
         )
-      
+
     }else{
       #### By Region ####
-      if(input$Plot_Option == 2){
+      if(input$Plot_Type == 0 & input$Plot_Option == 2){
         Spp2 <- data %>%
-          filter(Region != "TBD") %>% 
+          filter(Region != "TBD") %>%
           group_by(Region) %>%
-          summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
-          filter(Region != "na") %>% 
+          summarise(Value = sum(Data_Time_Points,na.rm=T)) %>%
+          filter(Region != "na") %>%
           filter(Region != "")
-        
+
         ggplot(data= Spp2,
                aes(
                  x=reorder(Region, -Value),
@@ -266,21 +356,21 @@ output$Number_spp <- renderPlot({
                 axis.title = element_text(size=14,
                                           face="bold")
           )
-        
+
       }else{
         #### By Location ####
-        if(input$Plot_Option == 3){
+        if(input$Plot_Type == 0 & input$Plot_Option == 3){
           Spp3 <- data %>%
-            filter(Location != "na") %>% 
-            filter(Location != "Multiple States") %>% 
+            filter(Location != "na") %>%
+            filter(Location != "Multiple States") %>%
             group_by(Location) %>%
-            summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+            summarise(Value = sum(Data_Time_Points,na.rm=T)) %>%
             arrange(desc(Value))
-          
-          Head_Spp3 <- head(Spp3,5) %>% 
+
+          Head_Spp3 <- head(Spp3,5) %>%
             arrange(desc(Value))
-          
-          
+
+
           ggplot(data= Head_Spp3,
                  aes(
                    x=reorder(Location, -Value),
@@ -300,7 +390,97 @@ output$Number_spp <- renderPlot({
                   axis.title = element_text(size=14,
                                             face="bold")
             )
+        }else{
+          if(input$Plot_Type == 1){
+            Se_Plot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area,Research_Field) %>% 
+  summarise(Entradas = n())
+
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Area,
+         y=Entradas,
+         fill= Research_Field
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Número de\n registros")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+                                   size=14
+                                   ),
+        axis.text.y = element_text(size = 14),
+        legend.position = "top",
+        axis.title = element_text(size=20,
+                                  face="bold"))+ 
+  guides(fill = guide_legend(title = "Disciplina",
+                             title.position = "left"))
+        }else{
+          if(input$Plot_Type == 2){
+          Se_Plot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(SE_Interaction)) %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area,SE_Interaction) %>% 
+  summarise(Entradas = n())
+
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Area,
+         y=Entradas,
+         fill= SE_Interaction
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Número de\n registros")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+                                   size=14
+                                   ),
+        axis.text.y = element_text(size = 14),
+        legend.position = "top",
+        axis.title = element_text(size=20,
+                                  face="bold"))+ 
+  guides(fill = guide_legend(title = "Interacción SE",
+                             title.position = "left"))
+          }else{
+          if(input$Plot_Type == 3){
+          Se_Plot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Institution_Type)) %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area,Institution_Type) %>% 
+  summarise(Entradas = n())
+
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Area,
+         y=Entradas,
+         fill= Institution_Type
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Número de\n registros")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+                                   size=14
+                                   ),
+        axis.text.y = element_text(size = 14),
+        legend.position = "top",
+        axis.title = element_text(size=20,
+                                  face="bold"))+ 
+  guides(fill = guide_legend(title = "Tipo de Institución",
+                             title.position = "left"))
+            }
+            }    
         }
+          }
       }
     }
   })
@@ -312,8 +492,34 @@ shinyApp(ui = ui, server = server)
 ```
 
 ***
+Podemos hacer una reconstrucción de los datos generados en México en los últimos años.
+
+```{r Historic_Data, echo=F,eval=T}
+Pedroche<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Pedroche_Hist.csv")
+Pedroche <- Pedroche %>% 
+  select(-1)
+  
+    
+    Hist <- data %>%
+      filter(MMID <=2861) %>%
+      select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+    
+    #Reads Predoche fixed data from the Parallel Analysis
+    
+    # #Join both datasets and removes NA's
+    Fin_Plot <- Pedroche%>%
+      bind_rows(Hist) %>%
+      filter(!is.na(Start_Year))
+    
+
+    #Plots the Historic contribution
+    ts_plot(Fin_Plot,1920,2020)
+
+```
 
 ### Palabras clave más frecuentes
+
+También se puede utilizar para hacer exploración más cualitativa o para hacer comunicación.
 
 ```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
@@ -342,6 +548,20 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 ## Colaboración
 
+<div class="columns-2">
+
+>- <img src="Images/Colabora.png" width=300 height=400>
+
+>- **Informa:** Estamos buscando por cualquier fuente de datos relevante a los ecosistemas marinos en México.
+
+>- **Difunde:** Parte del éxito de este proyecto depende de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
+
+<div class="green2">
+>- **No** estamos colectando datos si no que **Información** sobre los mismos
+</div>
+
+***
+
 <div class="centered">
 <div class="green2">
 
@@ -350,19 +570,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 </div>
 </div>
 
-<div class="columns-2">
-<img src="Images/Colabora.png" width=250 height=500>
-
->- **Comparte:** Recuerda que sólo estamos recopilando **información** sobre los datos
-
->- **Informa:** Estamos buscando por cualquier fuente de datos relevante a los ecosistemas marinos en México.
-  - - Publicaciones científicas
-  - - Repositorios públicos
-  - - Voluntarios
-
->- **Difunde:** Parte del éxito de este proyecto depende de la cantidad de participantes involucrados y las distintas disciplinas que se logren reflejar
-
-</div>
+<img src="Images/Fish.png" width=900 height=400>
 
 ## ¡Gracias!
 
@@ -373,7 +581,7 @@ Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 - **Colaboradores:**
 Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
 
-<img src="Images/Logos_PI.PNG" width=700 height=110>
+<img src="Images/Logos_PI.PNG" width=500 height=110>
 
 Página del proyecto: https://jepa.shinyapps.io/marmetadatamexesp/
 
