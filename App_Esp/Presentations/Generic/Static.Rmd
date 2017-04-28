@@ -22,7 +22,7 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 library(pander)
 
-data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
+data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Templateb.csv",
              colClasses = c(Location = 'character',
                             Notes = 'character')
 )
@@ -49,6 +49,13 @@ source('ts_fun.R')
 >* Resultados preeliminares
 >* Como colaborar
 
+<div class="centered">
+<div class="red">
+
+>* En Andamiento | NO Datos | Invitación a Colaborar
+
+</div>
+
 ## Motivación del proyecto
 
 <div class="centered">
@@ -59,6 +66,15 @@ source('ts_fun.R')
 
 ***
 
+<div class="centered">
+
+<img src="Images/Canadab.png" width=800 height=200>
+
+<img src="Images/Canada.png" width=500 height=300>
+
+
+## No solo la ciencia...
+
 <div class="columns-2">
 
 <img src="Images/Flow.PNG" width=400 height=400>
@@ -67,9 +83,12 @@ source('ts_fun.R')
 
 >- Biología, Ecología, Oceanografía, Economía, etc
 
+<div class="black">
+
 >- ¿Falta de datos? o ¿falta de disponibilidad de datos?
 
-<div class="black">
+</div>
+<div class="red">
 
 >- **Sin importar cuál sea, el resultado puede bloquear el progreso**
 
@@ -357,7 +376,7 @@ Pedroche <- Pedroche %>%
     
 También se puede utilizar para hacer exploración más cualitativa o para hacer comunicación.
 
-```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+```{r Keywords, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
 Words <- data
 WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
@@ -380,6 +399,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 ```
 
+## Esfuerzo Colaborativo
 
 <div class="columns-2">
 
@@ -414,10 +434,15 @@ Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 - **Colaboradores:**
 Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
 
-<img src="Images/Logos_PI.PNG" width=500 height=110>
+<img src="Images/Logos_PI.PNG" width=400 height=110>
 
 Página del proyecto: https://jepa.shinyapps.io/marmetadatamexesp/
 
 </div>
+
+***
+<div class="centered">
+
+<img src="Images/Pagina.png" width=900 height=500>
 
 # ¿Preguntas?
