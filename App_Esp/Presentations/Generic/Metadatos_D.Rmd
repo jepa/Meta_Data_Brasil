@@ -57,6 +57,20 @@ source('ts_fun.R')
 
 </div>
 
+## Data Vs Metadatos
+
+- **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE)
+
+- **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo. 
+    - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos...
+
+<div class="centered">
+
+<img src="Images/metadata.jpg" width=450 height=250>
+
+
+</div>
+
 ## Motivación del proyecto
 
 <div class="centered">
@@ -103,20 +117,6 @@ source('ts_fun.R')
 >- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
 
 </div>
-</div>
-
-## Data Vs Metadata
-
-- **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE)
-
-- **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo. 
-    - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos...
-
-<div class="centered">
-
-<img src="Images/metadata.jpg" width=450 height=250>
-
-
 </div>
 
 ## Objetivos del Proyecto
