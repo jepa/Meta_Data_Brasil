@@ -21,8 +21,9 @@ library(wordcloud) #For Word Mining
 #install.packages('tm')
 library(tm) #For Word Mining
 library(pander)
+library(DT)
 
-data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
+data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Templateb.csv",
              colClasses = c(Location = 'character',
                             Notes = 'character')
 )
@@ -43,12 +44,18 @@ source('ts_fun.R')
 
 >* Introducción
 >* * Motivación
->* * Datos V.s. Metadatos
 >* * Objetivos del proyecto
 >* Estructura de la base de metadatos
 >* Estado actual de la base
->* Resultados preeliminares
+>* Resultados preliminares
 >* Como colaborar
+
+<div class="centered">
+<div class="red">
+
+>* En Andamiento | NO Datos | Invitación a Colaborar
+
+</div>
 
 ## Motivación del proyecto
 
@@ -60,17 +67,30 @@ source('ts_fun.R')
 
 ***
 
+<div class="centered">
+
+<img src="Images/Canadab.png" width=800 height=200>
+
+<img src="Images/Canada.png" width=500 height=300>
+
+
+
+***
+
 <div class="columns-2">
 
 <img src="Images/Flow.PNG" width=400 height=400>
 
 >- Aumento en la investigación multidisciplinaria
 
->- Biología, Ecología, Oceanografía, Economía, etc
+>- Biología, Ecología, Oceanografía, Economía, etc.
+
+<div class="black">
 
 >- ¿Falta de datos? o ¿falta de disponibilidad de datos?
 
-<div class="black">
+</div>
+<div class="red">
 
 >- **Sin importar cuál sea, el resultado puede bloquear el progreso**
 
@@ -79,8 +99,6 @@ source('ts_fun.R')
 
 <div class="centered">
 <div class="green2">
-
-<div class="footer" style="margin-top:-200px;font-size:80%;">
 
 >- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
 
@@ -100,6 +118,7 @@ source('ts_fun.R')
 
 
 </div>
+
 ## Objetivos del Proyecto
 
 > - Diseñar la estructura de la base de metadatos de investigación relacionada con ecosistemas marinos y temas relacionados en México
@@ -109,7 +128,7 @@ source('ts_fun.R')
 </div>
 
 > - Identificar tendencias en la disponibilidad de datos en México
-> - Identificar información y vaciós de la misma que deberían ser tratados a futuro
+> - Identificar vacíos de información que deberían ser tratados a futuro
 > - Desarrollar protocolos para la publicación de la base de metadatos así como la incorporación de nuevos  registros
 
 ## Estructura de los Metadatos {.biger}
@@ -217,7 +236,7 @@ zz <- paste(sum(z$z))
 
 ## Fuentes de Información
 
-```{r Info_Academia, eval=F, echo=F}
+```{r Info_Academia, eval=T, echo=F}
 
 Aca <- data %>% 
   filter(Institution_Type=="Academic") %>% 
@@ -265,7 +284,7 @@ align = "c"
 * Por tema de investigación
 * Por tipo de dato
 
-```{r Preeliminar_a, eval=F, echo=F, warning=F,message=F, fig.width=5.5,fig.height=4.5, fig.align="center"}
+```{r Preeliminar_a, eval=T, echo=F, warning=F,message=F, fig.width=5.5,fig.height=4.5, fig.align="center"}
 
 ui <- fluidPage(
 sidebarLayout(
@@ -395,6 +414,7 @@ output$Number_spp <- renderPlot({
             Se_Plot <- data %>% 
   filter(!is.na(Area)) %>% 
   filter(!is.na(Research_Field)) %>% 
+  filter(Research_Field!="Other") %>%             
   filter(Area != "TBD") %>% 
   group_by(Area,Research_Field) %>% 
   summarise(Entradas = n())
@@ -415,6 +435,7 @@ ggplot(data=Se_Plot,
                                    ),
         axis.text.y = element_text(size = 14),
         legend.position = "top",
+        legend.text=element_text(size=16),
         axis.title = element_text(size=20,
                                   face="bold"))+ 
   guides(fill = guide_legend(title = "Disciplina",
@@ -424,6 +445,7 @@ ggplot(data=Se_Plot,
           Se_Plot <- data %>% 
   filter(!is.na(Area)) %>% 
   filter(!is.na(SE_Interaction)) %>% 
+  filter(SE_Interaction!="NA") %>% 
   filter(Area != "TBD") %>% 
   group_by(Area,SE_Interaction) %>% 
   summarise(Entradas = n())
@@ -444,6 +466,7 @@ ggplot(data=Se_Plot,
                                    ),
         axis.text.y = element_text(size = 14),
         legend.position = "top",
+        legend.text=element_text(size=16),
         axis.title = element_text(size=20,
                                   face="bold"))+ 
   guides(fill = guide_legend(title = "Interacción SE",
@@ -473,6 +496,7 @@ ggplot(data=Se_Plot,
                                    ),
         axis.text.y = element_text(size = 14),
         legend.position = "top",
+        legend.text=element_text(size=16),
         axis.title = element_text(size=20,
                                   face="bold"))+ 
   guides(fill = guide_legend(title = "Tipo de Institución",
@@ -517,7 +541,7 @@ Pedroche <- Pedroche %>%
 
 ```
 
-### Palabras clave más frecuentes
+## Palabras clave más frecuentes
 
 También se puede utilizar para hacer exploración más cualitativa o para hacer comunicación.
 
@@ -545,12 +569,11 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 ```
 
 
-
-## Colaboración
+## Esfuerzo Colaborativo
 
 <div class="columns-2">
 
->- <img src="Images/Colabora.png" width=300 height=400>
+ <img src="Images/Colabora.png" width=300 height=400>
 
 >- **Informa:** Estamos buscando por cualquier fuente de datos relevante a los ecosistemas marinos en México.
 
@@ -581,10 +604,15 @@ Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
 - **Colaboradores:**
 Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
 
-<img src="Images/Logos_PI.PNG" width=500 height=110>
+<img src="Images/Logos_PI.PNG" width=400 height=110>
 
 Página del proyecto: https://jepa.shinyapps.io/marmetadatamexesp/
 
 </div>
+
+***
+<div class="centered">
+
+<img src="Images/Pagina.png" width=900 height=500>
 
 # ¿Preguntas?

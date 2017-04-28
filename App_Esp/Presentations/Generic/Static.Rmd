@@ -1,13 +1,15 @@
 ---
 title: "Hacia la creación de una base de datos de investigación marina en México"
-author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
-date: "28/4/2017 | Centro de Investigación Científica y de Educación Superior de Ensenada, Baja California"
-output: 
-  ioslides_presentation: 
-    logo: choru_logo.png
-    widescreen: yes
+author: Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British
+  Columbia
+date: 28/4/2017 | Centro de Investigación Científica y de Educación Superior de Ensenada,
+  Baja California
+output:
+  ioslides_presentation:
     css: Fondo.css
-    toc: true
+    logo: choru_logo.png
+    toc: yes
+    widescreen: yes
 ---
 
 ```{r packages and data, eval=T, echo=F, warning=F, message=F}
@@ -46,7 +48,7 @@ source('ts_fun.R')
 >* * Objetivos del proyecto
 >* Estructura de la base de metadatos
 >* Estado actual de la base
->* Resultados preeliminares
+>* Resultados preliminares
 >* Como colaborar
 
 <div class="centered">
@@ -73,7 +75,8 @@ source('ts_fun.R')
 <img src="Images/Canada.png" width=500 height=300>
 
 
-## No solo la ciencia...
+
+***
 
 <div class="columns-2">
 
@@ -81,7 +84,7 @@ source('ts_fun.R')
 
 >- Aumento en la investigación multidisciplinaria
 
->- Biología, Ecología, Oceanografía, Economía, etc
+>- Biología, Ecología, Oceanografía, Economía, etc.
 
 <div class="black">
 
@@ -129,7 +132,7 @@ source('ts_fun.R')
 </div>
 
 > - Identificar tendencias en la disponibilidad de datos en México
-> - Identificar información y vaciós de la misma que deberían ser tratados a futuro
+> - Identificar vacíos de información que deberían ser tratados a futuro
 > - Desarrollar protocolos para la publicación de la base de metadatos así como la incorporación de nuevos  registros
 
 ## Estructura de los Metadatos {.biger}
@@ -245,6 +248,7 @@ align = "c"
 ## Resultados preliminares {.smaller}
 
 Se pueden generar resultados con cierta característica espacial
+
 * Desde muy generales (e.g Pacífico) hasta muy detallados (e.g. Laguna de Términos)
 
 ```{r Preeliminarya, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
@@ -319,7 +323,8 @@ Se pueden hacer preguntas más específicoas por ejemplo:
 
 Se_Plot <- data %>% 
   filter(!is.na(Area)) %>% 
-  filter(!is.na(Research_Field)) %>% 
+  filter(!is.na(Research_Field)) %>%
+  filter(Research_Field !="Other") %>% 
   filter(Area != "TBD") %>% 
   group_by(Area,Research_Field) %>% 
   summarise(Entradas = n())
@@ -339,7 +344,7 @@ ggplot(data=Se_Plot,
                                    size=14
                                    ),
         axis.text.y = element_text(size = 14),
-        legend.position = "top",
+        legend.position = "top",legend.text=element_text(size=16),
         axis.title = element_text(size=20,
                                   face="bold"))+ 
   guides(fill = guide_legend(title = "Research Field",
@@ -348,6 +353,7 @@ ggplot(data=Se_Plot,
 
 ***
 Podemos hacer una reconstrucción de los datos generados en México en los últimos años.
+
 
 ```{r Historic_Data, echo=F,eval=T}
 Pedroche<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Pedroche_Hist.csv")
