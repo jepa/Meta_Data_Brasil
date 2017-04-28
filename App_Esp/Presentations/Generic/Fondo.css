@@ -4,11 +4,15 @@
     text-align:center; width:90%;
 }
 
-#Agenda {
+.size {
    color: black;
 }
 
 .emphasized {
    font-size: 1.2em;
+}
+
+.bigger {
+   font-size: 5em;
 }
 
