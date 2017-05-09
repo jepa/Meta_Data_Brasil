@@ -1,7 +1,7 @@
 ---
 title: "Hacia la creación de una base de metadatos de investigación marina en México"
 author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
-date: "28/4/2017 | Centro de Investigación Científica y de Educación Superior de Ensenada, Baja California"
+date: "`r date()` | Instituto de Investigaciones Oceanológicas, UABC"
 output: 
   ioslides_presentation: 
     logo: choru_logo.png
@@ -23,7 +23,7 @@ library(tm) #For Word Mining
 library(pander)
 library(DT)
 
-data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Templateb.csv",
+data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
              colClasses = c(Location = 'character',
                             Notes = 'character')
 )

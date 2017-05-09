@@ -178,19 +178,19 @@ shinyServer(function(input, output, session) {
   
   output$TFgraph <- renderDygraph({
     x <- TFdatasetInput()
-    
+
     Dt_Points <- ts(x,
                     start=c(2016,11),
                     end = c(2017,4), # <- this has to be changed everytime we add a month
                     frequency= 12)
-    
+
     dygraph(Dt_Points) %>% #Creats the graph
       dyOptions(stackedGraph = TRUE, #Makes it stacked
                 drawPoints = TRUE, #Shows each data point
-                pointSize = 4) %>% 
-      dyRangeSelector(height = 20) %>% 
+                pointSize = 4) %>%
+      dyRangeSelector(height = 20) %>%
       dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
-      dyAxis("y", drawGrid = FALSE) %>% 
+      dyAxis("y", drawGrid = FALSE) %>%
       dyAxis("y", label = "Numero de Datos") %>%  #Labels
       dyLegend(width = 600)
   })
@@ -343,59 +343,71 @@ shinyServer(function(input, output, session) {
   # Keywords_Plot ####
   
   output$Keywords_Plot <- renderPlot({
-    Words <- datasetInput()
-    WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-    WordsCorpus <- tm_map(WordsCorpus, 
-                          PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus, 
-                          removePunctuation) #Removes punctuation
     
+    if(input$Words_But==TRUE){
+    if(input$Discipline == "Todas"){
+      Words <- datasetInput()
+    }else{
+    Words <- datasetInput() %>% 
+      filter(Research_Field == input$Discipline)
+    }
+  
+    WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
+    WordsCorpus <- tm_map(WordsCorpus,
+                          PlainTextDocument) #Converts to plain text
+    WordsCorpus <- tm_map(WordsCorpus,
+                          removePunctuation) #Removes punctuation
+
     Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
                      input$Keyword_Remove2)
-    
-    #Removes a word of user preference 
+
+    #Removes a word of user preference
     WordsCorpus <- tm_map(WordsCorpus,
                           removeWords,
                           Word_Remove )
-    
+
     #
-    
+
     wordcloud(WordsCorpus, #Plots the words
               max.words = 100,
               random.order = FALSE,
               colors=brewer.pal(8, "Dark2"))
     
+    }
   })
   
   #_____________________ END ___________________________ #
   
   #### Timeseries of data History ####
   
-  PedroData <- reactive({
-    
+    PedroData <- reactive({
+
     Pedroche<- fread("./Pedroche_Hist.csv")
-    Pedroche <- Pedroche %>% 
+    Pedroche <- Pedroche %>%
       select(-1)
-    
+
   })
+
   
   output$TSgraph <- renderDygraph({
-    
+    if(input$Tomeseries_But == TRUE){
     Hist <- datasetInput() %>%
       filter(MMID <=2861) %>%
       select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
-    
+
     #Reads Predoche fixed data from the Parallel Analysis
-    
+
     # #Join both datasets and removes NA's
     Fin_Plot <- PedroData() %>%
       bind_rows(Hist) %>%
       filter(!is.na(Start_Year))
-    
-    
+
+
     #Plots the Historic contribution
     ts_plot(Fin_Plot,1920,2020)
+    }
   })
+  
   
   #_____________________ END ___________________________ #  
   
@@ -498,6 +510,6 @@ shinyServer(function(input, output, session) {
   #_____________________ END ___________________________ #
   
   #_____________________ END COLLABORATION ___________________________ #
-
+  
 }) #<- END OF SERVER ! 
 

@@ -234,10 +234,10 @@ shinyUI(
              )),
              p(
                "In this section you will be presented with some preliminary results. These results are directly related to the information that is being collected and do not represent all marine research in Mexico."
-             ),
-             p(strong("Note:"),"Due to the size of the metadata base this section takes a few seconds (~ 20) to load.",
-               style = "color:red"
-             )
+             )#,
+             # p(strong("Note:"),"Due to the size of the metadata base this section takes a few seconds to load.",
+             #   style = "color:red"
+             # )
              ),
              column(
                width=3,
@@ -300,15 +300,22 @@ shinyUI(
                align= "center",
                p(h2("Qualitative Results")),
                br(),
-               p(h3("Frequent Keywords")),
-               textInput("Keyword_Remove1",
-                         "Remove Any Word",
-                         "",
-                         width = '50%'),
-               textInput("Keyword_Remove2",
-                         "",
-                         "",
-                         width = '50%'),
+               selectInput(inputId = "Discipline", 
+                           label= "Select an Option:",
+                           selected = NULL,
+                           choices = list(" "="",
+                                          "Aquaculture" = "Aquaculture",
+                                          "Ecology" = "Ecology",
+                                          "Oceanography" = "Oceanography",
+                                          "Fisheries" ="Fisheries",
+                                          "Tourism" = "Tourism",
+                                          "Sociology" = "Sociology",
+                                          "All" = "Todas"
+                                          
+                           )
+               ),
+               p(actionButton("Words_But", 
+                              "Plot!")),
                plotOutput("Keywords_Plot"),
                p(em("Note: It is possible that not all words are represented"))
                
@@ -320,6 +327,8 @@ shinyUI(
                p(h3(
                  "Reconstruction of Historic Data from Metadata"
                )),
+               p(actionButton("Tomeseries_But", 
+                              "Plot Histric Data")),
                dygraphOutput("TSgraph")
              )
     ),

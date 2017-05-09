@@ -195,43 +195,48 @@ x <- x %>%
     dyAxis("y", drawGrid = FALSE) %>%
     dyAxis("y", label = "Number of Data Points") %>%  #Labels
     dyLegend(width = 600)
+    
   })
   
   #_____________________ END ___________________________ #  
   
   
-  #### Quantitative Analysis ####
+  #### Qualitative Analysis ####
   
-  # Number of entries ####
-  output$Number_Entries <- renderText({
-    Number_entries <- datasetInput() %>% 
-      filter(MMID != "na")
-    paste(Number_entries$MMID[length(Number_entries$MMID)])
-    
-  })
+  # Keywords_Plot ####
   
-#_____________________ END ___________________________ #  
-  
-  # Number of Data Points ####
-  output$Number_Data_Points <- renderText({
-    Number_entries <- datasetInput()
-    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
+  output$Keywords_Plot <- renderPlot({
     
-  })
-
-#_____________________ END ___________________________ #  
-  
-  # Number of Repositories ####
-  output$Sources <- renderText({
-     z<- datasetInput() %>% 
-      group_by(Compilation_Title) %>% 
-      summarise(sum(Data_Time_Points)) %>% 
-      select(-2) %>% 
-      filter(!is.na(Compilation_Title)) %>% 
-      mutate(z = 1)
-    
-    paste(sum(z$z))
-    
+    if(input$Words_But==TRUE){
+      if(input$Discipline == "Todas"){
+        Words <- datasetInput()
+      }else{
+        Words <- datasetInput() %>% 
+          filter(Research_Field == input$Discipline)
+      }
+      
+      WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
+      WordsCorpus <- tm_map(WordsCorpus,
+                            PlainTextDocument) #Converts to plain text
+      WordsCorpus <- tm_map(WordsCorpus,
+                            removePunctuation) #Removes punctuation
+      
+      Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
+                       input$Keyword_Remove2)
+      
+      #Removes a word of user preference
+      WordsCorpus <- tm_map(WordsCorpus,
+                            removeWords,
+                            Word_Remove )
+      
+      #
+      
+      wordcloud(WordsCorpus, #Plots the words
+                max.words = 100,
+                random.order = FALSE,
+                colors=brewer.pal(8, "Dark2"))
+      
+    }
   })
   
   #_____________________ END ___________________________ #    
@@ -346,61 +351,72 @@ x <- x %>%
   # Keywords_Plot ####
   
   output$Keywords_Plot <- renderPlot({
-    Words <- datasetInput()
-    WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-    WordsCorpus <- tm_map(WordsCorpus, 
-                          PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus, 
-                          removePunctuation) #Removes punctuation
     
-    Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
-                     input$Keyword_Remove2)
-    
-    #Removes a word of user preference 
-    WordsCorpus <- tm_map(WordsCorpus,
-                          removeWords,
-                          Word_Remove ) 
-    #
-    
-    suppressWarnings(wordcloud(WordsCorpus, #Plots the words
-              max.words = 100,
-              random.order = FALSE,
-              colors=brewer.pal(8, "Dark2")
-              )
-    )
-    
+    if(input$Words_But==TRUE){
+      if(input$Discipline == "Todas"){
+        Words <- datasetInput()
+      }else{
+        Words <- datasetInput() %>% 
+          filter(Research_Field == input$Discipline)
+      }
+      
+      WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
+      WordsCorpus <- tm_map(WordsCorpus,
+                            PlainTextDocument) #Converts to plain text
+      WordsCorpus <- tm_map(WordsCorpus,
+                            removePunctuation) #Removes punctuation
+      
+      Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
+                       input$Keyword_Remove2)
+      
+      #Removes a word of user preference
+      WordsCorpus <- tm_map(WordsCorpus,
+                            removeWords,
+                            Word_Remove )
+      
+      #
+      
+      wordcloud(WordsCorpus, #Plots the words
+                max.words = 100,
+                random.order = FALSE,
+                colors=brewer.pal(8, "Dark2"))
+      
+    }
   })
   
   #_____________________ END ___________________________ #
   
   #### Timeseries of data History ####
   
+  #### Timeseries of data History ####
+  
   PedroData <- reactive({
     
     Pedroche<- fread("./Pedroche_Hist.csv")
-    Pedroche <- Pedroche %>% 
+    Pedroche <- Pedroche %>%
       select(-1)
     
   })
   
-  output$TSgraph <- renderDygraph({
-    
-    Hist <- datasetInput() %>%
-      filter(MMID <=2861) %>%
-      select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
-
-    #Reads Predoche fixed data from the Parallel Analysis
-    
-    # #Join both datasets and removes NA's
-    Fin_Plot <- PedroData() %>%
-      bind_rows(Hist) %>%
-      filter(!is.na(Start_Year))
-      
-    
-    #Plots the Historic contribution
-    ts_plot(Fin_Plot,1920,2020)
-  })
   
+  output$TSgraph <- renderDygraph({
+    if(input$Tomeseries_But == TRUE){
+      Hist <- datasetInput() %>%
+        filter(MMID <=2861) %>%
+        select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+      
+      #Reads Predoche fixed data from the Parallel Analysis
+      
+      # #Join both datasets and removes NA's
+      Fin_Plot <- PedroData() %>%
+        bind_rows(Hist) %>%
+        filter(!is.na(Start_Year))
+      
+      
+      #Plots the Historic contribution
+      ts_plot(Fin_Plot,1920,2020)
+    }
+  })
   #_____________________ END ___________________________ #  
   
   #_____________________ END PREELIMINARY RESULTS ___________________________ #

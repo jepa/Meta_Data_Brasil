@@ -20,6 +20,7 @@ library(dygraphs)
 
  
 shinyUI(
+
   ### Navigation bar
   navbarPage("",
              #Web page title
@@ -232,10 +233,10 @@ shinyUI(
                         )),
                         p(
                           "En esta sección se muestran algunos de los resultados previos relacionados con la investigación marina en México. Dichos resultados están directamente relacionados con la información que se va recaudando por lo que cambian constantemente mientras crece la base de metadatos. Asímismo, estos resultados son parciales y no representan el total de la investigación marina en México."
-                        ),
-                        p(strong("Nota:"),"Debido al tamaño de la base de metadatos esta sección tarda algunos segundos (~20) en cargar.",
-                          style = "color:red"
-                          )
+                        ) #,
+                        # p(strong("Nota:"),"Debido al tamaño de la base de metadatos esta sección tarda algunos segundos (~20) en cargar.",
+                        #   style = "color:red"
+                        #   )
                       ),
                       column(
                         width=3,
@@ -299,14 +300,22 @@ shinyUI(
                         p(h2("Resultados Cualitativos")),
                         br(),
                         p(h3("Palabras Clave Frecuentes")),
-                        textInput("Keyword_Remove1",
-                                  "Excluya Cualquier Palabra",
-                                  "",
-                                  width = '50%'),
-                        textInput("Keyword_Remove2",
-                                  "",
-                                  "",
-                                  width = '50%'),
+                        selectInput(inputId = "Discipline", 
+                                    label= "Seleccione una opción:",
+                                    selected = NULL,
+                                    choices = list(" "="",
+                                                   "Acuacultura" = "Aquaculture",
+                                                   "Ecología" = "Ecology",
+                                                   "Oceanografía" = "Oceanography",
+                                                   "Pesquerías" ="Fisheries",
+                                                   "Turismo" = "Tourism",
+                                                   "Sociología" = "Sociology",
+                                                   "Todas" = "Todas"
+                                                   
+                                    )
+                        ),
+                        p(actionButton("Words_But", 
+                                       "Acción")),
                         plotOutput("Keywords_Plot"),
                         p(em("Nota: Es posible que no todas las palabras se encuentren en la gráfica"))
                         
@@ -318,6 +327,8 @@ shinyUI(
                         p(h3(
                           "Histórico de Datos Incluidos en los Metadatos"
                         )),
+                        p(actionButton("Tomeseries_But", 
+                                       "Generar Histórico de Datos")),
                         dygraphOutput("TSgraph")
                       )
              ),
@@ -459,7 +470,7 @@ shinyUI(
                         href="https://jepa.shinyapps.io/marmetadatamexeng/")
                       )
   ),
-  #### DATA POINTS ####
+  #### Floating Menu ####
   column(8,
          align = "center",
          absolutePanel(

@@ -3,9 +3,9 @@ title: MarMetadataMex/Eng
 account: jepa
 server: shinyapps.io
 appId: 153939
-bundleId: 787050
+bundleId: 815632
 url: https://jepa.shinyapps.io/marmetadatamexeng/
-when: 1492018070.96067
+when: 1493942840.59986
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Reference_List.html|Data_Download/.gitignore|Data_Download/MMID_1246.pdf|Data_Download/MMID_2.csv|Data_Download/MMID_483.csv|Data_Download/MMID_485.csv|Data_Download/MMID_558.csv|Data_Download/Pseudorca_c_Distribution.png|Reference/Reference_List.html|Reference/Reference_List.pdf
+ignoredFiles: Reference_List.html|Data_Download/.gitignore|Data_Download/MMID_1246.pdf|Data_Download/MMID_2.csv|Data_Download/MMID_483.csv|Data_Download/MMID_485.csv|Data_Download/MMID_558.csv|Data_Download/Pseudorca_c_Distribution.png|GOMSumm/choru_logo.png|GOMSumm/Data_Curve.csv|GOMSumm/GoMSummit.Rmd|GOMSumm/Metadata_Key.csv|GOMSumm/Template.csv|GOMSumm/Images/FAO.png|GOMSumm/Images/Flow.png|GOMSumm/Images/Gom.png|GOMSumm/Images/Logos_PI.png|GOMSumm/Images/Logos3.png|GOMSumm/rsconnect/documents/GoMSummit.Rmd/shinyapps.io/jepa/GoMSummit.dcf|Reference/Reference_List.html|Reference/Reference_List.pdf|Reference/Reference_List.Rmd
