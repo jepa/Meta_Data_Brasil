@@ -303,7 +303,7 @@ shinyUI(
                selectInput(inputId = "Discipline", 
                            label= "Select an Option:",
                            selected = NULL,
-                           choices = list(
+                           choices = list("Select One" = "NOT",
                                           "Aquaculture" = "Aquaculture",
                                           "Ecology" = "Ecology",
                                           "Oceanography" = "Oceanography",
@@ -314,7 +314,6 @@ shinyUI(
                                           
                            )
                ),
-               # submitButton("Go"),
                p(actionButton("Words_But",
                               "submit!")),
                plotOutput("Keywords_Plot"),

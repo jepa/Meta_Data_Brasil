@@ -208,6 +208,10 @@ x <- x %>%
   output$Keywords_Plot <- renderPlot({
     input$Words_But
     
+    if(input$Discipline == "NOT"){
+      stop()
+      }
+    
     if(input$Discipline == "Todas"){
       Words <- datasetInput()
     }else{
