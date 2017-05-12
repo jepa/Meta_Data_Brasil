@@ -303,7 +303,7 @@ shinyUI(
                selectInput(inputId = "Discipline", 
                            label= "Select an Option:",
                            selected = NULL,
-                           choices = list(" "="",
+                           choices = list(
                                           "Aquaculture" = "Aquaculture",
                                           "Ecology" = "Ecology",
                                           "Oceanography" = "Oceanography",
@@ -314,8 +314,9 @@ shinyUI(
                                           
                            )
                ),
-               p(actionButton("Words_But", 
-                              "Plot!")),
+               # submitButton("Go"),
+               p(actionButton("Words_But",
+                              "submit!")),
                plotOutput("Keywords_Plot"),
                p(em("Note: It is possible that not all words are represented"))
                
