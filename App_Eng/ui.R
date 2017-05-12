@@ -314,8 +314,6 @@ shinyUI(
                                           
                            )
                ),
-               p(actionButton("Words_But",
-                              "submit!")),
                plotOutput("Keywords_Plot"),
                p(em("Note: It is possible that not all words are represented"))
                

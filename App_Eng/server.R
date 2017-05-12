@@ -206,8 +206,6 @@ x <- x %>%
   # Keywords_Plot ####
   
   output$Keywords_Plot <- renderPlot({
-    input$Words_But
-    
     if(input$Discipline == "NOT"){
       stop()
       }
