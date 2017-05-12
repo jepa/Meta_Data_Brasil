@@ -967,7 +967,7 @@ FIN <- bind_cols(y,yy,yyy)
 #write.csv(FIN,"AndresFin.csv")
 
 ###################### END ########################
-# GOb.mx info
+# GOb.mx info####
 
 #Embarcaciones en zonas de ballenas
 
@@ -988,7 +988,7 @@ EmbF <- EmbB %>%
 
 write.csv(EmbF,"Embarcaciones.csv")
 ###################### END ########################
-# COBI information for the Caribbeean
+# COBI information for the Caribbeean ####
 # March 26, 2017; La Paz, Mexico
 
 COBI <- read.csv("Data/Cobi_Imp.csv")
@@ -1009,7 +1009,7 @@ C_F <- COBI %>%
 write.csv(C_F, "Cobi_Out.csv")
 
 ###################### END ########################
-# Hector Reyes Labs
+# Hector Reyes Labs ####
 ## Luis Hernandez data
 # April 4, 2017; La Paz, Mexico
 
@@ -1157,4 +1157,71 @@ result <- query(cn,
 
 
 ###################### END ########################
+  #### Bertha L. ####
+
+Berta2 <- read.csv("~/Desktop/Berta2.csv", header = FALSE)
+View(Berta2)
+
+Bertha <- Berta %>% 
+  mutate(Title = paste("Abundancia de",Taxa,"en el Pacifico Norte")) %>% 
+  mutate(Key = "Abundancia; IMECOCAL; zooplancton; grupo; funcional")
+
+Bertha2 <- Berta2 %>% 
+  mutate(Title = paste("Abundancia de",V1," en el Pacifico Norte (muestras nocturnas)")) %>% 
+  mutate(Key = "Abundancia; IMECOCAL; zooplancton; euphausiid; muestras nocturnas; grupo; funcional; Ocurrencia")
+
+
+Bertha3 <- Berta2 %>% 
+  filter(Table_III != "Family") %>% 
+  filter(Table_III != "rder") %>% 
+  filter(Table_III != "amily") %>% 
+  mutate(Taxa_II = paste(Table_II,Table_Il_B)) %>% 
+  mutate(Taxa_III = paste(Table_III,Table_III_B)) %>% 
+  mutate(Title_I = paste("Length-weight regressions for",Table_I)) %>% 
+  mutate(Key_I = paste("estimado; carboon; cenizas; peso seco; prosome; largo; peso; hembra; copepodo; IMECOCAL;EL ninho; ENSO;")) %>% 
+  mutate(Title_II = paste("Presence of",Taxa_II,"in the North Pacific (1997-1999)")) %>% 
+  mutate(Key_II = paste("copepodo; IMECOCAL; noche; EL ninho; ENSO; Dominantes")) %>% 
+  mutate(Title_III = paste("Presence of",Taxa_III,"in the North Pacific during El Nino and La Nina")) %>% 
+  mutate(Key_III = paste("copepodo; IMECOCAL; ENSO; El Nino; La Nina; Presencia; Abundancia"))
+
+Bertha5 <- Berta5 %>% 
+  filter(Table_III != "Family") %>% 
+  mutate(Taxa_I = paste(Table_I,Table_I_B)) %>% 
+  mutate(Taxa_II = paste(Table_II,Table_II_B)) %>% 
+  mutate(Taxa_III = paste(Table_III,Table_III_B)) %>% 
+  mutate(Title_I = paste("Seasonal variation in population density of",Taxa_I,"in the North Pacific")) %>% 
+  mutate(Key_I = paste("Hyperiid; amphipodo; Invierno; Primavera; Otono;IMECOCAL")) %>% 
+  mutate(Title_II = paste("Correlation of",Taxa_II,"with salp species")) %>% 
+  mutate(Key_II = paste("Hyperiid; amphipodo; Spearman; Salps;IMECOCAL; Cyclosalpa bakeri;Cyclosalpa danae; Salpa  fusiformis; Thalia cicar; Thalia democratica; Thalia orientalis; Weelia cylindrica")) %>% 
+  mutate(Title_III = paste("Seasonal abundance of",Taxa_III,"in the North Pacific")) %>% 
+  mutate(Key_III = paste("Hyperiid; amphipodo; Enero; Abril; Julio; Octubre; Abundancia; IMECOCAL"))
+
+
+write.csv(Bertha5,"Bertha5.csv")
+
+#### Limpeiza de Template ####
+
+X <- Template %>% 
+  filter(Institution =="COBI")
   
+
+Xx <- Template %>% 
+filter(Short_Title =="Production and trade of Pony fishes, frozen")
+
+
+# Duplicated Entries
+duplicated(Xx$Short_Title)
+  
+  
+Repeated <-X[duplicated(X$Short_Title), ]
+
+Repeated_B <- Repeated %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+  
+
+#### ME QUEDE EN COBI
+
+
+
