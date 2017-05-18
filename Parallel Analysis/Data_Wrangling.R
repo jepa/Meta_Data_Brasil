@@ -1201,27 +1201,117 @@ write.csv(Bertha5,"Bertha5.csv")
 
 #### Limpeiza de Template ####
 
-X <- Template %>% 
-  filter(Institution =="COBI")
-  
+##### Duplicated Entries from Template 2.0 #####
 
-Xx <- Template %>% 
-filter(Short_Title =="Production and trade of Pony fishes, frozen")
+# Lookig at the repeated ones...
 
+Template <- Template %>% 
+  filter(MMID >=1) %>% 
+  filter(MMID <=33053)
 
-# Duplicated Entries
-duplicated(Xx$Short_Title)
-  
-  
-Repeated <-X[duplicated(X$Short_Title), ]
-
-Repeated_B <- Repeated %>% 
+Template_Explore <- Template %>% 
   group_by(Institution,
            Compilation_Title) %>% 
   summarise(n=n())
-  
 
-#### ME QUEDE EN COBI
+Repeated_Template <-Template[duplicated(Template$Short_Title), ]
+Repeated_Temp_Ag <- Repeated_Template %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+
+# Remove repeated from dataset
+
+No_Repeated_Template <-Template[!duplicated(Template$Short_Title), ]
+#write.csv(No_Repeated_Template, "Clean_Template.csv")
 
 
+# Now we need to clean the 2.2 Template starting from MMID 33053, oh man!!!!
+
+Templateb <- TemplateB %>% 
+  filter(MMID >=33053)
+
+Templateb_Explore <- Templateb %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+
+
+Repeated_Templateb <-Templateb[duplicated(Templateb$Short_Title), ]
+Repeated_Tempb_Agb <- Repeated_Templateb %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+
+# Remove repeated from dataset
+
+No_Repeated_Templateb <-Templateb[!duplicated(Templateb$Short_Title), ]
+
+Clean_Templateb_Explore <- No_Repeated_Templateb %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+
+# Now we put together both cleaned datasets...
+Cleaned_Template <- No_Repeated_Template %>% 
+  bind_rows(No_Repeated_Templateb) %>% 
+  select(-1)
+
+# Just checking to make sure it worked...
+Check_Duplication <-Cleaned_Template[duplicated(Cleaned_Template$Short_Title), ]
+
+
+# NOT #
+#There are still a lot of repeated data (30000)  I think the whole dataset is duplicated. So now what I need to do is extract from the Template 2.0 the new entries I did from La Paz and Ensenada
+
+# Making sure both datasets contain duplicate rows of the whole metadata...
+Duplications <-Templateb_Explore %>% 
+  anti_join(Template_Explore,
+            by ="Compilation_Title")
+
+# Yes they do...
+
+# So, we need to exstract from TemplateB only the NEW entries
+New_Entries <- TemplateB %>% 
+  anti_join(Template,
+            by ="Compilation_Title")
+
+# Now we check for duplications on the New Entries
+
+Repeated_New <-New_Entries[duplicated(New_Entries$Short_Title), ] #There are 3002 duplications...
+No_Repeated_New <-New_Entries[!duplicated(New_Entries$Short_Title), ]
+
+# Just checking witch databases are there...
+No_Repeated_New_Explore <- No_Repeated_New %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+
+#NOW we put them together...
+
+Cleaned_Template <- No_Repeated_Template %>% 
+  bind_rows(No_Repeated_New)
+
+Cleaned_Template_Explore <- Cleaned_Template %>% 
+  group_by(Institution,
+           Compilation_Title) %>% 
+  summarise(n=n())
+
+# Again checking there are no duplications....
+
+Repeated_Clean <-Cleaned_Template[duplicated(Cleaned_Template$Short_Title), ] #000000000
+
+##### FINALLY !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# Lets just check all datasets are there...
+
+#What datasets in TemplateB are NOT in Cleaned_Template
+Dataset_Check <- Templateb_Explore %>% 
+  anti_join(Cleaned_Template_Explore,
+            by="Compilation_Title") # 0000000000000
+
+#Now that we are sure, we export the dataset... 
+write.csv(Cleaned_Template, "Template_3.csv")
+
+#### END ####
 
