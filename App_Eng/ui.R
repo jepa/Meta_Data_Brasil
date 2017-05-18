@@ -113,7 +113,7 @@ shinyUI(
                      width = 200
                    )),
                  p(
-                   "Monitoreio Noroeste is a portal containing an inventory (metadata) of monitoring conducted in the Gulf of California and the Pacific Northwest. This inventory compiles information on the resources or indicators (biological, ecological, fisheries, economic, social, etc.) that are monitored in this region. The metadata that is in Monitoreo is not included in our meta-dataset, but worry not! Both inventories are connected so if your search results in information stored in Monitoreo, you will be immediately redirected."
+                   "Monitoreo Noroeste.mx is a public website  containing an inventory (metadata) of monitoring conducted in the Gulf of California and the Pacific Northwest. The inventory contains the range of targets that are being monitored by research institutions, federal agencies, civil social organizations, companies, and community groups. The metadata that is in Monitoreo noroeste is not included in our meta-dataset, but worry not! Both inventories are connected so if your search results in information stored in Monitoreo noroeste, you will be immediately redirected"
                  )
                ) #Close Monitoreo
              ) #Closes fluidRow
