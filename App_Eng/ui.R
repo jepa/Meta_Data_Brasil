@@ -58,12 +58,13 @@ shinyUI(
                  8,
                  align = "justified",
                  offset = 2,
-                 p(h3("Partners")
+                 p(h3("Network of Data and Metadata Partners")
                  )
                ),
+               #### DataMares ####
                column(
-                 8,
-                 align = "center",
+                 4,
+                 align = "justified",
                  offset = 2,
                  a(href="http://datamares.ucsd.edu/en/about",
                    img(
@@ -71,27 +72,52 @@ shinyUI(
                      height = 60,
                      width = 200
                    )),
+                 p(
+                   "dataMares is as an initiative that aims to promote free open science by providing easy-access to robust scientific information for everyone. dataMares works as a public marine-related data repository that creates", a(href="http://datamares.ucsd.edu/?page_id=153","stories"),"to engage public with the data storage."
+                 ),
+                 p(h5(
+                   "Do you have marine-related Data?"
+                      )),
+                 p(
+                   "Remember that the meta-database of marine research does not store data. Visit dataMares if you want your data to be stored and published on their website!"
+                 )
+                 ), #Close dataMares
+               # column(
+               #   2,
+               #   align = "justified",
+               #   #offset = 2,
+               #   a(href="http://gomexsi.tamucc.edu/",
+               #     img(
+               #       src = "GoMexSI.png",
+               #       height = 60,
+               #       width = 100
+               #     )),
+               #   p(
+               #     "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
+               #     p(h5(
+               #       "Do you have species interactions data from the GoM?"
+               #     )),
+               #     p(
+               #       "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
+               #     )
+               #   )
+               # ), #Close GoMexi
+               column(
+                 4,
+                 align = "justified",
+                 #offset = 2,
                  a(href="http://monitoreonoroeste.mx/index.php",
                    img(
                      src = "Monitoreo_Logo.png",
                      height = 60,
                      width = 200
-                   ))#,
-                 # a(href="www.inapesca.gob.mx",
-                 #   img(
-                 #     src = "inapesca_logo.JPG",
-                 #     height = 80,
-                 #     width = 300
-                 #   )),
-                 # a(href="www.edf.com.mx",
-                 #   img(
-                 #     src = "edf_logo.JPG",
-                 #     height = 80,
-                 #     width = 300
-                 #   ))
-               )
-               )
-             ),
+                   )),
+                 p(
+                   "Monitoreo Noroeste.mx is a public website  containing an inventory (metadata) of monitoring conducted in the Gulf of California and the Pacific Northwest. The inventory contains the range of targets that are being monitored by research institutions, federal agencies, civil social organizations, companies, and community groups. The metadata that is in Monitoreo noroeste is not included in our meta-dataset, but worry not! Both inventories are connected so if your search results in information stored in Monitoreo noroeste, you will be immediately redirected"
+                 )
+               ) #Close Monitoreo
+             ) #Closes fluidRow
+             ), #Closes tabPanel
     #### PROJECT DESCRIPTION ####
     tabPanel("The Project",
              fluidRow(
