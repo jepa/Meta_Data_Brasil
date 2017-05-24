@@ -63,7 +63,7 @@ shinyUI(
                ),
                #### DataMares ####
                column(
-                 2,
+                 4,
                  align = "justified",
                  offset = 2,
                  a(href="http://datamares.ucsd.edu/en/about",
@@ -82,28 +82,28 @@ shinyUI(
                    "Remember that the meta-database of marine research does not store data. Visit dataMares if you want your data to be stored and published on their website!"
                  )
                  ), #Close dataMares
+               # column(
+               #   2,
+               #   align = "justified",
+               #   #offset = 2,
+               #   a(href="http://gomexsi.tamucc.edu/",
+               #     img(
+               #       src = "GoMexSI.png",
+               #       height = 60,
+               #       width = 100
+               #     )),
+               #   p(
+               #     "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
+               #     p(h5(
+               #       "Do you have species interactions data from the GoM?"
+               #     )),
+               #     p(
+               #       "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
+               #     )
+               #   )
+               # ), #Close GoMexi
                column(
-                 2,
-                 align = "justified",
-                 #offset = 2,
-                 a(href="http://gomexsi.tamucc.edu/",
-                   img(
-                     src = "GoMexSI.png",
-                     height = 60,
-                     width = 100
-                   )),
-                 p(
-                   "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
-                   p(h5(
-                     "Do you have species interactions data from the GoM?"
-                   )),
-                   p(
-                     "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
-                   )
-                 )
-               ), #Close GoMexi
-               column(
-                 2,
+                 4,
                  align = "justified",
                  #offset = 2,
                  a(href="http://monitoreonoroeste.mx/index.php",
