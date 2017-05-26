@@ -1261,7 +1261,7 @@ Cleaned_Template <- No_Repeated_Template %>%
 Check_Duplication <-Cleaned_Template[duplicated(Cleaned_Template$Short_Title), ]
 
 
-# NOT #
+# NOTE #
 #There are still a lot of repeated data (30000)  I think the whole dataset is duplicated. So now what I need to do is extract from the Template 2.0 the new entries I did from La Paz and Ensenada
 
 # Making sure both datasets contain duplicate rows of the whole metadata...
@@ -1315,3 +1315,33 @@ write.csv(Cleaned_Template, "Template_3.csv")
 
 #### END ####
 
+write.csv(Eco_Bentos, "Eco_Bentos.csv")
+
+
+Sci_Name <- Eco_Bentos %>% 
+  group_by(`Scientific name`,
+           `State/Province`,
+           `Vernacular name`) %>% 
+  summarise(Min=min(Fecha),
+            Max =max(Fecha)) %>% 
+  mutate(Inicio =
+    paste(
+      "Presencia de",`Scientific name`,"en",`State/Province`
+    )
+  ) %>% 
+  mutate(Inicio_I =
+           paste(
+             "Presencia de",`Vernacular name`,"en",`State/Province`
+           )
+  ) %>% 
+  mutate(Key =
+           paste(
+             "Abundancia; Ecologia; Bentos; Historico;",`Vernacular name`
+           )
+  )
+
+
+
+
+write.csv(Sci_Name,"Sci_Name.csv")
+#
