@@ -63,37 +63,63 @@ shinyUI(
                           offset = 2,
                           p(h3("Red de metadatos")
                           )
-                        ),
-                        column(
-                          8,
-                          align = "center",
-                          offset = 2,
-                          a(href="http://datamares.ucsd.edu/en/about",
-                            img(
-                              src = "dataMares_Logo.png",
-                              height = 60,
-                              width = 200
+                          ),
+                          #### DataMares ####
+                          column(
+                            4,
+                            align = "justified",
+                            offset = 2,
+                            a(href="http://datamares.ucsd.edu/en/about",
+                              img(
+                                src = "dataMares_Logo.png",
+                                height = 60,
+                                width = 200
+                              )),
+                            p(
+                              "DataMares es una iniciativa que tiene como objetivo promover el libre accesso a la ciencia proporcionando fácil acceso a información científica de alta calidad. DataMares no solo funciona como un repositorio público de datos marinos si no que además, sirve como método de comunicación entre los datos y el usuario. A traves de sus", a (href =" http://datamares.ucsd.edu/?page_id=153 "," historias ")," dataMares conecta al público con la ciencia a través de la investigación y los datos almacenados."
+                            ),
+                            p(h5(
+                              "¿Necesitas un repositorio para tus datos?"
                             )),
-                          a(href="http://monitoreonoroeste.mx/index.php",
-                            img(
-                              src = "Monitoreo_Logo.png",
-                              height = 60,
-                              width = 200
-                            ))#,
-                          # a(href="www.inapesca.gob.mx",
-                          #   img(
-                          #     src = "inapesca_logo.JPG",
-                          #     height = 80,
-                          #     width = 300
-                          #   )),
-                          # a(href="www.edf.com.mx",
-                          #   img(
-                          #     src = "edf_logo.JPG",
-                          #     height = 80,
-                          #     width = 300
-                          #   ))
-                        )
-                      )
+                            p(
+                              "Recuerda que la base de metadatos de investigación marina no es repositorio de datos. ¡Visita dataMares caso necesites almacenar datos y generar una historia a partir de ellos!"
+                            )
+                          ), #Close dataMares
+                          # column(
+                          #   2,
+                          #   align = "justified",
+                          #   #offset = 2,
+                          #   a(href="http://gomexsi.tamucc.edu/",
+                          #     img(
+                          #       src = "GoMexSI.png",
+                          #       height = 60,
+                          #       width = 100
+                          #     )),
+                          #   p(
+                          #     "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
+                          #     p(h5(
+                          #       "Do you have species interactions data from the GoM?"
+                          #     )),
+                          #     p(
+                          #       "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
+                          #     )
+                          #   )
+                          # ), #Close GoMexi
+                          column(
+                            4,
+                            align = "justified",
+                            #offset = 2,
+                            a(href="http://monitoreonoroeste.mx/index.php",
+                              img(
+                                src = "Monitoreo_Logo.png",
+                                height = 60,
+                                width = 200
+                              )),
+                            p(
+                              "Monitoreo Noroeste.mx es un sitio web público que contiene un inventario (metadatos) de monitoreo realizado en el Golfo de California y el Noroeste Pacífico. El inventario contiene una gama de objetivos que están siendo monitoreados por instituciones de investigación, agencias federales, organizaciones sociales civiles, compañías y grupos comunitarios. Los metadatos que se encuentran en Monitoreo noroeste no están incluidos en nuestros meta-datos, ¡pero no se preocupe! Ambos inventarios están conectados por lo que si su búsqueda resulta en información almacenada en Monitoreo noroeste, usted será inmediatamente redirigido"
+                            )
+                          )
+             )
              ),
              #### PROJECT DESCRIPTION ####
              tabPanel("El Proyecto",
