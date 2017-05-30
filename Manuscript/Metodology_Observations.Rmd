@@ -18,7 +18,7 @@ Template <- read.csv("~/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv")
 
 ```
 
-# MMID[601:751]
+# MMID[597:748]
 ##Autor: CONABIO
 ### Publication_Year
 
@@ -30,7 +30,7 @@ There are (often) three different dates on CONABIO's portal:
 
 Prioritization was given in the following order: 3,1,2.
 
-# MMID[612]
+# MMID[609]
 ##Autor: CONABIO
 ### Data_Time_Points
 
@@ -42,7 +42,7 @@ Because we are not sure what social information is relevant for researchers we a
 - Indicadores Sociales [44]
 
 
-# MMID[759:1246]
+# MMID[756:1242]
 ##Autor: Secretaria de Economia
 ### Data_Time_Points
 
@@ -107,7 +107,7 @@ With random Data Time Points but start year of 1998 and end year of 2017.
 
 There are different shrimp presentations (e.g.*camaron grande, vamaron chico, cabeza de camaron, etc*). We included all as "*camaron*". The same for *Langosta*, *Pulpo*, and any other species with different presentaions. 
 
-# MMID[1523:1527]
+# MMID[1519:1523]
 ##Autor: Monitoreo NorOeste
 
 Because Monitoreo's program is to generate metadata and not data itself (like us) we are not duplicating records. Because of this, there are only five categories for Monitoreo that represent a total of 252 data points. 
@@ -125,7 +125,7 @@ kable(
 
 ```
 
-# MMID[1962:2075]
+# MMID[1955:2067]
 ##Autor: NOAA
 ### MMID
 
@@ -140,20 +140,21 @@ kable(
 )
 
 ```
-# MMID[2862:3585]
+
+# MMID[33298:33897]
 ##Autor: Damien Olvier Kunz
 ### Time component
 
 Because this is a catalogue made from different publications it is extremeley hard to determine start and end years as well as Data Time points. Hence Start and End years are setted to the publication year of each of the two vol.
 
 
-# MMID[34468:35071]
+# MMID[33298:33897]
 ##Autor: Damien Olvier Kunz
 ### Data_Time_Points
 All the records have 9 data time points. Damien used 9 publications (of different years) to gather all data. Hence, I though that it will be the best to just use that number instead of going publication by publication searching for each year of sampling.Also, he compiled a database of other bases that we already have (e.g. Hector Relles Pangas). Hence, those years are not captured on Damien's database to avoid duplication. 
 
 
-# MMID[35647:35763]
+# MMID[32805:32921]
 ##Autor: Bertha Lavaniegos et al
 ### Data_Time_Points
 Apendix 1, Abundance of each species is shown seasonally (4). However, instead of writing down 4 records per species, I will multiply the Number of data_Time_Points x 4.

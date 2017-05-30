@@ -1315,6 +1315,8 @@ write.csv(Cleaned_Template, "Template_3.csv")
 
 #### END ####
 
+#### ICMyL UNAM...####
+
 write.csv(Eco_Bentos, "Eco_Bentos.csv")
 
 
@@ -1341,7 +1343,5 @@ Sci_Name <- Eco_Bentos %>%
   )
 
 
-
-
-write.csv(Sci_Name,"Sci_Name.csv")
+#write.csv(Sci_Name,"Sci_Name.csv")
 #
