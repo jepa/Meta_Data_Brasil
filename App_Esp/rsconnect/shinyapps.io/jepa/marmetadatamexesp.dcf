@@ -3,9 +3,9 @@ title: marmetadatamexesp
 account: jepa
 server: shinyapps.io
 appId: 155793
-bundleId: 839788
+bundleId: 846470
 url: https://jepa.shinyapps.io/marmetadatamexesp/
-when: 1495663368.28841
+when: 1496191159.32406
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: Reference_List.html|Reference_List.Rmd|Reference.csv|Data/~$Reference.xlsx|Data_Download/.DS_Store|Data_Download/.gitignore|Data_Download/Metadata_Template.csv|Data_Download/MMID_1246.pdf|Data_Download/MMID_2.csv|Data_Download/MMID_483.csv|Data_Download/MMID_485.csv|Data_Download/MMID_558.csv|Data_Download/Pseudorca_c_Distribution.png|Presentations/.DS_Store|Presentations/Generic/.DS_Store|Presentations/Generic/choru_logo.png|Presentations/Generic/Fondo.css|Presentations/Generic/Metadatos_D.Rmd|Presentations/Generic/Metadatos_S.html|Presentations/Generic/Metadatos_S.Rmd|Presentations/Generic/Metadatos.pdf|Presentations/Generic/Resumen_Presentacion.pdf|Presentations/Generic/Resumen.Rmd|Presentations/Generic/ts_fun.R|Presentations/Generic/Data/Glosario.csv|Presentations/Generic/Images/.DS_Store|Presentations/Generic/Images/Canada.png|Presentations/Generic/Images/CanadaB.png|Presentations/Generic/Images/Climate_Fish.png|Presentations/Generic/Images/Colabora.png|Presentations/Generic/Images/EDF_CC.jpg|Presentations/Generic/Images/FAO.png|Presentations/Generic/Images/Fish.png|Presentations/Generic/Images/Flow.png|Presentations/Generic/Images/Gom.png|Presentations/Generic/Images/Historial.png|Presentations/Generic/Images/Historico.png|Presentations/Generic/Images/Logos_Pi.png|Presentations/Generic/Images/Logos.png|Presentations/Generic/Images/Logos3.png|Presentations/Generic/Images/metadata.jpg|Presentations/Generic/Images/Pagina.png|Presentations/Generic/Images/Questions.png|Presentations/Generic/Images/unete.jpg|Reference/Reference_List.html|Reference/Reference_List.pdf|Reference/Reference_List.Rmd

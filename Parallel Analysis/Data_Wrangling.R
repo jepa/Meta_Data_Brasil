@@ -6,6 +6,7 @@
 
 #### NOTE Allways run this first ####
 #library(xlsx)
+library(readr)
 library(dplyr)
 library(tidyr)
 library(data.table)
@@ -1317,6 +1318,8 @@ write.csv(Cleaned_Template, "Template_3.csv")
 
 #### ICMyL UNAM...####
 
+### Ecologia Bentos ###
+
 write.csv(Eco_Bentos, "Eco_Bentos.csv")
 
 
@@ -1345,3 +1348,35 @@ Sci_Name <- Eco_Bentos %>%
 
 #write.csv(Sci_Name,"Sci_Name.csv")
 #
+
+### 
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+
+
+Mar_Profundo <- Datos %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`Vernacular name`,
+           Kingdom,
+           Phylum,
+           Class,
+           Order) %>% 
+  summarise(Min=min(year),
+            Max =max(year)) %>% 
+  mutate(Inicio_I =
+           paste(
+             "Presencia de",`Vernacular name`,"en el Golfo de Mexico"
+           )
+  ) %>% 
+  mutate(Key =
+           paste(
+             "Mar Profundo; Especimen; Preservado; SIGSBEE; Justo Sierra; Nucleador; Multinucleador; Historico",Kingdom,Phylum,Class,Order, sep = "; "
+           )
+  ) 
+
+write.csv(Mar_Profundo, "Mar_Profundo.csv")
+
+####### FIN _____________________

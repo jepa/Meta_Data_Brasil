@@ -165,6 +165,43 @@ shinyServer(function(input, output, session) {
 
 #### PRELIMINARY RESULTS ####
   
+  #### Quantitative Analysis ####
+  
+  # Number of entries ####
+  output$Number_Entries <- renderText({
+    Number_entries <- datasetInput() %>% 
+      filter(MMID != "na")
+    paste(Number_entries$MMID[length(Number_entries$MMID)])
+    
+  })
+  
+  #_____________________ END ___________________________ #  
+  
+  # Number of Data Points ####
+  output$Number_Data_Points <- renderText({
+    Number_entries <- datasetInput()
+    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
+    
+  })
+  
+  #_____________________ END ___________________________ #  
+  
+  # Number of Repositories ####
+  output$Sources <- renderText({
+    z<- datasetInput() %>% 
+      group_by(Compilation_Title) %>% 
+      summarise(sum(Data_Time_Points)) %>% 
+      select(-2) %>% 
+      filter(!is.na(Compilation_Title)) %>% 
+      mutate(z = 1)
+    
+    paste(sum(z$z))
+    
+  })
+  
+  #_____________________ END ___________________________ #    
+  
+  
   #### Timeseries of data gathering ####
   
 # Import dataframe (for now)
