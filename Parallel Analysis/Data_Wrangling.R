@@ -1377,6 +1377,57 @@ Mar_Profundo <- Datos %>%
            )
   ) 
 
-write.csv(Mar_Profundo, "Mar_Profundo.csv")
+#write.csv(Mar_Profundo, "Mar_Profundo.csv")
 
 ####### FIN _____________________
+
+# Coleccion Ictiologica
+
+Datos <- read_delim("~/Downloads/uninmarResultados (1).csv",
+                    ";",
+                    escape_double = FALSE)
+Peces <- Datos %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           `Scientific name`,
+           County) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year)) %>% 
+  mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>% 
+  mutate(Key = paste("Peces; Ictiologia; Presencia",County,sep="; "))
+
+write.csv(Peces, "Peces.csv")
+
+#Check those entries with NA's
+
+x <- c("Atherinella blackburni","Chaetodipterus faber","Eucinostomus harengulus","Melanocetus murrayi", "Notropis saladonis")
+
+E <- Datos %>% 
+  filter(`Scientific name` %in% x )
+
+# Turns out there are records outside Mexico, they were removed.
+
+####### FIN _____________________
+
+# Coleccion de Moluscos
+
+Datos <- read_delim("~/Downloads/uninmarResultados (2).csv",
+                    ";",
+                    escape_double = FALSE)
+Moluscos <- Datos %>% 
+  filter(Country == "México") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           `Scientific name`,
+           County) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year)) %>% 
+  mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>% 
+  mutate(Key = paste("Moluscos; Malacologia; Presencia",County,sep="; ")) %>% 
+  mutate(State =paste(County)) %>% 
+  arrange(`Scientific name`)
+
+
+write.csv(Moluscos, "Moluscos.csv")
