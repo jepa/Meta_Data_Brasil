@@ -18,6 +18,14 @@ Template <- read.csv("~/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv")
 
 ```
 
+
+# General stuff
+
+# SE_ Interaction
+
+We could see all human ctivities as benefits as they bring money, jobs, etc. However, the way we are seign the SE interaction is overall system. Shipping, for example will bring benefits to society but will create extra pressure to the system. ANDRES
+
+
 # MMID[597:748]
 ##Autor: CONABIO
 ### Publication_Year
@@ -154,6 +162,9 @@ Because this is a catalogue made from different publications it is extremeley ha
 All the records have 9 data time points. Damien used 9 publications (of different years) to gather all data. Hence, I though that it will be the best to just use that number instead of going publication by publication searching for each year of sampling.Also, he compiled a database of other bases that we already have (e.g. Hector Relles Pangas). Hence, those years are not captured on Damien's database to avoid duplication. 
 
 
+Data points will be by location. Hence, each species will have data for each location inicial and end.
+
+
 # MMID[32805:32921]
 ##Autor: Bertha Lavaniegos et al
 ### Data_Time_Points
@@ -166,3 +177,17 @@ NOAA's data on the Gulf of Mexico is spread by season*
 ##Autor: MARUM
 ### Data_Time_Points
 Because UNIMAR is a metadatabase we are gonna do the same as with monitoreoNoroeste, hecne datapoints will be multiplied by the number of entries each category has. EG
+
+# MMID[1756]
+##Autor: CONAPESCA
+### SE_Interactions
+
+Are subsidies Pressure or response? depends on the type of subsidy and who gives it. *NOTE:* Andres will wright a paragraph on that
+
+# MMID[27115:29225]
+##Autor: FishBase
+### Data_Time_POints
+
+There are 16 dtp because of the 16 biological information available in FishBase for each species.
+
+

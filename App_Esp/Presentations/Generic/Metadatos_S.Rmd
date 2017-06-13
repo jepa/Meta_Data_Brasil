@@ -1,15 +1,12 @@
 ---
 title: "Hacia la creación de una base de metadatos de investigación marina en México"
-author: Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British
-  Columbia
-date: 28/4/2017 | Centro de Investigación Científica y de Educación Superior de Ensenada,
-  Baja California
 output:
   ioslides_presentation:
     css: Fondo.css
     logo: choru_logo.png
     toc: yes
     widescreen: yes
+  beamer_presentation: default
 ---
 
 ```{r packages and data, eval=T, echo=F, warning=F, message=F}
@@ -24,9 +21,10 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 library(pander)
 
-data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Templateb.csv",
+data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
              colClasses = c(Location = 'character',
-                            Notes = 'character')
+                            Notes = 'character',
+                            Data_Uncertanty ='character')
 )
 K_data<- read.csv("./Data/GLosario.csv",
                   header = TRUE,
@@ -41,87 +39,87 @@ source('ts_fun.R')
   
 ```
 
-## Agenda {.emphasized}
+<!-- ## Agenda {.emphasized} -->
 
->* Introducción
->* * Motivación
->* * Objetivos del proyecto
->* Estructura de la base de metadatos
->* Estado actual de la base
->* Resultados preliminares
->* Como colaborar
+<!-- >* Introducción -->
+<!-- >* * Motivación -->
+<!-- >* * Objetivos del proyecto -->
+<!-- >* Estructura de la base de metadatos -->
+<!-- >* Estado actual de la base -->
+<!-- >* Resultados preliminares -->
+<!-- >* Como colaborar -->
 
-<div class="centered">
-<div class="red">
+<!-- <div class="centered"> -->
+<!-- <div class="red"> -->
 
->* En Andamiento | NO Datos | Invitación a Colaborar
+<!-- >* En Andamiento | NO Datos | Invitación a Colaborar -->
 
-</div>
+<!-- </div> -->
 
-## Data Vs Metadatos
+<!-- ## Data Vs Metadatos -->
 
-- **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE)
+<!-- - **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE) -->
 
-- **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo. 
-    - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos...
+<!-- - **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo.  -->
+<!--     - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos... -->
 
-<div class="centered">
+<!-- <div class="centered"> -->
 
-<img src="Images/metadata.jpg" width=450 height=250>
-
-
-</div>
-
-## Motivación del proyecto
-
-<div class="centered">
-
-> <img src="Images/Climate_Fish.PNG" width=700 height=250> 
-
-> <img src="Images/EDF_CC.jpg" width=700 height=200>
-
-***
-
-<div class="centered">
-
-<img src="Images/Canadab.png" width=800 height=200>
-
-<img src="Images/Canada.png" width=500 height=300>
+<!-- <img src="Images/metadata.jpg" width=450 height=250> -->
 
 
+<!-- </div> -->
 
-***
+<!-- ## Motivación del proyecto -->
 
-<div class="columns-2">
+<!-- <div class="centered"> -->
 
-<img src="Images/Flow.PNG" width=400 height=400>
+<!-- > <img src="Images/Climate_Fish.PNG" width=700 height=250>  -->
 
->- Aumento en la investigación multidisciplinaria
+<!-- > <img src="Images/EDF_CC.jpg" width=700 height=200> -->
 
->- Biología, Ecología, Oceanografía, Economía, etc.
+<!-- *** -->
 
-<div class="black">
+<!-- <div class="centered"> -->
 
->- ¿Falta de datos? o ¿falta de disponibilidad de datos?
+<!-- <img src="Images/Canadab.png" width=800 height=200> -->
 
-</div>
-<div class="red">
-
->- **Sin importar cuál sea, el resultado puede bloquear el progreso**
-
-</div>
-</div>
-
-<div class="centered">
-<div class="green2">
+<!-- <img src="Images/Canada.png" width=500 height=300> -->
 
 
-<div class="footer" style="margin-top:-200px;font-size:80%;">
 
->- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+<!-- *** -->
 
-</div>
-</div>
+<!-- <div class="columns-2"> -->
+
+<!-- <img src="Images/Flow.PNG" width=400 height=400> -->
+
+<!-- >- Aumento en la investigación multidisciplinaria -->
+
+<!-- >- Biología, Ecología, Oceanografía, Economía, etc. -->
+
+<!-- <div class="black"> -->
+
+<!-- >- ¿Falta de datos? o ¿falta de disponibilidad de datos? -->
+
+<!-- </div> -->
+<!-- <div class="red"> -->
+
+<!-- >- **Sin importar cuál sea, el resultado puede bloquear el progreso** -->
+
+<!-- </div> -->
+<!-- </div> -->
+
+<!-- <div class="centered"> -->
+<!-- <div class="green2"> -->
+
+
+<!-- <div class="footer" style="margin-top:-200px;font-size:80%;"> -->
+
+<!-- >- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país -->
+
+<!-- </div> -->
+<!-- </div> -->
 
 
 ## Objetivos del Proyecto
@@ -157,9 +155,9 @@ col.names = NA
 
 <div class="centered">
 
-<!-- <img src="Images/Historial.png" width=600 height=400> -->
+<img src="Images/Historial.png" width=600 height=400>
 
-```{r Current Status, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+```{r Time line plot, eval=F, echo=F, warning=F,message=F, fig.align="center"}
 
 xx <- ts(x,
          start=c(2016,11),
@@ -175,6 +173,10 @@ dygraph(xx) %>% #Creats the graph
   dyAxis("y", drawGrid = FALSE) %>%
   dyAxis("y", label = "Número de Registros") %>%  #Labels
   dyLegend(width = 400)
+
+```
+
+```{r Current Status, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
 ## Solid numbers ####
 # Number of entries ####
@@ -248,18 +250,14 @@ align = "c"
 ```
 
 
-## Resultados preliminares {.smaller}
-
-Se pueden generar resultados con cierta característica espacial
-
-* Desde muy generales (e.g Pacífico) hasta muy detallados (e.g. Laguna de Términos)
+## Resultados preliminares (Generales) {.smaller}
 
 ```{r Preeliminarya, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
 
 Spp <- data %>% 
   filter(Area != "TBD") %>% 
   group_by(Area) %>% 
-  summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
+  summarise(Entradas = sum(n())) %>% 
   filter(Area !="na") # %>% 
 # filter(Entradas >= input$Num_Data_Range[1]) %>% 
 # filter(Entradas <= input$Num_Data_Range[2])
@@ -273,7 +271,7 @@ P1 <- ggplot(data= Spp,
   geom_bar(stat="identity")+
   #coord_flip()+
   theme_classic() +
-  ylab("Números de Datos")+
+  ylab("Número de Registros")+
   xlab("Área")+
   theme(axis.text.x = element_text(hjust = 1,
                                    size=14,
@@ -287,7 +285,7 @@ P1 <- ggplot(data= Spp,
 Spp2 <- data %>%
   filter(Region != "TBD") %>% 
   group_by(Region) %>%
-  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  summarise(Value = sum(n())) %>% 
   filter(Region != "na") %>% 
   filter(Region != "")
 
@@ -299,7 +297,7 @@ P2 <-ggplot(data= Spp2,
        )) +
   geom_bar(stat="identity")+
   theme_classic() +
-  ylab("Número de Datos")+
+  ylab("Número de Registros")+
   xlab("Región")+
   theme(axis.text.x = element_text(hjust = 1,
                                    size=14,
@@ -319,8 +317,22 @@ gridExtra::grid.arrange(
 ```
 
 ***
-Se pueden hacer preguntas más específicoas por ejemplo: 
-* ¿Qué tipo de investigación se hace en donde?
+
+```{r Research_field Particular, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+
+SubjectPlot <- data %>% 
+  filter(Research_Field == "Conservation") %>% 
+  filter(!is.na(Area)) %>% 
+  filter(Research_Field !="Other") %>% 
+  filter(Region != "TBD") %>% 
+  group_by(Subject_name,Region) %>% 
+  summarise(Entradas = n())
+
+
+```
+
+Áreas de investigación
+
 
 ```{r Research_field, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
 
@@ -359,9 +371,10 @@ Podemos hacer una reconstrucción de los datos generados en México en los últi
 
 <div class="centered">
 
-<!-- <img src="Images/Historico.png" width=600 height=400> -->
+<!-- NOTA CUANDO SEA EN PDF HAY QUE QUITAR EL COMENTARIO DEL LINK DE LA IMAGEN Y NO EVALUAR EL CHUNK -->
+<img src="Images/Historico.png" width=600 height=400>
 
-```{r Historic_Data, echo=F,eval=T}
+```{r Historic_Data, echo=F,eval=F}
 Pedroche<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Pedroche_Hist.csv")
 Pedroche <- Pedroche %>% 
   select(-1)
@@ -411,6 +424,236 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 ```
 
+
+## Resultados preliminares (Particulares) {.smaller}
+
+### El estado de la conservación en México
+
+```{r Current Status particular, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+## Solid numbers ####
+# Number of entries ####
+Number_entries_Par <- data %>%
+  filter(Research_Field == "Conservation") %>% 
+  filter(MMID != "na") 
+
+Number_entriess_Par <- paste(nrow(Number_entries_Par))
+
+# Number of Data Points ####
+Number_dp_Par <- paste(sum(Number_entries_Par$Data_Time_Points,na.rm=T))
+
+# Number of Repositories ####
+z<- data %>%
+  filter(Research_Field == "Conservation") %>%
+  group_by(Institution) %>%
+  summarise(sum(Data_Time_Points)) %>%
+  # select(-2) %>%
+  # filter(!is.na(Compilation_Title)) %>%
+  mutate(z = 1)
+
+zz_Par <- paste(sum(z$z))
+
+
+```
+
+
+Registros: **`r Number_entriess_Par`**  Repositorios: **`r zz_Par`**  Datos: **`r Number_dp_Par`** 
+
+
+```{r Preeliminar Particular, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height= 4.5, fig.align="center"}
+
+Spp <- data %>% 
+  filter(Research_Field == "Conservation") %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area) %>% 
+  summarise(Entradas = sum(n())) %>% 
+  filter(Area !="na") # %>% 
+# filter(Entradas >= input$Num_Data_Range[1]) %>% 
+# filter(Entradas <= input$Num_Data_Range[2])
+
+P1 <- ggplot(data= Spp,
+       aes(
+         x=reorder(Area, -Entradas),
+         y=Entradas,
+         fill=Area
+       )) +
+  geom_bar(stat="identity")+
+  #coord_flip()+
+  theme_classic() +
+  ylab("Número de Registros")+
+  xlab("Área")+
+  theme(axis.text.x = element_text(hjust = 1,
+                                   size=14,
+                                   angle=45),
+        axis.text.y = element_text(size = 14),
+        legend.position = "none",
+        axis.title = element_text(size=14,
+                                  face="bold")
+        
+  )
+
+P1
+
+```
+
+***
+
+### Número de Registros de Conservación por Región
+
+```{r Preeliminar Particular2, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=5, fig.align="center"}
+Spp2 <- data %>%
+  filter(Research_Field == "Conservation") %>% 
+  filter(Region != "TBD") %>% 
+  group_by(Region) %>%
+  summarise(Value = sum(n())) %>% 
+  filter(Region != "na") %>% 
+  filter(Region != "")
+
+P2 <-ggplot(data= Spp2,
+       aes(
+         x=reorder(Region, -Value),
+         y=Value,
+         fill=Region
+       )) +
+  geom_bar(stat="identity")+
+  theme_classic() +
+  ylab("Número de Registros")+
+  xlab("Región")+
+  theme(axis.text.x = element_text(hjust = 1,
+                                   size=14,
+                                   angle = 45),
+        axis.text.y = element_text(size = 14),
+        legend.position = "none",
+        axis.title = element_text(size=14,
+                                  face="bold")
+  )
+
+P2
+
+```
+
+***
+
+```{r Campeche, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
+
+Spp3 <- data %>%
+  filter(Research_Field == "Conservation") %>% 
+  filter(Region == "Banco Campeche Caribe") %>% 
+  group_by(Institution,Location) %>% 
+  summarise(Registros = n()) %>% 
+  arrange(desc(Registros)) %>% 
+  slice(1:10)
+
+kable(Spp3)
+  
+
+```
+
+***
+
+Exploramos COBI
+
+
+```{r COBI, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
+Spp4 <- data %>%
+  filter(Research_Field == "Conservation") %>% 
+  filter(Region == "Banco Campeche Caribe") %>% 
+  filter(Institution == "COBI") %>% 
+  slice(c(1,509,1991)) %>% 
+  select(2,5,10,11,12,14)
+
+k<- kable(Spp4)
+
+n_Spp <- data %>%
+  filter(Research_Field == "Conservation") %>% 
+  filter(Region == "Banco Campeche Caribe") %>% 
+  filter(Institution == "COBI") %>% 
+  group_by(Subject_name) %>% 
+  summarise(n())
+
+
+  
+
+```
+
+- **`r nrow(n_Spp)`** especies, registradas entre 2012 - 2016   
+- Dos tipos de datos: **Abundancia y Talla**
+- Para tres localidades: **Banco Chinchorro, Puerto Morelos y Sian Kaan**
+
+`r k`
+
+## CONABIO
+
+```{r CONABIO_2, eval=T, echo=F, warning=F,message=F, fig.align="center", fig.width=9}
+
+Sc <- data %>% 
+  filter(Compilation_Title == "Catalogo de metadatos geograficos") %>%
+  summarise(Registros=n(),Inicio = min(Start_Year), Fin = max(End_Year)) %>% 
+  mutate(Mas_Registros ="Manglares")
+  
+```
+
+**`r Sc$Registros[1]`** registros, desde `r Sc$Inicio[1]` hasta `r Sc$Fin[1]` siendo *`r Sc$Mas_Registros[1]`* los más repetidos
+
+```{r CONABIO, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+Conabio <- data %>% 
+  filter(Compilation_Title == "Catalogo de metadatos geograficos") %>%
+  group_by(Area) %>% 
+  summarise(Entradas = sum(n())) %>%
+  ggplot(.,
+       aes(
+         x=reorder(Area, -Entradas),
+         y=Entradas,
+         fill=Area
+       )) +
+  geom_bar(stat="identity")+
+  #coord_flip()+
+  theme_classic() +
+  ylab("Número de Registros")+
+  xlab("Área")+
+  theme(axis.text.x = element_text(hjust = 1,
+                                   size=14,
+                                   angle=45),
+        axis.text.y = element_text(size = 14),
+        legend.position = "none",
+        axis.title = element_text(size=14,
+                                  face="bold")
+        
+  )
+
+Conabio2 <- data %>% 
+  filter(Compilation_Title == "Catalogo de metadatos geograficos") %>%
+  group_by(SE_Interaction) %>% 
+  summarise(Entradas = sum(n())) %>%
+  ggplot(.,
+       aes(
+         x=reorder(SE_Interaction, -Entradas),
+         y=Entradas,
+         fill=SE_Interaction
+       )) +
+  geom_bar(stat="identity")+
+  #coord_flip()+
+  theme_classic() +
+  ylab("Número de Registros")+
+  xlab("Interacciones Socio-Ecologicas")+
+  theme(axis.text.x = element_text(hjust = 1,
+                                   size=14,
+                                   angle=45),
+        axis.text.y = element_text(size = 14),
+        legend.position = "none",
+        axis.title = element_text(size=14,
+                                  face="bold")
+        
+  )
+
+gridExtra::grid.arrange(Conabio,Conabio2, ncol =2)
+  
+
+```
+
+
+
 ## Esfuerzo Colaborativo
 
 <div class="columns-2">
@@ -437,14 +680,16 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 <img src="Images/Fish.png" width=900 height=400>
 
+
 ## ¡Gracias!
 
 <div class="centered">
 
-Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
+- Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
+- Andres Cisneros-Montemayor | a.cisneros@oceans.ubc.ca
 
 - **Colaboradores:**
-Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Cisneros-Montemayor Andres, Rodriguez Laura
+Arreguín-Sánchez F, Cheung W. William, Cisneros-Mata Miguel A, Rodriguez Laura
 
 <img src="Images/Logos_PI.PNG" width=400 height=110>
 
