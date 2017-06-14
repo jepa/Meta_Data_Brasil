@@ -240,8 +240,8 @@ Gov <- data %>%
 
 kable(
   data.table(
-  "Gobierno" = Gov$Institution[1:6],
-  "Gobierno" = Gov$Institution[7:12]
+  "Gobierno" = Gov$Institution[1:5],
+  "Gobierno" = Gov$Institution[6:10]
 ),
 col.names = NA,
 align = "c"
@@ -427,7 +427,7 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 
 ## Resultados preliminares (Particulares) {.smaller}
 
-### El estado de la conservación en México
+### Explorando los Registros de Conservación 
 
 ```{r Current Status particular, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
@@ -538,11 +538,11 @@ P2
 
 Spp3 <- data %>%
   filter(Research_Field == "Conservation") %>% 
-  filter(Region == "Banco Campeche Caribe") %>% 
+  filter(Region == "B. Camp. Caribe") %>% 
   group_by(Institution,Location) %>% 
   summarise(Registros = n()) %>% 
   arrange(desc(Registros)) %>% 
-  slice(1:10)
+  filter(Registros >=14)
 
 kable(Spp3)
   
@@ -557,7 +557,7 @@ Exploramos COBI
 ```{r COBI, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
 Spp4 <- data %>%
   filter(Research_Field == "Conservation") %>% 
-  filter(Region == "Banco Campeche Caribe") %>% 
+  filter(Region == "B. Camp. Caribe") %>% 
   filter(Institution == "COBI") %>% 
   slice(c(1,509,1991)) %>% 
   select(2,5,10,11,12,14)
@@ -566,7 +566,7 @@ k<- kable(Spp4)
 
 n_Spp <- data %>%
   filter(Research_Field == "Conservation") %>% 
-  filter(Region == "Banco Campeche Caribe") %>% 
+  filter(Region == "B. Camp. Caribe") %>% 
   filter(Institution == "COBI") %>% 
   group_by(Subject_name) %>% 
   summarise(n())
@@ -587,7 +587,7 @@ n_Spp <- data %>%
 ```{r CONABIO_2, eval=T, echo=F, warning=F,message=F, fig.align="center", fig.width=9}
 
 Sc <- data %>% 
-  filter(Compilation_Title == "Catalogo de metadatos geograficos") %>%
+  filter(Compilation_Title == "Catalogo de metadatos geograficos (CONABIO)") %>%
   summarise(Registros=n(),Inicio = min(Start_Year), Fin = max(End_Year)) %>% 
   mutate(Mas_Registros ="Manglares")
   
@@ -598,7 +598,7 @@ Sc <- data %>%
 ```{r CONABIO, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
 Conabio <- data %>% 
-  filter(Compilation_Title == "Catalogo de metadatos geograficos") %>%
+  filter(Compilation_Title == "Catalogo de metadatos geograficos (CONABIO)") %>%
   group_by(Area) %>% 
   summarise(Entradas = sum(n())) %>%
   ggplot(.,
@@ -623,7 +623,8 @@ Conabio <- data %>%
   )
 
 Conabio2 <- data %>% 
-  filter(Compilation_Title == "Catalogo de metadatos geograficos") %>%
+  filter(Compilation_Title == "Catalogo de metadatos geograficos (CONABIO)") %>%
+  filter(!is.na(SE_Interaction)) %>% 
   group_by(SE_Interaction) %>% 
   summarise(Entradas = sum(n())) %>%
   ggplot(.,
