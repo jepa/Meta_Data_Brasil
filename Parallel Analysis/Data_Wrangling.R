@@ -1412,7 +1412,7 @@ E <- Datos %>%
 
 # Coleccion de Moluscos
 
-Datos <- read_delim("~/Downloads/uninmarResultados (2).csv",
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
                     ";",
                     escape_double = FALSE)
 Moluscos <- Datos %>% 
@@ -1430,4 +1430,36 @@ Moluscos <- Datos %>%
   arrange(`Scientific name`)
 
 
-write.csv(Moluscos, "Moluscos.csv")
+#write.csv(Moluscos, "Moluscos.csv")
+
+####### FIN _____________________
+
+#Equinodermos
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+
+Equinos <- Datos %>% 
+  filter(Country == "México") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           `Scientific name`) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year)) %>% 
+  mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>% 
+  mutate(Key = paste("Equinodermos; Equinodermata; Presencia"))
+
+
+
+Equinos_Localidades <- Datos %>% 
+  filter(Country == "México") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           `Scientific name`,
+           County) %>% 
+  summarise(n())
+
+# Tienes que sacar las diferentes localidades por estado
