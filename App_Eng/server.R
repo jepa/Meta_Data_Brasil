@@ -432,6 +432,23 @@ x <- x %>%
     }
   )
   
+  
+  #### Download Metadata Key ####
+  TempKeyInput <- reactive({
+    
+    data<- fread("./Metadata_Key.csv")
+    data.frame(data)
+  })
+  
+  output$downloadKeyTemp <- downloadHandler(
+    filename = function() { 
+      paste(input$Key_datasetInput, 'MIM_Template_Key',".csv", sep='') 
+    },
+    content = function(file) {
+      write.csv(TempKeyInput(), file)
+    }
+  )
+  
 #_____________________ END ___________________________ #
   
   #### Institutions ####

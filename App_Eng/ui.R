@@ -394,9 +394,9 @@ shinyUI(
                     ),
                     # p("Donwload"),
                     downloadButton('downloadTemp',
-                                   "Download Template")
-                    # downloadButton('downloadIns',
-                    #                "Instructions")
+                                   "Download Template"),
+                    downloadButton('downloadKeyTemp',
+                                   "Metadata Key")
              ),
              column(2,
                     align="justified",

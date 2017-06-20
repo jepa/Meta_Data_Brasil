@@ -22,7 +22,7 @@ library(dygraphs)
 shinyUI(
 
   ### Navigation bar
-  navbarPage("",
+  navbarPage(id="MMM_Nav_Bar",
              #Web page title
              "Metadatos de Investigación Marina en México",
              #### HOME ####
