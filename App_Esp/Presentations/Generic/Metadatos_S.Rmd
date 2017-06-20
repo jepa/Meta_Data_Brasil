@@ -39,87 +39,87 @@ source('ts_fun.R')
   
 ```
 
-<!-- ## Agenda {.emphasized} -->
+## Agenda {.emphasized}
 
-<!-- >* Introducción -->
-<!-- >* * Motivación -->
-<!-- >* * Objetivos del proyecto -->
-<!-- >* Estructura de la base de metadatos -->
-<!-- >* Estado actual de la base -->
-<!-- >* Resultados preliminares -->
-<!-- >* Como colaborar -->
+>* Introducción
+>* * Motivación
+>* * Objetivos del proyecto
+>* Estructura de la base de metadatos
+>* Estado actual de la base
+>* Resultados preliminares
+>* Como colaborar
 
-<!-- <div class="centered"> -->
-<!-- <div class="red"> -->
+<div class="centered">
+<div class="red">
 
-<!-- >* En Andamiento | NO Datos | Invitación a Colaborar -->
+>* En Andamiento | NO Datos | Invitación a Colaborar
 
-<!-- </div> -->
+</div>
 
-<!-- ## Data Vs Metadatos -->
+## Data Vs Metadatos
 
-<!-- - **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE) -->
+- **Datos:** "*Información sobre algo concreto que permite su conocimiento exacto o sirve para deducir las consecuencias derivadas de un hecho"* (RAE)
 
-<!-- - **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo.  -->
-<!--     - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos... -->
+- **Metadatos:** es la información sobre cada aspecto de los datos que se requiere para entenderlo.
+    - - Es decir: el ¿qué?, ¿Quién?, ¿cómo?, ¿cuándo?, etc. de los datos...
 
-<!-- <div class="centered"> -->
+<div class="centered">
 
-<!-- <img src="Images/metadata.jpg" width=450 height=250> -->
-
-
-<!-- </div> -->
-
-<!-- ## Motivación del proyecto -->
-
-<!-- <div class="centered"> -->
-
-<!-- > <img src="Images/Climate_Fish.PNG" width=700 height=250>  -->
-
-<!-- > <img src="Images/EDF_CC.jpg" width=700 height=200> -->
-
-<!-- *** -->
-
-<!-- <div class="centered"> -->
-
-<!-- <img src="Images/Canadab.png" width=800 height=200> -->
-
-<!-- <img src="Images/Canada.png" width=500 height=300> -->
+<img src="Images/metadata.jpg" width=450 height=250>
 
 
+</div>
 
-<!-- *** -->
+## Motivación del proyecto
 
-<!-- <div class="columns-2"> -->
+<div class="centered">
 
-<!-- <img src="Images/Flow.PNG" width=400 height=400> -->
+> <img src="Images/Climate_Fish.PNG" width=700 height=250>
 
-<!-- >- Aumento en la investigación multidisciplinaria -->
+> <img src="Images/EDF_CC.jpg" width=700 height=200>
 
-<!-- >- Biología, Ecología, Oceanografía, Economía, etc. -->
+***
 
-<!-- <div class="black"> -->
+<div class="centered">
 
-<!-- >- ¿Falta de datos? o ¿falta de disponibilidad de datos? -->
+<img src="Images/Canadab.png" width=800 height=200>
 
-<!-- </div> -->
-<!-- <div class="red"> -->
-
-<!-- >- **Sin importar cuál sea, el resultado puede bloquear el progreso** -->
-
-<!-- </div> -->
-<!-- </div> -->
-
-<!-- <div class="centered"> -->
-<!-- <div class="green2"> -->
+<img src="Images/Canada.png" width=500 height=300>
 
 
-<!-- <div class="footer" style="margin-top:-200px;font-size:80%;"> -->
 
-<!-- >- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país -->
+***
 
-<!-- </div> -->
-<!-- </div> -->
+<div class="columns-2">
+
+<img src="Images/Flow.PNG" width=400 height=400>
+
+>- Aumento en la investigación multidisciplinaria
+
+>- Biología, Ecología, Oceanografía, Economía, etc.
+
+<div class="black">
+
+>- ¿Falta de datos? o ¿falta de disponibilidad de datos?
+
+</div>
+<div class="red">
+
+>- **Sin importar cuál sea, el resultado puede bloquear el progreso**
+
+</div>
+</div>
+
+<div class="centered">
+<div class="green2">
+
+
+<div class="footer" style="margin-top:-200px;font-size:80%;">
+
+>- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+
+</div>
+</div>
 
 
 ## Objetivos del Proyecto
@@ -425,11 +425,11 @@ suppressWarnings(wordcloud(WordsCorpus, #Plots the words
 ```
 
 
-## Resultados preliminares (Particulares) {.smaller}
+<!-- ## Resultados preliminares (Particulares) {.smaller} -->
 
-### Explorando los Registros de Conservación 
+<!-- ### Explorando los Registros de Conservación  -->
 
-```{r Current Status particular, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+```{r Current Status particular, eval=F, echo=F, warning=F,message=F, fig.align="center"}
 
 ## Solid numbers ####
 # Number of entries ####
@@ -457,10 +457,9 @@ zz_Par <- paste(sum(z$z))
 ```
 
 
-Registros: **`r Number_entriess_Par`**  Repositorios: **`r zz_Par`**  Datos: **`r Number_dp_Par`** 
 
 
-```{r Preeliminar Particular, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height= 4.5, fig.align="center"}
+```{r Preeliminar Particular, eval=F, echo=F, warning=F,message=F, fig.width=9,fig.height= 4.5, fig.align="center"}
 
 Spp <- data %>% 
   filter(Research_Field == "Conservation") %>% 
@@ -496,11 +495,11 @@ P1
 
 ```
 
-***
+<!-- *** -->
 
-### Número de Registros de Conservación por Región
+<!-- ### Número de Registros de Conservación por Región -->
 
-```{r Preeliminar Particular2, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=5, fig.align="center"}
+```{r Preeliminar Particular2, eval=F, echo=F, warning=F,message=F, fig.width=9,fig.height=5, fig.align="center"}
 Spp2 <- data %>%
   filter(Research_Field == "Conservation") %>% 
   filter(Region != "TBD") %>% 
@@ -532,9 +531,9 @@ P2
 
 ```
 
-***
+<!-- *** -->
 
-```{r Campeche, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
+```{r Campeche, eval=F, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
 
 Spp3 <- data %>%
   filter(Research_Field == "Conservation") %>% 
@@ -549,12 +548,12 @@ kable(Spp3)
 
 ```
 
-***
+<!-- *** -->
 
-Exploramos COBI
+<!-- Exploramos COBI -->
 
 
-```{r COBI, eval=T, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
+```{r COBI, eval=F, echo=F, warning=F,message=F, fig.width=9,fig.height=4.5, fig.align="center"}
 Spp4 <- data %>%
   filter(Research_Field == "Conservation") %>% 
   filter(Region == "B. Camp. Caribe") %>% 
@@ -576,15 +575,11 @@ n_Spp <- data %>%
 
 ```
 
-- **`r nrow(n_Spp)`** especies, registradas entre 2012 - 2016   
-- Dos tipos de datos: **Abundancia y Talla**
-- Para tres localidades: **Banco Chinchorro, Puerto Morelos y Sian Kaan**
 
-`r k`
 
-## CONABIO
+<!-- ## CONABIO -->
 
-```{r CONABIO_2, eval=T, echo=F, warning=F,message=F, fig.align="center", fig.width=9}
+```{r CONABIO_2, eval=F, echo=F, warning=F,message=F, fig.align="center", fig.width=9}
 
 Sc <- data %>% 
   filter(Compilation_Title == "Catalogo de metadatos geograficos (CONABIO)") %>%
@@ -593,9 +588,9 @@ Sc <- data %>%
   
 ```
 
-**`r Sc$Registros[1]`** registros, desde `r Sc$Inicio[1]` hasta `r Sc$Fin[1]` siendo *`r Sc$Mas_Registros[1]`* los más repetidos
 
-```{r CONABIO, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+```{r CONABIO, eval=F, echo=F, warning=F,message=F, fig.align="center"}
 
 Conabio <- data %>% 
   filter(Compilation_Title == "Catalogo de metadatos geograficos (CONABIO)") %>%
