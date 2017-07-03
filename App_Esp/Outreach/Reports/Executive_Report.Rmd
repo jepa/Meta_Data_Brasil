@@ -1,13 +1,13 @@
 ---
 title: "Base de metadatos de la investigación marina en México"
 author: ''
-date: "16 Junio, 2017"
+date: "20 Junio, 2017"
 output:
-  word_document: default
   pdf_document:
     fig_caption: yes
     fig_height: 2
     fig_width: 3
+  word_document: default
 ---
 
 ```{r packages and data, eval=T, echo=F, warning=F, message=F}

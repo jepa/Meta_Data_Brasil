@@ -1,0 +1,263 @@
+---
+title: "Building a Meta-database of Marine Research in Mexico"
+author: ''
+date: "June 20th, 2017"
+output:
+  pdf_document:
+    fig_caption: yes
+    fig_height: 2
+    fig_width: 3
+  word_document: default
+---
+
+```{r packages and data, eval=T, echo=F, warning=F, message=F}
+
+library(data.table)
+library(knitr)
+library(kableExtra)
+library(dplyr)
+library(dygraphs)
+library(ggplot2)
+
+
+Template <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv",
+                  colClasses = c(Location = 'character',
+                                 Notes = 'character',
+                                 Data_Uncertanty ='character')
+)
+
+
+# Needed for Historic reconstruction
+Pedroche<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Pedroche_Hist.csv")
+
+```
+
+```{r Numbers, eval=T, echo=F, warning=F, message=F}
+
+# Number of entries ####
+Number_entries <- Template %>%
+  filter(MMID != "na")
+
+N_entries <- paste(Number_entries$MMID[length(Number_entries$MMID)])
+
+# Number of Data Points ####
+N_dp <- paste(
+  round(sum(Number_entries$Data_Time_Points,na.rm=T)/1000)
+)
+
+# Number of Repositories ####
+z<- Template %>%
+  group_by(Compilation_Title) %>%
+  summarise(sum(Data_Time_Points)) %>%
+  select(-2) %>%
+  filter(!is.na(Compilation_Title)) %>%
+  mutate(z = 1)
+
+N_rep <- paste(sum(z$z))
+
+#### Inicio y fin ##
+
+Template2 <- Template %>% 
+  filter(Start_Year >= 1700)
+
+Y_Inicio <- min(Template2$Start_Year, na.rm = T)
+
+#### Resultados mas especificos ####
+
+Disciplina <- Template %>% 
+  group_by(Research_Field) %>% 
+  summarise(Registros=n(),
+            Datos = sum(Data_Time_Points,
+                        na.rm =T),
+            Inicio = min(Start_Year,
+                         na.rm =T),
+            Fin = max(Start_Year,
+                      na.rm =T)) %>% 
+  arrange(desc(Registros))
+
+Research_Field_T <-  kable(Disciplina,
+                           caption = "Resúmen de información contenida en los metadatos por categoría de investigación")
+
+### Especies con más datos ###
+
+Filtrado = c("Multiple Species", "Multiple Especies", "TBD")
+
+Especies <- Template %>% 
+  filter(!is.na(Subject_name)) %>% 
+  filter(!Subject_name %in% Filtrado) %>% 
+  group_by(Subject_name) %>% 
+  summarize(Registros=n(),
+            Datos = sum(Data_Time_Points,
+                        na.rm =T),
+            Inicio = min(Start_Year,
+                         na.rm =T),
+            Fin = max(Start_Year,
+                      na.rm =T)) %>% 
+  arrange(desc(Registros))
+
+### Estados con más datos ###
+
+Filtrado = c("Multiple locations", "Multiple", "TBD", "Multiple Stations")
+
+Localidades <- Template %>% 
+  filter(!is.na(Location)) %>% 
+  filter(!Location %in% Filtrado) %>% 
+  group_by(Location) %>% 
+  summarize(Registros=n(),
+            Datos = sum(Data_Time_Points,
+                        na.rm =T),
+            Inicio = min(Start_Year,
+                         na.rm =T),
+            Fin = max(Start_Year,
+                      na.rm =T)) %>% 
+  arrange(desc(Registros))
+
+```
+
+### Principal Researchers:
+-	Dr. Andrés Cisneros-Montemayor, Institute of Oceans and Fisheries, University of British Columbia
+-	Dr. Francisco Arreguín-Sánchez, Centro Interdisciplinario de Ciencias Marinas, Instituto Politécnico Nacional
+-	MSc. Juliano Palacios-Abrantes, Institute of Oceans and Fisheries, University of British Columbia
+-	Dr. Laura Rodríguez, Environmental Defense Fund México
+- Dr. Miguel Ángel Cisneros-Mata, Centro Regional de Investigación Pesquera, Guaymas, Instituto nacional de Pesca
+-	Dr. William Cheung, Institute of Oceans and Fisheries, University of British Columbia
+
+
+# Abstract
+
+Research and management of marine resources increasingly depends on various biological, ecological, social, and economic data. Limited information is often perceived as a barrier in advancing research and policy discussions. In Mexico, numerous information regarding the seas and coasts has been produced by academic institutions, government, and NGOs both inside and outside the country. However, in many cases, the existence and availability of these data is not clear for most people. While diverse barriers can compromise the exchange of information among stakeholders, having publicly accessible descriptions of existing data is a huge step towards increasing collaboration and innovative research. A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region. Hence, the following project aims to create a comprehensive meta-dataset of marine research in Mexico. Moreover, we aim to identify the major trends in marine data availability in Mexico as well as information and research gaps that can be addressed in the future. Finally, the meta-database will be public and available for consultation, and is expected to be largely self-maintaining. Since November of 2016, we have collected `r N_entries` records that contain information on more than `r N_dp` thousand data generated between `r Y_Inicio` and 2017. These metadata come from more than `r N_rep` sources of free access and scientific publications being fisheries and ecology the disciplines with more records and the Pacific coast the littoral with more data, at the moment. If we omit records containing multiple species, we find that *`r Especies$Subject_name[1]`* and *`r Especies$Subject_name[2]`* are the organisms with the most records and the locations with the most records are *`r Localidades$Location[1]`* and *`r Localidades$Location[2]`*. Despite a positive response from more than 60 individuals from the scientific community and from different governmental and non-governmental institutions, there is still a lack of information to be collected. This initiative is still outgoing, collecting metadata, creating inter-institutional relationships, and inviting researchers to collaborate with the population of the metadata. Data availability is key not only to better understand Mexico's marine and coastal environments, but to identify knowledge gaps so that research can be prioritized. This will facilitate furnishing management and conservation policies, for example, for marine habitats and fisheries resources vulnerable to climate change. The more people involved, the better we can reflect the state of marine research in Mexico.
+
+**Note:** The data, graphs, and tables reported here are preliminary and do not, in any way, reflect the current state of marine research in Mexico. This result can only be achieved when the project has managed to capture a large part of the data produced in the country.
+
+\clearpage
+
+<!-- #Annex, Images and Tables -->
+
+```{r Fig3, echo=F,eval=F,message=F,warning=F, fig.height=3, fig.width=6, fig.cap="History of records generated from information on the metadata. Note, future data represent projection models"}
+
+Pedroche <- Pedroche %>% 
+  select(-1)
+Hist <- Template %>%
+  filter(MMID <=2861) %>%
+  select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
+
+#Reads Predoche fixed data from the Parallel Analysis
+
+# #Join both datasets and removes NA's
+Fin_Plot <- Pedroche %>%
+  bind_rows(Hist) %>%
+  filter(!is.na(Start_Year))
+
+#### Codigo Andres ####
+tdat= na.omit(Fin_Plot[,c("Start_Year","End_Year")]) #Subset columns with 
+tdat$Start_Year<- as.numeric(as.character(tdat$Start_Year))
+tdat$End_Year<- as.numeric(as.character(tdat$End_Year))
+#mean(tdat$Start_Year) #just checking they are number
+#mean(tdat$End_Year) #just checking they are number
+
+#start and end year data
+years= 1930:2020 #Limit time span considered
+
+#x = tdat[1,1]:tdat[1,2] #First full time series #<- not working for me (J) So this should work as well:
+x <- tdat$Start_Year[1]:tdat$End_Year[1] # <- (J)
+#It works!
+
+ts= cbind( years, !is.na(match(years, x))==1 ) #Flag years in time series
+for(i in 2:dim(tdat)[1]) #Repeat for all data
+{
+  #x= tdat[i,1] : tdat[i,2]
+  x <- tdat$Start_Year[i]:tdat$End_Year[i]
+  ts= cbind(ts, !is.na(match(years, x))==1)
+}
+tssum= cbind(ts[,1], rowSums(ts[,2:dim(ts)[2]]) ) #Sum over years
+gtssum <- data.frame(tssum)
+
+ggplot(gtssum, aes(X1, X2)) +
+  geom_line() +
+  xlab("Year") +
+  ylab("Number of Records")+
+  theme_classic()+
+  scale_x_discrete(limits =c(seq(1930,2020,10)))
+
+```
+
+```{r Fig1, echo=F,eval=F, fig.height=3, fig.width=6, fig.cap= "Records by Mexican Coast. National refers to data comprising 2 or more littorals. Terrestrial refers to data in landlocked states"}
+
+# AreaEsp <- data.frame(c(
+#   Esp=
+#     "Atlántico",
+#   "Terrestre",
+#   "Nacional",
+#   "Pacífico"
+# )
+# )
+# colnames(AreaEsp) <- "AreaEsp"
+
+Area <- Template %>%   
+  group_by(Area) %>%
+  summarise(Value = n()) %>% 
+  filter(Area !="TBD") %>% 
+  filter(Area !="NA") 
+# %>% 
+#   bind_cols(AreaEsp)
+
+
+
+ggplot(data= Area,
+       aes(
+         x=reorder(Area, -Value),
+         y=Value,
+         fill=Area
+       )) +
+  geom_bar(stat="identity")+
+  theme_classic() +
+  ylab("Number of Records")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+    size=12),
+    axis.text.y = element_text(size = 12),
+    legend.position = "none",
+    axis.title = element_text(size=14,
+                              face="bold")
+  )
+
+# `r Research_Field_T`
+
+```
+
+\clearpage
+
+
+
+```{r Tab1, echo=F,eval=F}
+
+Ta <- Template %>%   
+  group_by(Author) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  select(-2) %>% 
+  slice(1:30)
+
+Tb <- Template %>% 
+  filter(MMID != 604) %>% 
+  group_by(Author) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>% 
+  select(-2) %>% 
+  slice(31:60)
+
+Tc <- Template %>%
+  group_by(Author) %>%
+  summarise(Value = sum(Data_Time_Points,na.rm=T)) %>%
+  select(-2) %>%
+  slice(41:60)
+
+Tf <- bind_cols(Ta,Tb)
+
+
+Tab <- kable(Tf,
+             caption = "Autores e Institutciones representadas en los metadatos. Nota: No todos los autores o instituciones han sido directamente contactados")
+
+# `r Tab`
+
+```
+
+

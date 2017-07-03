@@ -14,8 +14,8 @@ library(leaflet)
 library(dataone)
 install.packages('dataone')
 
-setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
+setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 #________________________________________________________#
 #### Sea Around Us Data, Pacific ####
@@ -1317,19 +1317,27 @@ write.csv(Cleaned_Template, "Template_3.csv")
 
 #### END ####
 
-#### ICMyL UNAM...####
+#### UNINMAR ####
+
+#Bremen ya fue...
+
+### ICMyL ###
 
 ### Ecologia Bentos ###
 
-write.csv(Eco_Bentos, "Eco_Bentos.csv")
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
 
-
-Sci_Name <- Eco_Bentos %>% 
+Sci_Name <- Datos %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
   group_by(`Scientific name`,
            `State/Province`,
            `Vernacular name`) %>% 
-  summarise(Min=min(Fecha),
-            Max =max(Fecha)) %>% 
+  summarise(Min=min(year),
+            Max =max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
   mutate(Inicio =
     paste(
       "Presencia de",`Scientific name`,"en",`State/Province`
@@ -1347,7 +1355,9 @@ Sci_Name <- Eco_Bentos %>%
   )
 
 
-#write.csv(Sci_Name,"Sci_Name.csv")
+write.csv(Sci_Name, "Eco_Bentos.csv")
+
+
 #
 
 ### 
@@ -1366,7 +1376,8 @@ Mar_Profundo <- Datos %>%
            Class,
            Order) %>% 
   summarise(Min=min(year),
-            Max =max(year)) %>% 
+            Max =max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
   mutate(Inicio_I =
            paste(
              "Presencia de",`Vernacular name`,"en el Golfo de Mexico"
@@ -1378,13 +1389,13 @@ Mar_Profundo <- Datos %>%
            )
   ) 
 
-#write.csv(Mar_Profundo, "Mar_Profundo.csv")
+write.csv(Mar_Profundo, "Mar_Profundo.csv")
 
 ####### FIN _____________________
 
 # Coleccion Ictiologica
 
-Datos <- read_delim("~/Downloads/uninmarResultados (1).csv",
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
                     ";",
                     escape_double = FALSE)
 Peces <- Datos %>% 
@@ -1393,8 +1404,9 @@ Peces <- Datos %>%
   group_by(`State/Province`,
            `Scientific name`,
            County) %>% 
-  summarise(Inicio = min(year),
-            Fin = max(year)) %>% 
+  summarise(Min=min(year),
+            Max =max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
   mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>% 
   mutate(Key = paste("Peces; Ictiologia; Presencia",County,sep="; "))
 
@@ -1423,15 +1435,16 @@ Moluscos <- Datos %>%
   group_by(`State/Province`,
            `Scientific name`,
            County) %>% 
-  summarise(Inicio = min(year),
-            Fin = max(year)) %>% 
+  summarise(Inicio=min(year),
+            Fin =max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
   mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>% 
   mutate(Key = paste("Moluscos; Malacologia; Presencia",County,sep="; ")) %>% 
   mutate(State =paste(County)) %>% 
   arrange(`Scientific name`)
 
 
-#write.csv(Moluscos, "Moluscos.csv")
+write.csv(Moluscos, "Moluscos.csv")
 
 ####### FIN _____________________
 
@@ -1447,20 +1460,187 @@ Equinos <- Datos %>%
            c("year", "month", "day"), sep = "-") %>% 
   group_by(`State/Province`,
            `Scientific name`) %>% 
-  summarise(Inicio = min(year),
-            Fin = max(year)) %>% 
+  summarise(Inicio=min(year),
+            Fin =max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
   mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>% 
-  mutate(Key = paste("Equinodermos; Equinodermata; Presencia"))
+  mutate(Key = paste("Equinodermos; Equinodermata; Presencia")) %>% 
+  arrange(`Scientific name`)
 
+Lista <- Equinos %>% 
+  filter(`State/Province` =="")
 
 
 Equinos_Localidades <- Datos %>% 
   filter(Country == "México") %>% 
+  filter(`Scientific name` %in% Lista$`Scientific name`) %>% 
+  filter(`State/Province` =="") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`Sea/Gulf`,
+           `Scientific name`
+           ) %>% 
+  summarise(n())
+
+write.csv(Equinos, "Equinos.csv")
+
+####### FIN _____________________
+
+#Porifera
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+
+Pori <- Datos %>% 
+  filter(Country == "México") %>% 
   separate(`Event date`,
            c("year", "month", "day"), sep = "-") %>% 
   group_by(`State/Province`,
-           `Scientific name`,
-           County) %>% 
-  summarise(n())
+           `Scientific name`
+           ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Titulo = paste("Especimen preservado de",`Scientific name`, "en", `State/Province`)) %>%
+  mutate(Key = paste("Porifera; Especimen preservado; Presencia; Calcarea; Demospongiae; Hexactinellida"))
 
-# Tienes que sacar las diferentes localidades por estado
+
+
+# write.csv(Pori, "Pori.csv")
+
+####### FIN _____________________
+
+
+#Campaás oceanograficas
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+
+Oceano <- Datos %>% 
+  filter(Country == "México") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           County
+  ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Temp = paste("Temperatura Superficial del Agua en", County,`State/Province`)) %>%
+  mutate(Temp_key = paste("CTD; temperatura; superficial; columna de agua; Justo Sierra; MOPEED")) %>%
+  mutate(Sal = paste("Salinidad de columna de Agua en", County,`State/Province`)) %>%
+  mutate(Sal_Key = paste("CTD; salinidad; partes por millon; superficial; columna de agua; Justo Sierra; MOPEED")) %>%
+  mutate(Oxi = paste("Concentracion de Oxigeno disuelto en", County,`State/Province`)) %>%
+  mutate(Oxi_Key = paste("CTD; oxigeno; superficial; columna de agua; Justo Sierra; MOPEED")) %>% 
+  mutate(Key = paste("Sonda CTD; Especimen preservado; Presencia; Calcarea; Demospongiae; Hexactinellida; MOPEED"))
+
+write.csv(Oceano, "Ocean.csv")
+####### FIN _____________________
+
+#Tulum
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+
+Tulum <- Datos %>% 
+  filter(Country == "México") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`Bay/Sound`,
+           County
+  ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Temp = paste("Presion atmosferica de",`Bay/Sound`, County)) %>%
+  mutate(Temp_key = paste("Observatorios marinos; SETRA; Barometro; TULUM")) %>% 
+  mutate(Temp = paste("Temperatura Superficial del Agua en",`Bay/Sound`, County)) %>%
+  mutate(Temp_key = paste("Observatorios marinos; SETRA; Barometro; MODIS; NASA; AQUA; Color del Agua; SST; TULUM")) 
+
+write.csv(Tulum, "Tulum.csv")
+####### FIN _____________________
+
+### Smitsonian ###
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+#Hay algunos registros sin "county"í, para esos los organizamos por Estado/Provincia
+Smithy_A <- Datos %>% 
+  filter(Country == "México") %>% 
+  filter(County == "") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           `Scientific name`
+  ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Temp = paste("Especimen preservado de",`Scientific name`)) %>%
+  mutate(Temp_key = paste("Smithsonian Institution; Equinodermos; Alcohol; Conserva")) %>% 
+  rename(County = `State/Province`)
+
+Smithy_B <- Datos %>% 
+  filter(Country == "México") %>% 
+  filter(County != "") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(County,
+           `Scientific name`
+  ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Temp = paste("Especimen preservado de",`Scientific name`)) %>%
+  mutate(Temp_key = paste("Smithsonian Institution; Equinodermos; Alcohol; Conserva"))
+
+
+Smithsonian <- bind_rows(Smithy_A,Smithy_B)
+
+write.csv(Smithsonian, "Smithsonian.csv")
+
+####### FIN _____________________
+
+### ICMyL Mazatlan ###
+
+Datos <- read_delim("~/Downloads/uninmarResultados.csv",
+                    ";",
+                    escape_double = FALSE)
+#Hay algunos pocos (15) sin "county", para esos los organizamos por Estado/Provincia
+Copepodos_A <- Datos %>% 
+  filter(Country == "México") %>% 
+  filter(County == "") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(`State/Province`,
+           `Scientific name`
+  ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Temp = paste("Especimen preservado de",`Scientific name`)) %>%
+  mutate(Temp_key = paste("Macho; Hembra; Alcohol; Merodo de colecta; Clasificacion; Copepodos; Disectado; Preservado Conserva")) %>% 
+  rename(County = `State/Province`)
+
+Copepodos_B <- Datos %>% 
+  filter(Country == "México") %>% 
+  filter(County != "") %>% 
+  separate(`Event date`,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(County,
+           `Scientific name`
+  ) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year))) %>% # <- nos da los dp para cada registro
+  mutate(Temp = paste("Especimen preservado de",`Scientific name`)) %>%
+  mutate(Temp_key = paste("Macho; Hembra; Alcohol; Merodo de colecta; Clasificacion; Copepodos; Disectado; Preservado Conserva"))
+
+Copepodos <- bind_rows(Copepodos_A,Copepodos_B)
+
+write.csv(Copepodos, "Copepodos.csv")
+                       
