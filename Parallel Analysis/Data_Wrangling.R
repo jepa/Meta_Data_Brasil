@@ -12,6 +12,7 @@ library(tidyr)
 library(data.table)
 library(leaflet)
 library(dataone)
+install.packages('dataone')
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
