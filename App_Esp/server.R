@@ -42,7 +42,7 @@ shinyServer(function(input, output, session) {
   ##### Template #####
   datasetInput <- reactive({
     
-    data<- fread("./Template.csv",
+    data<- fread("./TemplateB.csv",
                  colClasses = c(Location = 'character',
                                 Notes = 'character',
                                 Data_Uncertanty ='character'))
