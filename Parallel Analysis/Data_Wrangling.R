@@ -12,7 +12,7 @@ library(tidyr)
 library(data.table)
 library(leaflet)
 library(dataone)
-install.packages('dataone')
+
 
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
@@ -1607,6 +1607,8 @@ write.csv(Smithsonian, "Smithsonian.csv")
 
 ### ICMyL Mazatlan ###
 
+# Copepoda ##
+
 Datos <- read_delim("~/Downloads/uninmarResultados.csv",
                     ";",
                     escape_double = FALSE)
@@ -1642,5 +1644,66 @@ Copepodos_B <- Datos %>%
 
 Copepodos <- bind_rows(Copepodos_A,Copepodos_B)
 
-write.csv(Copepodos, "Copepodos.csv")
+# write.csv(Copepodos, "Copepodos.csv")
+
+#### Fin Copepodos
+
+#### Pollution ####
+
+#Impossible to do... 
+
+#### FIN ICMyL UNIMAR ####
+
+#### WCMC ####
+
+# MPAS ##
+
+
+WDPA <- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/WDPA_July2017_MEX-csv/WDPA_July2017_MEX-csv.csv") %>% 
+  filter(MARINE >= 1)
+
+# Tipo de informacion existente en la base de datos:
+# Tipo de area natural protegida (e.g Designacion) (DESIG) YA
+# Categoria IUN (IUCN_CAT) YA
+# (Rep_M_Area)
+# (GIS_M_Area)
+#(Rep_Area)
+#(GIS_Area)
+# Ano de creacion (Status_YR) (INCLUIR EN TODAS)
+# Plan de Manejo (MANG_PLAN) YA
+# Localidad (SUB_LOC) * voy a tener de desglosar eso (INCLUIR EN TODAS)
+# Tipo de file (TYPE) (INCLUIR EN TODAS)
+
+# For global numbers
+
+Glob <- WDPA %>% 
+  group_by(NAME) %>% 
+  summarise(n())
+
+View(Glob)
+
+# For single areas
+
+WDPA_I <- WDPA %>% 
+  mutate(Title_I = paste("Nivel de proteccion del AMP ", NAME, sep="")) %>% 
+  mutate(Key_I = paste("AMP; Area Natural Protegida; CONANP ",DESIG, sep=";")) %>% 
+  mutate(Title_II = paste("Cateogria IUCN del AMP ", NAME, sep="")) %>% 
+  mutate(Key_II = paste("AMP; Area Natural Protegida; CONANP; IUCN ",IUCN_CAT, DESIG, sep=";")) %>% 
+  mutate(Title_III = paste("Plan de Manejo del AMP ", NAME, sep="")) %>% 
+  mutate(Key_III = paste("AMP; Area Natural Protegida; CONANP; Poan de Manejo", sep=";")) %>% 
+  mutate(Title_VI = paste("Area del AMP ", NAME, sep="")) %>% 
+  mutate(Key_VI = paste("AMP; Area Natural Protegida; CONANP; tamano;, area", sep=";")) %>% 
+  select(TYPE,
+         NAME,
+         STATUS_YR,
+         MANG_PLAN,
+         30:37,
+         SUB_LOC)
+
+write.csv(WDPA_I,"WDPA_I.csv")
+
+
+# FIN WDPA, maps ###
+
+
                        
