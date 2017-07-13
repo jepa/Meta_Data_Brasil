@@ -12,6 +12,9 @@ library(tidyr)
 library(data.table)
 library(leaflet)
 library(dataone)
+library(rgdal)
+library(tools)
+library(ggplot2)
 
 
 
@@ -1705,5 +1708,108 @@ write.csv(WDPA_I,"WDPA_I.csv")
 
 # FIN WDPA, maps ###
 
+#### OBIS ####
 
-                       
+# I downloaded obis data for all mexico so I need to subset by eez and within EEZ's. I'll use the point_in_poligon() fun for that
+
+# Data. 
+OBIS <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/OBIS/d4f53cc99ff68fbabb4c971b30fd3b39ba00c9db/d4f53cc99ff68fbabb4c971b30fd3b39ba00c9db.csv")
+
+# Spatial analysis
+
+# The path
+path_eez_world <- ("/Users/jpalacios/Documents/Box Sync/UBC/Oceans_Project/Distribution/Data/Spatial/World_EEZ_v8_2014")
+#The File
+fnam_eez_world <- "World_EEZ_v8_2014_HR.shp"
+#Load it!
+eez_world <- readOGR(dsn = path_eez_world,
+                     layer =file_path_sans_ext(fnam_eez_world))
+
+#Fortify function to get a data.frame
+fortify.shape <- function(x){
+  x@data$id <- rownames(x@data)
+  x.f = fortify(x, region = "id")
+  x.join <- inner_join(x.f, x@data, by = "id")
+}
+
+#### The actual EEZ ####
+
+# Extract the EEZ for Mexico:
+eez_p <- eez_world[eez_world@data$Country == "Mexico", ]
+
+# Fortify the shapefile data:
+eez_p <- fortify(eez_p)
+
+# Get Mexico's Pacific EEZ
+eez_Mex_P <- eez_p %>% 
+  filter(piece == 1)
+
+# Get Mexico's Atlantic EEZ (2)
+eez_Mex_A <- eez_p %>% 
+  filter(piece == 2)
+  
+# Get the points in polygon  
+#Note <- 1 is present| 0 is ausent
+OBIS_P <-data.frame(point.in.polygon(OBIS$decimalLongitude,
+                                         OBIS$decimalLatitude,
+                                         eez_Mex_P$long,
+                                         eez_Mex_P$lat))
+
+colnames(OBIS_P) <- "EEZ"
+
+# First the Pacific data ####
+
+# Add a column to Original Subseted Data with this information and then filter only those present:
+OBIS_Pf <- OBIS %>% 
+  bind_cols(OBIS_P) %>% 
+  filter(EEZ == 1)  %>% 
+  select(-EEZ) %>% 
+  #Get ride of useless columns
+  select(1:8) %>% 
+  #Separate the date to know how many datapoints there are
+  separate(eventDate,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(scientificName,
+           institutionCode) %>% 
+  summarise(Inicio = min(year),
+            Fin = max(year),
+            DP = length(unique(year)),
+            Mean_Lat = mean(decimalLatitude),
+            Mean_Long = mean(decimalLongitude)) %>%
+  mutate(Title_P = paste("Records of",scientificName,"in the Pacific", sep=" ")) %>% 
+  mutate(Key_P = paste("Presencia; Ausencia; Registro; Observacion"))
+
+# write.csv(OBIS_Pf, "Obis_Final_Pacific.csv")
+
+# Now the Atlantic ####
+
+OBIS_A <-data.frame(point.in.polygon(OBIS$decimalLongitude,
+                                     OBIS$decimalLatitude,
+                                     eez_Mex_A$long,
+                                     eez_Mex_A$lat))
+
+colnames(OBIS_A) <- "EEZ"
+
+OBIS_Af <- OBIS %>% 
+  bind_cols(OBIS_A) %>% 
+  filter(EEZ == 1)  %>% 
+  select(-EEZ) %>% 
+  #Get ride of useless columns
+  select(1:8) %>% 
+  #Separate the date to know how many datapoints there are
+  separate(eventDate,
+           c("year", "month", "day"), sep = "-") %>% 
+  group_by(scientificName,
+           institutionCode) %>% 
+  summarise(Inicio = min(year,na.rm=T),
+            Fin = max(year,na.rm=T),
+            DP = length(unique(year,na.rm=T)),
+            Mean_Lat = mean(decimalLatitude),
+            Mean_Long = mean(decimalLongitude)) %>% 
+  mutate(Title_P = paste("Records of",scientificName,"in the Atlantic", sep=" ")) %>% 
+  mutate(Key_P = paste("Presencia; Ausencia; Registro; Observacion"))
+
+# write.csv(OBIS_Af, "Obis_Final_Atlantic.csv")
+
+
+#### FINA OBIS ####

@@ -190,4 +190,9 @@ Are subsidies Pressure or response? depends on the type of subsidy and who gives
 
 There are 16 dtp because of the 16 biological information available in FishBase for each species.
 
+# MMID[41431:60469]
+##Autor: OBIS
+### Long and Lat
+
+Longitude and Latitude are setted as the mean value for when there are more than one record
 

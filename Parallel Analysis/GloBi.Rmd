@@ -20,7 +20,6 @@ library(ggmap)
 #devtools::install_github("ropensci/rglobi")
 library(rglobi)
 library(ggplot2)
-
 #Spatial stuff
 library("rgdal") # for ogrInfo() and readOGR()
 library("tools") # for file_path_sans_ext()
