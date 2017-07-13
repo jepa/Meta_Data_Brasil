@@ -213,11 +213,12 @@ x <- x %>%
   #Creating TS graph
   
   output$TFgraph <- renderDygraph({
-  x <- TFdatasetInput()
+  x <- TFdatasetInput() %>% 
+    select(-Total)
 
   Dt_Points <- ts(x,
                   start=c(2016,11),
-                  end = c(2017,4), # <- this has to be changed everytime we add a month
+                  end = c(2017,6), # <- this has to be changed everytime we add a month
                   frequency= 12)
 
   dygraph(Dt_Points) %>% #Creats the graph
@@ -227,7 +228,7 @@ x <- x %>%
     dyRangeSelector(height = 20) %>%
     dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
     dyAxis("y", drawGrid = FALSE) %>%
-    dyAxis("y", label = "Number of Data Points") %>%  #Labels
+    dyAxis("y", label = "Number of Records") %>%  #Labels
     dyLegend(width = 600)
     
   })

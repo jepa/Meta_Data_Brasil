@@ -42,7 +42,7 @@ shinyServer(function(input, output, session) {
   ##### Template #####
   datasetInput <- reactive({
     
-    data<- fread("./TemplateB.csv",
+    data<- fread("./Template.csv",
                  colClasses = c(Location = 'character',
                                 Notes = 'character',
                                 Data_Uncertanty ='character'))
@@ -180,11 +180,12 @@ shinyServer(function(input, output, session) {
   #Creating TS graph
   
   output$TFgraph <- renderDygraph({
-    x <- TFdatasetInput()
+    x <- TFdatasetInput() %>% 
+      select(-Total)
 
     Dt_Points <- ts(x,
                     start=c(2016,11),
-                    end = c(2017,4), # <- this has to be changed everytime we add a month
+                    end = c(2017,6), # <- this has to be changed everytime we add a month
                     frequency= 12)
 
     dygraph(Dt_Points) %>% #Creats the graph
@@ -194,7 +195,7 @@ shinyServer(function(input, output, session) {
       dyRangeSelector(height = 20) %>%
       dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
       dyAxis("y", drawGrid = FALSE) %>%
-      dyAxis("y", label = "Numero de Datos") %>%  #Labels
+      dyAxis("y", label = "Numero de Registros") %>%  #Labels
       dyLegend(width = 600)
   })
   
