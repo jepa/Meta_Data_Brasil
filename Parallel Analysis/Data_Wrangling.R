@@ -15,7 +15,19 @@ library(dataone)
 library(rgdal)
 library(tools)
 library(ggplot2)
+library(leaflet)
 
+#### Mexico's EEZ
+
+EEZ_Mex <- read.csv("./eez_Mex.csv")
+
+# Get Mexico's Pacific EEZ
+eez_Mex_P <- EEZ_Mex %>% 
+  filter(piece == 1)
+
+# Get Mexico's Atlantic EEZ (2)
+eez_Mex_A <- EEZ_Mex %>% 
+  filter(piece == 2)
 
 
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
@@ -1657,57 +1669,6 @@ Copepodos <- bind_rows(Copepodos_A,Copepodos_B)
 
 # FIN _____________________ ICMyL UNIMAR _____________________ ####
 
-#### WCMC ####
-
-# MPAS ##
-
-
-WDPA <- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/WDPA_July2017_MEX-csv/WDPA_July2017_MEX-csv.csv") %>% 
-  filter(MARINE >= 1)
-
-# Tipo de informacion existente en la base de datos:
-# Tipo de area natural protegida (e.g Designacion) (DESIG) YA
-# Categoria IUN (IUCN_CAT) YA
-# (Rep_M_Area)
-# (GIS_M_Area)
-#(Rep_Area)
-#(GIS_Area)
-# Ano de creacion (Status_YR) (INCLUIR EN TODAS)
-# Plan de Manejo (MANG_PLAN) YA
-# Localidad (SUB_LOC) * voy a tener de desglosar eso (INCLUIR EN TODAS)
-# Tipo de file (TYPE) (INCLUIR EN TODAS)
-
-# For global numbers
-
-Glob <- WDPA %>% 
-  group_by(NAME) %>% 
-  summarise(n())
-
-View(Glob)
-
-# For single areas
-
-WDPA_I <- WDPA %>% 
-  mutate(Title_I = paste("Nivel de proteccion del AMP ", NAME, sep="")) %>% 
-  mutate(Key_I = paste("AMP; Area Natural Protegida; CONANP ",DESIG, sep=";")) %>% 
-  mutate(Title_II = paste("Cateogria IUCN del AMP ", NAME, sep="")) %>% 
-  mutate(Key_II = paste("AMP; Area Natural Protegida; CONANP; IUCN ",IUCN_CAT, DESIG, sep=";")) %>% 
-  mutate(Title_III = paste("Plan de Manejo del AMP ", NAME, sep="")) %>% 
-  mutate(Key_III = paste("AMP; Area Natural Protegida; CONANP; Poan de Manejo", sep=";")) %>% 
-  mutate(Title_VI = paste("Area del AMP ", NAME, sep="")) %>% 
-  mutate(Key_VI = paste("AMP; Area Natural Protegida; CONANP; tamano;, area", sep=";")) %>% 
-  select(TYPE,
-         NAME,
-         STATUS_YR,
-         MANG_PLAN,
-         30:37,
-         SUB_LOC)
-
-write.csv(WDPA_I,"WDPA_I.csv")
-
-
-# FIN WDPA, maps ###
-
 #### OBIS ####
 
 # I downloaded obis data for all mexico so I need to subset by eez and within EEZ's. I'll use the point_in_poligon() fun for that
@@ -1747,13 +1708,13 @@ eez_Mex_P <- eez_p %>%
 # Get Mexico's Atlantic EEZ (2)
 eez_Mex_A <- eez_p %>% 
   filter(piece == 2)
-  
+
 # Get the points in polygon  
 #Note <- 1 is present| 0 is ausent
 OBIS_P <-data.frame(point.in.polygon(OBIS$decimalLongitude,
-                                         OBIS$decimalLatitude,
-                                         eez_Mex_P$long,
-                                         eez_Mex_P$lat))
+                                     OBIS$decimalLatitude,
+                                     eez_Mex_P$long,
+                                     eez_Mex_P$lat))
 
 colnames(OBIS_P) <- "EEZ"
 
@@ -1812,3 +1773,255 @@ OBIS_Af <- OBIS %>%
 # write.csv(OBIS_Af, "Obis_Final_Atlantic.csv")
 
 # FIN _____________________ OBIS _____________________ ####
+
+#### WCMC ####
+
+# MPAS ####
+
+
+WDPA <- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/WDPA_July2017_MEX-csv/WDPA_July2017_MEX-csv.csv") %>% 
+  filter(MARINE >= 1)
+
+# Tipo de informacion existente en la base de datos:
+# Tipo de area natural protegida (e.g Designacion) (DESIG) YA
+# Categoria IUN (IUCN_CAT) YA
+# (Rep_M_Area)
+# (GIS_M_Area)
+#(Rep_Area)
+#(GIS_Area)
+# Ano de creacion (Status_YR) (INCLUIR EN TODAS)
+# Plan de Manejo (MANG_PLAN) YA
+# Localidad (SUB_LOC) * voy a tener de desglosar eso (INCLUIR EN TODAS)
+# Tipo de file (TYPE) (INCLUIR EN TODAS)
+
+# For global numbers
+
+Glob <- WDPA %>% 
+  group_by(NAME) %>% 
+  summarise(n())
+
+View(Glob)
+
+# For single areas
+
+WDPA_I <- WDPA %>% 
+  mutate(Title_I = paste("Nivel de proteccion del AMP ", NAME, sep="")) %>% 
+  mutate(Key_I = paste("AMP; Area Natural Protegida; CONANP ",DESIG, sep=";")) %>% 
+  mutate(Title_II = paste("Cateogria IUCN del AMP ", NAME, sep="")) %>% 
+  mutate(Key_II = paste("AMP; Area Natural Protegida; CONANP; IUCN ",IUCN_CAT, DESIG, sep=";")) %>% 
+  mutate(Title_III = paste("Plan de Manejo del AMP ", NAME, sep="")) %>% 
+  mutate(Key_III = paste("AMP; Area Natural Protegida; CONANP; Poan de Manejo", sep=";")) %>% 
+  mutate(Title_VI = paste("Area del AMP ", NAME, sep="")) %>% 
+  mutate(Key_VI = paste("AMP; Area Natural Protegida; CONANP; tamano;, area", sep=";")) %>% 
+  select(TYPE,
+         NAME,
+         STATUS_YR,
+         MANG_PLAN,
+         30:37,
+         SUB_LOC)
+
+write.csv(WDPA_I,"WDPA_I.csv")
+
+
+# FIN WDPA, maps ###
+
+## Cold Corals ####
+
+path_cold_corals <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/Cold_Corals/01_Data")
+#The File
+fnam_cold_corals <- "WCMC001_ColdCorals_pt_v3.shp"
+#Load it!
+cold_corals <- readOGR(dsn = path_cold_corals,
+                     layer =file_path_sans_ext(fnam_cold_corals))
+
+#### Checkpoint (WORKS)
+
+# leaflet(cold_corals) %>%
+#   addTiles(
+#     urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+#     attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+#   ) %>%
+#   setView(lng = -90, lat = 1.3, zoom = 2) %>% 
+#   addMarkers(
+#     lng = ~START_LONG,
+#     lat= ~START_LATI
+  # )
+
+##_____________All_es_gut______________##
+
+
+#Fortify function to get a data.frame
+fortify.shape <- function(x){
+  x@data$id <- rownames(x@data)
+  x.f = fortify(x, region = "id")
+  x.join <- inner_join(x.f, x@data, by = "id")
+}
+
+#### Mexico's EEZ
+
+EEZ_Mex <- read.csv("./eez_Mex.csv")
+
+
+# Get the points in polygon  
+#Note <- 1 is present| 0 is ausent
+Points_Cold_Corals <-data.frame(
+  point.in.polygon(
+    cold_corals$START_LONG,
+    cold_corals$START_LATI,
+    EEZ_Mex$long,
+    EEZ_Mex$lat
+    )
+  )
+
+
+# Fortify the shapefile data:
+# Note: because is a SpatioalPointsDataFrame you have to tell R that you want to convert the Data
+cold_corals_fort <- fortify(cold_corals@data) 
+
+colnames(Points_Cold_Corals) <- "EEZ"
+
+Cold_Corals_Mx <- cold_corals_fort %>% 
+  bind_cols(Points_Cold_Corals) %>% 
+  filter(EEZ == 1)  %>% 
+  select(-EEZ)
+
+
+Cold_Corals_Final <- Cold_Corals_Mx %>% 
+  separate(START_DATE,
+           c("year", "month", "day"), sep = "/") %>% 
+  group_by(TAXON,
+           REGION,
+           PLACE_NAME,
+           DATA_OWNER,
+           ORDER_
+           ) %>% 
+  summarise(
+    Numero = n(),
+    Inicio = min(year,na.rm=T),
+    Fin = max(year,na.rm=T),
+    DP = length(unique(year,na.rm=T)),
+    Mean_Lat = mean(START_LATI),
+    Mean_Long = mean(START_LONG)
+    ) %>% 
+  mutate(Title = paste("Presence of",TAXON,"in the",REGION)) %>% 
+  mutate(Key = paste("Corales; Agua Fria; Distribucion Mundial; Ocurrencia; presencia; ausencia; mar profundo; benticos",ORDER_, sep="; "))
+
+# write.csv(
+#   Cold_Corals_Final,
+#   "Cold_Corals_Final.csv"
+#   )
+
+#fin Cold Corals
+
+#### 
+
+## Salt Marshes ####
+
+path_marsh <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/Salt_Marsh/01_Data")
+#The File
+fnam_marsh <- "14_001_WCMC027_Saltmarsh_pt_v4.shp"
+#Load it!
+salt_marsh <- readOGR(dsn = path_marsh,
+                       layer =file_path_sans_ext(fnam_marsh))
+
+#Fortify function to get a data.frame
+fortify.shape <- function(x){
+  x@data$id <- rownames(x@data)
+  x.f = fortify(x, region = "id")
+  x.join <- inner_join(x.f, x@data, by = "id")
+}
+
+# Para este es mas facil simplemente extraer los datos para Mexico
+Salt_Mx <- salt_marsh[salt_marsh@data$COUNTRY == "Mexico",]
+
+# Fortify the shapefile data:
+# Note: because is a SpatioalPointsDataFrame you have to tell R that you want to convert the Data
+Salt_Marsh_fort <- fortify(Salt_Mx@data) 
+
+Salt_Marsh_Final <- Salt_Marsh_fort %>% 
+  mutate(Title = paste("Ocurrencia y Area reportada de marismas en la",REGION)) %>% 
+  mutate(Key = paste("RAMSAR; Marismas; Costero",HABITAT, sep="; "))
+
+write.csv(
+  Salt_Marsh_Final,
+  "Salt_Marsh_Final.csv"
+  )
+
+#fin Sal Marsh
+
+#### Seagrass ####
+path_Seagrass <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/Seagrass/01_Data")
+#The File
+fnam_Seagrass <- "WCMC_013_014_SeagrassesPt_v4.shp"
+#Load it!
+Seagrass <- readOGR(dsn = path_Seagrass,
+                      layer =file_path_sans_ext(fnam_Seagrass))
+
+Seagrass_fort <- fortify(Seagrass@data) 
+
+Seagrass_Mx <- Seagrass_fort %>% 
+  filter(PARENT_ISO == "MEX") %>% 
+  mutate(Title = paste("Localizacion de", BIO_CLASS, "en Baja California")) %>% 
+  mutate(TitleI = paste("Localizacion de", BIO_CLASS, "en Baja California Sur")) %>% 
+  mutate(Titleq = paste("Localizacion de", BIO_CLASS, "en Sinaloa")) %>% 
+  mutate(Titleqq = paste("Localizacion de", BIO_CLASS, "en Sonora")) %>% 
+  mutate(Titleqqq = paste("Localizacion de", BIO_CLASS, "en Tamaulipas")) %>%
+  mutate(Titleqqqq = paste("Localizacion de", BIO_CLASS, "en Veracruz")) %>%
+  mutate(Titleqqqf = paste("Localizacion de", BIO_CLASS, "en Tabasco")) %>%
+  mutate(Titleqqsq = paste("Localizacion de", BIO_CLASS, "en Campeche")) %>%
+  mutate(Titleqqqs = paste("Localizacion de", BIO_CLASS, "en Yucatan")) %>% 
+  mutate(Titleqqqff = paste("Localizacion de", BIO_CLASS, "en Quintana Roo"))
+
+
+write.csv(Seagrass_Mx,"Seagrass_Mx_fin.csv")
+
+
+## FIN SEAGRASS #
+
+#### BioDiv ####
+
+
+path_Reefs <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/DownloadPack-14_001_WCMC019_PatternsBiodiversity2010_v1/01_Data")
+#The File
+fnam_Reefs <- "WCMC-019-PatternsBiodiversity2010-AcrossTaxa.shp"
+#Load it!
+Reefs <- readOGR(dsn = path_Reefs,
+                    layer =file_path_sans_ext(fnam_Reefs))
+
+Reef_fort <- fortify(Reefs) 
+
+ #Pacific #
+Mex_Biodiv <-data.frame(point.in.polygon(Reefs$X_COORD,
+                                     Reefs$Y_COORD,
+                                     EEZ_Mex$long,
+                                     EEZ_Mex$lat))
+
+
+P_Biodiv <- Reef_fort %>% 
+  bind_cols(Biodiv_P)
+
+
+
+
+
+Reef_fort2 <- Reef_fort%>% 
+  mutate(Longitude = long/100000) %>% 
+  mutate(Latitude = lat/100000)
+
+ggplot() + 
+  geom_path(data = filter(Reef_fort2, piece ==1), 
+            aes(x = Longitude, y = Latitude, group = group), 
+            color = "black",
+            size = .5) + 
+  coord_map(projection = "mercator")+
+  theme_classic() 
+  
+
+
+Reefs_fort <- fortify(Reefs_Mex) 
+
+OBIS_Pf <- OBIS %>% 
+  bind_cols(OBIS_P) %>% 
+  filter(EEZ == 1)  %>% 
+  select(-EEZ) %>% 
+  
