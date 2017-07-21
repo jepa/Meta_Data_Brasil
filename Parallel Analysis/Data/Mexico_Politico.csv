@@ -1,8 +1,8 @@
-Area,Region,Estado
+Area_M,Region_M,Location
 Freshwater/Terrestrial,Freshwater/Terrestrial,Aguascalientes
-Pacific,Gulf of California,Baja California
-Pacific,Gulf of California,Baja California Sur
-Atlantic,Banco Campeche Caribe,Campeche
+Pacific,G. Of California,Baja California
+Pacific,G. Of California,Baja California Sur
+Atlantic,B Camp. Caribe,Campeche
 Freshwater/Terrestrial,Freshwater/Terrestrial,Coahuila
 Pacific,Central Pacific,Colima
 Pacific,South Pacific,Chiapas
@@ -20,13 +20,16 @@ Freshwater/Terrestrial,Freshwater/Terrestrial,Nuevo Leon
 Pacific,South Pacific,Oaxaca
 Freshwater/Terrestrial,Freshwater/Terrestrial,Puebla
 Freshwater/Terrestrial,Freshwater/Terrestrial,Queretaro
-Atlantic,Banco Campeche Caribe,Quintana Roo
+Atlantic,B Camp. Caribe,Quintana Roo
 Freshwater/Terrestrial,Freshwater/Terrestrial,San Luis Potosi
-Pacific,Gulf of California,Sinaloa
-Pacific,Gulf of California,Sonora
-Atlantic,West Gulf of Mexico,Tabasco
-Atlantic,West Gulf of Mexico,Tamaulipas
+Pacific,G. Of California,Sinaloa
+Pacific,G. Of California,Sonora
+Atlantic,W. G. Of Mexico,Tabasco
+Atlantic,W. G. Of Mexico,Tamaulipas
 Freshwater/Terrestrial,Freshwater/Terrestrial,Tlaxcala
-Atlantic,West Gulf of Mexico,Veracruz
-Atlantic,Banco Campeche Caribe,Yucatan
+Atlantic,W. G. Of Mexico,Veracruz
+Atlantic,B Camp. Caribe,Yucatan
 Freshwater/Terrestrial,Freshwater/Terrestrial,Zacatecas
+National,NA,Multiple States
+National,NA,Multiplos Estados
+Freshwater/Terrestrial,Freshwater/Terrestrial,Mexico(DF)

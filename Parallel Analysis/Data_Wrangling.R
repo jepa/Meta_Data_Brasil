@@ -16,23 +16,54 @@ library(rgdal)
 library(tools)
 library(ggplot2)
 library(leaflet)
+setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
+
+#### _________________________________ ####
+
+#### DATA ####
+
+#### Template
+
+Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv")
+# View(Template)
 
 #### Mexico's EEZ
 
-EEZ_Mex <- read.csv("./eez_Mex.csv")
-
-# Get Mexico's Pacific EEZ
-eez_Mex_P <- EEZ_Mex %>% 
-  filter(piece == 1)
-
-# Get Mexico's Atlantic EEZ (2)
-eez_Mex_A <- EEZ_Mex %>% 
-  filter(piece == 2)
-
-
-setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
-
+# EEZ_Mex <- read.csv("./eez_Mex.csv")
+# 
+# # Get Mexico's Pacific EEZ
+# eez_Mex_P <- EEZ_Mex %>% 
+#   filter(piece == 1)
+# 
+# # Get Mexico's Atlantic EEZ (2)
+# eez_Mex_A <- EEZ_Mex %>% 
+#   filter(piece == 2)
 #________________________________________________________#
+
+
+### Spatial Analysis ####
+
+source("./Functions/Politic_Distribution.r")
+
+New_Temp <- Politic_Distribution(Template, Save = F)
+
+
+Old <- Template %>% 
+  group_by(Area) %>% 
+  summarise(Old=n())
+
+c <- New_Temp %>% 
+  group_by(Area) %>% 
+  summarise(New=n()) %>% 
+  bind_cols(Old)
+
+# Check TBD and Pacific data cus it went "under"
+#Method, filter pacific in both fdatas and then use anti join to see which entries are not iqual ;) maybe not filter?
+
+####
+
+
+
 #### Sea Around Us Data, Pacific ####
 
 # Title ###
@@ -2023,5 +2054,5 @@ Reefs_fort <- fortify(Reefs_Mex)
 OBIS_Pf <- OBIS %>% 
   bind_cols(OBIS_P) %>% 
   filter(EEZ == 1)  %>% 
-  select(-EEZ) %>% 
+  select(-EEZ)
   
