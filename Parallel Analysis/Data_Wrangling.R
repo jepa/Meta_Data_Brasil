@@ -2051,8 +2051,222 @@ ggplot() +
 
 Reefs_fort <- fortify(Reefs_Mex) 
 
-OBIS_Pf <- OBIS %>% 
-  bind_cols(OBIS_P) %>% 
-  filter(EEZ == 1)  %>% 
-  select(-EEZ)
+#### Estuarios ####
+
+path_Estuarios <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/DownloadPack-14_001_UBC003_SAU_Estuaries2003_v2/01_Data")
+#The File
+fnam_Estuarios <- "14_001_UBC003_SAU_Estuaries2003_v2.shp"
+#Load it!
+Estuarios <- readOGR(dsn = path_Estuarios,
+                    layer =file_path_sans_ext(fnam_Estuarios))
+
+Estuarios_fort <- fortify(Estuarios@data) 
+
+Estu_Mex1 <- Estuarios_fort %>% 
+  filter(COUNTRY == "MEX") %>% 
+  filter(!is.na(RIVER_SYS)) %>% 
+  mutate(Titulo = paste("Descarga del Rio",RIVER_SYS))
+
+Estu_Mex2 <- Estuarios_fort %>% 
+  filter(COUNTRY == "MEX") %>% 
+  filter(is.na(RIVER_SYS)) %>% 
+  mutate(Titulo = paste("Descarga del Rio",LABEL))
+
+Estu_Mex <- Estu_Mex1 %>% 
+  bind_rows(Estu_Mex2)
+
+write.csv(Estu_Mex, "Estu_Mex.csv")
+
+
+
+  leaflet(Estu_Mex) %>%
+  addTiles(
+    urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+    attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  ) %>%
+  setView(lng = -90, lat = 1.3, zoom = 2) %>%
+  addMarkers(
+    lng = ~INPUT_LON,
+    lat= ~INPUT_LAT,
+    popup = ~LABEL
+)
+  
+#### Turismo ####
+  
+  path_Buceo <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/DownloadPack_14_001_WCMC030_DiveCentres2001_v1_2/01_Data")
+  #The File
+  fnam_Buceo <- "WCMC-030-DiveCentres2001-ver1-2.shp"
+  #Load it!
+  Buceo <- readOGR(dsn = path_Buceo,
+                       layer =file_path_sans_ext(fnam_Buceo))
+  
+  Buceo_fort <- fortify(Buceo@data) 
+  
+  Estu_Mex1 <- Buceo_fort %>% 
+    filter(COUNTRY == "MEX") %>% 
+    filter(!is.na(RIVER_SYS)) %>% 
+    mutate(Titulo = paste("Descarga del Rio",RIVER_SYS))
+  
+  Estu_Mex2 <- Buceo_fort %>% 
+    filter(COUNTRY == "MEX") %>% 
+    filter(is.na(RIVER_SYS)) %>% 
+    mutate(Titulo = paste("Descarga del Rio",LABEL))
+  
+  Estu_Mex <- Estu_Mex1 %>% 
+    bind_rows(Estu_Mex2)
+  
+  write.csv(Estu_Mex, "Estu_Mex.csv")
+  
+  
+  
+  leaflet(Estu_Mex) %>%
+    addTiles(
+      urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+      attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+    ) %>%
+    setView(lng = -90, lat = 1.3, zoom = 2) %>%
+    addMarkers(
+      lng = ~INPUT_LON,
+      lat= ~INPUT_LAT,
+      popup = ~LABEL
+    ) 
+  
+  
+  #### A ver... ####
+  
+  path_Buceo <- ("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/WCMC/DownloadPack-WCMC015_SeagrassRichness2003_v1")
+  #The File
+  fnam_Buceo <- "DownloadPack_14_001_WCMC030_DiveCentres2001_v1_2"
+  #Load it!
+  Buceo <- readOGR(dsn = path_Buceo,
+                   layer =file_path_sans_ext(fnam_Buceo))
+  
+  Buceo_fort <- fortify(Buceo@data) 
+  
+  Estu_Mex1 <- Buceo_fort %>% 
+    filter(COUNTRY == "MEX") %>% 
+    filter(!is.na(RIVER_SYS)) %>% 
+    mutate(Titulo = paste("Descarga del Rio",RIVER_SYS))
+  
+  Estu_Mex2 <- Buceo_fort %>% 
+    filter(COUNTRY == "MEX") %>% 
+    filter(is.na(RIVER_SYS)) %>% 
+    mutate(Titulo = paste("Descarga del Rio",LABEL))
+  
+  Estu_Mex <- Estu_Mex1 %>% 
+    bind_rows(Estu_Mex2)
+  
+  write.csv(Estu_Mex, "Estu_Mex.csv")
+  
+  
+  
+  leaflet(Estu_Mex) %>%
+    addTiles(
+      urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+      attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+    ) %>%
+    setView(lng = -90, lat = 1.3, zoom = 2) %>%
+    addMarkers(
+      lng = ~INPUT_LON,
+      lat= ~INPUT_LAT,
+      popup = ~LABEL
+    ) 
+  
+  # FIN _____________________ WCMC UNEP _____________________ ####
+  
+#### CARTA NACIONAL PESQUERA ####
+  
+  
+Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Species3.csv",
+                    col_names = FALSE) %>% 
+    filter(!is.na(X1))
+View(Species)
+  
+  # Titulos 
+Z_Captura <- "Zona de Captura de"
+Unidad <- "Unidad de Pesca para"
+Captura <- "Captura total de"
+Proporcion <- "Proporcion de especies"
+Poblaicon <- "Poblacion Estimada de"
+Esfuerzo <- "Numero de Embercaciones/personas que pescan"
+Medidas <- "Medida de Manejo para"
+Punto_Ref <- "Puntos de Referencia para"
+Estatus <- "Estatus de"
+
+mutate(T1 = paste(Z_Catpura,Especie, sep=" ")) %>% 
+  mutate(T2 = paste(Unidad,Especie, sep=" "))
+
+  
+  
+  
+Nombres <- Species %>% 
+  mutate(Comun = paste(X1,X2)) %>% 
+  mutate(Sci1 = paste(X3,X4)) %>% 
+  mutate(Sci2 = paste(X1,X2)) %>% 
+  mutate(Sci3 = paste(X2,X3)) %>% 
+  mutate(Sci4 = paste(X1,X2)) 
+
+
+Nombres <- Species %>% 
+  filter(!is.na(X4)) %>% 
+  mutate(Comun = paste(X1,X2)) %>% 
+  mutate(Sci = paste(X3,X4))
+
+Nombres2 <- Species %>% 
+  filter(is.na(X4)) %>% 
+  slice(15:331) %>% 
+  mutate(Sci = paste(X1,X2))
+  
+Nombres3 <- Species %>% 
+  filter(is.na(X4)) %>% 
+  slice(1:14) %>% 
+  mutate(Sci = paste(X2,X3))
+
+Nombres4 <- Species %>% 
+  filter(is.na(X4)) %>% 
+  slice(332:413) %>% 
+  mutate(Sci = paste(X1,X2)) 
+
+
+Final_Names <- Nombres %>% 
+  bind_rows(Nombres2,
+            Nombres3,
+            Nombres4)
+
+
+
+write.csv(Nombres, "Final_Names.csv")
+
+write.csv(Species, "Species.csv")
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
