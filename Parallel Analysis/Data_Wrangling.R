@@ -2177,9 +2177,8 @@ write.csv(Estu_Mex, "Estu_Mex.csv")
 #### CARTA NACIONAL PESQUERA ####
   
   
-Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Species3.csv",
-                    col_names = FALSE) %>% 
-    filter(!is.na(X1))
+Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Species_Names.csv",
+                    col_names = TRUE)
 View(Species)
   
   # Titulos 
@@ -2200,44 +2199,16 @@ mutate(T1 = paste(Z_Catpura,Especie, sep=" ")) %>%
   
   
 Nombres <- Species %>% 
-  mutate(Comun = paste(X1,X2)) %>% 
-  mutate(Sci1 = paste(X3,X4)) %>% 
-  mutate(Sci2 = paste(X1,X2)) %>% 
-  mutate(Sci3 = paste(X2,X3)) %>% 
-  mutate(Sci4 = paste(X1,X2)) 
-
-
-Nombres <- Species %>% 
-  filter(!is.na(X4)) %>% 
-  mutate(Comun = paste(X1,X2)) %>% 
-  mutate(Sci = paste(X3,X4))
-
-Nombres2 <- Species %>% 
-  filter(is.na(X4)) %>% 
-  slice(15:331) %>% 
-  mutate(Sci = paste(X1,X2))
-  
-Nombres3 <- Species %>% 
-  filter(is.na(X4)) %>% 
-  slice(1:14) %>% 
-  mutate(Sci = paste(X2,X3))
-
-Nombres4 <- Species %>% 
-  filter(is.na(X4)) %>% 
-  slice(332:413) %>% 
-  mutate(Sci = paste(X1,X2)) 
-
-
-Final_Names <- Nombres %>% 
-  bind_rows(Nombres2,
-            Nombres3,
-            Nombres4)
+  mutate(Scientific_Name = paste(Sci_A,
+                       Sci_B)) %>% 
+  mutate(Commun_Name = paste(Com_A,
+                             Com_B))
 
 
 
 write.csv(Nombres, "Final_Names.csv")
 
-write.csv(Species, "Species.csv")
+
   
   
   
