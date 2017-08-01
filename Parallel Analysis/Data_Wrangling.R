@@ -2216,16 +2216,23 @@ write.csv(Nombres, "Final_Names.csv")
   
   
   
+Especies_CNP <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv")
+
+#### Arreglar nombres ####
+
+Nombres <- Especies_CNP %>% 
+  filter(Litoral =="Pacifico") %>% 
+  group_by(Scientifico,
+           Animal
+           ) %>% 
+  summarise(n=n())
+
+Duplicados <- Nombres[duplicated(Nombres$Scientifico),]
   
   
   
   
-  
-  
-  
-  
-  
-  
+
   
   
   
