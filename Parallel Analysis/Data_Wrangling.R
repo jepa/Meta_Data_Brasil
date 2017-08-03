@@ -2177,74 +2177,286 @@ write.csv(Estu_Mex, "Estu_Mex.csv")
 #### CARTA NACIONAL PESQUERA ####
   
   
-Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Species_Names.csv",
+Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv",
                     col_names = TRUE)
 View(Species)
-  
-  # Titulos 
-Z_Captura <- "Zona de Captura de"
-Unidad <- "Unidad de Pesca para"
-Captura <- "Captura total de"
-Proporcion <- "Proporcion de especies"
-Poblaicon <- "Poblacion Estimada de"
-Esfuerzo <- "Numero de Embercaciones/personas que pescan"
-Medidas <- "Medida de Manejo para"
-Punto_Ref <- "Puntos de Referencia para"
-Estatus <- "Estatus de"
-
-mutate(T1 = paste(Z_Catpura,Especie, sep=" ")) %>% 
-  mutate(T2 = paste(Unidad,Especie, sep=" "))
-
-  
-  
-  
-Nombres <- Species %>% 
-  mutate(Scientific_Name = paste(Sci_A,
-                       Sci_B)) %>% 
-  mutate(Commun_Name = paste(Com_A,
-                             Com_B))
-
-
-
-write.csv(Nombres, "Final_Names.csv")
-
-
-  
-  
-  
-  
-  
-  
-  
-Especies_CNP <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv")
 
 #### Arreglar nombres ####
 
-Nombres <- Especies_CNP %>% 
-  filter(Litoral =="Pacifico") %>% 
-  group_by(Scientifico,
-           Animal
-           ) %>% 
-  summarise(n=n())
+# Nombres <- Especies_CNP %>% 
+#   filter(Litoral =="Pacifico") %>% 
+#   group_by(Scientifico,
+#            Animal
+#   ) %>% 
+#   summarise(n=n())
+# 
+# Duplicados <- Nombres[duplicated(Nombres$Scientifico),]
 
-Duplicados <- Nombres[duplicated(Nombres$Scientifico),]
+
+# Construir la tabla ####
   
+  # Titulos 
+
+# 1. Generalidades
+Generalidades <- paste("Especies objetivo y asociadas a la pesca de") # <- General, no por especie
+Generalidades_Key <- paste("Nombre Comun; Nombre Cientifico") # <- por especie objetivo
+Zona_Captura_Ob. <- paste ("Zona de captura de") # <- Para especies objetivo
+Zona_Captura_As. <- paste ("Zona de captura de") # <- Para especies objetivo
+Zona_Captura_As_II. <- paste("asociada a la pesca de")
+Unidad <- paste("Unidad de Pesca de")
+
+# 2. Indicadores
+Indicadores <- paste("Indicadores de la pesca de") # <- Nombre de especie objetivo (Categoria)
+
+# 3. Esfuerzo Pesquero 
+Esfuerzo <- paste("Esfuerzo pesquero para") # <- # Nombre de especie objetivo (Categoria)
+
+# 4. Lineamientos y estrrategias de manejo
+Estrategia <- paste("Estrategia de manejo para") # Nombre de especie objetivo
+
+
+#### Creacion de la Tabla ####
+
+# 1. Generalidades  
+x_Generalidades <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  group_by(Animal) %>% 
+  summarise(n()) %>% 
+  mutate(General = paste(Generalidades, Animal)) %>% 
+  select(General,
+         Animal)
+
+write.csv(x_Generalidades,
+      "x_Generalidades.csv")
+
+
+
+###
+
+x_Zona_Cap_Ob <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Zona_Captura_Ob = paste(Zona_Captura_Ob.,Cientifico)) %>% 
+  mutate(ZCO_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
+                         sep ="; ")) %>% 
+  select(Zona_Captura_Ob,
+         ZCO_key,
+         Cientifico,
+         Animal)
+
+write.csv(x_Zona_Cap_Ob,
+          "x_Zona_Cap_Ob.csv")
+
+###
+
+x_Zona_Cap_As <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(Clasificacion == "Asociadas") %>% 
+  mutate(Zona_Captura_As = paste(Zona_Captura_As.,Cientifico,Zona_Captura_As_II.,Animal,"(",Info_Extra,")",
+                                 sep=" ")) %>% 
+  mutate(ZCA_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
+                         sep ="; ")) %>% 
+  select(Zona_Captura_As,
+         ZCA_key,
+         Cientifico,
+         Animal
+         )
+
+write.csv(x_Zona_Cap_As,
+          "x_Zona_Cap_As.csv")
+
+###
+
+x_Unidad <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Unidad = paste(Unidad,Cientifico)) %>% 
+  mutate(Unidad_Key = paste(Comun,Animal,"Embarcacion; motor; fuera de borda; buceo; hooka; sacos; artes de pesca; trampas; viaje de pesca; palangre; anzuelo",
+                            sep ="; ")) %>% 
+  select(Unidad,
+         Unidad_Key,
+         Cientifico,
+         Animal)
+
+write.csv(x_Unidad,
+          "x_Unidad.csv")
+
+## FIN 1 ###
+
+x_Indicadores <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Indicadores = paste(Indicadores,Cientifico)) %>% 
+  mutate(Indicadores_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Produccion; composicion especifica; Biomasa estimada",
+                                 sep ="; ")) %>% 
+  select(Indicadores,
+         Indicadores_Key,
+         Cientifico,
+         Animal)
+
+write.csv(x_Indicadores,
+          "x_Indicadores.csv")
+
+## FIN 2 ##
+
+x_Esfuerzo <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Esfuerzo = paste(Esfuerzo, Cientifico)) %>% 
+  mutate(Esfuerzo_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Permisos; Pangas; Veda; Embarcaciones; Flota",
+                                 sep ="; ")) %>%
+  select(Esfuerzo,
+         Esfuerzo_Key,
+         Cientifico,
+         Animal)
   
+write.csv(x_Esfuerzo,
+          "x_Esfuerzo.csv")
   
+### FIN 3 ###
+
+x_Estrategia <- Species %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Estrategia = paste(Estrategia, Cientifico)) %>% 
+  mutate(Estrategia_Key = paste(Comun, Animal,"Permisos; Veda; Flota; Zonas de Pesca; Talla minima; Quota; ",
+                              sep ="; ")) %>%
+  select(Estrategia,
+         Estrategia_Key,
+         Cientifico,
+         Animal)
   
 
+write.csv(x_Estrategia, "x_Estrategia.csv")
+
+### FIN 4 ###
+
+#### CNP Atlantico ####
+
+Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv",
+                                         col_names = TRUE)
+
+# Explorando nombres #
+
+Nombres_A <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  group_by(Cientifico,
+           Comun) %>% 
+  summarise(n())
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+#### Creacion de la Tabla ####
+
+# 1. Generalidades  
+A_Generalidades <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  group_by(Animal) %>% 
+  summarise(n()) %>% 
+  mutate(General = paste(Generalidades, Animal)) %>% 
+  select(General,
+         Animal)
+
+write.csv(A_Generalidades,
+          "A_Generalidades.csv")
+
+
+
+###
+
+A_Zona_Cap_Ob <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Zona_Captura_Ob = paste(Zona_Captura_Ob.,Cientifico)) %>% 
+  mutate(ZCO_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
+                         sep ="; ")) %>% 
+  select(Zona_Captura_Ob,
+         ZCO_key,
+         Cientifico,
+         Animal)
+
+write.csv(A_Zona_Cap_Ob,
+          "A_Zona_Cap_Ob.csv")
+
+###
+
+A_Zona_Cap_As <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  filter(Clasificacion == "Asociadas") %>% 
+  mutate(Zona_Captura_As = paste(Zona_Captura_As.,Cientifico,Zona_Captura_As_II.,Animal,"(",Info_Extra,")",
+                                 sep=" ")) %>% 
+  mutate(ZCA_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
+                         sep ="; ")) %>% 
+  select(Zona_Captura_As,
+         ZCA_key,
+         Cientifico,
+         Animal
+  )
+
+write.csv(A_Zona_Cap_As,
+          "A_Zona_Cap_As.csv")
+
+###
+
+A_Unidad <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Unidad = paste(Unidad,Cientifico)) %>% 
+  mutate(Unidad_Key = paste(Comun,Animal,"Embarcacion; motor; fuera de borda; buceo; hooka; sacos; artes de pesca; trampas; viaje de pesca; palangre; anzuelo",
+                            sep ="; ")) %>% 
+  select(Unidad,
+         Unidad_Key,
+         Cientifico,
+         Animal)
+
+write.csv(A_Unidad,
+          "A_Unidad.csv")
+
+## FIN 1 ###
+
+A_Indicadores <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Indicadores = paste(Indicadores,Cientifico)) %>% 
+  mutate(Indicadores_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Produccion; composicion especifica; Biomasa estimada",
+                                 sep ="; ")) %>% 
+  select(Indicadores,
+         Indicadores_Key,
+         Cientifico,
+         Animal)
+
+write.csv(A_Indicadores,
+          "A_Indicadores.csv")
+
+## FIN 2 ##
+
+A_Esfuerzo <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Esfuerzo = paste(Esfuerzo, Cientifico)) %>% 
+  mutate(Esfuerzo_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Permisos; Pangas; Veda; Embarcaciones; Flota",
+                              sep ="; ")) %>%
+  select(Esfuerzo,
+         Esfuerzo_Key,
+         Cientifico,
+         Animal)
+
+write.csv(A_Esfuerzo,
+          "A_Esfuerzo.csv")
+
+### FIN 3 ###
+
+A_Estrategia <- Species %>% 
+  filter(Litoral == "Atlantico") %>% 
+  filter(Clasificacion == "Objetivo") %>% 
+  mutate(Estrategia = paste(Estrategia, Cientifico)) %>% 
+  mutate(Estrategia_Key = paste(Comun, Animal,"Permisos; Veda; Flota; Zonas de Pesca; Talla minima; Quota; ",
+                                sep ="; ")) %>%
+  select(Estrategia,
+         Estrategia_Key,
+         Cientifico,
+         Animal)
+
+
+write.csv(A_Estrategia, "A_Estrategia.csv")
