@@ -38,7 +38,7 @@ source('/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/ts_fun.R')
 
 # Introduction
 
-Climate change has been globally reshaping the marine ecosystem for the last century in different ways [Poloczanska, et al., 2013; Weatherdon et al 2016]. Increase on surface water temperature has been linked to both biomass change, and distribution shifts of marine fishes [Arreguín-Sánchez et al., 2016; Cheung et al., 2015]; coral bleaching on most reefs in the world [cita], and tropic mismatch in the water column [Edwards and Richardson, 2004]. Such effects are projected to continue and intensify if anthropogenic emissions are not mitigated [IPCC, william 1.5, Gatuso et al., 2015]. 
+Climate change has been globally reshaping the marine ecosystem for the last century in different ways [Poloczanska, et al., 2013; Weatherdon et al 2016]. Increase on surface water temperature has been linked to both biomass change, and distribution shifts of marine fishes [Arreguín-Sánchez et al., 2016; Cheung et al., 2015]; coral bleaching on most reefs in the world [cita], and tropic mismatch in the water column [Edwards and Richardson, 2004]. Such effects are projected to continue and intensify if anthropocentric emissions are not mitigated [IPCC, william 1.5, Gatuso et al., 2015]. 
 
 <!-- ### Link with human populations -->
 These ecosystem change is already having repercussions on human populations, specially on those who directly relie on marine resources [Pershing et al., 2015; Weatherdon et al 2016]. Some coastal communities depending on fish have seen their catch change [Arreguín-Sánchez et al., 2016]; and global projections suggest it will continue to shift (Cheung et al., 20XX). This will impact coastal communities on both economic and food security aspects, particular those on developing nations [Lam et al., 2016; Vermeulen et al., 2014]. Climate change is also expected to reduce ecosystem services provided by already disturbed ecosystems like mangrove forests and coral reefs. Diminishing their mitigation efficiency, hence, increasing the risk of natural catastrophes in coastal communities [cita]
@@ -68,12 +68,11 @@ These initiatives are examples of successful efforts to make marine data in Mexi
 
 #Number of Repositories ####
 
- z<- Template %>% 
+ Compi<- Template %>% 
       group_by(Compilation_Title) %>% 
-      summarise(Suma =sum(Data_Time_Points)) %>% 
-      filter(!is.na(Compilation_Title)) %>% 
-      mutate(z = 1) %>% 
-  arrange(desc(Suma))
+      summarise(z=n()) %>% 
+      select(-2) %>% 
+      filter(!is.na(Compilation_Title))
 
 # Main repositories
 M_Repo <- slice(z, 1:5)
@@ -81,7 +80,7 @@ M_Repo <- slice(z, 1:5)
 # Repos by 
 Type_Repo<- Template %>% 
       group_by(Institution_Type) %>% 
-      summarise(Suma =sum(Data_Time_Points, na.rm =T)) %>% 
+      summarise(Suma = n()) %>% 
       filter(!is.na(Institution_Type)) %>% 
       mutate(z = 1) %>% 
   arrange(Institution_Type)
@@ -90,20 +89,17 @@ Type_Repo<- Template %>%
 
 Insti<- Template %>% 
       group_by(Institution) %>% 
-      summarise(sum(Data_Time_Points)) %>% 
+      summarise(z=n()) %>% 
       select(-2) %>% 
-      filter(!is.na(Institution)) %>% 
-      mutate(z = 1)
+      filter(!is.na(Institution))
     
-Inst <- sum(Insti$z)
 
 # En Texto #
-
-Repo <- sum(z$z) # Numero total de repositorios
+Inst <- nrow(Insti)
+Repo <- nrow(Compi) # Numero total de repositorios
 SE <- unique(Template$SE_Interaction) # SE clasifications
 Main_Repo <- unique(M_Repo$Compilation_Title)
 
-Type_Repo[1,2]
 
 ```
 
@@ -115,7 +111,7 @@ Each record on the meta-dataset is part of a specific dataset included on a repo
 
 ## Data Sources
 
-The current effort to build the metadata collected data from `r Repo` repositories gathered by `r Inst` national and international institutions. The type of institutions included in this effort were academic (**n** = `r Type_Repo[1,2]`), gouvernamental agencies (**n** = `r Type_Repo[3,1]`), **non** (**n** = `r Type_Repo[5,1]`) and **inter** (`r Type_Repo[3,1]`) gouvernamental agencies, and international (**n** = `r Type_Repo[4,1]`) data sources. All data collected were sorted under the following social-ecological interaction: `r SE` (CITA).
+The current effort to build the metadata collected data from `r Repo` repositories gathered by `r Inst` national and international institutions. The type of institutions included in this effort were academic (**n** = `r Type_Repo[1,2]`), gouvernamental agencies (**n** = `r Type_Repo[3,1]`), **inter** (`r Type_Repo[3,1]`) and **non** (**n** = `r Type_Repo[5,1]`) gouvernamental agencies, and international data sources (**n** = `r Type_Repo[4,1]`).
 
 
 ## Case study 1: Climate change data availlabillity
@@ -126,13 +122,15 @@ The current effort to build the metadata collected data from `r Repo` repositori
 
 ```{r Results, eval=T, echo=F}
 
-Number_entries <- Template %>% 
-      filter(MMID != "na")
-
 # Number of metadata registers    
-Registers <- Number_entries$MMID[length(Number_entries$MMID)]
+Registers <- round(
+  Template$MMID[length(Template$MMID)]/1000,
+  1)
+
 # Number of Data Points ####
-Data_Points <- sum(Number_entries$Data_Time_Points,na.rm=T)
+Data_Points <- round(
+  sum(Template$Data_Time_Points,na.rm=T)/1000,
+  1)
 
 #Number of Repositories ####
  z<- Template %>% 
@@ -147,8 +145,15 @@ Repo <- sum(z$z)
 #Disciplines (Sociology. eg.)
 Dis <- Template %>% 
   group_by(Research_Field) %>% 
-  summarise(n=n()) %>% 
-  arrange(desc(n))
+  summarise(n=n(),
+            DP=sum(Data_Time_Points,
+                  na.rm =T)) %>%
+  mutate(Rate = round(
+    DP/n,
+    2)) %>% 
+  arrange(desc(Rate))
+# Dis by data point #
+
 
 #### Species Information ####
 
@@ -177,32 +182,31 @@ SD <- round(
   2
 )
 
+#### In Text Results ####
+
+Dis_n <- Dis %>% 
+  arrange(desc(n))
+
 ```
 
 ## General Numbers
-The meta-database of marine research has `r Registers` records containing information for about `r round(Data_Points/1000)` thousand data points, from `r Repo` repositories, both national and international. Data gathered was on 7 major disciplines: `r paste(Dis$Research_Field)` from witch `r Dis[1,1]` was the most abundant (Figure 1).
+
+The meta-database of marine research has `r Registers` thousand records containing information for about `r Data_Points` thousand data points. The research field with the most amount of records found was **`r Dis_n[1,1]`** (**n** = `r Dis_n[1,2]`), followed by **`r Dis_n[2,1]`** (**n** = `r Dis_n[2,2]`) (Figure 1). However, when we analize the amount of data points by each register, we find that  **`Dis[1,1]`** (**n** = `r Dis[1,4]`) and **`r Dis[2,1]`**( **n** = `r Dis[2,4]`) have the higher rate of data-points per register.
 
 ```{r Fig1, eval=T, echo=F, fig.align="center",fig.height=4,fig.width=7,fig.cap="Number of data points per research field."}
 
-Research_F <- Template %>% 
-  filter(MMID != "na") %>% 
-  group_by(Research_Field) %>% 
-  summarise(Entradas = sum(Data_Time_Points,
-                           na.rm=T)) %>% 
-  filter(Research_Field != "")
-  
-      
-      ggplot(data= Research_F,
+P1 <- Dis %>% 
+  ggplot(.,
              aes(
                x=reorder(Research_Field, 
                          -Entradas),
-               y=Entradas/1000, #Thousand
+               y=DP/1000, #Thousand
                fill=Research_Field
              )) +
         geom_bar(stat="identity")+
         #coord_flip()+
         theme_classic() +
-        ylab("Data Points (Thousand)")+
+        ylab("Registers (Thousand)")+
         xlab("Research Field")+
         theme(axis.text.x = element_text(hjust = 1,
                                          #size=11,
@@ -212,10 +216,33 @@ Research_F <- Template %>%
               # axis.title = element_text(size=12)
         # )
 
+P2 <- Dis %>% 
+  ggplot(.,
+             aes(
+               x=reorder(Research_Field, 
+                         -Rate),
+               y=Rate,
+               fill=Research_Field
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Registers (Thousand)")+
+        xlab("Research Field")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         #size=11,
+                                         angle=45),
+              # axis.text.y = element_text(size = 11),
+              legend.position = "none")
+              # axis.title = element_text(size=12)
+        # )
+
+grid.arrange(P1,
+             P2,
+             nrow =2)
+
 ```
 
-
-## Subject Analysis
 There is a total of `r nrow(Species)` subjects in the metadata. The subject that has the most amount of data points is `r Species[1,1]` with `r Species[1,2]` registers However, at the species level,* Ophiactis savignyi* is the most repeated one with `r Species[33,2]` records. The data distribution is very diverse since the mean data point is `r Mean` (sd `r SD`). This is mainly because a large amount of records are one observation of species lists.
 
 
