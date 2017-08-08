@@ -2460,3 +2460,33 @@ A_Estrategia <- Species %>%
 
 
 write.csv(A_Estrategia, "A_Estrategia.csv")
+
+
+#### Numeros resumen ####
+x <- Template %>% 
+  group_by(Region) %>% 
+  summarise(n=n()) %>% 
+  mutate(Per = (n/20884)*100)
+
+Species <- Template %>% 
+  filter(Research_Field == "Fisheries") %>%
+  filter(Subject_name != "Multiple Species") %>% 
+  filter(Subject_name != "Multiple Epecies") %>%
+  filter(Subject_name != "Multiple species") %>% 
+  filter(Subject_name != "Multiple Especies") %>%
+  filter(Subject_name != "TBD") %>%
+  group_by(Subject_name) %>% 
+  summarise(n=n()) %>% 
+  mutate(Per = (n/4228)*100)
+
+Spp <-data.frame(unique(Species$Subject_name))
+
+
+Inst <- Species %>% 
+  group_by(Institution) %>% 
+  summarise(n())
+
+Most <- Template %>% 
+  group_by(Subject_name) %>% 
+  summarise(n())
+
