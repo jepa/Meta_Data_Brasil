@@ -17,6 +17,7 @@ library(knitr)
 library(data.table)
 library(ggplot2)
 library(gridExtra)
+library(dygraphs)
 
 #Data needed
 
@@ -26,6 +27,12 @@ Template <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Te
                                 Notes = 'character',
                                 Data_Uncertanty ='character')
                  )
+
+Time <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Data_Curve.csv")
+Time <- Time %>%
+  select(-1)
+  
+source('/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/ts_fun.R')
 
 ```
 
@@ -57,10 +64,63 @@ These initiatives are examples of successful efforts to make marine data in Mexi
 
  
 # Materials and Methods
+```{r Repositories_Institutions, eval=T, echo=F, warning=F,message=F}
+
+#Number of Repositories ####
+
+ z<- Template %>% 
+      group_by(Compilation_Title) %>% 
+      summarise(Suma =sum(Data_Time_Points)) %>% 
+      filter(!is.na(Compilation_Title)) %>% 
+      mutate(z = 1) %>% 
+  arrange(desc(Suma))
+
+# Main repositories
+M_Repo <- slice(z, 1:5)
+
+# Repos by 
+Type_Repo<- Template %>% 
+      group_by(Institution_Type) %>% 
+      summarise(Suma =sum(Data_Time_Points, na.rm =T)) %>% 
+      filter(!is.na(Institution_Type)) %>% 
+      mutate(z = 1) %>% 
+  arrange(Institution_Type)
+
+# Institutions #
+
+Insti<- Template %>% 
+      group_by(Institution) %>% 
+      summarise(sum(Data_Time_Points)) %>% 
+      select(-2) %>% 
+      filter(!is.na(Institution)) %>% 
+      mutate(z = 1)
+    
+Inst <- sum(Insti$z)
+
+# En Texto #
+
+Repo <- sum(z$z) # Numero total de repositorios
+SE <- unique(Template$SE_Interaction) # SE clasifications
+Main_Repo <- unique(M_Repo$Compilation_Title)
+
+Type_Repo[1,2]
+
+```
 
 ## Data Compilation
 
+The first step towards building the meta-database was the selection of categories in witch data was going to be categorized. This step was crussial for the subsequent meta-analysis of the diffeent aspects of marine research in Mexico. The present effort concentrated in collecting information on biology, ecology, fisheries, oceanography and social sciences data related to marine systems in Mexico. Because digital-available data in Mexico is scattered among different types of institutions, we started the search on global assessments (e.g. OBIS, FAO, NOAA, etc.) and subsequently went for more local data sources (e.g. Mexican universities catalogues, NGOs databases, etc.). While plenty of data was found on thess online, it was suspected that many data was going to be found on personal off-line repositories (e.g. Long-track researchers and local ressources managers and NGOs). For this last step we organized workshops and meetings in most of the main marine-research hubs of Mexico, and participated on key academic events, hoping to collect information from top researchers in the areas. Because this is a collaborative initiative, we also partner up with other initiatives (e.g. DataMares, MonitoreoNoroeste, etc) to have their data represented in the meta-dataset.
+
+Each record on the meta-dataset is part of a specific dataset included on a repository related to coastal and marine resources or regions. For each repository found, we first breakdown each dataset and then each topic represented in such table. Hence, each record in the meta-database represents a topic included in a dataset. For biological data the topics were applied for each species (or group of species). Lastly, when the information had a spatial content, the information was disaggregated to the level of municipality. This dessagrageted method of including information creates a longer dataset but allows for a more specific type of meta-analysis.
+
 ## Data Sources
+
+The current effort to build the metadata collected data from `r Repo` repositories gathered by `r Inst` national and international institutions. The type of institutions included in this effort were academic (**n** = `r Type_Repo[1,2]`), gouvernamental agencies (**n** = `r Type_Repo[3,1]`), **non** (**n** = `r Type_Repo[5,1]`) and **inter** (`r Type_Repo[3,1]`) gouvernamental agencies, and international (**n** = `r Type_Repo[4,1]`) data sources. All data collected were sorted under the following social-ecological interaction: `r SE` (CITA).
+
+
+## Case study 1: Climate change data availlabillity
+
+## Case study 2: Marine Protected Areas and somehting else in Mexico
 
 # Results
 
@@ -73,6 +133,7 @@ Number_entries <- Template %>%
 Registers <- Number_entries$MMID[length(Number_entries$MMID)]
 # Number of Data Points ####
 Data_Points <- sum(Number_entries$Data_Time_Points,na.rm=T)
+
 #Number of Repositories ####
  z<- Template %>% 
       group_by(Compilation_Title) %>% 
