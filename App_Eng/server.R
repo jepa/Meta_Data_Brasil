@@ -40,6 +40,7 @@ shinyServer(function(input, output, session) {
   
   
 ##### Template #####
+  # Version 3.1 #
   datasetInput <- reactive({
     
     data<- fread("./Template.csv",
