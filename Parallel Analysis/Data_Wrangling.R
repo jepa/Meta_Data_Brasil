@@ -16,6 +16,7 @@ library(rgdal)
 library(tools)
 library(ggplot2)
 library(leaflet)
+library(taxize) # For scientific names
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 #### _________________________________ ####
@@ -2357,11 +2358,11 @@ NComunes <- Species %>%
   summarise(n()) %>% 
   semi_join(Spp_Asociada,
             by="Cientifico")
+
+write.csv(Spp_Incidental, "Spp_Incidental.csv")
+
+write.csv(Spp_Asociada,"Spp_Asociada.csv")
   
-
-
-
-
 
 #### CNP Atlantico ####
 
@@ -2493,6 +2494,7 @@ A_Estrategia <- Species %>%
 
 write.csv(A_Estrategia, "A_Estrategia.csv")
 
+#### FIN 3 #____________
 
 #### Numeros resumen ####
 x <- Template %>% 
@@ -2521,6 +2523,8 @@ Inst <- Species %>%
 Most <- Template %>% 
   group_by(Subject_name) %>% 
   summarise(n())
+
+#### ___________ FIN Numeros Resumen ________ ##
 
 #### Jenny Carolina ####
 # Corales
@@ -2573,3 +2577,18 @@ Cost_Fin <- x %>%
 
 write.csv(Cost_Fin,"Cost_Fin.csv")
 
+
+#### Nombres scientificos ####
+
+Nombres <- Names_CNP %>% 
+  slice(-1:-41) %>% 
+
+
+CNP_Correct <- gnr_resolve(names = Nombres$`Subject name`, #Looks for homogenic names 
+                           best_match_only = TRUE)  # Returns only the best match
+
+# me dan 500 y pico porque son los nombres distintos... hashtag bye hasta mañana
+
+Final_List <- CNP_Correct %>% 
+  group_by(matched_name) %>% 
+  summarise(n())
