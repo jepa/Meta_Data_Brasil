@@ -75,7 +75,7 @@ These initiatives are examples of successful efforts to make marine data in Mexi
       filter(!is.na(Compilation_Title))
 
 # Main repositories
-M_Repo <- slice(z, 1:5)
+M_Repo <- slice(Compi, 1:5)
 
 # Repos by 
 Type_Repo<- Template %>% 
@@ -105,7 +105,7 @@ Main_Repo <- unique(M_Repo$Compilation_Title)
 
 ## Data Compilation
 
-The first step towards building the meta-database was the selection of categories in witch data was going to be categorized. This step was crussial for the subsequent meta-analysis of the diffeent aspects of marine research in Mexico. The present effort concentrated in collecting information on biology, ecology, fisheries, oceanography and social sciences data related to marine systems in Mexico. Because digital-available data in Mexico is scattered among different types of institutions, we started the search on global assessments (e.g. OBIS, FAO, NOAA, etc.) and subsequently went for more local data sources (e.g. Mexican universities catalogues, NGOs databases, etc.). While plenty of data was found on thess online, it was suspected that many data was going to be found on personal off-line repositories (e.g. Long-track researchers and local ressources managers and NGOs). For this last step we organized workshops and meetings in most of the main marine-research hubs of Mexico, and participated on key academic events, hoping to collect information from top researchers in the areas. Because this is a collaborative initiative, we also partner up with other initiatives (e.g. DataMares, MonitoreoNoroeste, etc) to have their data represented in the meta-dataset.
+The first step towards building the meta-database was the selection of categories in witch data was going to be categorized. This step was crussial for the subsequent meta-analysis of the diffeent aspects of marine research in Mexico. The present effort concentrated in collecting information on biology, ecology, fisheries, oceanography and social sciences data related to marine systems in Mexico. Because digital-available data in Mexico is scattered among different types of institutions, we started the search on global assessments (e.g. OBIS, FAO, NOAA, etc.) and subsequently went for more local data sources (e.g. Mexican universities catalogues, NGOs databases, etc.). While plenty of data was found on these online sources, it was suspected that many data was going to be found on personal off-line repositories (e.g. Long-track researchers and local ressources managers and NGOs). For this last step we organize **seven** different workshops/meetings in **five** marine-research hubs cities of Mexico. We participated on **three** key academic events (State of the Gulf of Mexico 2017, Sustainable Aquatic Ressources Workshop Mexico, and the International Meeting for Usage nad Conservation of Fisheries Ressources), hoping to collect information from top researchers in the areas. Because this is a collaborative initiative, we also partner up with other initiatives (e.g. DataMares, MonitoreoNoroeste, CONABIO, etc) to have their data represented in the meta-dataset.
 
 Each record on the meta-dataset is part of a specific dataset included on a repository related to coastal and marine resources or regions. For each repository found, we first breakdown each dataset and then each topic represented in such table. Hence, each record in the meta-database represents a topic included in a dataset. For biological data the topics were applied for each species (or group of species). Lastly, when the information had a spatial content, the information was disaggregated to the level of municipality. This dessagrageted method of including information creates a longer dataset but allows for a more specific type of meta-analysis.
 
@@ -157,7 +157,7 @@ Dis <- Template %>%
 
 #### Species Information ####
 
-Species <- Number_entries %>%
+Species <- Template %>%
   filter(Subject_name !="TBD") %>% 
   filter(Subject_name != "Multiple Especies") %>%
   filter(Subject_name != "Multiple Species") %>% 
@@ -199,7 +199,7 @@ P1 <- Dis %>%
   ggplot(.,
              aes(
                x=reorder(Research_Field, 
-                         -Entradas),
+                         -DP),
                y=DP/1000, #Thousand
                fill=Research_Field
              )) +
