@@ -40,7 +40,7 @@ shinyServer(function(input, output, session) {
   
   
   ##### Template #####
-  # Version 3.1 #
+  # Version 3.2 #
   datasetInput <- reactive({
     
     data<- fread("./Template.csv",
@@ -182,11 +182,12 @@ shinyServer(function(input, output, session) {
   
   output$TFgraph <- renderDygraph({
     x <- TFdatasetInput() %>% 
-      select(-Total)
+      select(-Real_Total,
+             -Temp)
 
     Dt_Points <- ts(x,
                     start=c(2016,11),
-                    end = c(2017,6), # <- this has to be changed everytime we add a month
+                    end = c(2017,7), # <- this has to be changed everytime we add a month
                     frequency= 12)
 
     dygraph(Dt_Points) %>% #Creats the graph

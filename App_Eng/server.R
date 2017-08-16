@@ -40,7 +40,7 @@ shinyServer(function(input, output, session) {
   
   
 ##### Template #####
-  # Version 3.1 #
+  # Version 3.2 #
   datasetInput <- reactive({
     
     data<- fread("./Template.csv",
@@ -215,11 +215,12 @@ x <- x %>%
   
   output$TFgraph <- renderDygraph({
   x <- TFdatasetInput() %>% 
-    select(-Total)
+    select(-Real_Total,
+           -Temp)
 
   Dt_Points <- ts(x,
                   start=c(2016,11),
-                  end = c(2017,6), # <- this has to be changed everytime we add a month
+                  end = c(2017,7), # <- this has to be changed everytime we add a month
                   frequency= 12)
 
   dygraph(Dt_Points) %>% #Creats the graph
@@ -293,7 +294,7 @@ Words <- Template
       Spp <- datasetInput() %>% 
         group_by(Area) %>% 
         summarise(Entradas = sum(Data_Time_Points,na.rm=T)) %>% 
-        filter(Area !="na") %>% 
+        filter(Area !="NA") %>% 
         filter(Area != "TBD") 
       # filter(Entradas >= input$Num_Data_Range[1]) %>% 
       # filter(Entradas <= input$Num_Data_Range[2])

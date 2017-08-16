@@ -16,6 +16,7 @@ library(rgdal)
 library(tools)
 library(ggplot2)
 library(leaflet)
+library(taxize) # For scientific names
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 #### _________________________________ ####
@@ -2214,6 +2215,10 @@ Esfuerzo <- paste("Esfuerzo pesquero para") # <- # Nombre de especie objetivo (C
 # 4. Lineamientos y estrrategias de manejo
 Estrategia <- paste("Estrategia de manejo para") # Nombre de especie objetivo
 
+# Extra. Pesca Incidental
+Incidental <- paste("Pesquerias con captura incidental de")
+Asociada <- paste("Pesquerias con captura asociada de")
+
 
 #### Creacion de la Tabla ####
 
@@ -2330,6 +2335,34 @@ x_Estrategia <- Species %>%
 write.csv(x_Estrategia, "x_Estrategia.csv")
 
 ### FIN 4 ###
+
+
+# Incidental y Asociada ####
+Spp_Incidental <- Species %>% 
+  filter(Clasificacion == "Incidental") %>% 
+  mutate(Titulo_I = paste(Incidental,Cientifico)) %>% 
+  mutate(Key_I = paste("Nombre cientifico; comun; bycatch",Comun,Animal))
+           
+           
+Spp_Asociada <- Species %>% 
+  filter(Clasificacion == "Asociadas") %>% 
+  group_by(Cientifico) %>% 
+  summarise(n()) %>% 
+  mutate(Titulo_A = paste(Asociada,Cientifico)) %>% 
+  select(Cientifico,Titulo_A)
+
+NComunes <- Species %>% 
+  filter(Clasificacion == "Asociadas") %>% 
+  group_by(Cientifico,
+           Animal) %>% 
+  summarise(n()) %>% 
+  semi_join(Spp_Asociada,
+            by="Cientifico")
+
+write.csv(Spp_Incidental, "Spp_Incidental.csv")
+
+write.csv(Spp_Asociada,"Spp_Asociada.csv")
+  
 
 #### CNP Atlantico ####
 
@@ -2461,6 +2494,7 @@ A_Estrategia <- Species %>%
 
 write.csv(A_Estrategia, "A_Estrategia.csv")
 
+#### FIN 3 #____________
 
 #### Numeros resumen ####
 x <- Template %>% 
@@ -2490,3 +2524,71 @@ Most <- Template %>%
   group_by(Subject_name) %>% 
   summarise(n())
 
+#### ___________ FIN Numeros Resumen ________ ##
+
+#### Jenny Carolina ####
+# Corales
+Corales <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/Hector Reyes/Jenny Carolina/Corales.csv")
+View(Corales)
+
+
+x <- data.frame()
+y <- data.frame()
+for(i in 1:13){
+  for(j in 1:18){
+  x[i,j] = paste("Estado de salud de",Corales$Especies[j],"en", Corales$Sitios[i])
+  y[j,1] = paste(Corales$Especies[j])
+  }
+}
+
+Corales_Fin <- x %>% 
+  bind_cols(y) %>% 
+  gather("x","Titulo",1:18) %>% 
+  gather("xx","Subject",1:18) %>% 
+  mutate(Key = paste("Arrecifes; Sano; Lesionado; Corales"))
+
+# write.csv(Corales_Fin,
+#           "Corales_Fin.csv")
+  
+
+## ___________________________FIN____________________________________###
+
+
+##### Gloabl Fishing Cost ciky Lam ####
+
+
+Cost_Vicky <- read_csv("~/Desktop/Cost_Vicky.csv")
+
+x <- data.frame()
+y <- data.frame()
+for(i in 1:29){
+  for(j in 1:4){
+    x[i,j] = paste(Cost_Vicky$Cost[j],"cost for", Cost_Vicky$Art[i], "fishing")
+    y[i,1] = paste(Cost_Vicky$Arte[i])
+  }
+}
+
+Cost_Fin <- x %>% 
+  bind_cols(y) %>% 
+  gather("x","Titulo",1:4) %>% 
+  select(-x) %>% 
+  mutate(Key = paste(V1,"Costo; Pesca; Estimado; Dolares US; Fijo; Variable; 2005", sep="; ")) %>% 
+  filter(V1 !="NA")
+
+write.csv(Cost_Fin,"Cost_Fin.csv")
+
+
+#### Nombres scientificos ####
+
+Nombres <- Names_CNP %>% 
+  slice(-1:-41) %>% 
+
+
+CNP_Correct <- gnr_resolve(names = Nombres$`Subject name`, #Looks for homogenic names 
+                           best_match_only = TRUE)  # Returns only the best match
+
+# me dan 500 y pico porque son los nombres distintos... hashtag bye hasta mañana
+
+Final_List <- CNP_Correct %>% 
+  group_by(matched_name) %>% 
+  summarise(n())
