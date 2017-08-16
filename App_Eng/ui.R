@@ -63,7 +63,7 @@ shinyUI(
                ),
                #### DataMares ####
                column(
-                 4,
+                3,
                  align = "justified",
                  offset = 2,
                  a(href="http://datamares.ucsd.edu/en/about",
@@ -82,28 +82,28 @@ shinyUI(
                    "Remember that the meta-database of marine research does not store data. Visit dataMares if you want your data to be stored and published on their website!"
                  )
                  ), #Close dataMares
-               # column(
-               #   2,
-               #   align = "justified",
-               #   #offset = 2,
-               #   a(href="http://gomexsi.tamucc.edu/",
-               #     img(
-               #       src = "GoMexSI.png",
-               #       height = 60,
-               #       width = 100
-               #     )),
-               #   p(
-               #     "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
-               #     p(h5(
-               #       "Do you have species interactions data from the GoM?"
-               #     )),
-               #     p(
-               #       "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
-               #     )
-               #   )
-               # ), #Close GoMexi
                column(
-                 4,
+                 3,
+                 align = "justified",
+                 #offset = 2,
+                 a(href="http://gomexsi.tamucc.edu/",
+                   img(
+                     src = "GoMexSI.png",
+                     height = 60,
+                     width = 100
+                   )),
+                 p(
+                   "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
+                   p(h5(
+                     "Do you have species interactions data from the GoM?"
+                   )),
+                   p(
+                     "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
+                   )
+                 )
+               ), #Close GoMexi
+               column(
+                 3,
                  align = "justified",
                  #offset = 2,
                  a(href="http://monitoreonoroeste.mx/index.php",
@@ -116,7 +116,21 @@ shinyUI(
                    "Monitoreo Noroeste.mx is a public website  containing an inventory (metadata) of monitoring conducted in the Gulf of California and the Pacific Northwest. The inventory contains the range of targets that are being monitored by research institutions, federal agencies, civil social organizations, companies, and community groups. The metadata that is in Monitoreo noroeste is not included in our meta-dataset, but worry not! Both inventories are connected so if your search results in information stored in Monitoreo noroeste, you will be immediately redirected"
                  )
                ) #Close Monitoreo
-             ) #Closes fluidRow
+             ), #Closes fluidRow
+             column(
+               3,
+               align = "justified",
+               offset = 2,
+               a(href="http://bdmy.org.mx/colecciones-cientificas/",
+                 img(
+                   src = "BDMY_Logo.jpeg",
+                   height = 100,
+                   width = 230
+                 )),
+               p(
+                 "The Marine Biodiversity group of Yucatan (BDMY) is a group of researchers from the National Autonomous University of Mexico (UNAM) associated with the Faculty of Sciences - Academic Unit Sisal / Yucatan. The group aims to describe and analyze patterns of species diversity and distribution in the coastal and reef areas of the Gulf of Mexico. The objective is to generate baselines and contribute to the management and conservation of these habitats. Currently BDMY collaborators are studying the following taxa: Cnidaria, Crustacea, Porifera, Echinodermata, Mollusca, Urochordata (Ascidacea), Briozoa, Vertebrata (fish). The group manages 4 scientific collections and has identified more than 60 new species."
+               )
+             ) #END BMDY
              ), #Closes tabPanel
     #### PROJECT DESCRIPTION ####
     tabPanel("The Project",
@@ -328,8 +342,8 @@ shinyUI(
                br(),
                selectInput(inputId = "Discipline", 
                            label= "Select an Option:",
-                           selected = NULL,
-                           choices = list("Select One" = "NOT",
+                           selected = "Todas",
+                           choices = list(
                                           "Aquaculture" = "Aquaculture",
                                           "Ecology" = "Ecology",
                                           "Oceanography" = "Oceanography",

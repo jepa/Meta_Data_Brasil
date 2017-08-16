@@ -241,30 +241,36 @@ x <- x %>%
   
   # Keywords_Plot ####
   
+Words <- Template
+  
   output$Keywords_Plot <- renderPlot({
-    if(input$Discipline == "NOT"){
-      stop()
-      }
+    # if(input$Discipline == "NOT"){
+    #   stop()
+    #   }
     
     if(input$Discipline == "Todas"){
-      Words <- datasetInput()
+      Words <- datasetInput() %>% 
+        filter(!is.na(Research_Field))
     }else{
       Words <- datasetInput() %>% 
+        filter(!is.na(Research_Field)) %>% 
         filter(Research_Field == input$Discipline)
+        
     }
     WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-    WordsCorpus <- tm_map(WordsCorpus,
-                          PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus,
-                          removePunctuation) #Removes punctuation
-    
-    Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
-                     input$Keyword_Remove2)
-    
-    #Removes a word of user preference
-    WordsCorpus <- tm_map(WordsCorpus,
-                          removeWords,
-                          Word_Remove )
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       PlainTextDocument) #Converts to plain text
+    # 
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       removePunctuation) #Removes punctuation
+    # 
+    # # Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
+    # #                  input$Keyword_Remove2)
+    # 
+    # #Removes a word of user preference
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       removeWords)
+    #                       
     
       
       wordcloud(WordsCorpus, #Plots the words

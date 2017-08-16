@@ -66,7 +66,7 @@ shinyUI(
                           ),
                           #### DataMares ####
                           column(
-                            4,
+                            3,
                             align = "justified",
                             offset = 2,
                             a(href="http://datamares.ucsd.edu/en/about",
@@ -85,30 +85,30 @@ shinyUI(
                               "Recuerda que la base de metadatos de investigación marina no es repositorio de datos. ¡Visita dataMares caso necesites almacenar datos y generar una historia a partir de ellos!"
                             )
                           ), #Close dataMares
-                          # column(
-                          #   2,
-                          #   align = "justified",
-                          #   #offset = 2,
-                          #   a(href="http://gomexsi.tamucc.edu/",
-                          #     img(
-                          #       src = "GoMexSI.png",
-                          #       height = 60,
-                          #       width = 100
-                          #     )),
-                          #   p(
-                          #     "GoMexSi is a transformational, open source tool to be used by the scientific and public communities to record, archive and analyze species interaction data. The database contains information on all instances of species interactions recorded in the Gulf of Mexico.",
-                          #     p(h5(
-                          #       "Do you have species interactions data from the GoM?"
-                          #     )),
-                          #     p(
-                          #       "You can contact GoMexSi and store your datasets of species interactions on their free on-line repository. Your data will be available for access in the website!"
-                          #     )
-                          #   )
-                          # ), #Close GoMexi
                           column(
-                            4,
+                            3,
                             align = "justified",
-                            #offset = 2,
+                            # offset = 2,
+                            a(href="http://gomexsi.tamucc.edu/",
+                              img(
+                                src = "GoMexSI.png",
+                                height = 60,
+                                width = 100
+                              )),
+                            p(
+                              "GoMexSi es una herramienta destinada a ser utilizada por la comunidad científica y el público en general, para registrar, archivar y analizar datos de interacción de especies. La base de datos contiene información sobre todos los casos de interacción de especies registradas en el Golfo de México, es abierta,", em("oppen source"), "y está en constante actualizació.",
+                              p(h5(
+                                "¿Tienes datos sobre interacción de especies en el Golfo de México? ¡Los puedes incluir en la base de GoMexi!"
+                              )),
+                              p(
+                                "Puedes ponerte en contacto con GoMexSi y almacenar tus datos en su repositorio on-line de forma gratuita ¡Tus datos estarán disponibles para consulta en su sitio web!"
+                              )
+                            )
+                          ), #Close GoMexi
+                          column(
+                            3,
+                            align = "justified",
+                            # offset = 3,
                             a(href="http://monitoreonoroeste.mx/index.php",
                               img(
                                 src = "Monitoreo_Logo.png",
@@ -119,7 +119,23 @@ shinyUI(
                               "Monitoreo Noroeste.mx es un sitio web público que contiene un inventario (metadatos) de monitoreo realizado en el Golfo de California y el Noroeste Pacífico. El inventario contiene una gama de objetivos que están siendo monitoreados por instituciones de investigación, agencias federales, organizaciones sociales civiles, compañías y grupos comunitarios. Los metadatos que se encuentran en Monitoreo noroeste no están incluidos en nuestros meta-datos, ¡pero no se preocupe! Ambos inventarios están conectados por lo que si su búsqueda resulta en información almacenada en Monitoreo noroeste, usted será inmediatamente redirigido"
                             )
                           )
-             )
+                      ), #fluid row
+                        # hr(),
+                        # br(),
+                          column(
+                            3,
+                            align = "justified",
+                            offset = 2,
+                            a(href="http://bdmy.org.mx/colecciones-cientificas/",
+                              img(
+                                src = "BDMY_Logo.jpeg",
+                                height = 100,
+                                width = 230
+                              )),
+                            p(
+                              "El grupo Biodiversidad Marina de Yucatán (BDMY) es un grupo de investigadores e la Universidad Nacional Autónoma de México asociados a la Facultad de Ciencias - Unidad académica Sisal/Yucatán.  El grupo pretende describir y analizar los patrones de diversidad y distribución de especies de las zonas costeras y arrecifales del Golfo de México, con la finalidad de generar líneas base y contribuir al manejo y conservación de dichos hábitats. Actualmente los colaboradores de BDMY se están dedicando al estudio de los siguientes taxa: Cnidaria, Crustacea, Porifera, Echinodermata, Mollusca, Urochordata (Ascidacea), Briozoa, Vertebrata (peces). El grupo maneja 4 colecciones científicas y ha identificado más de 60 nuevas especies."
+                            )
+                          ) #END BMDY
              ),
              #### PROJECT DESCRIPTION ####
              tabPanel("El Proyecto",
@@ -328,8 +344,8 @@ shinyUI(
                         p(h3("Palabras Clave Frecuentes")),
                         selectInput(inputId = "Discipline", 
                                     label= "Seleccione una opción:",
-                                    selected = NULL,
-                                    choices = list("Seleccione" = "NOT",
+                                    selected = "Todas",
+                                    choices = list(
                                                    "Acuacultura" = "Aquaculture",
                                                    "Ecología" = "Ecology",
                                                    "Oceanografía" = "Oceanography",
