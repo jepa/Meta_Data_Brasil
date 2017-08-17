@@ -350,9 +350,9 @@ shinyServer(function(input, output, session) {
   
   output$Keywords_Plot <- renderPlot({
     
-    # if(input$Discipline == "NOT"){
-    #   stop()
-    # }
+    if(input$Discipline == "NOT"){
+      stop()
+    }
     
     if(input$Discipline == "Todas"){
       Words <- datasetInput()

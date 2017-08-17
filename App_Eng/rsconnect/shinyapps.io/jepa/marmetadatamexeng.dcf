@@ -3,9 +3,9 @@ title: MarMetadataMex/Eng
 account: jepa
 server: shinyapps.io
 appId: 153939
-bundleId: 940953
+bundleId: 944718
 url: https://jepa.shinyapps.io/marmetadatamexeng/
-when: 1502744784.21875
+when: 1502995057.82805
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: Outreach/GOMSumm/choru_logo.png|Outreach/GOMSumm/Data_Curve.csv|Outreach/GOMSumm/GoMSummit.Rmd|Outreach/GOMSumm/Metadata_Key.csv|Outreach/GOMSumm/Template.csv|Outreach/GOMSumm/Images/FAO.png|Outreach/GOMSumm/Images/Flow.png|Outreach/GOMSumm/Images/Gom.png|Outreach/GOMSumm/Images/Logos_PI.png|Outreach/GOMSumm/Images/Logos3.png|Outreach/GOMSumm/rsconnect/documents/GoMSummit.Rmd/shinyapps.io/jepa/GoMSummit.dcf|Outreach/Reports/Executive_Report.pdf|Outreach/Reports/Executive_Report.Rmd

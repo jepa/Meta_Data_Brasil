@@ -342,8 +342,8 @@ shinyUI(
                br(),
                selectInput(inputId = "Discipline", 
                            label= "Select an Option:",
-                           selected = "Todas",
-                           choices = list(
+                           selected = "NOT",
+                           choices = list( "Select a Category" = "NOT",
                                           "Aquaculture" = "Aquaculture",
                                           "Ecology" = "Ecology",
                                           "Oceanography" = "Oceanography",

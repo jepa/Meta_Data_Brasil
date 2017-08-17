@@ -344,8 +344,8 @@ shinyUI(
                         p(h3("Palabras Clave Frecuentes")),
                         selectInput(inputId = "Discipline", 
                                     label= "Seleccione una opción:",
-                                    selected = "Todas",
-                                    choices = list(
+                                    selected = "NOT",
+                                    choices = list("Seleccione una Categoría" = "NOT",
                                                    "Acuacultura" = "Aquaculture",
                                                    "Ecología" = "Ecology",
                                                    "Oceanografía" = "Oceanography",
