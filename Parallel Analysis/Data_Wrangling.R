@@ -2182,6 +2182,29 @@ Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/
                     col_names = TRUE)
 View(Species)
 
+#### Correccion Nombres scientificos ####
+
+CNP_Correct <- gnr_resolve(names = Species$Cientifico, #Looks for homogenic names 
+                            best_match_only = TRUE) %>% # Returns only the best match 
+  rename(Cientifico = user_supplied_name)
+
+# Searching for completeley wrong names
+Names_Missing <- Species %>% 
+  anti_join(CNP_Correct,
+            by ="Cientifico")
+
+View(Names_Missing)
+
+Species_Rev <- Species %>% 
+  left_join(CNP_Correct,
+            by ="Cientifico") %>% 
+  select(-4,-13,-15,-16) %>% 
+  rename(Cientifico = matched_name) %>% 
+  select(1:3,12,4:11)
+
+write.csv(Species_Rev,
+          "Especies_CNP.csv")
+
 #### Arreglar nombres ####
 
 # Nombres <- Especies_CNP %>% 
@@ -2223,7 +2246,7 @@ Asociada <- paste("Pesquerias con captura asociada de")
 #### Creacion de la Tabla ####
 
 # 1. Generalidades  
-x_Generalidades <- Species %>% 
+x_Generalidades <- Species_Rev %>% 
   filter(Litoral == "Pacifico") %>% 
   group_by(Animal) %>% 
   summarise(n()) %>% 
@@ -2238,8 +2261,9 @@ write.csv(x_Generalidades,
 
 ###
 
-x_Zona_Cap_Ob <- Species %>% 
-  filter(Litoral == "Pacifico") %>% 
+x_Zona_Cap_Ob <- Species_Rev %>% 
+  filter(Litoral == "Pacifico") %>%
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   filter(Clasificacion == "Objetivo") %>% 
   mutate(Zona_Captura_Ob = paste(Zona_Captura_Ob.,Cientifico)) %>% 
   mutate(ZCO_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
@@ -2254,9 +2278,10 @@ write.csv(x_Zona_Cap_Ob,
 
 ###
 
-x_Zona_Cap_As <- Species %>% 
+x_Zona_Cap_As <- Species_Rev %>% 
   filter(Litoral == "Pacifico") %>% 
   filter(Clasificacion == "Asociadas") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Zona_Captura_As = paste(Zona_Captura_As.,Cientifico,Zona_Captura_As_II.,Animal,"(",Info_Extra,")",
                                  sep=" ")) %>% 
   mutate(ZCA_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
@@ -2272,9 +2297,10 @@ write.csv(x_Zona_Cap_As,
 
 ###
 
-x_Unidad <- Species %>% 
+x_Unidad <- Species_Rev %>% 
   filter(Litoral == "Pacifico") %>% 
   filter(Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Unidad = paste(Unidad,Cientifico)) %>% 
   mutate(Unidad_Key = paste(Comun,Animal,"Embarcacion; motor; fuera de borda; buceo; hooka; sacos; artes de pesca; trampas; viaje de pesca; palangre; anzuelo",
                             sep ="; ")) %>% 
@@ -2288,9 +2314,10 @@ write.csv(x_Unidad,
 
 ## FIN 1 ###
 
-x_Indicadores <- Species %>% 
-  filter(Litoral == "Pacifico") %>% 
-  filter(Clasificacion == "Objetivo") %>% 
+x_Indicadores <- Species_Rev %>% 
+  filter(Litoral == "Pacifico" & 
+           Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Indicadores = paste(Indicadores,Cientifico)) %>% 
   mutate(Indicadores_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Produccion; composicion especifica; Biomasa estimada",
                                  sep ="; ")) %>% 
@@ -2304,9 +2331,10 @@ write.csv(x_Indicadores,
 
 ## FIN 2 ##
 
-x_Esfuerzo <- Species %>% 
+x_Esfuerzo <- Species_Rev %>% 
   filter(Litoral == "Pacifico") %>% 
   filter(Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Esfuerzo = paste(Esfuerzo, Cientifico)) %>% 
   mutate(Esfuerzo_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Permisos; Pangas; Veda; Embarcaciones; Flota",
                                  sep ="; ")) %>%
@@ -2320,9 +2348,10 @@ write.csv(x_Esfuerzo,
   
 ### FIN 3 ###
 
-x_Estrategia <- Species %>% 
+x_Estrategia <- Species_Rev %>% 
   filter(Litoral == "Pacifico") %>% 
   filter(Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Estrategia = paste(Estrategia, Cientifico)) %>% 
   mutate(Estrategia_Key = paste(Comun, Animal,"Permisos; Veda; Flota; Zonas de Pesca; Talla minima; Quota; ",
                               sep ="; ")) %>%
@@ -2338,21 +2367,25 @@ write.csv(x_Estrategia, "x_Estrategia.csv")
 
 
 # Incidental y Asociada ####
-Spp_Incidental <- Species %>% 
+
+Spp_Incidental <- Species_Rev %>% 
   filter(Clasificacion == "Incidental") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Titulo_I = paste(Incidental,Cientifico)) %>% 
-  mutate(Key_I = paste("Nombre cientifico; comun; bycatch",Comun,Animal))
+  mutate(Key_I = paste("Nombre Cientifico; comun; bycatch",Comun,Animal))
            
            
-Spp_Asociada <- Species %>% 
+Spp_Asociada <- Species_Rev %>% 
   filter(Clasificacion == "Asociadas") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   group_by(Cientifico) %>% 
   summarise(n()) %>% 
   mutate(Titulo_A = paste(Asociada,Cientifico)) %>% 
   select(Cientifico,Titulo_A)
 
-NComunes <- Species %>% 
+NComunes <- Species_Rev %>% 
   filter(Clasificacion == "Asociadas") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   group_by(Cientifico,
            Animal) %>% 
   summarise(n()) %>% 
@@ -2364,6 +2397,34 @@ write.csv(Spp_Incidental, "Spp_Incidental.csv")
 write.csv(Spp_Asociada,"Spp_Asociada.csv")
   
 
+### FIN Insident. Asociad. ###
+
+
+# Revisar duplicados ####
+
+Especies_CNP <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/CNP_II.csv")
+
+Repeated_CNP <-Especies_CNP[duplicated(Especies_CNP$Short_Title), ]#Todas parecen ser de Escama cuando objetivo.
+
+lista <- c("Epinephelus niphobles",
+"Paralabrax nebulifer",
+"Semicossyphus pulcher",
+"Sphyraena ensis",
+"Mustelus californicus",
+"Mustelus lunulatus",
+"Mustelus henlei",
+"Paralabrax auroguttatus",
+"Micropogonias megalops",
+"Cynoscion othonopterus",
+"Paralabrax maculatofasciatus",
+"Centropomus medius",
+"Carcharhinus falciformis")
+
+x <- Repeated_CNP %>% 
+  filter(!Subject_name %in% lista)
+
+### OJO: ALL REPEATED ARE FOR SHARKS IN EL ITSMO
+
 #### CNP Atlantico ####
 
 Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv",
@@ -2371,19 +2432,10 @@ Species <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/
 
 # Explorando nombres #
 
-Nombres_A <- Species %>% 
-  filter(Litoral == "Atlantico") %>% 
-  group_by(Cientifico,
-           Comun) %>% 
-  summarise(n())
-  
-
-
-
 #### Creacion de la Tabla ####
 
 # 1. Generalidades  
-A_Generalidades <- Species %>% 
+x_Generalidades <- Species_Rev %>% 
   filter(Litoral == "Atlantico") %>% 
   group_by(Animal) %>% 
   summarise(n()) %>% 
@@ -2391,15 +2443,16 @@ A_Generalidades <- Species %>%
   select(General,
          Animal)
 
-write.csv(A_Generalidades,
-          "A_Generalidades.csv")
+write.csv(x_Generalidades,
+          "x_Generalidades.csv")
 
 
 
 ###
 
-A_Zona_Cap_Ob <- Species %>% 
-  filter(Litoral == "Atlantico") %>% 
+x_Zona_Cap_Ob <- Species_Rev %>% 
+  filter(Litoral == "Atlantico") %>%
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   filter(Clasificacion == "Objetivo") %>% 
   mutate(Zona_Captura_Ob = paste(Zona_Captura_Ob.,Cientifico)) %>% 
   mutate(ZCO_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
@@ -2409,14 +2462,15 @@ A_Zona_Cap_Ob <- Species %>%
          Cientifico,
          Animal)
 
-write.csv(A_Zona_Cap_Ob,
-          "A_Zona_Cap_Ob.csv")
+write.csv(x_Zona_Cap_Ob,
+          "x_Zona_Cap_Ob.csv")
 
 ###
 
-A_Zona_Cap_As <- Species %>% 
+x_Zona_Cap_As <- Species_Rev %>% 
   filter(Litoral == "Atlantico") %>% 
   filter(Clasificacion == "Asociadas") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Zona_Captura_As = paste(Zona_Captura_As.,Cientifico,Zona_Captura_As_II.,Animal,"(",Info_Extra,")",
                                  sep=" ")) %>% 
   mutate(ZCA_key = paste(Animal,Comun, "Litoral; Area de pesca; Zona de Captura; Longitud; Latitud",
@@ -2427,14 +2481,15 @@ A_Zona_Cap_As <- Species %>%
          Animal
   )
 
-write.csv(A_Zona_Cap_As,
-          "A_Zona_Cap_As.csv")
+write.csv(x_Zona_Cap_As,
+          "x_Zona_Cap_As.csv")
 
 ###
 
-A_Unidad <- Species %>% 
+x_Unidad <- Species_Rev %>% 
   filter(Litoral == "Atlantico") %>% 
   filter(Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Unidad = paste(Unidad,Cientifico)) %>% 
   mutate(Unidad_Key = paste(Comun,Animal,"Embarcacion; motor; fuera de borda; buceo; hooka; sacos; artes de pesca; trampas; viaje de pesca; palangre; anzuelo",
                             sep ="; ")) %>% 
@@ -2443,14 +2498,15 @@ A_Unidad <- Species %>%
          Cientifico,
          Animal)
 
-write.csv(A_Unidad,
-          "A_Unidad.csv")
+write.csv(x_Unidad,
+          "x_Unidad.csv")
 
 ## FIN 1 ###
 
-A_Indicadores <- Species %>% 
-  filter(Litoral == "Atlantico") %>% 
-  filter(Clasificacion == "Objetivo") %>% 
+x_Indicadores <- Species_Rev %>% 
+  filter(Litoral == "Atlantico" & 
+           Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Indicadores = paste(Indicadores,Cientifico)) %>% 
   mutate(Indicadores_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Produccion; composicion especifica; Biomasa estimada",
                                  sep ="; ")) %>% 
@@ -2459,14 +2515,15 @@ A_Indicadores <- Species %>%
          Cientifico,
          Animal)
 
-write.csv(A_Indicadores,
-          "A_Indicadores.csv")
+write.csv(x_Indicadores,
+          "x_Indicadores.csv")
 
 ## FIN 2 ##
 
-A_Esfuerzo <- Species %>% 
+x_Esfuerzo <- Species_Rev %>% 
   filter(Litoral == "Atlantico") %>% 
   filter(Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Esfuerzo = paste(Esfuerzo, Cientifico)) %>% 
   mutate(Esfuerzo_Key = paste(Comun, Animal, "CPUE; Captura; Esfuerzo; Permisos; Pangas; Veda; Embarcaciones; Flota",
                               sep ="; ")) %>%
@@ -2475,14 +2532,15 @@ A_Esfuerzo <- Species %>%
          Cientifico,
          Animal)
 
-write.csv(A_Esfuerzo,
-          "A_Esfuerzo.csv")
+write.csv(x_Esfuerzo,
+          "x_Esfuerzo.csv")
 
 ### FIN 3 ###
 
-A_Estrategia <- Species %>% 
+x_Estrategia <- Species_Rev %>% 
   filter(Litoral == "Atlantico") %>% 
   filter(Clasificacion == "Objetivo") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
   mutate(Estrategia = paste(Estrategia, Cientifico)) %>% 
   mutate(Estrategia_Key = paste(Comun, Animal,"Permisos; Veda; Flota; Zonas de Pesca; Talla minima; Quota; ",
                                 sep ="; ")) %>%
@@ -2492,37 +2550,40 @@ A_Estrategia <- Species %>%
          Animal)
 
 
-write.csv(A_Estrategia, "A_Estrategia.csv")
+write.csv(x_Estrategia, "x_Estrategia.csv")
 
-#### FIN 3 #____________
-
-#### Numeros resumen ####
-x <- Template %>% 
-  group_by(Region) %>% 
-  summarise(n=n()) %>% 
-  mutate(Per = (n/20884)*100)
-
-Species <- Template %>% 
-  filter(Research_Field == "Fisheries") %>%
-  filter(Subject_name != "Multiple Species") %>% 
-  filter(Subject_name != "Multiple Epecies") %>%
-  filter(Subject_name != "Multiple species") %>% 
-  filter(Subject_name != "Multiple Especies") %>%
-  filter(Subject_name != "TBD") %>%
-  group_by(Subject_name) %>% 
-  summarise(n=n()) %>% 
-  mutate(Per = (n/4228)*100)
-
-Spp <-data.frame(unique(Species$Subject_name))
+### FIN 4 ###
 
 
-Inst <- Species %>% 
-  group_by(Institution) %>% 
-  summarise(n())
+# Incidental y Asociada ####
 
-Most <- Template %>% 
-  group_by(Subject_name) %>% 
-  summarise(n())
+Spp_Incidental <- Species_Rev %>% 
+  filter(Clasificacion == "Incidental") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
+  mutate(Titulo_I = paste(Incidental,Cientifico)) %>% 
+  mutate(Key_I = paste("Nombre Cientifico; comun; bycatch",Comun,Animal))
+
+
+Spp_Asociada <- Species_Rev %>% 
+  filter(Clasificacion == "Asociadas") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
+  group_by(Cientifico) %>% 
+  summarise(n()) %>% 
+  mutate(Titulo_A = paste(Asociada,Cientifico)) %>% 
+  select(Cientifico,Titulo_A)
+
+NComunes <- Species_Rev %>% 
+  filter(Clasificacion == "Asociadas") %>% 
+  filter(Animal != "Escama") %>% #Se repite en las subfichas
+  group_by(Cientifico,
+           Animal) %>% 
+  summarise(n()) %>% 
+  semi_join(Spp_Asociada,
+            by="Cientifico")
+
+write.csv(Spp_Incidental, "Spp_Incidental.csv")
+
+write.csv(Spp_Asociada,"Spp_Asociada.csv")
 
 #### ___________ FIN Numeros Resumen ________ ##
 
@@ -2576,19 +2637,3 @@ Cost_Fin <- x %>%
   filter(V1 !="NA")
 
 write.csv(Cost_Fin,"Cost_Fin.csv")
-
-
-#### Nombres scientificos ####
-
-Nombres <- Names_CNP %>% 
-  slice(-1:-41) %>% 
-
-
-CNP_Correct <- gnr_resolve(names = Nombres$`Subject name`, #Looks for homogenic names 
-                           best_match_only = TRUE)  # Returns only the best match
-
-# me dan 500 y pico porque son los nombres distintos... hashtag bye hasta mañana
-
-Final_List <- CNP_Correct %>% 
-  group_by(matched_name) %>% 
-  summarise(n())
