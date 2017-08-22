@@ -2679,3 +2679,288 @@ Cost_Fin <- x %>%
   filter(V1 !="NA")
 
 write.csv(Cost_Fin,"Cost_Fin.csv")
+
+#### ________ FIN ###
+
+#### ____________________________GBIF ____________________________#### 
+
+#__________ GOC ####
+
+
+GOC_Data <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/GOC_Data.csv", 
+                       "\t", escape_double = FALSE)
+
+GOC_Data$N_year <- as.numeric(GOC_Data$year)
+
+
+GBIF_DATA_GoC <- GOC_Data %>% 
+  group_by(species) %>% 
+    summarise(
+      n = length(unique(year)),
+      mean_Long = mean(decimallongitude),
+      mean_Lat = mean(decimallatitude),
+      min_y = min(year, na.rm = T),
+      max_y = max(year, na.rm=T)
+    ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en el Golfo de California")) %>% 
+  mutate(Key = "taxonomia; ecologia; distribucion; macrofauna; mar de cortes; peces; reptiles; mamiferos; aves marinas; microinvertebrados")
+
+
+write.csv(GBIF_DATA_GoC,
+          "GBIF_DATA_GoC.csv")
+
+#__________ Tiburcios ####
+
+Tiburcios_Data <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Tiburones.csv", 
+                       "\t", escape_double = FALSE)
+
+Tiburcios_Data$N_year <- as.numeric(Tiburcios_Data$year)
+
+Tiburcios_Data_Final <- Tiburcios_Data %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia (y fecha de) de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; tiburon; checklist; literatura; museos; colecciones; trabajo de campo")) %>% 
+  select(
+    Key,
+    n)
+
+
+x <- data.table(Tiburcios_Data_Final$locations)
+
+
+
+write.csv(Tiburcios_Data_Final,
+          "Tiburcios_Data_Final_I.csv")
+
+
+#__________ Poliqueta ####
+
+Poliqueta_Data <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Poliqueta.csv", 
+                             "\t", escape_double = FALSE)
+
+Poliqueta_Data$year <- as.numeric(Poliqueta_Data$year)
+
+
+Poliqueta_I <- Poliqueta_Data %>%  #Datos con especie
+  filter(!is.na(species)) %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Poliqueta; Nereididae; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+Poliqueta_II <- Poliqueta_Data %>%  #Datos con especie
+  filter(is.na(species)) %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",genus," (Genero) en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Poliqueta; Nereididae; checklist; literatura; museos; colecciones; trabajo de campo")) %>% 
+  rename(species = genus) %>% 
+  bind_rows(Poliqueta_I)
+
+write.csv(Poliqueta_II,
+          "Poliqueta_II.csv")
+
+#__________ Algas ####
+
+Algas <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Algas.csv", 
+                             "\t", escape_double = FALSE)
+
+Algas$year <- as.numeric(Algas$year)
+
+Algas_Final <- Algas %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Rodophilas; Coralines; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+write.csv(Algas_Final,
+          "Algas_Final.csv")
+
+
+#________ Macro Algas Gdpe ####
+
+
+Macro_Algas <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Macro_Gdp.csv", 
+                    "\t", escape_double = FALSE)
+
+Macro_Algas$year <- as.numeric(Macro_Algas$year)
+
+Macro_Algas_Final <- Macro_Algas %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Rodophilas; Coralines; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+write.csv(Macro_Algas_Final,
+          "Macro_Algas_Final.csv")
+
+
+#________ Equinodermos ####
+
+
+Equinodermos <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Equinodermos.csv", 
+                          "\t", escape_double = FALSE)
+
+# Es posible que sea la misma base que la de la UNAM...
+UNAM <- Template %>% 
+  filter(Dataset_Title == "Coleccion Nacional de Equinodermos Mexicanos Dra. Maria Elena Caso Munoz") %>% 
+  rename(species = Subject_name)
+
+
+Equinos <- Equinodermos %>% 
+  group_by(species) %>% 
+  summarise(n=n())
+
+
+Ausentes <- Equinos %>% # 361 especies en la nueva que no estan en el Template
+  anti_join(UNAM,
+            by="species")
+
+Presentes <- Equinos %>% # 292 especies en la nueva que tmb estan en el Template
+  semi_join(UNAM,
+            by="species")
+
+
+Equinodermos$year <- as.numeric(Equinodermos$year)
+
+Equinodermos_Final_Data <- Equinodermos %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Equinodermos; checklist; coleccion; trabajo de campo"))
+
+write.csv(Equinodermos_Final_Data,
+          "Equinodermos_Final_Data.csv")
+
+#____________ Flora playas y Dunas ####
+
+
+Flora <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Flora_Dunas.csv", 
+                                    "\t", escape_double = FALSE)
+
+
+Flora$year <- as.numeric(Flora$year)
+
+Flora_Final <- Flora %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; dunas; playas; costa; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+write.csv(Flora_Final,
+          "Flora_Final.csv")
+
+#______ Crustaceos GoM ####
+
+Crustaceos <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Crustaceos_GoM.csv", 
+                    "\t", escape_double = FALSE)
+
+
+Crustaceos$year <- as.numeric(Crustaceos$year)
+
+Crustaceos_Data_Final <- Crustaceos %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; dunas; playas; costa; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+write.csv(Crustaceos_Data_Final,
+          "Crustaceos_Data_Final.csv")
+
+
+
+#____________ Macroalgas_N playas y Dunas ####
+
+
+Macroalgas_N <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Macroalgas_N.csv", 
+                    "\t", escape_double = FALSE)
+
+
+Macroalgas_N$year <- as.numeric(Macroalgas_N$year)
+
+Macroalgas_N_Data_Final <- Macroalgas_N %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; dunas; playas; costa; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+write.csv(Macroalgas_N_Data_Final,
+          "Macroalgas_N_Data_Final.csv")
+
+#______ Crustaceos GoM ####
+
+Crustaceos <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Crustaceos_GoM.csv", 
+                         "\t", escape_double = FALSE)
+
+
+Crustaceos$year <- as.numeric(Crustaceos$year)
+
+Crustaceos_Data_Final <- Crustaceos %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; dunas; playas; costa; checklist; literatura; museos; colecciones; trabajo de campo"))
+
+write.csv(Crustaceos_Data_Final,
+          "Crustaceos_Data_Final.csv")
