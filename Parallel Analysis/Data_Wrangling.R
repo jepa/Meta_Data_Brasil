@@ -2964,3 +2964,1204 @@ Crustaceos_Data_Final <- Crustaceos %>%  #Datos con especie
 
 write.csv(Crustaceos_Data_Final,
           "Crustaceos_Data_Final.csv")
+
+# ____________ Ictoplancton ###
+
+
+
+Ictoplancton <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Ictoplancton.csv", 
+                         "\t", escape_double = FALSE)
+
+
+Ictoplancton$year <- as.numeric(Ictoplancton$year)
+
+Ictoplancton_Data_S <- Ictoplancton %>%  #Datos con especie
+  filter(taxonrank == "SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude),
+    mean_Lat = mean(decimallatitude),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Celestun; Ictioplancton; plankton; costa; checklist; zzoplancton"))
+
+Ictoplancton_Data_Final <- Ictoplancton %>%  #Datos con especie
+  filter(taxonrank != "SPECIES") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",genus,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; distribucion; Celestun; Ictioplancton; plankton; costa; checklist; zzoplancton")) %>% 
+  rename(species = genus) %>% 
+  bind_rows(Ictoplancton_Data_S)
+
+
+
+write.csv(Ictoplancton_Data_Final,
+          "Ictoplancton_Data_Final.csv")
+
+
+# ___________ Tortugas ####
+
+Tortugas <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Tortugas.csv", 
+                           "\t", escape_double = FALSE)
+
+
+Tortugas$year <- as.numeric(Tortugas$year)
+
+Tortugas_Data_Final <- Tortugas %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; playas; anidacion; tortugas marinas"))
+
+
+write.csv(Tortugas_Data_Final,
+          "Tortugas_Data_Final.csv")
+
+
+# ___________ Rhizophora_Gen ####
+
+Rhizophora_Gen <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Rhizophora_Gen.csv", 
+                       "\t", escape_double = FALSE)
+
+
+Rhizophora_Gen$year <- as.numeric(Rhizophora_Gen$year)
+
+Rhizophora_Gen_Data_Final <- Rhizophora_Gen %>%  #Datos con especie
+  group_by(species,
+           locality) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Estudio Genetico de",species,"en",locality)) %>% 
+  mutate(Key = paste("taxonomia; ecologia; playas; anidacion; Rhizophora"))
+
+
+write.csv(Rhizophora_Gen_Data_Final,
+          "Rhizophora_Gen_Data_Final.csv")
+
+
+# ___________ Diatomeas_G ####
+
+Diatomeas_G <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Diatomeas_G.csv", 
+                             "\t", escape_double = FALSE)
+
+#### Mexico's EEZ
+
+EEZ_Mex <- read.csv("./Data/eez_Mex.csv")
+
+# Get Mexico's Pacific EEZ
+eez_Mex_P <- EEZ_Mex %>%
+  filter(piece == 1)
+
+# Get Mexico's Atlantic EEZ (2)
+eez_Mex_A <- EEZ_Mex %>%
+  filter(piece == 2)
+#________________________________________________________#
+
+
+Diatomeas_G$year <- as.numeric(Diatomeas_G$year)
+
+Diatomeas_G_Data_Final <- Diatomeas_G %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(" Observacion y frecuencia de",species,"en el G. de Mexico")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; playas; frecuencia; Presencia"))
+
+
+write.csv(Diatomeas_G_Data_Final,
+          "Diatomeas_G_Data_Final.csv")
+
+
+# ___________ Codigo_Barras ####
+
+Codigo_Barras <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Codigo_Barras.csv", 
+                          "\t", escape_double = FALSE)
+EEZ_Mex <- read.csv("./Data/eez_Mex.csv")
+
+
+# Get the points in polygon  
+#Note <- 1 is present| 0 is ausent
+Codigo_Barras_Mex <-data.frame(point.in.polygon(Codigo_Barras$decimallongitude,
+                                     Codigo_Barras$decimallatitude,
+                                     EEZ_Mex$long,
+                                     EEZ_Mex$lat))
+
+colnames(Codigo_Barras_Mex) <- "EEZ"
+
+
+
+Codigo_Barras$year <- as.numeric(Codigo_Barras$year)
+
+Codigo_Barras_Data_Final <- Codigo_Barras %>% 
+  bind_cols(Codigo_Barras_Mex) %>%  #Datos con especie
+  filter(EEZ == 1) %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Codigo de barras (iBOL) para",species)) %>% 
+  mutate(Key = paste("taxonomia; genetica; iBOL; International Barcode of Life; DNA; bases; MEXBOL"))
+
+
+write.csv(Codigo_Barras_Data_Final,
+          "Codigo_Barras_Data_Final.csv")
+
+
+# ___________ Ictioplancton_Campeche ####
+
+Ictioplancton_Campeche <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Ictioplancton_Campeche.csv", 
+                             "\t", escape_double = FALSE)
+
+
+Ictioplancton_Campeche$year <- as.numeric(Ictioplancton_Campeche$year)
+
+Ictioplancton_Campeche_Data_Sp <- Ictioplancton_Campeche %>%  #Datos con especie
+  filter(taxonrank == "SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Presencia de",species,"en la bahia de Campeche")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; presencia; ictioplancton; plancton; zooplancton; Terminos; Centla"))
+
+Ictioplancton_Campeche_Data_G <- Ictioplancton_Campeche %>%  #Datos con especie
+  filter(taxonrank == "GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Presencia de",genus," (Gen.) en la bahia de Campeche")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; presencia; ictioplancton; plancton; zooplancton; Terminos; Centla")) %>% 
+  rename(species = genus)
+
+Ictioplancton_Campeche_Data_F <- Ictioplancton_Campeche %>%  #Datos con especie
+  filter(taxonrank == "FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Presencia de",family," (Fam.) en la bahia de Campeche")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; presencia; ictioplancton; plancton; zooplancton; Terminos; Centla")) %>% 
+  rename(species = family) %>% 
+  bind_rows(Ictioplancton_Campeche_Data_Sp,
+            Ictioplancton_Campeche_Data_G)
+
+
+write.csv(Ictioplancton_Campeche_Data_F,
+          "Ictioplancton_Campeche_Data_Final.csv")
+
+
+
+# ___________ Macroinver_TJ ####
+
+Macroinver_TJ <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Macroinver_TJ.csv", 
+                       "\t", escape_double = FALSE)
+
+
+Macroinver_TJ_Data_Final <- Macroinver_TJ %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Ensenada-Tijuana")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; Macroinvertebrados; benthos; bentico; Annelida; Mollusca; Echinodermata; Crustacea; Plataforma Continental; RMP"))
+
+
+write.csv(Macroinver_TJ_Data_Final,
+          "Macroinver_TJ_Data_Final.csv")
+
+
+
+# ___________ Aves_Playeras_Tam ####
+
+Aves_Playeras_Tam <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Aves_Playeras_Tam.csv", 
+                            "\t", escape_double = FALSE)
+
+
+Aves_Playeras_Tam_Data_Final <- Aves_Playeras_Tam %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en Ensenada-Tijuana")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; Invertebrados; aves; playeras; Laguna Madre; LMT"))
+
+
+write.csv(Aves_Playeras_Tam_Data_Final,
+          "Aves_Playeras_Tam_Data_Final.csv")
+
+
+
+# ___________ Crustaceos_Macro_GoM ####
+
+Crustaceos_Macro_GoM <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Crustaceos_Macro_GoM.csv", 
+                                "\t", escape_double = FALSE)
+View(Crustaceos_Macro_GoM)
+
+
+Crustaceos_Macro_GoM_Data_Final <- Crustaceos_Macro_GoM %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Ocurrencia de",species,"en la plataforma continental y talud del GoM")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; crustaceos; talud; macrobentos; talud; plataforma"))
+
+
+write.csv(Crustaceos_Macro_GoM_Data_Final,
+          "Crustaceos_Macro_GoM_Data_Final.csv")
+
+
+# ___________ Parasitos_Noroeste ####
+
+Parasitos_Noroeste <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Parasitos_Noroeste.csv", 
+                                   "\t", escape_double = FALSE)
+View(Parasitos_Noroeste)
+
+Parasitos_Noroeste_Data_S <- Parasitos_Noroeste %>%  #Datos con especie
+  filter(taxonrank == "SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Identificacion de",species,"como parasito de peces")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; peces; parasitos; Bahia Mazatlan; Bahia de Banderas; SNIB"))
+
+Parasitos_Noroeste_Data_G <- Parasitos_Noroeste %>%  #Datos con especie
+  filter(taxonrank == "GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Identificacion de",genus," (Gen.)como parasito de peces")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; peces; parasitos; Bahia Mazatlan; Bahia de Banderas; SNIB")) %>% 
+  rename(species = genus)
+
+Parasitos_Noroeste_Data_F <- Parasitos_Noroeste %>%  #Datos con especie
+  filter(taxonrank == "FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Identificacion de",family,"(Fam.) como parasito de peces")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; peces; parasitos; Bahia Mazatlan; Bahia de Banderas; SNIB")) %>% 
+  rename(species = family) %>% 
+  bind_rows(Parasitos_Noroeste_Data_G,
+            Parasitos_Noroeste_Data_S)
+
+write.csv(Parasitos_Noroeste_Data_F,
+          "Parasitos_Noroeste_Data_Final.csv")
+
+
+# ___________ Macroalgas_Invasoras ####
+
+Macroalgas_Invasoras <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Macroalgas_Invasoras.csv", 
+                                   "\t", escape_double = FALSE)
+View(Macroalgas_Invasoras)
+
+
+Macroalgas_Invasoras_Data_Final <- Macroalgas_Invasoras %>%  #Datos con especie
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Estado actual de",species,"en el Pacifico Norte")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; macroalgas; introducidas; invasoras; costa"))
+
+
+write.csv(Macroalgas_Invasoras_Data_Final,
+          "Macroalgas_Invasoras_Data_Final.csv")
+
+
+# ___________ Ictiofauna_Banderas ####
+
+Ictiofauna_Banderas <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Ictiofauna_Banderas.csv", 
+                                   "\t", escape_double = FALSE)
+View(Ictiofauna_Banderas)
+
+
+Ictiofauna_Banderas_Data_S <- Ictiofauna_Banderas %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Taxonomia y Sistematica de",species)) %>% 
+  mutate(Key = paste("taxonomia; ecologia; ictiofauna; peces"))
+
+Ictiofauna_Banderas_Data_G <- Ictiofauna_Banderas %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Taxonomia y Sistematica de",genus, "(Gen.)")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; ictiofauna; peces")) %>% 
+  rename(species = genus)
+
+Ictiofauna_Banderas_Data_F <- Ictiofauna_Banderas %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Taxonomia y Sistematica de",family, "(Fam.)")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; ictiofauna; peces")) %>% 
+  rename(species = family) %>% 
+  bind_rows(Ictiofauna_Banderas_Data_S,
+            Ictiofauna_Banderas_Data_G)
+
+
+write.csv(Ictiofauna_Banderas_Data_F,
+          "Ictiofauna_Banderas_Data_Final.csv")
+
+
+
+# ___________ Aves_Playeras_II ####
+
+Aves_Playeras_II <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Aves_Playeras_II.csv", 
+                                  "\t", escape_double = FALSE)
+View(Aves_Playeras_II)
+
+
+Aves_Playeras_II_Data_S <- Aves_Playeras_II %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Datos de observacion de",species, "en la Laguna Madre")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; invertebrados; aves; playeras"))
+
+Aves_Playeras_II_Data_G <- Aves_Playeras_II %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Datos de observacion de",genus, "(Gen.) en la Laguna Madre")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; invertebrados; aves; playeras")) %>% 
+  rename(species = genus)
+
+Aves_Playeras_II_Data_F <- Aves_Playeras_II %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Datos de observacion de",family, "(Fam.) en la Laguna Madre")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; invertebrados; aves; playeras")) %>% 
+  rename(species = family) %>% 
+  bind_rows(Aves_Playeras_II_Data_S,
+            Aves_Playeras_II_Data_G)
+
+
+write.csv(Aves_Playeras_II_Data_F,
+          "Aves_Playeras_II_Data_Final.csv")
+
+# ___________ Aves_Playeras_III ####
+
+Aves_Playeras_III <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Aves_Playeras_III.csv", 
+                               "\t", escape_double = FALSE)
+View(Aves_Playeras_III)
+
+
+Aves_Playeras_III_Data_S <- Aves_Playeras_III %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Datos de observacion de",species, "en la Laguna Madre")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; invertebrados; aves; playeras"))
+
+Aves_Playeras_III_Data_G <- Aves_Playeras_III %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Datos de observacion de",genus, "(Gen.) en la Laguna Madre")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; invertebrados; aves; playeras")) %>% 
+  rename(species = genus)
+
+Aves_Playeras_III_Data_F <- Aves_Playeras_III %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Datos de observacion de",family, "(Fam.), en la Laguna Madre")) %>% 
+  mutate(Key = paste("taxonomia; ecologia; invertebrados; aves; playeras")) %>% 
+  rename(species = family) %>% 
+  bind_rows(Aves_Playeras_III_Data_S,
+            Aves_Playeras_III_Data_G)
+
+
+write.csv(Aves_Playeras_III_Data_F,
+          "Aves_Playeras_III_Data_Final.csv")
+
+
+# ___________ Larvas_Atun ####
+
+Larvas_Atun <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Larvas_Atun.csv", 
+                                   "\t", escape_double = FALSE)
+View(Larvas_Atun)
+
+
+Larvas_AtunS <- Larvas_Atun %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste("Distribucion espacio-temporal de larvas de",species, "en el Golfo de Tehuantepec")) %>% 
+  mutate(Key = paste("larvas; distribucion; atun; tunidos"))
+
+Larvas_AtunG <- Larvas_Atun %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Distribucion espacio-temporal de larvas de",genus, "(Gen.) en el Golfo de Tehuantepec")) %>% 
+  mutate(Key = paste("larvas; distribucion; atun; tunidos")) %>% 
+  rename(species = genus)
+
+Larvas_AtunF <- Larvas_Atun %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste("Distribucion espacio-temporal de larvas de",family, "(Fam.), en el Golfo de Tehuantepec")) %>% 
+  mutate(Key = paste("larvas; distribucion; atun; tunidos")) %>% 
+  rename(species = family) %>% 
+  bind_rows(Larvas_AtunS,
+            Larvas_AtunG)
+
+
+write.csv(Larvas_AtunF,
+          "Larvas_AtunFinal.csv")
+
+
+#___________ Algas GoC #####
+
+Algas_GoC <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Algas_GoC.csv", 
+                          "\t", escape_double = FALSE)
+View(Algas_GoC)
+
+Keywords <- "Flores; algas marinas; herbario; CMMEX; Rhodophyta; Phaeophyta; Chlorophyta"
+Inicio <- "Descripcion floristica de"
+Fin <- "en el Alto Golfo de California"
+
+Algas_GoCS <- Algas_GoC %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+Algas_GoCG <- Algas_GoC %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, genus, "(Gen.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = genus) %>% 
+  bind_rows(Algas_GoCS,
+            Algas_GoCG)
+
+
+Algas_GoCF <- Algas_GoC %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, family, "(Fam.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = family) %>% 
+  bind_rows(Algas_GoCS,
+            Algas_GoCG)
+
+
+write.csv(Algas_GoCS,
+          "Algas_GoCFinal.csv")
+
+
+#___________ Fauna Batial #####
+
+Fauna_Batial <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Fauna_Batial.csv", 
+                        "\t", escape_double = FALSE)
+View(Fauna_Batial)
+
+Keywords <- "Campana; oceanografica; SIGSBEE; DGoMB-JSSD; Sigsbee; Planicie abisal; batial; abisopelagica"
+Inicio <- "Presencia de"
+Fin <- "en el fondo marino del GoM"
+
+Fauna_BatialS <- Fauna_Batial %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+Fauna_BatialG <- Fauna_Batial %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, genus, "(Gen.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = genus)
+
+Fauna_BatialC <- Fauna_Batial %>%  #Datos con especie
+  filter(taxonrank =="CLASS") %>% 
+  group_by(class) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, class, "(Class)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = class)
+
+Fauna_BatialO <- Fauna_Batial %>%  #Datos con especie
+  filter(taxonrank =="ORDER") %>% 
+  group_by(order) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, order, "(Ord.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = order)
+
+Fauna_BatialK <- Fauna_Batial %>%  #Datos con especie
+  filter(taxonrank =="KINGDOM") %>% 
+  group_by(kingdom) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, kingdom, "(King.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = kingdom)
+
+
+Fauna_BatialF <- Fauna_Batial %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    n = length(unique(year)),
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T)
+  ) %>% 
+  mutate(Titulo = paste(Inicio, family, "(Fam.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = family) %>% 
+  bind_rows(Fauna_BatialS,Fauna_BatialG,Fauna_BatialC,Fauna_BatialO,Fauna_BatialK)
+
+
+write.csv(Fauna_BatialF,
+          "Fauna_Batial_Final_Data.csv")
+
+# ______________ Aves_Playeras_IV ####
+
+Aves_Playeras_IV <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Aves_Playeras_IV.csv", 
+                                "\t", escape_double = FALSE)
+View(Aves_Playeras_IV)
+
+Inicio <- "Ocurrencia de"
+Fin <- "en la laguna Madre, Tamaulipas"
+Keywords <- "taxonomia; ecologia; Invertebrados; aves; playeras; Laguna Madre; LMT"
+
+Aves_Playeras_IV_Final <- Aves_Playeras_IV %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+
+write.csv(Aves_Playeras_IV_Final,
+          "Aves_Playeras_IV_Data_Final.csv")
+
+# ______________ Gen_Robalo ####
+
+Gen_Robalo <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Gen_Robalo.csv", 
+                               "\t", escape_double = FALSE)
+View(Gen_Robalo)
+
+Inicio <- "Genetica y taxonomia de"
+Fin <- ""
+Keywords <- "taxonomia; ecologia; robalo; genetica; DNA"
+
+Gen_Robalo_Final <- Gen_Robalo %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+
+write.csv(Gen_Robalo_Final,
+          "Gen_Robalo_Final_Data.csv")
+
+
+
+# ______________ Rodolitos ####
+
+Rodolitos <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Rodolitos.csv", 
+                         "\t", escape_double = FALSE)
+View(Rodolitos)
+
+Inicio <- "Morfologia funcional de"
+Fin <- "en el Golfo de California"
+Keywords <- "Rodolitos; taxonomia; morfologia; mantos"
+
+RodolitosS <- Rodolitos %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+RodolitosG <- Rodolitos %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio, genus, "(Gen.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = genus)
+            
+RodolitosF <- Rodolitos %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio, family, "(Fam.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = family) %>% 
+  bind_rows(RodolitosS,
+            RodolitosG)
+
+
+write.csv(RodolitosF,
+          "Rodolitos_Final_Data.csv")
+
+# ______________ Decapodos ####
+
+Decapodos <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Decapodos.csv", 
+                        "\t", escape_double = FALSE)
+View(Decapodos)
+
+Inicio <- "Presencia de"
+Fin <- "en el Pacifico tropical"
+Keywords <- "decapodos; crustaceos; pocillopora; corales"
+
+DecapodosS <- Decapodos %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+DecapodosG <- Decapodos %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio, genus, "(Gen.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = genus)
+
+DecapodosF <- Decapodos %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio, family, "(Fam.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = family) %>% 
+  bind_rows(DecapodosS,
+            DecapodosG)
+
+
+write.csv(DecapodosF,
+          "Decapodos_Final_Data.csv")
+
+
+# ______________ Larvas_GoC ####
+
+Larvas_GoC <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Larvas_GoC.csv", 
+                        "\t", escape_double = FALSE)
+
+unique(Larvas_GoC$taxonrank)
+
+Inicio <- "Inventario de larvas de"
+Fin <- "en el Pacifico tropical"
+Keywords <- "Larvas; peces"
+
+Larvas_GoCS <- Larvas_GoC %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+
+write.csv(Larvas_GoCS,
+          "Larvas_GoC_Final_Data.csv")
+
+
+# ______________ Codigo barras Huevos_ ####
+
+CB_Huevos <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Codigo_Barra_Huevos.csv", 
+                         "\t", escape_double = FALSE)
+unique(CB_Huevos$taxonrank)
+
+Inicio <- "Codigo de barras para huevos y larvas de"
+Fin <- ""
+Keywords <- "Codigo de barras; huevos; larvas; costeros; oceanicos; peces; sistema arrecifal mesoamericano; caribe"
+
+CB_HuevosS <- CB_Huevos %>%  #Datos con especie
+  filter(taxonrank =="SPECIES") %>% 
+  group_by(species) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio,species, Fin)) %>% 
+  mutate(Key = paste(Keywords))
+
+CB_HuevosG <- CB_Huevos %>%  #Datos con especie
+  filter(taxonrank =="GENUS") %>% 
+  group_by(genus) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio, genus, "(Gen.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = genus)
+
+CB_HuevosF <- CB_Huevos %>%  #Datos con especie
+  filter(taxonrank =="FAMILY") %>% 
+  group_by(family) %>% 
+  summarise(
+    mean_Long = mean(decimallongitude, na.rm =T),
+    mean_Lat = mean(decimallatitude, na.rm =T),
+    min_y = min(year, na.rm = T),
+    max_y = max(year, na.rm=T),
+    n = length(unique(year))
+  ) %>% 
+  mutate(Titulo = paste(Inicio, family, "(Fam.)",Fin)) %>% 
+  mutate(Key = paste(Keywords)) %>% 
+  rename(species = family) %>% 
+  bind_rows(CB_HuevosS,
+            CB_HuevosG)
+
+
+write.csv(CB_HuevosF,
+          "CB_Huevos_Final_Data.csv")
+
+# ______________ Escribano ####
+
+Escribano <- read_delim("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Fitoplancton_Ts.csv", 
+                        "\t", escape_double = FALSE)
+unique(Escribano$taxonrank)
+
+
+Inicio <- "Caracterizacion y evaluacion de la pesqueria de"
+Fin <- "en Quintana Roo"
+Keywords <- "Pesqueria; escribanos; migratorios; picudas; pesca deportiva"
+
+
+
+GBIF_Create(Escribano,Inicio,Fin,Keywords,"Escribano")
+
+# ______________ Tortuga_Laud ####
+
+
+Inicio <- "Distribucion de la poblacion de"
+Fin <- "en el Pacifico mexicano (1996-1997)"
+Keywords <- "Tortuga; laud; anidacion; temporada"
+
+Author <- "Sarti Martinez., et al"
+Institution <- "GBIF-UNAM"
+Area <- "Pacific"
+Region <- "" 
+Location <- ""
+Dataset_Title <- "Estimacion del tamano de la poblacion anidadora de tortuga laud dermochelys coriacea y su distribucion en el pacífico mexicano durante la temporada de anidacion 1996-1997" 
+Reference <- "https://doi.org/10.15468/siicu6"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Tortuga_Laud,Inicio,Fin,Keywords,"Tortuga_Laud_I")
+
+
+# ______________ Aves_Playeras V ####
+
+## FUNCION ###
+Titulo <- "Aves_Playeras_Tam_V"
+Inicio <- "Ocurrencia de"
+Fin <- "en laguna Madre de Tamaulipas"
+Keywords <- "Aves; Pplayera; presencia; registro"
+
+## TEMPLATE ###
+Author <- "Gabino Rodriguez., et al"
+Institution <- "GBIF-UNAL"
+Area <- "Pacific"
+Region <- "W. G. of Mexico" 
+Location <- "Laguna Madre"
+Dataset_Title <- "Invertebrados y aves playeras de la Laguna Madre de Tamaulipas, México" 
+Reference <- "https://doi.org/10.15468/gnalq5"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Fitoplancton_Ts ####
+
+## FUNCION ###
+Titulo <- "Carey_Lagartos"
+Inicio <- "Dinamica poblacional de "
+Fin <- "en Todos Santos"
+Keywords <- "Fitoplancton; Todos Santos; Ensenada; Contaminacion"
+
+## TEMPLATE ###
+Author <- "Orellana Cepeda., et al"
+Institution <- "GBIF-UABC"
+Area <- "Pacific"
+Region <- "G. Of California" 
+Location <- "Todos Santos"
+Dataset_Title <- "Dinámica poblacional de la tortuga de carey (Eretmochelys imbricata) en su área de forraje. Río Lagartos, Yucatán" 
+Reference <- "https://doi.org/10.15468/aswbyx"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+# ______________ Dorada ####
+
+## FUNCION ###
+Titulo <- "Dorada"
+Inicio <- "Deteccion de reclutas de"
+Fin <- ""
+Keywords <- "dorada; Sparus; cultico"
+
+## TEMPLATE ###
+Author <- "Cruz Aguero., et al"
+Institution <- "GBIF-IPN"
+Area <- "Pacific"
+Region <- "G. Of California" 
+Location <- "Bahia de La Paz"
+Dataset_Title <- "Deteccion de reclutas de la dorada Sparus aurata como medida del nivel de establecimiento en la Bahia de La Paz, BCS" 
+Reference <- "https://doi.org/10.15468/ajyuo9"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+# ______________ Spp_Bentonicas_Caribe ####
+
+## FUNCION ###
+Titulo <- "Spp_Bentonicas_Caribe"
+Inicio <- "Distribucion de"
+Fin <- "en el Caribe"
+Keywords <- "hexacorales; octocorales; esponjas; especies miscelaneas; bentos;"
+
+## TEMPLATE ###
+Author <- "Chavez Ortiz., et al"
+Institution <- "GBIF-IPN"
+Area <- "Atlantic"
+Region <- "B. Campeche Caribe" 
+Location <- "Quintana Roo"
+Dataset_Title <- "Distribucion e inventario de algunas especies bentonicas (hexacorales, octocorales, esponjas, y especies miscelaneas) en arrecifes del Caribe mexicano" 
+Reference <- "https://doi.org/10.15468/txdpn5"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Decapodos_UNAM ####
+
+## FUNCION ###
+Titulo <- "Decapodos_UNAM"
+Inicio <- "Registro de"
+Fin <- "en coleccion de la FCB, UANL"
+Keywords <- "Crustaceos; Decapodos;"
+
+## TEMPLATE ###
+Author <- "Rodriguez Almaraz., et al"
+Institution <- "GBIF-UANL"
+Area <- "National"
+Region <- "" 
+Location <- ""
+Dataset_Title <- "Los crustaceos decapodos marinos: Actualizacion de la coleccion carcinologica de la Facultad de Ciencias Biologicas, UANL" 
+Reference <- "https://doi.org/10.15468/w1lujq"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Anfipodos_ColJa ####
+
+## FUNCION ###
+Titulo <- "Anfipodos_ColJa"
+Inicio <- "Registro de"
+Fin <- "en Jalisco y Colima"
+Keywords <- "anfipodos; crustaceos; zooplancton; hiperidos; area marina prioritaria"
+
+## TEMPLATE ###
+Author <- "Gasca Serrano., et al"
+Institution <- "GBIF-ECOSUR"
+Area <- "Pacific"
+Region <- "Sentral Pacific" 
+Location <- "Colima y Jalisco"
+Dataset_Title <- "Base de datos y coleccion de anfipodos (Hyperiidea:Crustacea) de regiones marinas prioritarias de Jalisco y Colima en el Pacifico mexicano" 
+Reference <- "https://doi.org/10.15468/c2edgd"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+# ______________ Macroalgas_Banderas ####
+
+## FUNCION ###
+Titulo <- "Macroalgas_Banderas"
+Inicio <- "Registro de"
+Fin <- "en Bahia Banderas"
+Keywords <- "macroalgas; algas; Chlorophyta; Phaeophyta; Rhodophyta; Cianophyta; FCME; Herbario"
+
+## TEMPLATE ###
+Author <- "Gonzalez Gonzalez., et al"
+Institution <- "GBIF-UNAM"
+Area <- "Pacific"
+Region <- "Sentral Pacific" 
+Location <- "Bahia Banderas"
+Dataset_Title <- "Inventario de macroalgas de Bahia de Banderas: Fase I y Fase II" 
+Reference <- "https://doi.org/10.15468/pglvkj"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
