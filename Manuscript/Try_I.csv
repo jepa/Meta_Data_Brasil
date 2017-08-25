@@ -1,0 +1,31 @@
+Source,Target,Value,Name,ID
+1,13,606,Academic,0
+1,14,16883,Goverment_Fund,1
+1,2,477,Inter. Gov (IGO),2
+1,13,326,International,3
+4,13,23,Non. Gov. (NGO),4
+5,4,3,Private,5
+5,13,1998,Aquaculture,6
+0,7,1,Conservation,7
+0,8,7972,Ecology,8
+0,9,3283,Fisheries,9
+0,10,238,Oceanography,10
+0,13,2,Sociology,11
+0,11,24,Turism,12
+1,6,79,Other,13
+14,7,263,Goverment_Res.,14
+14,9,16517,,
+14,10,20,,
+14,13,1,,
+14,11,3,,
+2,6,90,,
+2,7,389,,
+2,8,19039,,
+2,9,387,,
+3,8,9491,,
+3,10,90,,
+3,13,6,,
+4,7,3,,
+4,9,3,,
+4,10,1,,
+4,11,1,,

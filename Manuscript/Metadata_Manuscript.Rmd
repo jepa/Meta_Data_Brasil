@@ -18,6 +18,7 @@ library(data.table)
 library(ggplot2)
 library(gridExtra)
 library(dygraphs)
+library(networkD3)
 
 #Data needed
 
@@ -105,9 +106,18 @@ Main_Repo <- unique(M_Repo$Compilation_Title)
 
 ## Data Compilation
 
-The first step towards building the meta-database was the selection of categories in witch data was going to be categorized. This step was crussial for the subsequent meta-analysis of the diffeent aspects of marine research in Mexico. The present effort concentrated in collecting information on biology, ecology, fisheries, oceanography and social sciences data related to marine systems in Mexico. Because digital-available data in Mexico is scattered among different types of institutions, we started the search on global assessments (e.g. OBIS, FAO, NOAA, etc.) and subsequently went for more local data sources (e.g. Mexican universities catalogues, NGOs databases, etc.). While plenty of data was found on these online sources, it was suspected that many data was going to be found on personal off-line repositories (e.g. Long-track researchers and local ressources managers and NGOs). For this last step we organize **seven** different workshops/meetings in **five** marine-research hubs cities of Mexico. We participated on **three** key academic events (State of the Gulf of Mexico 2017, Sustainable Aquatic Ressources Workshop Mexico, and the International Meeting for Usage nad Conservation of Fisheries Ressources), hoping to collect information from top researchers in the areas. Because this is a collaborative initiative, we also partner up with other initiatives (e.g. DataMares, MonitoreoNoroeste, CONABIO, etc) to have their data represented in the meta-dataset.
+The first step towards building the meta-database was the selection of categories in witch data was going to be categorized. This step was crussial for the subsequent meta-analysis of the diffeent aspects of marine research in Mexico. The present effort concentrated in collecting information on data related to marine systems in Mexico from biology, ecology, fisheries, oceanography and social sciences. Because digital-available data in Mexico is scattered among different types of institutions, we started the search on global assessments (e.g. OBIS, FAO, NOAA, etc.) and subsequently went for more local data sources (e.g. Mexican universities catalogues, NGOs databases, etc.). While plenty information was found on these online sources, it was suspected that many of the metadata created was going to be found on personal off-line repositories (e.g. Long-track researchers, local ressources managers and NGOs). For this last step we organize **seven** different workshops/meetings in **five** marine-research hubs cities of Mexico. Hoping to collect information from top researchers we participated on **four** key academic events (EDF Mexico Meeting on Fisheries, 2017; State of the Gulf of Mexico, 2017; Sustainable Aquatic Ressources Workshop Mexico, 2017; International Meeting for Usage and Conservation of Fisheries Ressources, 2017). Because this is a collaborative initiative, we also partner up with other initiatives (e.g. DataMares, MonitoreoNoroeste, CONABIO, etc.) to have their data represented in the meta-dataset.
 
-Each record on the meta-dataset is part of a specific dataset included on a repository related to coastal and marine resources or regions. For each repository found, we first breakdown each dataset and then each topic represented in such table. Hence, each record in the meta-database represents a topic included in a dataset. For biological data the topics were applied for each species (or group of species). Lastly, when the information had a spatial content, the information was disaggregated to the level of municipality. This dessagrageted method of including information creates a longer dataset but allows for a more specific type of meta-analysis.
+## Metada Structure
+
+Each record on the meta-dataset is part of a specific dataset included on a repository related to coastal and marine resources or regions. We first split each dataset found in the repository and then each topic represented in such dataset. Hence, each record in the meta-database represents a topic included in a dataset **(Figure 1)**. For biological data the topics were applied for each species (or group of species). Lastly, when the information had a spatial content, the information was disaggregated to the level of municipality. This dessagrageted method of including information creates a longer dataset but allows for a more specific type of meta-analysis. 
+
+The metadata gathered was categorized in 7 braod categories: 
+
+![](Images/Methods_Flow.png)
+
+
+
 
 ## Data Sources
 
@@ -402,5 +412,70 @@ grid.arrange(Area_PLot,
 )
                                         
 ```
+
+
+```{r Network_Analysis, echo=F,eval=T}
+
+
+# Por ahora este funciona ya que hay que limpiar los metadatos
+
+DFb <- read_csv("~/Documents/Github/Meta_Data_Mexico/Manuscript/Try_I.csv", 
+    col_types = cols(Value = col_number()))
+
+sankeyNetwork(Links = DFb, Nodes = DFb, Source = "Source",
+             Target = "Target", Value = "Value", NodeID = "Name",
+             fontSize = 12, nodeWidth = 30)
+
+
+# Eventualmente...
+# 
+# 
+# # Name for each category of the graph
+# Category <- data.table::data.table(Name=c("Academic",
+# "Goverment_Fund",
+# "Inter. Gov (IGO)",
+# "International",
+# "Non. Gov. (NGO)",
+# "Private",
+# "Aquaculture",
+# "Conservation",
+# "Ecology",
+# "Fisheries",
+# "Oceanography",
+# "Sociology",
+# "Turism",
+# "Other",
+# "Goverment_Res."
+# )
+# )
+# 
+# # The rest of the needed information
+# 
+# R_Fund_Org <-Template %>%
+#   filter(!is.na(Research_Fund)) %>%
+#   group_by(Research_Fund,Institution_Type) %>%
+#   summarise(Value =n()) %>%
+#   slice(-1) %>%
+#   rename(Source = Research_Fund,
+#          Target = Institution_Type)
+# 
+# Inst_Field <-Template %>%
+#   filter(!is.na(Institution_Type)) %>%
+#   group_by(Institution_Type,Research_Field) %>%
+#   summarise(Value = n()) %>%
+#   rename(Source = Institution_Type,
+#          Target = Research_Field) %>%
+#   bind_rows(R_Fund_Org) %>%
+#   slice(-1)
+# 
+# Inst_Field$Source <- as.numeric(as.factor(Inst_Field$Source))
+# Inst_Field$Target <- as.numeric(as.factor(Inst_Field$Target))
+# 
+# sankeyNetwork(Links = Inst_Field, Nodes = Category, Source = "Source",
+#              Target = "Target", Value = "Value", NodeID = "Name",
+#              fontSize = 12, nodeWidth = 30)
+
+```
+
 # Discussion
 # Literature Review
