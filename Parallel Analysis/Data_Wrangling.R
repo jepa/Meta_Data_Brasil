@@ -4165,3 +4165,573 @@ User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx"
 
 GBIF_Create(Inicio,Fin,Keywords,Titulo)
 
+# ______________ Flora_Terminos ####
+
+## FUNCION ###
+Titulo <- "Flora_Terminos"
+Inicio <- "Registro de"
+Fin <- "en Laguna de Terminos (CAMP)"
+Keywords <- "macroalgas; algas; Chlorophyta; Phaeophyta; Rhodophyta; Cianophyta; vascular; zona inundable; fauna; flora; Laguna"
+
+## TEMPLATE ###
+Author <- "Bonilla Barbosa, et al"
+Institution <- "GBIF-UAEM"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe" 
+Location <- "Laguna de Terminos"
+Dataset_Title <- "Flora acuatica vascular y de zonas inundables del area de proteccion de flora y fauna Laguna de Terminos, Campeche, Mexico." 
+Reference <- "https://doi.org/10.15468/zp7jgv"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Esponjas ####
+
+## FUNCION ###
+Titulo <- "Esponjas"
+Inicio <- "Registro de"
+Fin <- "Para registro de Cofigo de barras"
+Keywords <- "Esponjas; DNA; ADN; Codigo de barras; biodiversidad; Porifera; biotecnologia"
+
+## TEMPLATE ###
+Author <- "Cruz-Barraza, et al"
+Institution <- "GBIF-UAEM"
+Area <- "National"
+Region <- "" 
+Location <- ""
+Dataset_Title <- "Nuevas aportaciones a la biodiversidad de esponjas marinas de Mexico: bases para la elaboracion de codigo de barras de ADN" 
+Reference <- "https://doi.org/10.15468/pkhco9"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Flora_Centla ####
+
+## FUNCION ###
+Titulo <- "Flora_Centla"
+Inicio <- "Registro de"
+Fin <- "en los Pantanos de Centla"
+Keywords <- "Flora; reserva; biosfera; pantanos; Centla; Humedal; inventario"
+
+## TEMPLATE ###
+Author <- "Guadarrama Olivera, et al"
+Institution <- "GBIF-UJAT"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe"
+Location <- "Pantanos de Centla"
+Dataset_Title <- "Flora de la reserva de la biosfera de los Pantanos de Centla, en el estado de Tabasco, Mexico" 
+Reference <- "https://doi.org/10.15468/nfizxi"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Manglar_Ver ####
+
+## FUNCION ###
+Titulo <- "Manglar_Ver"
+Inicio <- "Monitoreo de"
+Fin <- "en Veracruz"
+Keywords <- "Manglar; Mangle; Caracterizacion; monitoreo; Costa"
+
+## TEMPLATE ###
+Author <- "Portillo Guzman, et al"
+Institution <- "GBIF-INECOL"
+Area <- "Atlantic"
+Region <- "W. G. of Mexico"
+Location <- "Veracruz"
+Dataset_Title <- "Programa regional para la caracterizacion y el monitoreo de ecosistemas de manglar del Golfo de Mexico y Caribe Mexicano: Veracruz. Version 1.3"
+Reference <- "https://doi.org/10.15468/p2gmmh"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Manati ####
+
+## FUNCION ###
+Titulo <- "Manati"
+Inicio <- "Monitoreo de"
+Fin <- ""
+Keywords <- "Manati; ratio-transmisor; monitoreo; genetico; ADN; DNA; mitocondrial"
+
+## TEMPLATE ###
+Author <- "Morales Vela, et al"
+Institution <- "GBIF-ECOSUR"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe"
+Location <- "Quintana Roo"
+Dataset_Title <- "Variacion genetica del manati (Trichechus manatus), en el sureste de Mexico y monitoreo con radio-transmisores en Quintana Roo. Version 1.4"
+Reference <- "https://doi.org/10.15468/mncmu1"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+# ______________ Aves_GoC_GoM ####
+
+## FUNCION ###
+Titulo <- "Aves_GoC_GoM"
+Inicio <- "Distribucion de"
+Fin <- "en el Golfo de California"
+Keywords <- "Aves; abundancia; marinas; acuaticas; regiones marinas prioritarias; area protegida; SAV"
+
+## TEMPLATE ###
+Author <- "Velarde Gonzalez, et al"
+Institution <- "GBIF-ECOSUR"
+Area <- "Pacific"
+Region <- "Gulf of California"
+Location <- ""
+Dataset_Title <- "Distribucion y abundancia de aves marinas y acuaticas en regiones marinas prioritarias y areas protegidas del Golfo de California y Golfo de Mexico"
+Reference <- "https://doi.org/10.15468/tld9yx"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Arrecifes ####
+
+## FUNCION ###
+Titulo <- "Arrecifes"
+Inicio <- "Caracterizacion de"
+Fin <- "en Mahahual"
+Keywords <- "Corales; Sistema; Arrecifal; Mesoamericano; pesquerias; Turismos; Flora; Fauna; Mahahual"
+
+## TEMPLATE ###
+Author <- "Merediz Alonso, et al"
+Institution <- "GBIF-AmigosSianKaan"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe"
+Location <- "Mahahual"
+Dataset_Title <- "Caracterizacion y monitoreo de la condicion arrecifal en cinco areas naturales protegidas y un area de influencia de Quintana Roo, Mexico: Primera etapa. Version 1.3"
+Reference <- "https://doi.org/10.15468/yx7eck"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Aves_SJ ####
+
+## FUNCION ###
+Titulo <- "Aves_SJ"
+Inicio <- "Abundancia de"
+Fin <- "en Isla San Jose (BCS)"
+Keywords <- "Aves marinas; Aves terrestres; Abundancia; riqueza especifica"
+
+## TEMPLATE ###
+Author <- "Carmona Pina, et al"
+Institution <- "GBIF-UABCS"
+Area <- "Pacific"
+Region <- "G. of California"
+Location <- "Isla San Jose"
+Dataset_Title <- "Riqueza especifica, distribucion y abundancia de aves terrestres y marinas en Isla San Jose, Golfo de California, Baja California Sur, Mexico"
+Reference <- "https://doi.org/10.15468/u0yv2s"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+# ______________ Peces_Tax ####
+
+## FUNCION ###
+Titulo <- "Peces_Tax"
+Inicio <- "Estudio taxonomico de"
+Fin <- ""
+Keywords <- "Peces; taxonomia; zoogeografia; Laguna Madre; Costa Tamaulipas; Veracruz; Sonda Campeche; Justo Sierra; Barcos Camaroneros"
+
+## TEMPLATE ###
+Author <- "Lozano Vilano, et al"
+Institution <- "GBIF-UANL"
+Area <- "Atlantic"
+Region <- ""
+Location <- ""
+Dataset_Title <- "Estudio taxonomico y zoogeografico de areas selectas de peces marinos en Laguna Madre y Costas de Tamaulipas, Veracruz y Campeche, Mexico. Version 1.3"
+Reference <- "https://doi.org/10.15468/r6mfvp"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Ictiofauna_PC ####
+
+## FUNCION ###
+Titulo <- "Ictiofauna_PC"
+Inicio <- "Caracterizacion de"
+Fin <- "en Punta Carrizal (Col)"
+Keywords <- "Peces; taxonomia; estructura; ictiofauna; arrecifes rocosos; arrecifes coralinos; diversidad"
+
+## TEMPLATE ###
+Author <- "Chavez Comparan, et al"
+Institution <- "GBIF-UCOL"
+Area <- "Pacific"
+Region <- "Central Pacific"
+Location <- "Punta Carrizal"
+Dataset_Title <- "Caracterizacion y estructura de la ictiofauna de arrecifes rocosos y coralinos en Punta Carrizal, Colima, Mexico para fines de inventario y conservacion de la diversidad animal"
+Reference <- "https://doi.org/10.15468/xqft0m"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Flora_Complejo ####
+
+## FUNCION ###
+Titulo <- "Flora_Complejo"
+Inicio <- "Presencia de"
+Fin <- "en Baja California Sur"
+Keywords <- "Flora;Clorophyta; Phaeophyta; Rodophyta; conspicua; Echinodermata; Mollusca; Polychaeta; Complejo Insular Espiritu Santo-Cerralvo-San Jose"
+
+## TEMPLATE ###
+Author <- "Herrero Perezrul, et al"
+Institution <- "GBIF-IPN"
+Area <- "Pacific"
+Region <- "G. of Clifornia"
+Location <- "Complejo Insular Espiritu Santo-Cerralvo-San Jose"
+Dataset_Title <- "Distribución espacio-temporal de aves playeras y su relación con los invertebrados bentónicos en la Reserva de la Biósfera Marismas Nacionales, Nayarit, México"
+Reference <- "https://doi.org/10.15468/p0ekvb"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+# ______________ Aves_Mar_Nac ####
+
+## FUNCION ###
+Titulo <- "Aves_Mar_Nac"
+Inicio <- "Relacion de"
+Fin <- "con invertebrados benticos"
+Keywords <- "aves playeras; Reserva de la Biosfera; riqueza; abundancia; distribucion"
+
+## TEMPLATE ###
+Author <- "Carmona Pina, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Pacific"
+Region <- "G. of Clifornia"
+Location <- "Reserva de la Biosfera Marismas Nacional"
+Dataset_Title <- "Distribucion espacio-temporal de aves playeras y su relación con los invertebrados bentonicos en la Reserva de la Biosfera Marismas Nacionales, Nayarit, Mexico"
+Reference <- "https://doi.org/10.15468/cmen4f"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Cangrejo ####
+
+## FUNCION ###
+Titulo <- "Cangrejo"
+Inicio <- "Presencia de"
+Fin <- "en Golfo de Mexico"
+Keywords <- "Cangrejo; Anomuro; Branquiuros; Laguna Costera; Litoral"
+
+## TEMPLATE ###
+Author <- "Raz-Guzman, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "W. G. of Mexico"
+Location <- ""
+Dataset_Title <- "Catalogo de cangrejos anomuros y braquiuros de las lagunas costeras de mayor extension en el litoral mexicano del Golfo de Mexico"
+Reference <- "https://doi.org/10.15468/kd8uxs"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ SAV ####
+
+## FUNCION ###
+Titulo <- "SAV"
+Inicio <- "Condicion actual de"
+Fin <- "en Sistema Arrecifal Veracruzano"
+Keywords <- "Sistema Arrecifal Veracruzano; Corales; Monitoreo; Comunidad; SAV; Pertubacion"
+
+## TEMPLATE ###
+Author <- "Horta Puga, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "W. G. of Mexico"
+Location <- "Sistema Arrecifal Veracruzano"
+Dataset_Title <- "Sistema Arrecifal Veracruzano: condicion actual y programa permanente de monitoreo: Primera Etapa"
+Reference <- "https://doi.org/10.15468/ygb95w"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Ictio ####
+
+## FUNCION ###
+Titulo <- "Ictio"
+Inicio <- "Registro de"
+Fin <- ""
+Keywords <- "Ictiofauna; Region Marina Prioritaria; Peces Marinos; Coleccion Ictiologica"
+
+## TEMPLATE ###
+Author <- "Cruz Aguero, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "National"
+Region <- ""
+Location <- ""
+Dataset_Title <- "Registros ictiofaunisticos de localidades selectas de 10 regiones marinas prioritarias del Pacifico Mexicano"
+Reference <- "https://doi.org/10.15468/mezqik"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Elasmobranquios ####
+
+## FUNCION ###
+Titulo <- "Elasmobranquios"
+Inicio <- "Registro de"
+Fin <- "en el Golfo de Tehuantepec"
+Keywords <- "Ictiofauna; peces cartilaginosos; Chondrichthyies; Tiburones; Rayas; quimeras"
+
+## TEMPLATE ###
+Author <- "Castillo Geniz, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Pacific"
+Region <- "South Pacific"
+Location <- "Golfo de Tehuantepec"
+Dataset_Title <- "Elasmobranquios del Golfo de Tehuantepec, litoral chiapaneco"
+Reference <- "https://doi.org/10.15468/omucft"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Poliquetos_UANL ####
+
+## FUNCION ###
+Titulo <- "Poliquetos_UANL"
+Inicio <- "Registro de"
+Fin <- ""
+Keywords <- "Poliqueto; Co"
+
+## TEMPLATE ###
+Author <- "Leon Gonzalez, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "National"
+Region <- ""
+Location <- ""
+Dataset_Title <- "Actualizacion de la coleccion poliquetologica de la Universidad Autonoma de Nuevo Leon"
+Reference <- "https://doi.org/10.15468/x5e1h1"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Ostracodos ####
+
+## FUNCION ###
+Titulo <- "Ostracodos"
+Inicio <- "Registro de"
+Fin <- ""
+Keywords <- "Ostracodos; catalogo; Inventario; Mar Profundo; superficie; Zona Economica Exclusiva"
+
+## TEMPLATE ###
+Author <- "Leon Gonzalez, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "National"
+Region <- ""
+Location <- ""
+Dataset_Title <- "Inventario y catalogo de ostracodos recientes de los mares mexicanos
+"
+Reference <- "https://doi.org/10.15468/lihjgf"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Poliquetos_UANL ####
+
+## FUNCION ###
+Titulo <- "Poliquetos_UANL_I"
+Inicio <- "Registro de"
+Fin <- "de la coleccion de la FcB de la UANL"
+Keywords <- "Poliquetos; Catalogo; Invertebrados; Atropodos"
+
+## TEMPLATE ###
+Author <- "Leon Gonzalez, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "National"
+Region <- ""
+Location <- ""
+Dataset_Title <- "La Coleccion de Poliquetos (Annelida: Polychaeta) de la Facultad de Ciencias Biologicas, Universidad Autonoma de Nuevo Leon"
+Reference <- "https://doi.org/10.15468/sn6e04"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Copepodos ####
+
+## FUNCION ###
+Titulo <- "Copepodos"
+Inicio <- "Registro de"
+Fin <- "en la costa oriental de la Pen. Yucatan"
+Keywords <- "Copepodos; Crustaceos; pelagico;" 
+
+## TEMPLATE ###
+Author <- "Suarez Morales, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe"
+Location <- "Caribe"
+Dataset_Title <- "Los copepodos (crustacea) pelagicos de la costa oriental de la Peninsula de Yucatan"
+Reference <- "https://doi.org/10.15468/oztiwh"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Eufasidos ####
+
+## FUNCION ###
+Titulo <- "Eufasidos"
+Inicio <- "Registro de"
+Fin <- ""
+Keywords <- "Eufasido; Malacostraca; Custraceo; Zooplancton" 
+
+## TEMPLATE ###
+Author <- "Gasca Serrano, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- ""
+Location <- ""
+Dataset_Title <- "Base de datos y la coleccion de eufausidos (Euphausiacea: Malacostraca: Crustacea) del Atlantico mexicano"
+Reference <- "https://doi.org/10.15468/jvcqjg"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Crustaceos_Inv ####
+
+## FUNCION ###
+Titulo <- "Crustaceos_Inv"
+Inicio <- "Registro de"
+Fin <- "como especie invasora del Sistema Arrecifal Veracruzano"
+Keywords <- "Catalogo; crustaceos; anfipodos; invasores; Parque Nacional Sistema Arrecifal Veracruzano; PNSAV; SAV"
+
+## TEMPLATE ###
+Author <- "Winfield Aguilar, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "W. G. of Mexico"
+Location <- "Sistema Arrecifal Veracruzano"
+Dataset_Title <- "Catalogo de las especies de crustaceos anfipodos invasores del Parque Nacional Sistema Arrecifal Veracruzano (PNSAV) y la actualizacion de la base de datos (CONABIO) de los anfipodos en Mexico"
+Reference <- "https://doi.org/10.15468/ky1oeo"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Manglar_Yucatan ####
+
+## FUNCION ###
+Titulo <- "Manglar_Yuc"
+Inicio <- "Monitoreo de"
+Fin <- "en Yucatan"
+Keywords <- "Manglar; Mangle; Caracterizacion; monitoreo; Costa"
+
+## TEMPLATE ###
+Author <- "Herrera SIlveira, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe"
+Location <- "Yucatan"
+Dataset_Title <- "Programa regional para la caracterizacion y el monitoreo de ecosistemas de manglar del Golfo de Mexico y Caribe Mexicano: Peninsula de Yucatan"
+Reference <- "https://doi.org/10.15468/9ecxkr"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Ictiofauna_humed ####
+
+## FUNCION ###
+Titulo <- "Ictiofauna_humed"
+Inicio <- "Estatus Ecologico de"
+Fin <- "en humedales costeros del noroeste de BC"
+Keywords <- "Ictiofauna; Humedales; Costeros; Bocanas; marismas; Area Marina Prioritaria; Amenazada A1; Ensenadense"
+
+## TEMPLATE ###
+Author <- "Ruiz Campos, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Pacific"
+Region <- "G. of California"
+Location <- "Ensenadense"
+Dataset_Title <- "Estatus ecologico y distribucion de la ictiofauna de humedales costeros (bocanas y marismas) en el noroeste de Baja California México (Area marina prioritaria amenazada A1: Ensenadense)"
+Reference <- "https://doi.org/10.15468/8e7deh"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Tanaidaceos ####
+
+## FUNCION ###
+Titulo <- "Tanaidaceos"
+Inicio <- "Presencia de"
+Fin <- "en el G. de Mexico y Caribe"
+Keywords <- "Tanaidaceos; Crustaceos; Peracarida; Poliquetos"
+
+## TEMPLATE ###
+Author <- "Suarez Morales, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "B. of Campeche Caribe"
+Location <- ""
+Dataset_Title <- "Bases de datos de Tanaidaceos (Crustacea: Peracarida) del Mar Caribe mexicano y Poliquetos pelagicos del Golfo de Mexico y Mar Caribe mexicano"
+Reference <- "https://doi.org/10.15468/8bcbag"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Cangrejo_II ####
+
+## FUNCION ###
+Titulo <- "Cangrejo_I"
+Inicio <- "Presencia de"
+Fin <- "en Golfo de Mexico"
+Keywords <- "Cangrejo; Anomuro; Branquiuros; Laguna Costera; Litoral"
+
+## TEMPLATE ###
+Author <- "Raz-Guzman, et al"
+Institution <- "GBIF-CONABIO"
+Area <- "Atlantic"
+Region <- "W. G. of Mexico"
+Location <- ""
+Dataset_Title <- "Catalogo de cangrejos anomuros y braquiuros de las lagunas costeras de mayor extension en el litoral mexicano del Golfo de Mexico"
+Reference <- "https://doi.org/10.15468/atuln7"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+
+####____________ Merge EVERYTHING ####
+
+
+#### STILL NOT WORKING ####
+
+# First correcting the MMID column
+for(i in 21:42){
+  Name <- paste(Data_Guide[i,1])
+  x <- read_csv(
+      paste("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/",
+        Name,
+        sep="")
+      )%>% 
+    rename(MMID = )
+  
+  write.csv(x,
+            Name,
+            row.names = F)
+}
+
+# Now merging everything
+xx <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Arrecifes_BC_Final.csv")
+
+for(i in 33:84){
+  Name <- paste(Data_Guide[i,2])
+  x <- read_csv(
+    paste("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/",
+          Name,
+          sep="")
+  )%>% 
+    bind_rows(xx
+    )
+  
+  # write.csv(x,
+  #           Name,
+  #           row.names = F)
+}
+
+#Problema con 32
