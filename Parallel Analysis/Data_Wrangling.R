@@ -19,6 +19,8 @@ library(leaflet)
 library(taxize) # For scientific names
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
+source("./Functions/gbif_import.r")
+
 #### _________________________________ ####
 
 #### DATA ####
@@ -4165,3 +4167,133 @@ User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx"
 
 GBIF_Create(Inicio,Fin,Keywords,Titulo)
 
+# ______________ Fitoplancton_BC ####
+
+## FUNCION ###
+Titulo <- "Fitoplancton_BC"
+Inicio <- "Area de Surgencia de"
+Fin <- ""
+Keywords <- "zooplancton; Surgencia; Enscenada; Biodiversidad"
+
+## TEMPLATE ###
+Author <- "Orellana Cepeda., et al"
+Institution <- "GBIF-UABC"
+Area <- "Pacific"
+Region <- "Gulf of California" 
+Location <- "Ensenada"
+Dataset_Title <- "Fitoplancton marino frente a Baja California. 2. Areas de surgencias de la region Ensenadense" 
+Reference <- "https://doi.org/10.15468/dcpjjs"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Tortugas_gen ####
+
+## FUNCION ###
+Titulo <- "Tortugas_gen"
+Inicio <- "Genetica poblacional de"
+Fin <- ""
+Keywords <- "Tortugas; ADN; genetica; filogeografia; golfina; laud"
+
+## TEMPLATE ###
+Author <- "Abreu Grobois., et al"
+Institution <- "GBIF-UNAM"
+Area <- "Pacific"
+Region <- "" 
+Location <- ""
+Dataset_Title <- "Genetica poblacional y filogeografia de las tortugas marinas golfina (Lepidochelys olivacea) y laud (Dermochelys coriacea) en el Pacifico mexicano" 
+Reference <- "https://doi.org/10.15468/dlyav9"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Cetaceos_BA ####
+
+## FUNCION ###
+Titulo <- "Cetaceos_BA"
+Inicio <- "Distribucion de"
+Fin <- "en Bahia de Los Angeles (BCS)"
+Keywords <- "Diversidad; Distribucion; abundancia; Cetaceos; Canal Ballenas; Angeles; turismo; mamifero marino"
+
+## TEMPLATE ###
+Author <- "Heckel Dziendzielewski., et al"
+Institution <- "GBIF-CICESE"
+Area <- "Pacific"
+Region <- "Gulf of California" 
+Location <- "Bahia de los Angeles"
+Dataset_Title <- "Diversidad, distribucion y abundancia de cetaceos en Bahia de los Angeles y Canal de Ballenas, Golfo de California: bases cientificas para una nueva area de observacion turistica de mamiferos marinos"
+Reference <- "https://doi.org/10.15468/cwwjak"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Kuby ####
+
+Kuby <- Kuby %>% 
+  filter(countrycode == "MX")
+
+write.csv(Kuby,
+          "Kuby.csv",
+          col.names = FALSE)
+
+## FUNCION ###
+Titulo <- "Kuby"
+Inicio <- "Registro de"
+Fin <- "en la coleccion de la U. de Kansas"
+Keywords <- "Ichthyologia; Peces; KUBI; Coleccion"
+
+## TEMPLATE ###
+Author <- "Bentley., et al"
+Institution <- "GBIF-U.Kansas"
+Area <- "National"
+Region <- "" 
+Location <- ""
+Dataset_Title <- "KUBI Ichthyology Collection"
+Reference <- "https://doi.org/10.15468/mgjasg"
+User_Contact <- "Andrew Bentley; abentley@ku.edu" 
+
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Bacterias_BC ####
+
+## FUNCION ###
+Titulo <- "Bacterias_BC"
+Inicio <- "Presencia de"
+Fin <- "en Bahia Concepcion (BCS)"
+Keywords <- "Bacterias; Fototrofas; Comunidad; Microbios; Bentos"
+
+## TEMPLATE ###
+Author <- "Lopez Cortes, et al"
+Institution <- "GBIF-CIBNOR"
+Area <- "Pacifico"
+Region <- "Gulf of California" 
+Location <- "Bahia Concepcion"
+Dataset_Title <- "Diversidad de bacterias fototrofas en comunidades microbianas bentonicas de Bahia Concepcion, BCS, Mexico"
+Reference <- "https://doi.org/10.15468/b4gnla"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx"
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
+
+# ______________ Aves_Paz ####
+
+## FUNCION ###
+Titulo <- "Aves_Paz"
+Inicio <- "Presencia de"
+Fin <- "en la ensenada de La Paz (BCS)"
+Keywords <- "Riqueza especifica; Distribucion; Abundancai; Aves"
+
+## TEMPLATE ###
+Author <- "Carmona Pina, et al"
+Institution <- "GBIF-UABCS"
+Area <- "Pacifico"
+Region <- "Gulf of California" 
+Location <- "Ensenada de La Paz"
+Dataset_Title <- "Riqueza especifica, distribucion y abundancia de aves acuaticas en la ensenada de La Paz, Baja California Sur, Mexico"
+Reference <- "https://doi.org/10.15468/wricli"
+User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx"
+
+GBIF_Create(Inicio,Fin,Keywords,Titulo)
