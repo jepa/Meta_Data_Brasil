@@ -819,9 +819,15 @@ output$Network <- renderSankeyNetwork({
               by ="ID")
   
   
-  sankeyNetwork(Links = Target, Nodes = Category, Source = "Source",
-                Target = "Target", Value = "Value", NodeID = "Name",
-                fontSize = 12, nodeWidth = 30)
+  sankeyNetwork(Links = Target, #Dataset with Source, Target and value
+                Nodes = Category, #Dataset withe the Names
+                Source = "Source", #Source column in Links dataset
+                Target = "Target", #Target column in Links dataset
+                Value = "Value", # The amount to plot from the Links dataset
+                NodeID = "Name", #What's showing when mouse over Node
+                units = "Records" #Units to show
+                fontSize = 12,
+                nodeWidth = 30)
   
   
 })
