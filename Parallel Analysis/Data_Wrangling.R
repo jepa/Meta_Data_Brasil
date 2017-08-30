@@ -4986,36 +4986,170 @@ GBIF_Create(Inicio,Fin,Keywords,Titulo)
 #### STILL NOT WORKING ####
 
 # First correcting the MMID column
-for(i in 21:42){
+
+### STEP DONE ###
+for(i in 35:nrow(Data_Guide)){
   Name <- paste(Data_Guide[i,1])
-  x <- read_csv(
+  xx <- read_csv(
     paste("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/",
           Name,
-          sep="")
+          sep=""),
+    col_types = cols(X1 = col_skip())
   )%>% 
-    rename(MMID = )
+    mutate(MMID="") %>% 
+    select(MMID,everything())
   
   write.csv(x,
             Name,
             row.names = F)
 }
 
+####____________________________________
+
 # Now merging everything
 xx <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Arrecifes_BC_Final.csv")
+Data_Guide <- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Data_Guide.csv") %>% 
+  select(Final_List)
+x <- NULL
 
-for(i in 33:84){
-  Name <- paste(Data_Guide[i,2])
-  x <- read_csv(
-    paste("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/",
-          Name,
-          sep="")
-  )%>% 
-    bind_rows(xx
-    )
+for(i in 1:nrow(Data_Guide)){
+  # Name <- paste(Data_Guide[i])
+  Liga <- paste("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/",
+                Data_Guide$Final_List[i],
+                sep="")
   
-  # write.csv(x,
-  #           Name,
-  #           row.names = F)
+  x <- fread(Liga)
+  x <- x %>% 
+    mutate(File = paste(Data_Guide[i])) %>% 
+    filter(!is.na(Short_Title))
+  
+  x <- data.table(x)
+    
+  # print(Liga)
+# }
+  
+  if(i == 1){
+    Data <- copy(x) # <- copies the previouse data.table
+  }else{ 
+    setkey(Data, # <- sets the data.table as "reference" ?setkey
+           Area); setkey(x,
+                                Area); 
+    list <- list(Data, # <- creates a list to merge the tables
+                 x)
+    Data <- rbindlist(list, #<- Merges all the data in one single file.
+                       use.names = TRUE, # <- This will merge columns by Name
+                       fill = FALSE, # <- This allows for the NA's
+                       idcol =  NULL)  # Columns id
+  }
 }
 
-#Problema con 32
+unique(Data$File)
+
+Data <- select(Data, -File)
+
+write.csv(Data,
+      "Data.csv",
+      row.names = F)
+#### __________________________________FIN DE GBIF __________________________________ ####
+
+#### Money really, money ####
+
+Template_3_4 <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_3.4.csv")
+
+Money <- Template_3_4 %>% 
+  group_by(Compilation_Title) %>% 
+  summarise(n())
+
+Money <- Template_3_4 %>% 
+  filter(is.na(Research_Fund)) %>% 
+  group_by(Compilation_Title) %>% 
+  summarise(n())
+
+#### Network analysis ###
+
+# Eventualmente...
+
+
+# Name for each category of the graph
+Category <- data.table::data.table(Name=c(
+  "AAcademic",
+  "Aquaculture",
+"Goverment",
+"Inter. Gov (IGO)",
+"International",
+"NGO",
+"Unknown",
+"Conservation",
+"Ecology",
+"Fisheries",
+"Oceanography",
+"Sociology",
+"Turism",
+"Other",
+"NGO Funding",
+"Private Funding",
+"Goverment Fu",
+"ACA_F",
+"Inter. Gov (IGO) Funding",
+"International Funding"
+)
+) %>% 
+  arrange(Name)
+
+# The rest of the needed information
+Template <- Template_3_4
+
+#First Research Funding
+R_Fund_Org <-Template %>%
+  group_by(Research_Fund,Institution_Type) %>%
+  summarise(Value =n()) %>%
+  rename(Source = Research_Fund,
+         Target = Institution_Type)
+
+Inst_Field <-Template %>%
+  filter(!is.na(Institution_Type)) %>%
+  group_by(Institution_Type,Research_Field) %>%
+  summarise(Value = n()) %>%
+  rename(Source = Institution_Type,
+         Target = Research_Field)
+
+Final_Table <- R_Fund_Org %>%
+  bind_rows(Inst_Field) 
+
+Final_Table <- data.frame(ID = seq(1:nrow(Final_Table))) %>% 
+  bind_cols(Final_Table)
+
+Final_Table_N <- Final_Table %>% 
+  gather("Category","Character",2:3) %>% 
+  arrange(Character)
+
+Final_Table_N$Character <- as.integer(as.factor(Final_Table_N$Character))
+Final_Table_N$Character <- as.numeric(as.integer(Final_Table_N$Character)-1)
+
+Source <- Final_Table_N %>% 
+  filter(Category == "Source") %>% 
+  select(-Category) %>% 
+  rename(Source = Character)
+
+Target <- Final_Table_N %>% 
+  filter(Category == "Target") %>% 
+  select(-Category,-Value) %>% 
+  rename(Target = Character) %>% 
+  left_join(Source,
+            by ="ID")
+
+# Final_Table_x <- Target %>% 
+#   bind_cols(Target) %>% 
+#   select(Source, Target,Value)
+
+# Final_Table_x$Source <- as.integer(as.numeric(Final_Table_x$Source))
+# Final_Table_x$Target <- as.integer(as.numeric(Final_Table_x$Target))
+# Final_Table_x$Value <- as.numeric(as.integer(Final_Table_x$Value))
+
+
+sankeyNetwork(Links = Target, Nodes = Category, Source = "Source",
+             Target = "Target", Value = "Value", NodeID = "Name",
+             fontSize = 12, nodeWidth = 30)
+
+
+
