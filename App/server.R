@@ -50,10 +50,12 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- read.csv("./Templateb.csv", 
-                    header = TRUE,
-                    na="NA")
-    data.frame(data)
+    data<- fread("./Template_3.4.csv",
+                 colClasses = c(Location = 'character',
+                                Notes = 'character',
+                                Data_Uncertanty ='character',
+                                Data_Time_Points = 'numeric'))
+    #data.frame(data)
   })
   
   
@@ -147,11 +149,6 @@ shinyServer(function(input, output) {
   
   # Data points shown in the map ###
   #Fedecop information 
-  FEDECOOP <- paste(sep = "<br/>",
-                    "<b><a href='http://www.fedecoop.com.mx'>MetaID 342</a></b>",
-                    "Lobster Stock Assesment and Catch from FEDECOOP since 1970",
-                    "Private Dataset"
-  )
   
   #### The Actual Map ####
   #(requieres leaflet package)
@@ -168,36 +165,7 @@ shinyServer(function(input, output) {
       setView(lng = -102.5528, 
               lat = 23.6345,
               zoom = 5) %>% 
-      # Data examples as markers ####
-    addMarkers(lng = -109.4725,
-               lat = 24.6356, 
-               popup = "7654")%>%
-      addMarkers(lng = -95.8084852,
-                 lat = 20.5764432,
-                 popup = "MetaID 423"
-      )%>%
-      addMarkers(lng = -107.8084852,
-                 lat = 15.5764432,
-                 popup = "Meta ID = 343. Short Title: Buoy ID4: sst, salinity and currents since 1980"
-      )%>%
-      # Data examples as rectangles ####
-    addRectangles(
-      lng1=-107.607877, lat1=18.459820,
-      lng2=-110.557877, lat2=17.431188,
-      color="red",
-      fillColor = "red",
-      fillOpacity = 0,
-      popup = "Meta ID = 546. Short Title: Hammerhead Shark Stock Assesment between 2000-2014"
-    ) %>% 
-      addRectangles(
-        lng1=-115.507877, lat1=28.400000,
-        lng2=-115.557877, lat2=28.421188,
-        color="green",
-        fillColor = "green",
-        fillOpacity = 0.2,
-        popup = FEDECOOP
-      ) %>% 
-      #### Lat & Long in dataset ####
+      # Markers for those that we have ####
     addMarkers(
       lng = ~Long,
       lat = ~Lat,
@@ -211,30 +179,41 @@ shinyServer(function(input, output) {
   #### Quantitative Results ####
   # Number of entries ####
   
-  output$Number_Entries <- renderPrint({
+  #### Quantitative Analysis ####
+  
+  # Number of entries ####
+  output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
-    Number_entries$MMID[length(Number_entries$MMID)]
+    paste(Number_entries$MMID[length(Number_entries$MMID)])
     
   })
   
-  output$Number_Data_Points <- renderPrint({
+  #_____________________ END ___________________________ #  
+  
+  # Number of Data Points ####
+  output$Number_Data_Points <- renderText({
     Number_entries <- datasetInput()
-    sum(Number_entries$Data_Time_Points,na.rm=T)
+    paste(sum(Number_entries$Data_Time_Points,na.rm=T))
     
   })
   
-  output$Sources <- renderPrint({
-     z<- datasetInput() %>% 
+  #_____________________ END ___________________________ #  
+  
+  # Number of Repositories ####
+  output$Sources <- renderText({
+    z<- datasetInput() %>% 
       group_by(Compilation_Title) %>% 
       summarise(sum(Data_Time_Points)) %>% 
       select(-2) %>% 
       filter(!is.na(Compilation_Title)) %>% 
       mutate(z = 1)
     
-    sum(z$z)
+    paste(sum(z$z))
     
   })
+  
+  #### NUMBER OF DATA POINTS ####
   
   output$Number_spp <- renderPlot({
     #### Entries By Area####
@@ -334,6 +313,106 @@ shinyServer(function(input, output) {
     }
   })
   
+  #### NUMBER OF Records ####
+  
+  output$Records <- renderPlot({
+    #### Entries By Area####
+    
+    if(input$Plot_Option_B == 1){
+      Spp <- datasetInput() %>% 
+        group_by(Area) %>% 
+        summarise(Entradas = n()) %>% 
+        filter(Area !="na") # %>% 
+      # filter(Entradas >= input$Num_Data_Range[1]) %>% 
+      # filter(Entradas <= input$Num_Data_Range[2])
+      
+      ggplot(data= Spp,
+             aes(
+               x=reorder(Area, -Entradas),
+               y=Entradas,
+               fill=Area
+             )) +
+        geom_bar(stat="identity")+
+        #coord_flip()+
+        theme_classic() +
+        ylab("Registros")+
+        xlab("Campo de Investigación")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         size=14,
+                                         angle=45),
+              axis.text.y = element_text(size = 14),
+              legend.position = "none",
+              axis.title = element_text(size=20,
+                                        face="bold")
+              
+        )
+      
+    }else{
+      #### By Region####
+      if(input$Plot_Option == 2){
+        Spp2 <- datasetInput() %>%
+          group_by(Region) %>%
+          summarise(Value = n()) %>% 
+          filter(Region != "na") %>% 
+          filter(Region != "")
+        
+        ggplot(data= Spp2,
+               aes(
+                 x=reorder(Region, -Value),
+                 y=Value,
+                 fill=Region
+               )) +
+          geom_bar(stat="identity")+
+          theme_classic() +
+          ylab("Registros")+
+          xlab("Región")+
+          theme(axis.text.x = element_text(hjust = 1,
+                                           size=14,
+                                           angle = 45),
+                axis.text.y = element_text(size = 14),
+                legend.position = "none",
+                axis.title = element_text(size=20,
+                                          face="bold")
+          )
+        
+      }else{
+        #### By Location####
+        if(input$Plot_Option == 3){
+          Spp3 <- datasetInput() %>%
+            filter(Location != "na") %>% 
+            filter(Location != "Multiple States") %>% 
+            group_by(Location) %>%
+            summarise(Value = n()) %>% 
+            arrange(desc(Value))
+          
+          Head_Spp3 <- head(Spp3,input$Num_Data_Range_R) %>% 
+            arrange(desc(Value))
+          
+          
+          ggplot(data= Head_Spp3,
+                 aes(
+                   x=reorder(Location, -Value),
+                   y=Value,
+                   fill=Location
+                 )) +
+            geom_bar(stat="identity")+
+            theme_classic() +
+            coord_flip() +
+            ylab("Registros")+
+            xlab("Localidad")+
+            theme(axis.text.x = element_text(hjust = 1,
+                                             size=14,
+                                             angle=45),
+                  axis.text.y = element_text(size = 14),
+                  legend.position = "none",
+                  axis.title = element_text(size=20,
+                                            face="bold")
+            )
+        }
+      }
+    }
+  })
+  
   #### SE_Component ####
   output$SE_Component <- renderPlot({
     Se_Plot <- datasetInput() %>% 
@@ -361,49 +440,108 @@ shinyServer(function(input, output) {
                                       face="bold"))
   })
   
+  #### SE_Component Registros ####
+  output$SE_Component_Reg <- renderPlot({
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(SE_Interaction)) %>% 
+      filter(SE_Interaction != "Otros") %>% 
+      group_by(SE_Interaction) %>% 
+      summarise(Value = n())
+    
+    ggplot(data=Se_Plot,
+           aes(
+             y = Value,
+             x = SE_Interaction,
+             fill =SE_Interaction
+           ))+
+      geom_bar(stat = "identity")+
+      theme_classic() +
+      ylab("Número de Registros")+
+      xlab("Componente Socio Económico")+
+      theme(axis.text.x = element_text(hjust = 1,
+                                       size=14,
+                                       angle= 45),
+            axis.text.y = element_text(size = 14),
+            legend.position = "none",
+            axis.title = element_text(size=20,
+                                      face="bold"))
+  })
+  
   ####.############### ####
   #### Qualitative Analysis ####
   
   # Keywords_Plot ####
   
   output$Keywords_Plot <- renderPlot({
-    Words <- datasetInput()
+    
+    if(input$Discipline == "NOT"){
+      stop()
+    }
+    
+    if(input$Discipline == "Todas"){
+      Words <- datasetInput()
+    }else{
+      Words <- datasetInput() %>% 
+        filter(Research_Field == input$Discipline)
+    }
     WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-    WordsCorpus <- tm_map(WordsCorpus, PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       PlainTextDocument) #Converts to plain text
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       removePunctuation) #Removes punctuation
+    # 
+    # Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
+    #                  input$Keyword_Remove2)
     
-    Word_Remove <- c(input$Keyword_Remove1,input$Keyword_Remove2)
-    
-    #Removes a word of user preference 
-    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 
-    #
+    #Removes a word of user preference
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       removeWords,
+    #                       Word_Remove )
+    # 
     
     wordcloud(WordsCorpus, #Plots the words
               max.words = 100,
               random.order = FALSE,
               colors=brewer.pal(8, "Dark2"))
     
+    #}
   })
   
   #### Subject_Name Word Cloud ####
   
-  output$Subject_name_Plot <- renderPlot({
-    Words <- datasetInput()
-    WordsCorpus <- Corpus(VectorSource(Words$Subject_name)) #Selects only Subject_name
-    WordsCorpus <- tm_map(WordsCorpus, PlainTextDocument) #Converts to plain text
-    WordsCorpus <- tm_map(WordsCorpus, removePunctuation) #Removes punctuation
+  output$Subjects_Plot <- renderPlot({
     
-    Word_Remove <- c(input$Subject_Remove,input$Subject_Remove2)
+    if(input$Discipline_Subject == "NOT"){
+      stop()
+    }
     
-    #Removes a word of user preference 
-    WordsCorpus <- tm_map(WordsCorpus, removeWords,Word_Remove ) 
-    #
+    if(input$Discipline == "Todas"){
+      Words <- datasetInput()
+    }else{
+      Words <- datasetInput() %>% 
+        filter(Research_Field == input$Discipline)
+    }
+    WordsCorpus <- Corpus(VectorSource(Words$Subject_name)) #Selects only Keywords
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       PlainTextDocument) #Converts to plain text
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       removePunctuation) #Removes punctuation
+    # 
+    # Word_Remove <- c(input$Keyword_Remove1, #<- For optional word removing
+    #                  input$Keyword_Remove2)
+    
+    #Removes a word of user preference
+    # WordsCorpus <- tm_map(WordsCorpus,
+    #                       removeWords,
+    #                       Word_Remove )
+    # 
     
     wordcloud(WordsCorpus, #Plots the words
               max.words = 100,
               random.order = FALSE,
               colors=brewer.pal(8, "Dark2"))
     
+    #}
   })
   
   #### Experimental Analysis ####  
@@ -422,7 +560,7 @@ shinyServer(function(input, output) {
              ))+
         geom_bar()+
         theme_classic() +
-        ylab("Número de Datos")+
+        ylab("Número Registros")+
         xlab("Area")+
         theme(axis.text.x = element_text(hjust = 1,
                                          size=14,
@@ -447,7 +585,7 @@ shinyServer(function(input, output) {
                ))+
           geom_bar()+
           theme_classic() +
-            ylab("Número de Datos")+
+            ylab("Número de Registros")+
           xlab("Región")+
           theme(axis.text.x = element_text(hjust = 1,
                                            size=14,
@@ -473,7 +611,7 @@ shinyServer(function(input, output) {
                  ))+
             geom_bar()+
             theme_classic() +
-            ylab("Número de Datos")+
+            ylab("Número de Registros")+
             xlab("Localidad")+
             theme(axis.text.x = element_text(hjust = 1,
                                              size=14,
@@ -608,9 +746,84 @@ shinyServer(function(input, output) {
       }
     }
   })
-  ####.############### ####
-  #### Colaborar ####
+  
+  #### Netword D3 ####
+  
+output$Network <- renderSankeyNetwork({
+  
+  Category <- data.table::data.table(Name=c(
+    "AAcademic",
+    "Aquaculture",
+    "Goverment",
+    "Inter. Gov (IGO)",
+    "International",
+    "NGO",
+    "Unknown",
+    "Conservation",
+    "Ecology",
+    "Fisheries",
+    "Oceanography",
+    "Sociology",
+    "Turism",
+    "Other",
+    "NGO Funding",
+    "Private Funding",
+    "Goverment Fu",
+    "ACA_F",
+    "Inter. Gov (IGO) Funding",
+    "International Funding"
+  )
+  ) %>% 
+    arrange(Name)
+  
+  # The rest of the needed information
+  Template <- datasetInput()
+  
+  #First Research Funding
+  R_Fund_Org <-Template %>%
+    group_by(Research_Fund,Institution_Type) %>%
+    summarise(Value =n()) %>%
+    rename(Source = Research_Fund,
+           Target = Institution_Type)
+  
+  Inst_Field <-Template %>%
+    filter(!is.na(Institution_Type)) %>%
+    group_by(Institution_Type,Research_Field) %>%
+    summarise(Value = n()) %>%
+    rename(Source = Institution_Type,
+           Target = Research_Field)
+  
+  Final_Table <- R_Fund_Org %>%
+    bind_rows(Inst_Field) 
+  
+  Final_Table <- data.frame(ID = seq(1:nrow(Final_Table))) %>% 
+    bind_cols(Final_Table)
+  
+  Final_Table_N <- Final_Table %>% 
+    gather("Category","Character",2:3) %>% 
+    arrange(Character)
+  
+  Final_Table_N$Character <- as.integer(as.factor(Final_Table_N$Character))
+  Final_Table_N$Character <- as.numeric(as.integer(Final_Table_N$Character)-1)
+  
+  Source <- Final_Table_N %>% 
+    filter(Category == "Source") %>% 
+    select(-Category) %>% 
+    rename(Source = Character)
+  
+  Target <- Final_Table_N %>% 
+    filter(Category == "Target") %>% 
+    select(-Category,-Value) %>% 
+    rename(Target = Character) %>% 
+    left_join(Source,
+              by ="ID")
   
   
+  sankeyNetwork(Links = Target, Nodes = Category, Source = "Source",
+                Target = "Target", Value = "Value", NodeID = "Name",
+                fontSize = 12, nodeWidth = 30)
+  
+  
+})
 })
 

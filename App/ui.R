@@ -409,12 +409,7 @@ shinyUI(
              column(
                width = 6,
                align= "center",
-               p(h3("Quantitative Results")),
-               p(h5("Total Number of Data Registers")),
-               p(h4(textOutput("Number_Entries"))),
-               p(h5("Total Number of Data Points")),
-               p(h4(textOutput("Number_Data_Points"))),
-               p(h4("Number of Data Enteries per Area")),
+               p(h3("By Data Point")),
                selectInput("Plot_Option", 
                            label= "Choose To Show Plot:",
                            choices = list("By Area" = 1, 
@@ -432,34 +427,67 @@ shinyUI(
                p(h4("Social Economic Component")),
                plotOutput("SE_Component")
              ),
-             #### Qualitative Results####
-             ####Keywords Word Cloud####
+             #### By Record ####
              column(
                width = 6,
                align= "center",
-               p(h3("Qualitative Results")),
-               textInput("Keyword_Remove1",
-                         "Remove any Keyword",
-                         "",
-                         width = '50%'),
-               textInput("Keyword_Remove2",
-                         "",
-                         "",
-                         width = '50%'),
-               plotOutput("Keywords_Plot"),
-               p(em("Note: Not all words might be represented in the graph")),
+               p(h3("By Record")),
+               selectInput("Plot_Option_B", 
+                           label= "Choose To Show Plot:",
+                           choices = list("By Area" = 1, 
+                                          "By Region" = 2,
+                                          "By Location" =3
+                           )
+               ),
+               plotOutput("Records"),
+               sliderInput("Num_Data_Range_R",
+                           "Select the Top Categories",
+                           value=10,
+                           min = 1,
+                           max = 50),
+               p(h4("Social Economic Component")),
+               plotOutput("SE_Component_Reg")
+             ),
+             #### Word Cloud ####
+             column(
+               width = 6,
+               align= "center",
+               p(h3("Wordcloud  Keywords")),
+               selectInput(inputId = "Discipline", 
+                           label= "",
+                           selected = "NOT",
+                           choices = list("Seleccione una Categoría" = "NOT",
+                                          "Acuacultura" = "Aquaculture",
+                                          "Ecología" = "Ecology",
+                                          "Oceanografía" = "Oceanography",
+                                          "Pesquerías" ="Fisheries",
+                                          "Turismo" = "Tourism",
+                                          "Sociología" = "Sociology",
+                                          "Todas" = "Todas"
+                           )
+               ),
+               plotOutput("Keywords_Plot")
+             ),
+               column(
+                 width = 6,
+                 align= "center",
                #### Subject_Name Word Cloud ####
-               p(h4("Subject Name Word Cloud")),
-               textInput("Subject_Remove",
-                         "Remove Any Subject",
-                         "",
-                         width = '50%'),
-               textInput("Subject_Remove2",
-                         "",
-                         "",
-                         width = '50%'),
-               plotOutput("Subject_name_Plot"),
-               p(em("Note: Not all words might be represented in the graph"))
+               p(h3("Wordcloud  Subject Names")),
+               selectInput(inputId = "Discipline_Subject", 
+                           label= "",
+                           selected = "NOT",
+                           choices = list("Seleccione una Categoría" = "NOT",
+                                          "Acuacultura" = "Aquaculture",
+                                          "Ecología" = "Ecology",
+                                          "Oceanografía" = "Oceanography",
+                                          "Pesquerías" ="Fisheries",
+                                          "Turismo" = "Tourism",
+                                          "Sociología" = "Sociology",
+                                          "Todas" = "Todas"
+                                          
+                           )
+               ),
+               plotOutput("Subjects_Plot")
              ),
              #### Experimental Analysis ####
              column(width =12,
@@ -485,7 +513,8 @@ shinyUI(
                          width = "20%"
              ),
              plotOutput("Research_Field_Plot")
-             )
+             ),
+             sankeyNetworkOutput("Network")
     )
   )
 )
