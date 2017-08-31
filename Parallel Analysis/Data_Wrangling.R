@@ -5054,7 +5054,7 @@ write.csv(Data,
 
 #### Money really, money ####
 
-Template_3_4 <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_3.4.csv")
+Template_3_4 <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
 
 Money <- Template_3_4 %>% 
   group_by(Compilation_Title) %>% 
@@ -5070,28 +5070,27 @@ Money <- Template_3_4 %>%
 # Eventualmente...
 
 
-# Name for each category of the graph
 Category <- data.table::data.table(Name=c(
   "AAcademic",
   "Aquaculture",
-"Goverment",
-"Inter. Gov (IGO)",
-"International",
-"NGO",
-"Unknown",
-"Conservation",
-"Ecology",
-"Fisheries",
-"Oceanography",
-"Sociology",
-"Turism",
-"Other",
-"NGO Funding",
-"Private Funding",
-"Goverment Fu",
-"ACA_F",
-"Inter. Gov (IGO) Funding",
-"International Funding"
+  "Goverment",
+  "Inter. Gov (IGO)",
+  "International",
+  "NGO",
+  "Unknown",
+  "Conservation",
+  "Ecology",
+  "Fisheries",
+  "Oceanography",
+  "Sociology",
+  "Turism",
+  "Other",
+  "NGO Funding",
+  "Private Funding",
+  "Goverment Fu",
+  "ACA_F",
+  "Inter. Gov (IGO) Funding",
+  "International Funding"
 )
 ) %>% 
   arrange(Name)
@@ -5131,25 +5130,141 @@ Source <- Final_Table_N %>%
   select(-Category) %>% 
   rename(Source = Character)
 
-Target <- Final_Table_N %>% 
+ATarget <- Final_Table_N %>% 
   filter(Category == "Target") %>% 
   select(-Category,-Value) %>% 
   rename(Target = Character) %>% 
   left_join(Source,
             by ="ID")
 
-# Final_Table_x <- Target %>% 
-#   bind_cols(Target) %>% 
-#   select(Source, Target,Value)
 
-# Final_Table_x$Source <- as.integer(as.numeric(Final_Table_x$Source))
-# Final_Table_x$Target <- as.integer(as.numeric(Final_Table_x$Target))
-# Final_Table_x$Value <- as.numeric(as.integer(Final_Table_x$Value))
-
-
-sankeyNetwork(Links = Target, Nodes = Category, Source = "Source",
-             Target = "Target", Value = "Value", NodeID = "Name",
-             fontSize = 12, nodeWidth = 30)
+sankeyNetwork(Links = ATarget, #Dataset with Source, Target and value
+              Nodes = Category, #Dataset withe the Names
+              Source = "Source", #Source column in Links dataset
+              Target = "Target", #Target column in Links dataset
+              Value = "Value", # The amount to plot from the Links dataset
+              NodeID = "Name", #What's showing when mouse over Node
+              units = "Records", #Units to show
+              fontSize = 12,
+              nodeWidth = 30)
 
 
 
+#### ____________ DATOS.GOV _______________ ####
+
+## SCT- Infraestructura arino Portuaria ##
+Dinoflagelados_Marinos <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/CIBNOR/Dinoflagelados_Marinos.csv") %>% 
+  separate(`FECHA DE AISLAMIENTO`, c("day", "month", "year"), sep = "/")
+
+
+Dino <- Dinoflagelados_Marinos %>%
+  filter(LOCALIDAD != "CUBA") %>% 
+  group_by(ESPECIE,LOCALIDAD) %>% 
+  summarise(Ymin = min(year, na.rm=t),
+            Ymax = max(year),
+            nYear = length(unique(year))) %>% 
+  mutate(Titulo = paste("Presencia de",ESPECIE, "en",LOCALIDAD)) %>% 
+  mutate(Key = paste(LOCALIDAD, "Dinoflagelados; Coleccion; semestral; Noroeste"))
+  
+
+Titulos <- data.frame(
+  Titul= c(
+"Temperatura del agua",
+"Radiacion solar",
+"Direccion viento",
+"Magnitud viento",
+"Temperatura del aire",
+"Humedad relativa",
+"Presion atmosferica",
+"Precipitacion",
+"Nivel del mar 3"
+))
+
+Final <- Titulos %>% 
+  mutate(Ti = paste(Titul,"en la Bahia de Baja California (2016)")) %>% 
+  mutate(Key = paste("Mes; Dia; Hora; Minuto; Segundo; Temperatura; estacio mareografica; Observatorio; Mareas; Costas"))
+
+
+### CNH ###
+Gas <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/Gas.csv")
+
+CNH <- Gas %>% 
+  group_by(activo,region) %>% 
+  summarise(n=n()
+            )
+
+### CONANP ####
+
+CONANP <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/CONANP_D.csv")
+
+CO <- CONANP %>% 
+  mutate(Titulo = paste("Superficie Certificada del", `Nombre del area`)) %>% 
+  mutate(Titulo_I = paste("Fecha y plazo de Certificacion de", `Nombre del area`)) %>% 
+  select(Titulo,
+         Titulo_I)
+
+Areas <- CONANP %>% 
+  group_by(Estado) %>% 
+  summarise(n()) %>% 
+  mutate(x = paste("Areas con Manglar destinadas Voluntariamente a la Conservacion en",Estado))
+
+
+### Sitios Ramsar
+path.ne.coast <- ("/Users/jpalacios/Downloads/Cobertura_Sitios_Ramsar")
+file_name <- "Sitios_Ramsar_Geo_ITRF92_2015.shp"
+
+# Loading the shapefile:
+data_coast <- readOGR(dsn = path.ne.coast, 
+                      layer = file_path_sans_ext(file_name))
+
+x <- fortify(data_coast)
+ggplot() + 
+  geom_path(data = x, 
+            aes(x = long, y = lat, group = group), 
+            color = "black",
+            size = 0.25) + 
+  coord_map(projection = "mercator") 
+
+
+### ANP ##
+
+RB <- c("Sian Kaan",
+"Alto Golfo de California",
+"Banco Chinchorro",
+"Isla del Golfo de California",
+"Ria Celestun",
+"Ria Lagartos",
+"Arrecife Alacranes",
+"Huatulco",
+"Laguna madre y Delta de Rio Bravo",
+"Pantanos de Centla",
+"Sistema Arrecifal Veracruzano",
+"Islas Marietas",
+"Islas Marias",
+"Isla Cozumel",
+"Sian Ka'an"
+)
+
+ANP_L <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/ANP_Loc.csv")
+ANPS <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/listado_ANPS.csv") %>% 
+  filter(Sup_Marina >= 1) %>% 
+  filter(!is.na(Programa)) %>% 
+  mutate(x = paste("Estudio Previo para la determinacion del ANP",ANP)) %>% 
+  select(x,ANP,Programa)
+
+### RAMSAR ##
+
+Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico.csv")
+
+MP <- Mexico_Politico %>% 
+  filter(Region_M != "Freshwater/Terrestrial") %>% 
+  rename(Estado = Location)
+
+RAMSAR <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/RAMSAR.csv") 
+
+Ram <- RAMSAR%>% 
+  filter(!is.na(`Sitio Ramsar`)) %>% 
+  mutate(Titulo = paste("Superficie de",`Sitio Ramsar`)) %>% 
+  select(Titulo, Estado) %>% 
+  semi_join(MP,
+            by = "Estado")

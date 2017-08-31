@@ -1,0 +1,64 @@
+---
+title: "Metadata Requests"
+author: "Juliano Palacios Abrantes"
+date: "30/8/2017"
+output: html_document
+---
+
+
+## Dr. Blanca Idalia Gutierez 
+### Aug 30th, 2017
+
+Correo: bigzzg@gmail.com
+
+¿ya tienes ubicadas a las instituciones que están haciendo o han hecho trabajo de monitoreo en el golfo mexicano? Nos están pidiendo organizar una reunión con instituciones que hagan o hicieron monitoreo en el golfo, porque necesitamos esté relacionado con los índices que vamos a trabajor. Principalmente de componentes de calidad del agua y contaminacion, pero cualquier tipo de información sirve
+
+
+```{r Blaca, eval=F, echo = T, message= F, warning = F}
+library(data.table)
+library(dplyr)
+
+Idalia <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
+
+Idalia_Data <- Idalia %>% 
+  filter(Area =="Atlantic") %>% 
+  group_by(Author,
+           Institution,
+           Research_Field,
+           Reference,
+           Compilation_Title) %>% 
+  summarise(
+    n=n(),
+    MMID = paste(MMID, collapse = ";")
+  ) %>% 
+  select(-n)
+
+write.csv(Idalia_Data,
+          "Metadatos_Atlantico_Idalia.csv",
+          row.names = F)
+
+Autores_Fuera <- c(
+  "CONAPESCA",
+  "CONABIO"
+)
+
+National_Data <-Idalia %>% 
+  filter(Area =="National") %>%
+  filter(!Author %in% Autores_Fuera) %>% 
+  group_by(Author,
+           Institution,
+           Research_Field,
+           Reference,
+           
+           Compilation_Title) %>% 
+  summarise(
+    n=n(),
+    MMID = paste(MMID, collapse = ";")
+  ) %>% 
+  select(-n)
+
+write.csv(Idalia_Data,
+          "Metadatos_Nacional_Idalia.csv",
+          row.names = F)
+
+```

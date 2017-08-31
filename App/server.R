@@ -8,6 +8,7 @@ library(shiny)
 library(leaflet) #For the maps
 library(DT) #For showing nice tables
 library(dplyr) #Data wrangling
+library(tidyr) #Data wrangling
 library(ggplot2) #Plots
 #install.packages('wordcloud')
 library(wordcloud) #For Word Mining
@@ -50,7 +51,7 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- fread("./Template_3.4.csv",
+    data<- fread("./Template_4.1.csv",
                  colClasses = c(Location = 'character',
                                 Notes = 'character',
                                 Data_Uncertanty ='character',
@@ -825,7 +826,7 @@ output$Network <- renderSankeyNetwork({
                 Target = "Target", #Target column in Links dataset
                 Value = "Value", # The amount to plot from the Links dataset
                 NodeID = "Name", #What's showing when mouse over Node
-                units = "Records" #Units to show
+                units = "Records", #Units to show
                 fontSize = 12,
                 nodeWidth = 30)
   
