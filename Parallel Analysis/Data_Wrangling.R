@@ -1042,6 +1042,23 @@ write.csv(EmbF,"Embarcaciones.csv")
 # COBI information for the Caribbeean ####
 # March 26, 2017; La Paz, Mexico
 
+
+###NOTE: I Notice a mistake on the dataset, species from the Pacific are catalogued as Atlantic... FIX IT!!!
+### Explore Atlantic observations ###
+
+Data_CONABIO_A <- Template %>% 
+  filter(Subject_name %in% Especies_CONABIO$Cientifico) %>% 
+  filter(Area == "Atlantic") %>% 
+  filter(Institution != "COBI")
+
+unique(Data_CONABIO_A$Subject_name)
+length(unique(Data_CONABIO_A$Subject_name)) #41 spp con COBI y solo 28 sin COBI
+unique(Data_CONABIO_A$Institution) ## 11 institutions
+
+#### 
+
+
+
 COBI <- read.csv("Data/Cobi_Imp.csv")
 
 C_F <- COBI %>% 
@@ -5268,3 +5285,5 @@ Ram <- RAMSAR%>%
   select(Titulo, Estado) %>% 
   semi_join(MP,
             by = "Estado")
+
+

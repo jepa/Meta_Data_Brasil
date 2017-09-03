@@ -778,7 +778,7 @@ output$Network <- renderSankeyNetwork({
     arrange(Name)
   
   # The rest of the needed information
-  Template <- datasetInput()
+  Template <- Template_4_1
   
   #First Research Funding
   R_Fund_Org <-Template %>%

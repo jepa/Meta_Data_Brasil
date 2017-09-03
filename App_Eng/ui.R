@@ -20,6 +20,8 @@ library(dygraphs)
 shinyUI(
   ### Navigation bar
   navbarPage(id = "MMM_Nav_Bar",
+             ### For google Analytics to messure people in the webpage ###
+             tags$head(includeScript("google_analytics.R")),
     #Web page title
     "Meta-database of Marine Research in Mexico",
     #### HOME ####
@@ -366,7 +368,7 @@ shinyUI(
                  "Reconstruction of Historic Data from Metadata"
                )),
                p(actionButton("Tomeseries_But", 
-                              "Plot Histric Data")),
+                              "Plot Historic Data")),
                dygraphOutput("TSgraph")
              )
     ),

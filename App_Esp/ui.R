@@ -23,6 +23,8 @@ shinyUI(
 
   ### Navigation bar
   navbarPage(id="MMM_Nav_Bar",
+             ### For google Analytics to messure people in the webpage ###
+             tags$head(includeScript("google_analytics.R")),
              #Web page title
              "Metadatos de Investigación Marina en México",
              #### HOME ####
