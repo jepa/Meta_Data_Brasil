@@ -2186,26 +2186,26 @@ View(Species)
 
 #### Correccion Nombres scientificos ####
 
-CNP_Correct <- gnr_resolve(names = Species$Cientifico, #Looks for homogenic names 
-                            best_match_only = TRUE) %>% # Returns only the best match 
-  rename(Cientifico = user_supplied_name)
-
-# Searching for completeley wrong names
-Names_Missing <- Species %>% 
-  anti_join(CNP_Correct,
-            by ="Cientifico")
-
-View(Names_Missing)
-
-Species_Rev <- Species %>% 
-  left_join(CNP_Correct,
-            by ="Cientifico") %>% 
-  select(-4,-13,-15,-16) %>% 
-  rename(Cientifico = matched_name) %>% 
-  select(1:3,12,4:11)
-
-write.csv(Species_Rev,
-          "Especies_CNP.csv")
+# CNP_Correct <- gnr_resolve(names = Species$Cientifico, #Looks for homogenic names 
+#                             best_match_only = TRUE) %>% # Returns only the best match 
+#   rename(Cientifico = user_supplied_name)
+# 
+# # Searching for completeley wrong names
+# Names_Missing <- Species %>% 
+#   anti_join(CNP_Correct,
+#             by ="Cientifico")
+# 
+# View(Names_Missing)
+# 
+# Species_Rev <- Species %>% 
+#   left_join(CNP_Correct,
+#             by ="Cientifico") %>% 
+#   select(-4,-13,-15,-16) %>% 
+#   rename(Cientifico = matched_name) %>% 
+#   select(1:3,12,4:11)
+# 
+# write.csv(Species_Rev,
+#           "Especies_CNP.csv")
 
 #### Arreglar nombres ####
 
@@ -5052,7 +5052,7 @@ write.csv(Data,
       row.names = F)
 #### __________________________________FIN DE GBIF __________________________________ ####
 
-#### Money really, money ####
+#### Money realy, money ####
 
 Template_3_4 <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
 
