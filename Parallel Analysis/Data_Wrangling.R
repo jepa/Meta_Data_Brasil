@@ -17,6 +17,7 @@ library(tools)
 library(ggplot2)
 library(leaflet)
 library(taxize) # For scientific names
+library(stringr)
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 source("./Functions/gbif_import.r")
@@ -27,7 +28,7 @@ source("./Functions/gbif_import.r")
 
 #### Template
 
-Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App_Eng/Template.csv")
+Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
 # View(Template)
 
 #### Mexico's EEZ
@@ -5286,4 +5287,99 @@ Ram <- RAMSAR%>%
   semi_join(MP,
             by = "Estado")
 
+
+#### CONABIO a CNP ###
+
+### Problemas, el nivel de detalle para las especies no es el mismo. Almejas es un claro ejemplo
+
+#### Hay que hacerlo por litoral, primero.
+Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
+
+Especies_CNP <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv")
+
+#### Pacifico ####
+
+P_CNP <- Especies_CNP %>% 
+  filter(Litoral == "Pacifico") %>% 
+  select(Animal,
+         Cientifico) %>% 
+  rename(Subject_name = Animal)
+
+CONAPESCA <- Template %>% 
+  filter(Institution == "CONAPESCA") %>% 
+  filter(Area == "Pacific") %>% 
+  select(MMID,
+         Subject_name) %>% 
+  filter(!is.na(Subject_name))
+
+Homologado <- CONAPESCA %>% 
+  left_join(P_CNP,
+            by = "Subject_name")
+
+#### Completar faltantes de acuerdo a CNP ####
+
+
+NA_Homo <- filter(Homologado,
+                  is.na(Cientifico))
+
+# Cmabiar nombres para que empaten los del Anuario
+
+P_CNP$Subject_name <- replace(P_CNP$Subject_name, 
+                              P_CNP$Subject_name== "Huachinango_Pargo", "Guachinango"
+)
+
+P_CNP$Subject_name <- replace(P_CNP$Subject_name, 
+                              P_CNP$Subject_name== "Lisas", "Lisa"
+)
+
+P_CNP$Subject_name <- replace(P_CNP$Subject_name, 
+                              P_CNP$Subject_name== "Tiburon", "Tiburon;Cazon"
+)
+
+Sardina <- Especies_CNP %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(str_detect(Comun,"Sardina")
+  ) %>% 
+  select(Cientifico) %>% 
+  mutate(Subject_name = paste("Sardina")) %>% 
+  group_by(Cientifico,
+           Subject_name) %>% 
+  summarise(n=n()) %>% 
+  select(-n)
+  
+
+Bagre <- Especies_CNP %>% 
+  filter(Litoral == "Pacifico") %>% 
+  filter(str_detect(Comun,"Bagre")
+  ) %>% 
+  select(Cientifico) %>% 
+  mutate(Subject_name = paste("Bagre")) %>% 
+  group_by(Cientifico,
+           Subject_name) %>% 
+  summarise(n=n()) %>% 
+  select(-n)
+
+
+P_CNP_II <- P_CNP %>% 
+  bind_rows(Sardina,
+            Bagre)
+
+### Volver a correr con problemas resueltos ##
+
+#Homologados #
+
+Homologado <- CONAPESCA %>% 
+  left_join(P_CNP_II,
+            by = "Subject_name") %>% 
+  select(-Subject_name) %>% 
+  filter(!is.na(Cientifico))
+
+# Regresar homologados a Template de CONAPESCA #
+
+
+New_CONAPESCA <- CONAPESCA %>% 
+  left_join(Homologado,
+            by = "MMID")
+
+#### Me quede hasta aca, funciona mas ahora necesito hacer que rodo se repita
 
