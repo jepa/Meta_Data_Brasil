@@ -1047,6 +1047,8 @@ write.csv(EmbF,"Embarcaciones.csv")
 ###NOTE: I Notice a mistake on the dataset, species from the Pacific are catalogued as Atlantic... FIX IT!!!
 ### Explore Atlantic observations ###
 
+
+
 Data_CONABIO_A <- Template %>% 
   filter(Subject_name %in% Especies_CONABIO$Cientifico) %>% 
   filter(Area == "Atlantic") %>% 
@@ -1058,24 +1060,68 @@ unique(Data_CONABIO_A$Institution) ## 11 institutions
 
 #### 
 
+Cobi_Imp <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Cobi_Imp.csv")
+# View(Cobi_Imp)
 
-
-COBI <- read.csv("Data/Cobi_Imp.csv")
-
-C_F <- COBI %>% 
-  mutate(AbundanciaA = paste("Abundancia de", Especies, "en Punta Herrero, Sian Kaan")) %>% 
-  mutate(AbundanciaB = paste("Abundancia de", Especies, "en Maria Elena, Sian Kaan")) %>% 
-  mutate(AbundanciaC = paste("Abundancia de", Especies, "en Puerto Morelos")) %>% 
-  mutate(AbundanciaD = paste("Abundancia de", Especies, "en Banco Chinchorro")) %>% 
+C_Atlantico <- Cobi_Imp %>% 
+  filter(Region =="SAM") %>% 
+  mutate(AbundanciaA = paste("Abundancia de", Especie, "en Punta Herrero, Sian Kaan")) %>% 
+  mutate(AbundanciaB = paste("Abundancia de", Especie, "en Maria Elena, Sian Kaan")) %>% 
+  mutate(AbundanciaC = paste("Abundancia de", Especie, "en Puerto Morelos")) %>% 
+  mutate(AbundanciaD = paste("Abundancia de", Especie, "en Banco Chinchorro")) %>% 
   mutate(Key = paste(Comun,"Abundancia; Ausencia; Presencia; Quinta Roo; Yucatan; Monitoreo, Peces, Invertebrado")) %>% 
-  mutate(TallaI = paste("Talla de", Especies, "en Punta Herrero, Sian Kaan")) %>% 
-  mutate(TallaII = paste("Talla de", Especies, "en Maria Elena, Sian Kaan")) %>% 
-  mutate(TallaIII = paste("Talla de", Especies, "en Puerto Morelos")) %>% 
-  mutate(TallaIIII = paste("Talla de", Especies, "en Banco Chinchorro")) %>% 
+  mutate(TallaI = paste("Talla de", Especie, "en Punta Herrero, Sian Kaan")) %>% 
+  mutate(TallaII = paste("Talla de", Especie, "en Maria Elena, Sian Kaan")) %>% 
+  mutate(TallaIII = paste("Talla de", Especie, "en Puerto Morelos")) %>% 
+  mutate(TallaIIII = paste("Talla de", Especie, "en Banco Chinchorro")) %>% 
   mutate(Key = paste(Comun,"Tallas; Quinta Roo; Yucatan; Monitoreo, Peces, Invertebrado"))
+
+C_Pacifico <- Cobi_Imp %>% 
+  filter(Region =="PBC") %>% 
+  mutate(AbundanciaA = paste("Abundancia de", Especie, "en Isla Guadalupe, BC")) %>% 
+  mutate(AbundanciaB = paste("Abundancia de", Especie, "en Rosario, BC")) %>% 
+  mutate(AbundanciaC = paste("Abundancia de", Especie, "en Isla Magdalena, BCS")) %>% 
+  mutate(AbundanciaD = paste("Abundancia de", Especie, "en Isla Natividad, BCS")) %>% 
+  mutate(AbundanciaE = paste("Abundancia de", Especie, "en Loreto, BCS")) %>% 
+  mutate(AbundanciaF = paste("Abundancia de", Especie, "en Ligui, BCS")) %>% 
+  mutate(AbundanciaG = paste("Abundancia de", Especie, "en Loreto, BCS")) %>% 
+  mutate(AbundanciaH = paste("Abundancia de", Especie, "en Cabo Pulmo, BCS")) %>% 
+  mutate(AbundanciaI = paste("Abundancia de", Especie, "en Loreto, BCS")) %>% 
+  mutate(AbundanciaJ = paste("Abundancia de", Especie, "en Isla Datil, SON")) %>% 
+  mutate(AbundanciaK = paste("Abundancia de", Especie, "en Isla San Pedro Martir, SON")) %>% 
+  mutate(AbundanciaL = paste("Abundancia de", Especie, "en Isla San Pedro Nolasco, SON")) %>% 
+  mutate(AbundanciaM = paste("Abundancia de", Especie, "en Isla Datil, SON")) %>% 
+  mutate(AbundanciaN = paste("Abundancia de", Especie, "en Bahia de Kino, SON")) %>% 
+  mutate(AbundanciaO = paste("Abundancia de", Especie, "en Puerto Libertad, SON")) %>% 
+  mutate(TallaA = paste("Talla de", Especie, "en Isla Guadalupe, BC")) %>% 
+  mutate(TallaB = paste("Talla de", Especie, "en Rosario, BC")) %>% 
+  mutate(TallaC = paste("Talla de", Especie, "en Isla Magdalena, BCS")) %>% 
+  mutate(TallaD = paste("Talla de", Especie, "en Isla Natividad, BCS")) %>% 
+  mutate(TallaE = paste("Talla de", Especie, "en Loreto, BCS")) %>% 
+  mutate(TallaF = paste("Talla de", Especie, "en Ligui, BCS")) %>% 
+  mutate(TallaG = paste("Talla de", Especie, "en Loreto, BCS")) %>% 
+  mutate(TallaH = paste("Talla de", Especie, "en Cabo Pulmo, BCS")) %>% 
+  mutate(TallaI = paste("Talla de", Especie, "en Loreto, BCS")) %>% 
+  mutate(TallaJ = paste("Talla de", Especie, "en Isla Datil, SON")) %>% 
+  mutate(TallaK = paste("Talla de", Especie, "en Isla San Pedro Martir, SON")) %>% 
+  mutate(TallaL = paste("Talla de", Especie, "en Isla San Pedro Nolasco, SON")) %>% 
+  mutate(TallaM = paste("Talla de", Especie, "en Isla Datil, SON")) %>% 
+  mutate(TallaN = paste("Talla de", Especie, "en Bahia de Kino, SON")) %>% 
+  mutate(TallaO = paste("Talla de", Especie, "en Puerto Libertad, SON")) %>% 
+  mutate(Key_T = paste(Comun,"Tallas; Baja California; Baja California Sur; Sonora; Monitoreo, Peces, Invertebrados")) %>% 
+  mutate(Key = paste(Comun,"Abundancia; Baja California; Baja California Sur; Sonora; Monitoreo, Peces, Invertebrados")) %>% 
+  gather("Titulo", "Otro",4:33)
   
 
-write.csv(C_F, "Cobi_Out.csv")
+write.csv(C_Pacifico, "C_Pacifico.csv")
+
+#### FALTA INCORPORAR EL ATLANTICO 
+
+#### FIXING COBI ####
+
+COBI_Old <- Template_4_1 %>% 
+  filter(Institution == "COBI")
+
 
 ###################### END ########################
 # Hector Reyes Labs ####
