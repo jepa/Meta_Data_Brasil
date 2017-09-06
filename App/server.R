@@ -17,6 +17,7 @@ library(tm) #For Word Mining
 #library(xlsx)
 library(networkD3)
 library(data.table)
+library(dygraphs)
 
 #install.packages('networkD3')
 
@@ -51,9 +52,8 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- fread("./Template_4.1
-                 .csv",
-                 colClasses = c(Location = 'character',
+    data<- fread("./Template_4.1.csv",
+                 colClasses = c(Area = 'character',
                                 Notes = 'character',
                                 Data_Uncertanty ='character',
                                 Data_Time_Points = 'numeric'))
@@ -154,6 +154,7 @@ shinyServer(function(input, output) {
   
   #### The Actual Map ####
   #(requieres leaflet package)
+  
   output$Data_Map <- renderLeaflet({
     data = datasetInput() %>% 
       filter(!is.na(Lat))
@@ -174,6 +175,41 @@ shinyServer(function(input, output) {
       popup = ~as.character(MMID),
       clusterOptions = markerClusterOptions()
     )
+    
+  })
+  
+  #Creating TS graph ####
+  
+  TFdatasetInput <- reactive({
+    
+    x <- fread("Data_Curve_I.csv")
+    x <- x %>%
+      select(-1)
+    
+  })
+  
+  output$TFgraph <- renderDygraph({
+    x <- TFdatasetInput() %>% 
+      select(-Real_Total,
+             -Temp)
+    
+    Dt_Points <- ts(x,
+                    start=c(2016,11),
+                    end = c(2017,8), # <- this has to be changed everytime we add a month
+                    frequency= 12)
+    
+    dygraph(Dt_Points) %>% #Creats the graph
+      dyOptions(stackedGraph = TRUE, #Makes it stacked
+                drawPoints = TRUE, #Shows each data point
+                pointSize = 4) %>%
+      dyRangeSelector(height = 20) %>%
+      dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
+      dyAxis("y", drawGrid = FALSE) %>%
+      dyAxis("y", label = "Number of Records") %>%  #Labels
+      dyLegend(width = 600) %>% 
+      dyHighlight(highlightCircleSize = 5, 
+                  highlightSeriesBackgroundAlpha = 0.2,
+                  hideOnMouseOut = FALSE)
     
   })
   

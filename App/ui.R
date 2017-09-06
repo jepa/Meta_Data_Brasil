@@ -3,6 +3,7 @@ library(shiny)
 library(leaflet)
 library(DT)
 library(markdown)
+library(dygraphs)
 
 shinyUI(
   navbarPage(
@@ -395,7 +396,11 @@ shinyUI(
                #### Map of Data Localization ####
                p(h3("Map of Data Localization")),
                leafletOutput("Data_Map"),
-               p(em("Note: The numbers displayed in each marker (Blue Baloon) represent the MMID"))
+               p(em("Note: The numbers displayed in each marker (Blue Baloon) represent the MMID")),
+               p(h3(
+                 "Time Series of Data Information Gathering"
+               )),
+               dygraphOutput("TFgraph")
              ),
              br(),
              br(),
