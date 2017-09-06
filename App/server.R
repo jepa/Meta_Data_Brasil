@@ -856,7 +856,6 @@ output$Network <- renderSankeyNetwork({
     left_join(Source,
               by ="ID")
   
-  
   sankeyNetwork(Links = Target, #Dataset with Source, Target and value
                 Nodes = Category, #Dataset withe the Names
                 Source = "Source", #Source column in Links dataset

@@ -37,9 +37,11 @@ K_data<- read.csv("./Data/GLosario.csv",
                   header = TRUE,
                   na="NA")
 
-x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Data_Curve.csv")
+x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Data_Curve_I.csv")
 x <- x %>%
-  select(-1)
+  select(-1,
+         - Real_Total,
+         - Temp)
   
 source('ts_fun.R')
   
@@ -114,7 +116,7 @@ col.names = NA
 
 xx <- ts(x,
          start=c(2016,11),
-         end = c(2017,7), # <- this has to be changed everytime we add a month
+         end = c(2017,8), # <- this has to be changed everytime we add a month
          frequency= 12)
 
 dygraph(xx) %>% #Creats the graph

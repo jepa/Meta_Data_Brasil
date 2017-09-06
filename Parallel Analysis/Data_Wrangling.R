@@ -5427,10 +5427,92 @@ Homologado <- CONAPESCA %>%
 
 # Regresar homologados a Template de CONAPESCA #
 
-
 New_CONAPESCA <- CONAPESCA %>% 
   left_join(Homologado,
             by = "MMID")
 
-#### Me quede hasta aca, funciona mas ahora necesito hacer que rodo se repita
+Spp <- New_CONAPESCA %>% 
+  filter(!is.na(Cientifico)) %>% 
+  select(-Subject_name) %>% 
+  rename(Subject_name = Cientifico)
 
+Final <- New_CONAPESCA %>% 
+  filter(is.na(Cientifico)) %>% 
+  select(-Cientifico) %>% 
+  bind_rows(Spp) %>% 
+  arrange(MMID)
+
+
+
+#### Convertir Template de categoria para especie...
+
+### First we deal with the Subject_Name
+CONAPESCA_I <- Template %>% 
+  filter(Institution == "CONAPESCA") %>% 
+  filter(Area == "Pacific")
+
+Merged_Table <- CONAPESCA_I %>% 
+  left_join(Final,
+            by = "MMID") %>% 
+  rename(Subject_name = Subject_name.y) %>% 
+  ### Now we deal with the Shott title...
+  mutate(New_name = gsub(New_CONAPESCA$Subject_name,
+                         New_CONAPESCA$Cientifico,
+                         Merged_Table$Short_Title)) %>% 
+  select(1,
+         New_name,
+         2:6,
+         Subject_name,
+         -Short_Title,
+         -Subject_name.x,
+         everything())
+
+#### All dataset test...
+
+#### Not working LOOOOOSER
+
+### First we deal with the Subject_Name
+Template_Bis <- Template
+
+Merged_Table_Bis <- Template_Bis %>% 
+  left_join(Final,
+            by = "MMID") %>% 
+  rename(Subject_name = Subject_name.y) %>% 
+  ### Now we deal with the Shott title...
+  mutate(New_name = gsub(New_CONAPESCA$Subject_name,
+                         New_CONAPESCA$Cientifico,
+                         Merged_Table_Bis$Short_Title)) %>% 
+  select(1,
+         New_name,
+         2:6,
+         Subject_name,
+         -Short_Title,
+         -Subject_name.x,
+         everything())
+
+
+
+
+#### Aquacultura MAC ####
+Aquacultura <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Aquacultura.csv")
+View(Aquacultura)
+
+AQ <- Aquacultura %>% 
+  group_by(NOMBRE_OFICINA,
+           NOMBRE_PRINCIPAL
+           ) %>% 
+  summarise(Min_Y = min(ANO_CORTE),
+            Max_Y = max(ANO_CORTE),
+            DATA.POINTS = length(unique(ANO_CORTE)),
+            LOCALIZACION = paste(unique(NOMBRE_ESTADO, collapse="; "))
+            ) %>% 
+  mutate(ProduccionI = paste("Peso desembarcado de", NOMBRE_PRINCIPAL, "en",NOMBRE_OFICINA)) %>% 
+  mutate(ProduccionII = paste("Peso Vivo de", NOMBRE_PRINCIPAL, "en",NOMBRE_OFICINA)) %>% 
+  mutate(ProduccionIII = paste("Precio de", NOMBRE_PRINCIPAL, "en",NOMBRE_OFICINA)) %>% 
+  mutate(ProduccionIIII = paste("Valor de", NOMBRE_PRINCIPAL, "en",NOMBRE_OFICINA)) %>% 
+  mutate(Key_Pro = paste("Produccion; Acuacultura; Cosecha")) %>% 
+  mutate(Key_Valor = paste("Produccion; Acuacultura; Cosecha; Valor; Economico")) %>% 
+  gather("Uno","dos",7:10)
+
+write.csv(AQ,
+          "AQ.csv")
