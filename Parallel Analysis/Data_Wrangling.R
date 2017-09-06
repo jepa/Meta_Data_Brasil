@@ -1074,7 +1074,12 @@ C_Atlantico <- Cobi_Imp %>%
   mutate(TallaII = paste("Talla de", Especie, "en Maria Elena, Sian Kaan")) %>% 
   mutate(TallaIII = paste("Talla de", Especie, "en Puerto Morelos")) %>% 
   mutate(TallaIIII = paste("Talla de", Especie, "en Banco Chinchorro")) %>% 
-  mutate(Key = paste(Comun,"Tallas; Quinta Roo; Yucatan; Monitoreo, Peces, Invertebrado"))
+  mutate(Key = paste(Comun,"Tallas; Quinta Roo; Yucatan; Monitoreo, Peces, Invertebrado")) %>% 
+  gather("Esta","Title",4:12)
+
+
+write.csv(C_Atlantico,
+          "C_Atlantico.csv")
 
 C_Pacifico <- Cobi_Imp %>% 
   filter(Region =="PBC") %>% 
@@ -1115,7 +1120,7 @@ C_Pacifico <- Cobi_Imp %>%
 
 write.csv(C_Pacifico, "C_Pacifico.csv")
 
-#### FALTA INCORPORAR EL ATLANTICO 
+
 
 #### FIXING COBI ####
 
