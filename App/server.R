@@ -51,7 +51,8 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- fread("./Template_4.1.csv",
+    data<- fread("./Template_4.1
+                 .csv",
                  colClasses = c(Location = 'character',
                                 Notes = 'character',
                                 Data_Uncertanty ='character',
@@ -778,7 +779,7 @@ output$Network <- renderSankeyNetwork({
     arrange(Name)
   
   # The rest of the needed information
-  Template <- Template_4_1
+  Template <- datasetInput()
   
   #First Research Funding
   R_Fund_Org <-Template %>%
