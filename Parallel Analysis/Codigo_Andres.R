@@ -5,7 +5,7 @@
 library(dplyr)  #<- For data wrangling
 library(dygraphs) # <- for interactive TS graphs
 
-meta <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template.csv") 
+meta <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv") 
 
 #---Temporal dataset coverage--------------------------
 
@@ -44,9 +44,19 @@ J_TS <- ts(J$X2,
 
 #Plots it "nicelly"
 dygraph(J_TS) %>%
+  dyAxis("x",
+         labelWidth = 26,
+         drawGrid = FALSE) %>%
+  dyAxis("y", label = "Number of data points in Metadata Records",
+         labelWidth = 26,
+         drawGrid = FALSE) %>%
   dySeries("V1", label = "Data Points") %>%
-  dyOptions(stackedGraph = TRUE) %>%
-  dyRangeSelector(height = 20)
+  dyOptions(stackedGraph = TRUE,
+            axisLabelFontSize = 26,
+            axisLabelWidth = 150
+            ) %>%
+  dyRangeSelector(dateWindow = c("1950-1-1","2017-1-1"))
+  
 
 ### End of "Mi cuchara ####
 

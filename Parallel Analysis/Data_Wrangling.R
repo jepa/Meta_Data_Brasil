@@ -5434,3 +5434,19 @@ New_CONAPESCA <- CONAPESCA %>%
 
 #### Me quede hasta aca, funciona mas ahora necesito hacer que rodo se repita
 
+CONAPESCA_I <- CONAPESCA <- Template %>% 
+  filter(Institution == "CONAPESCA") %>% 
+  filter(Area == "Pacific")
+
+
+New_Temp <- CONAPESCA_I %>% 
+  left_join(New_CONAPESCA,
+            by="MMID")
+
+### Correccion de todos los nombres...
+
+Template_Correct <- gnr_resolve(names = Template$Subject_name[1:50000], #Looks for homogenic names
+                            best_match_only = TRUE,
+                            canonical = TRUE)
+
+TC <- data.table(Template_Correct)

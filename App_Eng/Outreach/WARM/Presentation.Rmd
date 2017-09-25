@@ -1,13 +1,12 @@
 ---
-title: "Meta-database of Marine Research in Mexico"
-author: Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British
-  Columbia
-date: "14/3/2017 | Present Status and Horizon Scanning of Sustainable Aquatic Resource Developmen, Felipe Carrillo Puerto, Quintana Roo, Mexico "
+title: "Towards a meta-database of Marine Research in Mexico"
+subtitle: ""
+date: "13/09/2017 |Present Status and Horizon Scanning of Sustainable Aquatic Resource Development, Instituto Tecnológico Superior de Felipe Carrillo Puerto, Q. Roo, Mexico"
 output:
   ioslides_presentation:
     logo: choru_logo.png
     widescreen: yes
-subtitle: "Sustainable Aquatics Resources Mexico"
+author: "Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British Columbia"
 ---
 
 ```{r packages and data, eval=T, echo=F, warning=F,message=F}
@@ -39,18 +38,20 @@ K_data<- read.csv("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Me
 
 x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Eng/Data_Curve.csv")
 x <- x %>%
-  select(-1)
+  select(-1,
+         -Real_Total,
+         -Temp)
 ```
 
-## Agenda {.emphasized}
+## The late evening show {.emphasized}
 
->* Introduction
->* * Motivation
->* * Project Objectives
->* Metadatabase Structure
->* Current Status of the Metadata
->* Preeliminary Results
->* How to collaborate
+- Introduction
+    + Motivation
+    + Project Objectives
+- Metadatabase Structure
+- Current Status of the Metadata
+- Preeliminary Results
+- How to collaborate
 
 <div class="centered">
 <div class="red">
@@ -130,7 +131,7 @@ x <- x %>%
 
 ## Metadata Structure {.biger}
 
-```{r Metadata display, eval=T, echo=F, warning=F,message=F}
+```{r Metadata Structure, eval=T, echo=F, warning=F,message=F}
 
  Title <- names(data)
 kable(
@@ -194,15 +195,17 @@ zz <- paste(sum(z$z))
 
 Geolocalization of records
 
-```{r Map, eval=T,echo=F, warning=F,message=F, fig.width=9, fig.height=5, fig.align="center"}
+<div class="centered">
+
+```{r Map, eval=T,echo=F, warning=F,message=F, fig.width=9, fig.height=4.5, fig.align="center"}
 
 Temp <- data %>% 
   filter(!is.na(Lat))
 
 leaflet(Temp) %>%
       addTiles(
-        urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
-        attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+        urlTemplate = 'http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+        # attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
       ) %>%
       #Initial view #
       setView(lng = -102.5528, 
@@ -217,7 +220,7 @@ leaflet(Temp) %>%
 
 ```
 
->- Since November we have colected: **`r Number_entriess`** Records, from **`r zz`** repositories, representing more than **`r Number_dp`** data points
+> Since November we have colected: **`r Number_entriess`** Records, from **`r zz`** repositories, representing more than **`r Number_dp`** data points
 
 ## Preliminary Results
 
@@ -284,31 +287,79 @@ grid.arrange(Spp,
 
 ***
 
-```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+Research topics by litoral
 
-Words <- data
+```{r Research_field_Record, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
 
-WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-WordsCorpus <- tm_map(WordsCorpus,
-                      PlainTextDocument) #Converts to plain text
-WordsCorpus <- tm_map(WordsCorpus,
-                      removePunctuation) #Removes punctuation
+Tot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>%
+  filter(Research_Field !="Other") %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area) %>% 
+  summarise(Entradas_tot = n())
 
-#Removes a word of user preference
-# WordsCorpus <- tm_map(WordsCorpus,
-#                       removeWords)
-#
+Se_Plot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>%
+  filter(Research_Field !="Other") %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area,Research_Field) %>% 
+  summarise(Entradas = n()) %>% 
+  left_join(Tot,
+            by="Area") %>% 
+  mutate(Per = (Entradas/Entradas_tot)*100)
 
-  wordcloud(WordsCorpus, #Plots the words
-              max.words = 100,
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Area,
+         y=Per,
+         fill= Research_Field
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Porsentaje del total de\n registros por área")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+                                   size=14
+                                   ),
+        axis.text.y = element_text(size = 14),
+        legend.position = "top",legend.text=element_text(size=16),
+        axis.title = element_text(size=20,
+                                  face="bold"))+ 
+  guides(fill = guide_legend(title = "Research Field",
+                             title.position = "left"))
+```
+
+***
+
+Frequent words on Aquaculture and Fisheries records
+
+
+```{r WordCloud, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+Words_F <- data %>% 
+  filter(Research_Field == "Fisheries" |
+           Research_Field == "Aquaculture")
+
+WordsCorpus_Fish <- Corpus(VectorSource(Words_F$Keywords)) #Selects only Keywords
+Word_Remove_Fish <- c("Acuacultura",
+                      "Pesca")
+
+WordsCorpus <- tm_map(WordsCorpus_Fish,
+                      removeWords,
+                      Word_Remove_Fish)
+
+wordcloud(WordsCorpus, #Plots the words
+              max.words = 250,
               random.order = FALSE,
               colors=brewer.pal(8, "Dark2")
-            )
+)
 
 ```
 
-
-## Institution Flow
+***
 
 Analysis of what type of institutions are donnors, what are doing the actual research, and in what fields
 
@@ -392,37 +443,50 @@ R_Fund_Org <-data %>%
 
 ```
 
+***
 
+Historical of collected data in Mexico
+
+<div class="centered">
+
+<img src="Images/HistoricoB.png" width=900 height=500>
+
+</div>
 
 ## Direct Collaboration
+<div class="centered">
 
+<img src="Images/Fish.png" width=900 height=400>
+
+</div>
+
+***
+
+- We invite *you* to think on research questions and applications for this dataset as it is (will) available for everyone!
+- We encourage you to share the information you have about your data, this will:
+    + Create new opportunities for collaboration 
+    + Increase your professional network
+    + Support the sustainability of aquatic resources in Mexico
+    
 <div class="centered">
 <div class="green2">
 
 **The more people involved, the better we can reflect the state of marine research in Mexico!**
 
 </div>
-
-<img src="Images/Fish.png" width=600 height=300>
-
 </div>
-
-***
-
-We invite *you* to think on research questions and applications for this dataset as it is (will) available for everyone!
-
 
 
 ## Thank you !
 
 <div class="centered">
 
-Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
+Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca | @julianop_a
 
 - **Collaborators:**
 Arreguín-Sánchez, Francisco; Cheung W., William; Cisneros-Mata, Miguel A; Cisneros-Montemayor, Andres; Rodriguez, Laura
 
-<img src="Images/Logos_PI.PNG" width=700 height=110>
+<img src="Images/Logos_PI.PNG" width=400 height=110>
 
 Project's Webpage: http://jepa.shinyapps.io/marmetadatamexeng/
 

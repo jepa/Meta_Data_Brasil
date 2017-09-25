@@ -1,5 +1,9 @@
+
 ---
 title: "Hacia la creación de una base de metadatos de investigación marina en México"
+author: Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British
+  Columbia
+date: "11/09/2017 | UNAM- Unidad Académica Sisal, México "
 output:
   ioslides_presentation:
     css: Fondo.css
@@ -21,7 +25,7 @@ library(wordcloud) #For Word Mining
 library(tm) #For Word Mining
 library(pander)
 
-data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv",
+data<- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv",
              colClasses = c(Location = 'character',
                             Notes = 'character',
                             Data_Uncertanty ='character')
@@ -30,9 +34,11 @@ K_data<- read.csv("./Data/GLosario.csv",
                   header = TRUE,
                   na="NA")
 
-x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App_Esp/Data_Curve.csv")
+x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Data_Curve_I.csv")
 x <- x %>%
-  select(-1)
+  select(-1, 
+         -Real_Total,
+         -Temp)
   
 source('ts_fun.R')
   
@@ -41,13 +47,13 @@ source('ts_fun.R')
 
 ## Agenda {.emphasized}
 
->* Introducción
->* * Motivación
->* * Objetivos del proyecto
->* Estructura de la base de metadatos
->* Estado actual de la base
->* Resultados preliminares
->* Como colaborar
+- Introducción
+    + Motivación
+    + Objetivos del proyecto
+- Estructura de la base de metadatos
+- Estado actual de la base
+- Resultados preliminares
+- Como colaborar
 
 <div class="centered">
 <div class="red">
@@ -114,9 +120,9 @@ source('ts_fun.R')
 <div class="green2">
 
 
-<div class="footer" style="margin-top:-200px;font-size:80%;">
+<div class="footer" style="margin-top:-100px;font-size:80%;">
 
->- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
+- Una Base de metadatos fomenta la colaboración y apoya la toma de decisiones relevante a cualquier comunidad o región del país
 
 </div>
 </div>
@@ -155,13 +161,13 @@ col.names = NA
 
 <div class="centered">
 
-<img src="Images/Historial.png" width=600 height=400>
+<!-- <img src="Images/Historial.png" width=600 height=400> -->
 
-```{r Time line plot, eval=F, echo=F, warning=F,message=F, fig.align="center"}
+```{r Time line plot, eval=T, echo=F, warning=F,message=F, fig.align="center", fig.width=9}
 
 xx <- ts(x,
          start=c(2016,11),
-         end = c(2017,4), # <- this has to be changed everytime we add a month
+         end = c(2017,8), # <- this has to be changed everytime we add a month
          frequency= 12)
 
 dygraph(xx) %>% #Creats the graph
@@ -211,7 +217,7 @@ zz <- paste(sum(z$z))
 ```{r Info_Academia, eval=T, echo=F}
 
 Aca <- data %>% 
-  filter(Institution_Type=="Academic") %>% 
+  filter(Institution_Type=="ACA") %>% 
   group_by(Institution) %>% 
   summarise(n=n()) %>% 
   select(Institution)
@@ -240,8 +246,8 @@ Gov <- data %>%
 
 kable(
   data.table(
-  "Gobierno" = Gov$Institution[1:5],
-  "Gobierno" = Gov$Institution[6:10]
+  "Gobierno" = Gov$Institution[1:4],
+  "Gobierno" = Gov$Institution[5:8]
 ),
 col.names = NA,
 align = "c"
@@ -257,7 +263,7 @@ align = "c"
 Spp <- data %>% 
   filter(Area != "TBD") %>% 
   group_by(Area) %>% 
-  summarise(Entradas = sum(n())) %>% 
+  summarise(Entradas = n()) %>% 
   filter(Area !="na") # %>% 
 # filter(Entradas >= input$Num_Data_Range[1]) %>% 
 # filter(Entradas <= input$Num_Data_Range[2])
@@ -285,7 +291,7 @@ P1 <- ggplot(data= Spp,
 Spp2 <- data %>%
   filter(Region != "TBD") %>% 
   group_by(Region) %>%
-  summarise(Value = sum(n())) %>% 
+  summarise(Value = n()) %>% 
   filter(Region != "na") %>% 
   filter(Region != "")
 
@@ -318,7 +324,7 @@ gridExtra::grid.arrange(
 
 ***
 
-```{r Research_field Particular, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+```{r Research_field Particular, eval=F,echo=F,fig.width=9,fig.height=5, fig.align="c"}
 
 SubjectPlot <- data %>% 
   filter(Research_Field == "Conservation") %>% 
@@ -331,10 +337,18 @@ SubjectPlot <- data %>%
 
 ```
 
-Áreas de investigación
 
+¿Cuántos registros existen de cada una de las áreas de investigación por océano/litoral?
 
-```{r Research_field, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+```{r Research_field_Record, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+
+Tot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>%
+  filter(Research_Field !="Other") %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area) %>% 
+  summarise(Entradas_tot = n())
 
 Se_Plot <- data %>% 
   filter(!is.na(Area)) %>% 
@@ -342,18 +356,21 @@ Se_Plot <- data %>%
   filter(Research_Field !="Other") %>% 
   filter(Area != "TBD") %>% 
   group_by(Area,Research_Field) %>% 
-  summarise(Entradas = n())
+  summarise(Entradas = n()) %>% 
+  left_join(Tot,
+            by="Area") %>% 
+  mutate(Per = (Entradas/Entradas_tot)*100)
 
 
 ggplot(data=Se_Plot,
        aes(
          x=Area,
-         y=Entradas,
+         y=Per,
          fill= Research_Field
        ))+
   geom_bar(stat = "identity")+
   theme_classic() +
-  ylab("Número de\n registros")+
+  ylab("Porsentaje del total de\n registros por área")+
   xlab("Area")+
   theme(axis.text.x = element_text(
                                    size=14
@@ -367,6 +384,136 @@ ggplot(data=Se_Plot,
 ```
 
 ***
+
+Pero cuando vemos el número de años con datos (series históricas)...
+
+```{r Research_field_Datapoints, eval=T,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+
+Tot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>%
+  filter(Research_Field !="Other") %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area) %>% 
+  summarise(Entradas_tot = sum(Data_Time_Points,
+                               na.rm=T)
+  )
+
+Se_Plot <- data %>% 
+  filter(!is.na(Area)) %>% 
+  filter(!is.na(Research_Field)) %>%
+  filter(Research_Field !="Other") %>% 
+  filter(Area != "TBD") %>% 
+  group_by(Area,Research_Field) %>% 
+  summarise(Entradas = sum(Data_Time_Points,
+                               na.rm=T)
+  ) %>% 
+  left_join(Tot,
+            by="Area") %>% 
+  mutate(Per = (Entradas/Entradas_tot)*100)
+
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Area,
+         y=Per,
+         fill= Research_Field
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Porcentaje del total de\n registros por área")+
+  xlab("Area")+
+  theme(axis.text.x = element_text(
+                                   size=14
+                                   ),
+        axis.text.y = element_text(size = 14),
+        legend.position = "top",legend.text=element_text(size=16),
+        axis.title = element_text(size=20,
+                                  face="bold"))+ 
+  guides(fill = guide_legend(title = "Research Field",
+                             title.position = "left"))
+```
+
+
+<!-- *** -->
+
+<!-- >- México es un país megadiverso por lo que existen muchos registros únicos por especie -->
+<!-- - Muchos de los registros de ecología no son series históricas -->
+<!-- - Menos del 1% (0.11) del total de especies representa más del 10% de los datos (históricos) -->
+<!-- - - Menos del 1% (0.52) del total de especies representa más del 10% de los registros -->
+
+```{r Research_field_Datapoints_por_Registro, eval=F,echo=F,fig.width=9,fig.height=5, fig.align="c"}
+
+
+##### Por Datapoint 
+
+Filtros <- c("","TBD","Multiple Especies")
+
+
+Tot <- data %>% 
+  group_by(Subject_name) %>% 
+  filter(!Subject_name %in% Filtros) %>% 
+  filter(!is.na(Subject_name)) %>% 
+  summarise(Entradas_tot = sum(Data_Time_Points,
+                               na.rm=T)
+  )
+
+Totales <- sum(Tot$Entradas_tot,
+               na.rm = T)
+
+Se_Plot <- data %>% 
+  group_by(Subject_name) %>% 
+  filter(!Subject_name %in% Filtros) %>% 
+  filter(!is.na(Subject_name)) %>% 
+  group_by(Subject_name) %>% 
+  summarise(Entradas = sum(Data_Time_Points,
+                               na.rm=T)
+  ) %>% 
+  mutate(Per = (Entradas/Totales)*100) %>% 
+  arrange(desc(Per))
+
+
+Per_10 <- Se_Plot %>% 
+  slice(1:27) %>% 
+  summarise(Suma = sum(Per))
+
+Per_Tot <- round((26/23244)*100,2)
+
+
+##### Por registros 
+
+Tot <- data %>% 
+  group_by(Subject_name) %>% 
+  filter(!Subject_name %in% Filtros) %>% 
+  filter(!is.na(Subject_name)) %>% 
+  summarise(Entradas_tot = n()
+  )
+
+Totales <- sum(Tot$Entradas_tot,
+               na.rm = T)
+
+Se_Plot <- data %>% 
+  group_by(Subject_name) %>% 
+  filter(!Subject_name %in% Filtros) %>% 
+  filter(!is.na(Subject_name)) %>% 
+  group_by(Subject_name) %>% 
+  summarise(Entradas = n()
+  ) %>% 
+  mutate(Per = (Entradas/Totales)*100) %>% 
+  arrange(desc(Per))
+
+
+Per_10 <- Se_Plot %>% 
+  slice(1:120) %>% 
+  summarise(Suma = sum(Per))
+
+Per_Tot_Reg <- round((120/23244)*100,2)
+
+```
+
+***
+
+
 Podemos hacer una reconstrucción de los datos generados en México en los últimos años.
 
 <div class="centered">
@@ -381,7 +528,7 @@ Pedroche <- Pedroche %>%
   
     
     Hist <- data %>%
-      filter(MMID <=2861) %>%
+      # filter(MMID <=2861) %>%
       select(Start_Year,End_Year) # <- Temporary fix for Brusca and Pedroche data
     
     #Reads Predoche fixed data from the Parallel Analysis
@@ -399,16 +546,16 @@ Pedroche <- Pedroche %>%
     
 ## Palabras clave más frecuentes
     
-También se puede utilizar para hacer exploración más cualitativa o para hacer comunicación.
+También se puede utilizar para hacer exploración más cualitativa o para hacer comunicación de la ciencia.
 
 ```{r Keywords, eval=T, echo=F, warning=F,message=F, fig.align="center"}
 
 Words <- data
 WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
-WordsCorpus <- tm_map(WordsCorpus,
-                      PlainTextDocument) #Converts to plain text
-WordsCorpus <- tm_map(WordsCorpus,
-                      removePunctuation) #Removes punctuation
+# WordsCorpus <- tm_map(WordsCorpus,
+#                       PlainTextDocument) #Converts to plain text
+# WordsCorpus <- tm_map(WordsCorpus,
+#                       removePunctuation) #Removes punctuation
 
 #Removes a word of user preference
 # WordsCorpus <- tm_map(WordsCorpus,
@@ -455,8 +602,6 @@ zz_Par <- paste(sum(z$z))
 
 
 ```
-
-
 
 
 ```{r Preeliminar Particular, eval=F, echo=F, warning=F,message=F, fig.width=9,fig.height= 4.5, fig.align="center"}
@@ -576,7 +721,6 @@ n_Spp <- data %>%
 ```
 
 
-
 <!-- ## CONABIO -->
 
 ```{r CONABIO_2, eval=F, echo=F, warning=F,message=F, fig.align="center", fig.width=9}
@@ -647,7 +791,6 @@ gridExtra::grid.arrange(Conabio,Conabio2, ncol =2)
   
 
 ```
-
 
 
 ## Esfuerzo Colaborativo
