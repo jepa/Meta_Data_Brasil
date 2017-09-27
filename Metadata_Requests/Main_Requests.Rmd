@@ -6,7 +6,7 @@ output: html_document
 ---
 
 
-## Dr. Blanca Idalia Gutierez 
+## Dr. Blanca Idalia Gutierez | CINVESTAV-Mérida
 ### Aug 30th, 2017
 
 Correo: bigzzg@gmail.com
@@ -62,3 +62,85 @@ write.csv(Idalia_Data,
           row.names = F)
 
 ```
+
+
+## Bárbara Rojas; CONABIO
+### Sep 27th, 2017
+
+Correo: barbara.rojas@conabio.gob.mx
+
+ANPs de interés para el proyecto son:
+-PN Arrecifes de Puerto Morelos
+-Parque Nacional Costa Occidental de Isla Mujeres, Punta Cancún y Punta Nizuc 
+-APFF Manglares de Nichupté
+-APFF Laguna de Términos
+-RB Archipiélago de Revillagigedo
+-RB Zona marina Bahía de los Ángeles, canales de Ballenas y de Salsipuedes
+-PN Zona marina del Archipiélago de San Lorenzo
+-RB Isla San Pedro Mártir
+
+```{r Blaca, eval=F, echo = T, message= F, warning = F}
+library(data.table)
+library(dplyr)
+
+Listado <- c(
+  "Arrecifes de Puerto Morelos",
+  "Isla Mujeres",
+  "Punta Cancun",
+  "Punta Nizuc", 
+  "Nichupte",
+  "Terminos",
+  "Archipielago de Revillagigedo",
+  "Revillagigedo",
+  "Bahia de los Angeles",
+  "Salsipuedes",
+  "Archipielago de San Lorenzo",
+  "San Lorenzo",
+  "San Pedro Martir"
+)
+
+
+Barbara <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
+
+Datos_in_Loc <- Barbara %>% 
+  filter(grepl(
+      paste(Listado, collapse="|"), 
+      Location))
+
+Datos_in_k <- Barbara %>% 
+    filter(grepl(
+      paste(Listado, collapse="|"), 
+      Keywords))
+
+#Check for repetition of Rows
+Repeated <- Datos_in_k %>% 
+  semi_join(Datos_in_Loc,
+            by="MMID")
+
+Datos_Barbara <- Datos_in_k %>% 
+  filter(!MMID %in% Repeated$MMID) %>% #Removes repeated values
+  bind_rows(Datos_in_Loc)
+
+write.csv(Datos_Barbara,
+          "Metadatos_ANP.csv",
+          row.names = F)
+                      
+
+Datos_Barbara_Res <- Datos_in_k %>% 
+  filter(!MMID %in% Repeated$MMID) %>% #Removes repeated values
+  bind_rows(Datos_in_Loc) %>% 
+  group_by(Compilation_Title,
+           Dataset_Title,
+           Author,
+           Institution) %>% 
+  summarise(Numero_de_Registros= n(),
+            MMIDs = paste(MMID, collapse="; ")
+            )
+
+write.csv(Datos_Barbara_Res,
+          "Metadatos_ANP_resumidos.csv",
+          row.names = F)
+
+```
+
+
