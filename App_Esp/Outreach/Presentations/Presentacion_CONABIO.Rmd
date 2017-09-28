@@ -40,12 +40,7 @@ K_data<- read.csv("./Data/GLosario.csv",
 x <- fread("/Users/jpalacios/Documents/Github/Meta_Data_Mexico/App/Data_Curve_I.csv")
 x <- x %>%
   select(-1,
-<<<<<<< HEAD
-         - Real_Total,
-         - Temp)
-=======
          -Real_Total)
->>>>>>> bfc93b351bb7fb1b301eb03e898f4da5df4df6d0
   
 source('ts_fun.R')
   

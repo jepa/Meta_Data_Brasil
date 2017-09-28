@@ -1,0 +1,334 @@
+---
+title: "Meta-database of Marine Research in Mexico"
+author: Juliano Palacios Abrantes | Changing Oceans Research Unit, University of British
+  Columbia
+date: "14/3/2017 | Harte Research Institute, Texas A&M University"
+output:
+  ioslides_presentation:
+    logo: choru_logo.png
+    widescreen: yes
+subtitle: State of The Gulf of Mexico Summit 2017
+runtime: shiny
+---
+
+```{r packages and data, eval=T, echo=F, warning=F,message=F}
+
+library(data.table)
+library(networkD3)
+library(dygraphs)
+library(dplyr)
+library(DT)
+library(ggplot2)
+library(wordcloud) #For Word Mining
+#install.packages('tm')
+library(tm) #For Word Mining
+
+data<- fread("./Template.csv",
+             colClasses = c(Location = 'character',
+                            Notes = 'character')
+)
+K_data<- read.csv("./Metadata_Key.csv",
+                  header = TRUE,
+                  na="NA")
+
+x <- fread("./Data_Curve.csv")
+x <- x %>%
+  select(-1)
+```
+
+
+## Project Background
+<div class="columns-2">
+
+<img src="Images/Flow.PNG" width=400 height=400>
+
+- Increasingly depending on multidisciplinary research
+
+- Biology, Ecology, Oceanography, Economy, etc!
+
+- Lack of data or lack of data availability?
+
+- No matter which, the result can block progress
+
+</div>
+
+<div class="centered">
+<div class="green2">
+
+> - A meta-database fosters collaboration and eases the process of informing best policies relevant to any community or region
+
+</div>
+
+## Project Objectives
+
+> -	Design a framework for the meta-database of marine ecosystems and marine-related research of Mexico
+
+<div class="green2">
+> -	**Identify available data sources and incorporate into developed meta-database framework**
+</div>
+
+> -	Identify the major trends in marine data availability in Mexico 
+> -	Identify information and research gaps that should be addressed in the future
+> -	Develop protocols for public sharing of the meta-database and inclusion of new information in the future
+
+## Metadata Structure
+
+```{r Metadata display, eval=T, echo=F, warning=F,message=F}
+library(shiny)
+
+
+ui <- fluidPage(
+  tabsetPanel(
+    id ="Data_Explorer",
+    tabPanel(
+      p("Metadata Key"),
+      dataTableOutput("Metadata_Key")
+    ),
+    tabPanel(
+      p("Metadata"),
+      dataTableOutput("datatable")
+    )
+  )
+)
+
+
+server <- function(input, output) {
+  output$Metadata_Key <- renderDataTable({
+    
+    
+    datatable(K_data,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 50,
+                             autoWidth = FALSE
+              )
+    )
+    
+  })
+  
+  output$datatable <- renderDataTable({
+    
+    datatable(data,
+              rownames = FALSE,
+              filter = 'top',
+              escape = FALSE,
+              options = list(pageLength = 28,
+                             autoWidth = FALSE,
+                             lengthMenu = c(10, 20,30)
+              )
+    )
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
+
+```
+
+## Current Status of the Metadata
+
+<div class="centered">
+
+```{r Current Status, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+xx <- ts(x,
+         start=c(2016,11),
+         end = c(2017,3), # <- this has to be changed everytime we add a month
+         frequency= 12)
+
+dygraph(xx) %>% #Creats the graph
+  dyOptions(stackedGraph = TRUE, #Makes it stacked
+            drawPoints = TRUE, #Shows each data point
+            pointSize = 4) %>%
+  dyRangeSelector(height = 20) %>%
+  dyAxis("x", drawGrid = FALSE) %>% #Removes the grid
+  dyAxis("y", drawGrid = FALSE) %>%
+  dyAxis("y", label = "Number of Data Points") %>%  #Labels
+  dyLegend(width = 600)
+
+## Solid numbers ####
+# Number of entries ####
+Number_entries <- data %>%
+  filter(MMID != "na")
+Number_entriess <- paste(Number_entries$MMID[length(Number_entries$MMID)])
+
+# Number of Data Points ####
+Number_dp <- paste(sum(Number_entries$Data_Time_Points,na.rm=T))
+
+# Number of Repositories ####
+z<- data %>%
+  group_by(Compilation_Title) %>%
+  summarise(sum(Data_Time_Points)) %>%
+  select(-2) %>%
+  filter(!is.na(Compilation_Title)) %>%
+  mutate(z = 1)
+
+zz <- paste(sum(z$z))
+
+```
+
+
+>- Since November we have colected: **`r Number_entriess`** Records, from **`r zz`** repositories, resulting in **`r Number_dp`** data points
+
+</div>
+
+## Preliminary Results for the Gulf of Mexico {.smaller}
+
+```{r CurrentStatusb, eval=T, echo=F, warning=F,message=F}
+
+## Solid numbers ####
+# Number of entries ####
+G_Number_entries <- data %>%
+  filter(MMID != "na") %>%
+  filter(Area =="Atlantic")
+
+G_Number_entriess <- paste(nrow(G_Number_entries))
+#
+#   # Number of Data Points ####
+G_Number_dp <- paste(sum(G_Number_entries$Data_Time_Points,na.rm=T))
+
+# Number of Repositories ####
+G_z<- data %>%
+  filter(Area =="Atlantic") %>%
+  group_by(Compilation_Title) %>%
+  summarise(sum(Data_Time_Points)) %>%
+  select(-2) %>%
+  filter(!is.na(Compilation_Title)) %>%
+  mutate(z = 1)
+
+Reps <- G_z$Compilation_Title
+
+G_zz <- paste(sum(G_z$z))
+
+G_Per <- sum(G_Number_entries$Data_Time_Points,na.rm=T)
+N_Per <- sum(Number_entries$Data_Time_Points,na.rm=T)
+Percentage <- round((G_Per/N_Per)*100,digits = 2)
+
+
+
+```
+
+<div class="centered">
+
+> The dataset has **`r G_Number_entriess`** metadata records, from **`r G_zz`** repositories, resulting in **`r G_Number_dp`** data points. 
+
+### **Sources of Data**
+
+<img src="Images/Logos3.PNG" width=750 height=300>
+
+> - **That is only *`r Percentage`*% of total metadata records!**
+> - <img src="Images/Gom.PNG" width=570 height=80>
+
+</div>
+
+
+<div class="notes">
+Current Repositories:
+
+`r Reps`
+
+</div>
+
+
+## Preliminary Results for the Gulf of Mexico (cont.)
+
+<div class="columns-2">
+
+```{r Preeliminarya, eval=T, echo=F, warning=F,message=F, fig.width=5.5,fig.height=4.5, fig.align="center"}
+
+Se_Plot <- data %>%
+  filter(Area == "Atlantic") %>%
+  filter(Research_Field != "Fisheries; Aquaculture") %>% 
+  filter(Research_Field != "Fisheries; Conservation") %>% 
+  filter(!is.na(Region)) %>%
+  group_by(Research_Field,Region) %>%
+  summarise(Entradas = sum(Data_Time_Points,na.rm=T))
+
+ggplot(data=Se_Plot,
+       aes(
+         x=Region,
+         y= Entradas,
+         fill= Research_Field
+       ))+
+  geom_bar(stat = "identity")+
+  theme_classic() +
+  ylab("Number of Data Points")+
+  theme(axis.text.x = element_text(
+    size=15),
+    axis.text.y = element_text(size = 18),
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20),
+    legend.position = "right",
+    axis.title = element_text(size=18,
+                              face="bold"))+
+  guides(fill = guide_legend(title = "Research Field",
+                             title.position = "top"),
+         col = guide_legend(nrow = 3))+
+  scale_x_discrete("Region", labels = c("Campeche B \n Caribe","West G.\n Mexico"))
+                   
+```
+
+*Note: not all data are represented in plots* 
+
+```{r Preeliminaryb, eval=T, echo=F, warning=F,message=F, fig.align="center"}
+
+Words <- data %>%
+  filter(Area == "Atlantic")
+WordsCorpus <- Corpus(VectorSource(Words$Keywords)) #Selects only Keywords
+WordsCorpus <- tm_map(WordsCorpus,
+                      PlainTextDocument) #Converts to plain text
+WordsCorpus <- tm_map(WordsCorpus,
+                      removePunctuation) #Removes punctuation
+
+#Removes a word of user preference
+# WordsCorpus <- tm_map(WordsCorpus,
+#                       removeWords)
+#
+
+suppressWarnings(wordcloud(WordsCorpus, #Plots the words
+                           max.words = 100,
+                           random.order = FALSE,
+                           colors=brewer.pal(8, "Dark2")
+)
+)
+
+```
+
+
+    
+</div>
+
+
+## Direct Collaboration
+
+<div class="centered">
+<div class="green2">
+
+**The more people involved, the better we can reflect the state of marine research in Mexico!**
+
+</div>
+</div>
+
+>- **Share:** Remember that we are looking for data information and not the data itself!
+
+>- **Inform:** We are looking for any source of information relevant to marine research in Mexico.
+
+>- **Communicate:** A large multidisciplinary group of collaborators will certainly contribute to a successful project
+
+## Thank you !
+
+<div class="centered">
+
+Juliano Palacios-Abrantes | j.palacios@oceans.ubc.ca
+
+- **Collaborators:**
+Arreguín-Sánchez, Francisco; Cheung W., William; Cisneros-Mata, Miguel A; Cisneros-Montemayor, Andres; Rodriguez, Laura
+
+<img src="Images/Logos_PI.PNG" width=700 height=110>
+
+Project's Webpage: http://jepa.shinyapps.io/marmetadatamexeng/
+
+</div>
+
+# Questions?
