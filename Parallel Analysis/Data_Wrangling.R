@@ -4528,13 +4528,13 @@ Region <- "Gulf of California"
 Location <- ""
 Dataset_Title <- "Distribucion y abundancia de aves marinas y acuaticas en regiones marinas prioritarias y areas protegidas del Golfo de California y Golfo de Mexico"
 Reference <- "https://doi.org/10.15468/tld9yx"
->>>>>>> 266e074c3a6092a9dd71cd618702625655c2a57b
+
 User_Contact <- "Sonia Alejandra Careaga Olvera; scareaga@conabio.gob.mx" 
 
 
 GBIF_Create(Inicio,Fin,Keywords,Titulo)
 
-<<<<<<< HEAD
+
 # ______________ Tortugas_gen ####
 
 ## FUNCION ###
@@ -5443,7 +5443,7 @@ Final <- New_CONAPESCA %>%
   arrange(MMID)
 
 
-<<<<<<< HEAD
+
 
 #### Convertir Template de categoria para especie...
 
@@ -5517,7 +5517,7 @@ AQ <- Aquacultura %>%
 
 write.csv(AQ,
           "AQ.csv")
-=======
+
 CONAPESCA_I <- CONAPESCA <- Template %>% 
   filter(Institution == "CONAPESCA") %>% 
   filter(Area == "Pacific")
@@ -5534,4 +5534,20 @@ Template_Correct <- gnr_resolve(names = Template$Subject_name[1:50000], #Looks f
                             canonical = TRUE)
 
 TC <- data.table(Template_Correct)
->>>>>>> bfc93b351bb7fb1b301eb03e898f4da5df4df6d0
+
+
+
+#### Tiburones Angel Silvia Salas ####
+
+
+
+Tiburcio <- Angel_tiburones %>% 
+  group_by(Presentacion,
+           Origen,
+           Destino) %>% 
+  summarise(n(),
+            Sy = min(Ano),
+            Ey = max(Ano),
+            DP = length(unique(Ano))) %>% 
+  mutate(Titulo = paste("Datos crudos de exportacion de", Presentacion,"(",Origen,"-",Destino,")"))
+
