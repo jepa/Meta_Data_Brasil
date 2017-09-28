@@ -5443,6 +5443,7 @@ Final <- New_CONAPESCA %>%
   arrange(MMID)
 
 
+<<<<<<< HEAD
 
 #### Convertir Template de categoria para especie...
 
@@ -5516,3 +5517,21 @@ AQ <- Aquacultura %>%
 
 write.csv(AQ,
           "AQ.csv")
+=======
+CONAPESCA_I <- CONAPESCA <- Template %>% 
+  filter(Institution == "CONAPESCA") %>% 
+  filter(Area == "Pacific")
+
+
+New_Temp <- CONAPESCA_I %>% 
+  left_join(New_CONAPESCA,
+            by="MMID")
+
+### Correccion de todos los nombres...
+
+Template_Correct <- gnr_resolve(names = Template$Subject_name[1:50000], #Looks for homogenic names
+                            best_match_only = TRUE,
+                            canonical = TRUE)
+
+TC <- data.table(Template_Correct)
+>>>>>>> bfc93b351bb7fb1b301eb03e898f4da5df4df6d0
