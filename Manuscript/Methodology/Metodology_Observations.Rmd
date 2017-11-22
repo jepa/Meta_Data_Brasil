@@ -200,3 +200,10 @@ Longitude and Latitude are setted as the mean value for when there are more than
 ##Autor: GIBF-UNAM
 ### Data_Time_Points
 NOTE: This dataset might be the same as the one UNIMAR Solis, et al.
+
+# Comments to resolve
+- Datos MX, Generales = Energía es... Sociologia?
+- SENER y Pemex, info por pozo petrolero... 
+
+
+

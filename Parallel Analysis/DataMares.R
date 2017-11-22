@@ -1,5 +1,5 @@
 ### For Datamares ####
-# This script generates the dadtaset for DataMates
+# This script generates the dadtaset for DataMates # And back
 
 # Libraries
 library(data.table)
@@ -25,3 +25,20 @@ write.csv(DataMares_MD,
           "DataMares_MD.csv",
           row.names = FALSE
           )
+
+
+# Para adicionar los datos de dataMares
+
+Pre_Template <- ec_cp_endemism_metadata %>% 
+  slice(
+    c(
+      2,3,5,6,7,11,17,45)
+  ) %>% 
+  select(1:2) %>% 
+  tidyr::spread(
+    X0,X1
+  )
+
+
+
+  

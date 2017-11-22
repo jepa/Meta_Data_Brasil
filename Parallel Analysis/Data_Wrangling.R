@@ -5051,9 +5051,6 @@ GBIF_Create(Inicio,Fin,Keywords,Titulo)
 
 ####____________ Merge EVERYTHING ####
 
-
-#### STILL NOT WORKING ####
-
 # First correcting the MMID column
 
 ### STEP DONE ###
@@ -5621,7 +5618,7 @@ LoLo <- lolo%>%
             by ="Location")
 
 
-#### INCAPESCA ####
+#### INAPESCA ####
 
 DICTAMENES <- read_csv("~/Downloads/DICTAMENES.csv", 
                        col_types = cols(Ano_del_dictamen = col_number()))
@@ -5668,9 +5665,183 @@ WDIC_b <- DICTAMENES %>%
   )
 
 
+# SENER #####
+
+SENER <-Mexico_Politico %>% 
+  mutate(
+    Titulo = paste("Precios medios de energia de alumbrado publico en",Location,
+                   sep=" ")
+  )
 
 
-#### CONABIO a CNP ###
+Regions_Fuera <- c("Norte", "Sur")
+
+Campos_Pemex_A <- SENER %>% 
+  group_by(Region,
+           Campo) %>% 
+  summarise(n()) %>% 
+  filter(Region == "Marina Noreste") %>% 
+  select(1,2) %>% 
+  mutate(
+    Area = paste("Atlantic"),
+    Regions = paste("W. G. of Mexico")
+  )
+
+Campos_Pemex_P <- SENER %>% 
+  group_by(Region,
+           Campo) %>% 
+  summarise(n()) %>% 
+  filter(Region == "Marina Suroeste") %>% 
+  select(1,2) %>% 
+  mutate(
+    Area = paste("Pacific"),
+    Regions = paste("South Pacific")
+  )
+
+Campos_Pemex <- Campos_Pemex_A %>% 
+  bind_rows(Campos_Pemex_P)
+
+write.csv(Campos_Pemex,
+          "Campos_Pemex.csv",
+          row.names = FALSE)
+
+Reservas <- Campos_Pemex %>% 
+  mutate(
+    Petroleo = paste("Reserva Remanente de Petroleo Crudo en",Campo),
+    Aceite = paste("Reserva Remanente de Aceite en",Campo),
+   Condensado =  paste("Reserva Remanente de Condensado en",Campo),
+   Liquidos =  paste("Reserva Remanente de Liquidos de planta en",Campo),
+   Gas_Seco =  paste("Reserva Remanente de Gas seco en",Campo),
+   Gas_Natural =  paste("Reserva Remanente de Gas Natural en",Campo),
+   Condensado =  paste("Reserva Remanente de Condensado en",Campo)
+  ) %>% 
+  tidyr::gather(
+    "Key",
+    "Title",
+    5:10
+  ) %>% 
+  mutate(
+    Keywords = paste(Key,"Posible; Probable; Probada; MMb; Barriles",
+                     sep="; ")
+  )
+
+write.csv(Reservas,
+          "Reservas.csv",
+          row.names = FALSE)
+
+## SCT ####
+
+Numero <- BDportstats %>% 
+  tidyr::gather(
+    "CAMPO",
+    "Desc",
+    4:length(.)
+  ) %>% 
+  left_join(Dic_Puertos,
+            by= "CAMPO")
+
+NN <- Numero %>% 
+  group_by(
+    PUERTO,
+    DECRIPCION
+  ) %>% 
+  summarise(
+    YMin = min(ANO),
+    Ymax = max(ANO),
+    N_dat = length(unique(ANO))
+  ) %>% 
+  mutate(
+    Titulo = paste(DECRIPCION,"en",PUERTO,
+                   sep=" "),
+    Key = paste("Puertos; Movimientos; exportacion; Inportacion; Comercio; Carga; Buques; Pasajeros")
+  )
+
+write.csv(NN,
+          "nn.csv",
+          row.names = FALSE)
+
+
+### All topgether NOW! ### 
+
+Data_Guide <- c("CIBNOR.csv",
+"CNH.csv",
+"CONANP.csv",
+"CONAPESCA.csv",
+"Generales.csv",
+"Indicadores_pesqueros.csv",
+"INEPESCA.csv",
+"SCT.csv",
+"SECTUR.csv"
+)
+
+### STEP DONE ###
+for(i in 6:length(Data_Guide)){
+  Name <- paste(Data_Guide[i])
+  xx <- read_csv(
+    paste("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/Finalizados/",
+          Name,
+          sep=""),
+    col_types = cols(X1 = col_skip())
+  )%>% 
+    mutate(MMID="") %>% 
+    select(MMID,everything())
+  
+  write.csv(x,
+            Name,
+            row.names = F)
+}
+
+####____________________________________
+
+# Now merging everything
+xx <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Arrecifes_BC_Final.csv")
+Data_Guide <- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Data_Guide.csv") %>% 
+  select(Final_List)
+x <- NULL
+
+for(i in 1:length(Data_Guide)){
+  # Name <- paste(Data_Guide[i])
+  Liga <- paste("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/Finalizados/",
+                Data_Guide[i],
+                sep="")
+  
+  x <- fread(Liga)
+  x <- x %>% 
+    mutate(File = paste(Data_Guide[i])) %>% 
+    filter(!is.na(Short_Title))
+  
+  x <- data.table(x)
+  
+  # print(Liga)
+  # }
+  
+  if(i == 1){
+    Data <- copy(x) # <- copies the previouse data.table
+  }else{ 
+    setkey(Data, # <- sets the data.table as "reference" ?setkey
+           Area); setkey(x,
+                         Area); 
+    list <- list(Data, # <- creates a list to merge the tables
+                 x)
+    Data <- rbindlist(list, #<- Merges all the data in one single file.
+                      use.names = TRUE, # <- This will merge columns by Name
+                      fill = FALSE, # <- This allows for the NA's
+                      idcol =  NULL)  # Columns id
+  }
+}
+
+unique(Data$File)
+
+Data <- select(Data, -File)
+
+write.csv(Data,
+          "Data.csv",
+          row.names = F)
+
+
+  
+
+########_______________ CONABIO a CNP ####
 
 ### Problemas, el nivel de detalle para las especies no es el mismo. Almejas es un claro ejemplo
 
@@ -5882,7 +6053,7 @@ Tiburcio <- Angel_tiburones %>%
             DP = length(unique(Ano))) %>% 
   mutate(Titulo = paste("Datos crudos de exportacion de", Presentacion,"(",Origen,"-",Destino,")"))
 
-#### dataMares ####
+####___________________________________ dataMares ####
 
 Ecol <- ec_gc_ecological_monitoring %>% 
   group_by(Species,
@@ -6073,9 +6244,126 @@ Kelp <- Kelp_Data %>%
     Titulo = paste("Abundancia de",Especie,"en",Localidad)
       )
 
-# dataMares_metadata
+# dataMares_Segunda Tanda desde metadatos
+
+#ec_cp_endemism
+
+Endemismo <- ec_cp_endemism %>% 
+  group_by(`Species complete`) %>% 
+  summarise(
+    n=n(),
+    Habitats = paste(unique(Habitat),
+                    collapse = "; "),
+    Ymin = min(Year),
+    Ymax = max(Year),
+    Data_Points = length(unique(Year))
+  ) %>% 
+  mutate(
+    T1 = paste("Presencia de",`Species complete`,"en Parque nacional Cabo Pulmo",
+               sep = " "),
+    T2 = paste("Status de proteccion de", `Species complete`,"en Parque nacional Cabo Pulmo",
+               sep = " "),
+    K1 = paste("Presencia; Ausencia; Terrestres; Conservacion; Cabo Pulmo; Listado",Habitats,
+               sep = "; "),
+    K2 = paste("NOM; Peligro; Proteccion; Endemica; Region; Amenazada",Habitats,
+               sep="; ")
+  ) %>% 
+  tidyr::gather(
+    "Type",
+    "Text",
+    7:10
+  ) %>% 
+  select(-2,-3)
+
+# write.csv(Endemismo,
+#           "Endemismo.csv",
+#           row.names = FALSE)
 
 
+#ec_cp_fish_larvae 
+
+Larvas <- ec_cp_fish_larvae %>% 
+  group_by(
+    Species
+  ) %>% 
+  summarise(
+    Ymin = min(Year),
+    Ymax = max(Year),
+    Data_Points = length(unique(Year))
+  ) %>% 
+  mutate(
+    Titulo = paste ("Abundancia de huevos de",Species,"en Cabo Pulmo",
+                    sep = " "),
+    Key = paste ("Larvas; Reclutamiento; Huevecillos; Cabo Pulmo ",
+                    sep = " ")
+  )
+
+# ec_gc_anemones.xlsx
+
+Anemonas <- ec_gc_anemones %>% 
+  filter(País == "México") %>% 
+  group_by(Localidad,
+           Especie) %>% 
+  summarise(
+    n()
+  ) %>% 
+  mutate(
+    Titulo = paste("Informacion Taxonomica de", Especie,"En el Golfo de California",
+                   sep = " "),
+    Keyword = paste("Taxonomia; Anemonas; Cnidario; Cnidocisto; Tamano; Tipo; Colecta; Listado; Coleccion Taxonomica")
+  )
+
+# ec_gc_size_matters.xlsx
+
+ec_gc_size_matters <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_gc_size_matters.xlsx")
+
+MetaDataMares <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_gc_size_matters_metadata.xlsx",
+                                 col_names = FALSE)
 
 
+Pre_Template <- MetaDataMares %>% 
+  slice(
+    c(
+      2,3,5,6,7,11,17,45)
+  ) %>% 
+  select(1:2) %>% 
+  tidyr::spread(
+    X0,X1
+  )
 
+Pre_Template$`Date of last update:` <- as.Date(as.numeric(Pre_Template$`Date of last update:`),
+                                               origin = "1899-12-30"
+                                               )
+
+Size_Matters <- ec_gc_size_matters %>% 
+  group_by(Reef,
+           Genre) %>% 
+  summarise(
+    n()
+  ) %>% 
+  mutate(
+    Titulo = paste("Densidad de", Genre, "en",Reef,
+                   sep=" "),
+    Titulo_B = paste("Densidad de polipos de", Genre, "en",Reef,
+                   sep=" "),
+      key= paste("Arrecife; Abanicos de mar; Monitoreo; Rocoso")
+  ) %>% 
+  select(-3) %>% 
+  tidyr::gather(
+    "Title",
+    "Text",
+    3:4
+  ) %>% 
+  select(-4)
+
+write.csv(Size_Matters,
+          "Size_Matters.csv",
+          row.names = FALSE)
+
+#ec_po_sponges.xlsx
+
+ec_po_sponges <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_po_sponges.xlsx")
+
+
+  
+  
