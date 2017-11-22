@@ -132,7 +132,21 @@ shinyUI(
                p(
                  "The Marine Biodiversity group of Yucatan (BDMY) is a group of researchers from the National Autonomous University of Mexico (UNAM) associated with the Faculty of Sciences - Academic Unit Sisal / Yucatan. The group aims to describe and analyze patterns of species diversity and distribution in the coastal and reef areas of the Gulf of Mexico. The objective is to generate baselines and contribute to the management and conservation of these habitats. Currently BDMY collaborators are studying the following taxa: Cnidaria, Crustacea, Porifera, Echinodermata, Mollusca, Urochordata (Ascidacea), Briozoa, Vertebrata (fish). The group manages 4 scientific collections and has identified more than 60 new species."
                )
-             ) #END BMDY
+             ), #END BMDY
+             column( #CONABIO
+               3,
+               align = "justified",
+               offset = 0,
+               a(href="http://www.biodiversidad.gob.mx/",
+                 img(
+                   src = "logo_conabio.png",
+                   height = 100,
+                   width = 280
+                 )),
+               p(
+                 "The National Commission for the Knowledge and Use of Biodiversity is an intersecretarial commission created in 1992. CONABIO performs its functions through an operational group that since its creation has been headed by Dr. José Sarukhán Kermez, as National Coordinator. Its mission is to promote, coordinate, support and carry out activities aimed to generate knowledge of biological diversity, as well as its conservation and sustainable use for the benefit of society. Among the main functions of CONABIO are to implement and operate the National Information System on Biodiversity ", a (href =" http://www.conabio.gob.mx/remib/doctos/snib.html "," SNIB"), ". The marine research metadata database is directly connected to the bases of CONABIO which is expected to participate more actively in the project in the coming months."
+               )
+             ) #END CONABIO
              ), #Closes tabPanel
     #### PROJECT DESCRIPTION ####
     tabPanel("The Project",
