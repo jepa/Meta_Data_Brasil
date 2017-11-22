@@ -143,4 +143,68 @@ write.csv(Datos_Barbara_Res,
 
 ```
 
+## Dr. Ray Hilborn | UW
+### Oct 18th, 2017
 
+Dear Mr. Juliano E. Palacios Abrantes,
+
+We are conducting a survey of how fisheries are managed around the world and have published our initial results in the attached paper. We would like very much to get individuals familiar with Mexico fisheries to complete a survey for one or more of the various species listed in the attached spreadsheet for Mexico. Ideally these individuals would come from different backgrounds, science, management, industry, NGO etc.
+
+Please let me know if you might be able to provide contacts and perhaps an email introduction. If you are willing to complete a survey, please let me know that as well and for which species. 
+
+```{r Hilborn, eval=F, echo = T, message= F, warning = F}
+library(data.table)
+library(dplyr)
+
+Template <- fread("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
+Ray <- read.csv("Species_List_Hilborn.csv")
+
+Ignorar <- c(
+  "James Simons; James.Simons@tamucc.edu",
+  "Jorrit Poelen; jhpoelen@xs4all.nl",
+  "Sky Bristol; sbristol@usgs.gov, Abby Benson; albenson@usgs.gov",
+  "onia Alejandra Careaga Olvera; scareaga@conabio.gob.mx",
+  "uenlace@conapesca.gob.mx"
+)
+
+Sci_Name <- Template %>% 
+  filter(Subject_name %in% Ray$Subject_name) %>% 
+  group_by(Subject_name,
+           User_Contact) %>% 
+  summarise(n=n()) %>% 
+  filter(!User_Contact %in% Ignorar) %>% 
+  filter(!is.na(User_Contact)) 
+
+
+  Ray_Final <- Ray %>% 
+    left_join(Sci_Name,
+            by ="Subject_name")
+  
+  #### Merida ####
+  
+  # Jorge Lopez #
+  Jorge_Lopez <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Finalizados/Jorge_Lopez.csv")
+  
+Sci_Name_Jor <- Jorge_Lopez %>% 
+  filter(Subject_name %in% Ray$Subject_name) %>% 
+  group_by(Subject_name,
+           User_Contact) %>% 
+    summarise(n=n()) %>% 
+    filter(!is.na(User_Contact)) %>% 
+    bind_rows(Ray_Final) %>% 
+  select(Subject_name,
+         Taxonomic.Group,
+         FAO.Spanish.Name,
+         English.Name,
+         Comments,
+         everything(),
+         -n
+         ) %>% 
+  rename(Scientific.Group=Subject_name)
+  
+write.csv(Sci_Name_Jor,
+          "Hilborn_Dataset_JEPA.csv",
+          row.names = FALSE)
+
+
+``````
