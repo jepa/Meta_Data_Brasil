@@ -20,7 +20,7 @@ library(taxize) # For scientific names
 library(stringr)
 setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
-source("./Functions/gbif_import.r")
+# source("./Functions/gbif_import.r")
 
 #### _________________________________ ####
 
@@ -5051,9 +5051,6 @@ GBIF_Create(Inicio,Fin,Keywords,Titulo)
 
 ####____________ Merge EVERYTHING ####
 
-
-#### STILL NOT WORKING ####
-
 # First correcting the MMID column
 
 ### STEP DONE ###
@@ -5319,7 +5316,26 @@ ANPS <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/
   filter(Sup_Marina >= 1) %>% 
   filter(!is.na(Programa)) %>% 
   mutate(x = paste("Estudio Previo para la determinacion del ANP",ANP)) %>% 
-  select(x,ANP,Programa)
+  select(x,ANP,Programa, Categoria, Municipios) %>% 
+  left_join(ANP_L,
+            by="ANP") %>% 
+  mutate(Key = paste(Categoria,Municipios,
+                     sep="; ")
+  ) %>% 
+  select(Key)
+
+write.csv(ANPS,
+          "ANPS_key.csv",
+          row.names = FALSE)
+
+unique(Template$Region)
+
+
+#### Indicadores de desempeño de recursos pesqueros @@@@
+
+Indicadores <- Template %>% 
+  filter()
+
 
 ### RAMSAR ##
 
@@ -5339,6 +5355,7 @@ Ram <- RAMSAR%>%
             by = "Estado")
 
 
+<<<<<<< HEAD
 Portuario <- DATOS %>% 
   group_by(SERVICIO,
            PUERTO
@@ -5376,6 +5393,495 @@ write.csv(Eslora_Menor,
 
 
 #### CONABIO a CNP ###
+=======
+
+#### CONAPESCA ####
+
+tolower(Acciones_Inspeccion_Vigilancia$Estado)
+
+Acciones_Inspeccion_Vigilancia$Estado <- tolower(Acciones_Inspeccion_Vigilancia$Estado)
+Mexico_Politico$Location <- tolower(Mexico_Politico$Location)
+
+
+
+Inspeccion <- Acciones_Inspeccion_Vigilancia %>% 
+group_by(Actividad,
+           Region,
+           Estado) %>% 
+  summarise(n()) %>% 
+  mutate(Titulo_1 = paste(Actividad, "en", Region, "de", Estado,
+                          sep=" "),
+         Key_1 = paste("Inspeccion; Vigilancia; Monitoreo; Pesquerias; IUU")
+         ) %>% 
+  select(Titulo_1,
+         Key_1,
+         Estado) %>% 
+  rename(Location = Estado) %>% 
+  left_join(Mexico_Politico,
+            by ="Location")
+
+RO_VP_sistemas_producto$Nombre.Municipio <- tolower(RO_VP_sistemas_producto$Nombre.Municipio)
+
+SPR <- RO_VP_sistemas_producto %>% 
+  mutate(Location = tolower(Nombre.Estado)) %>% 
+  group_by(Programa,
+           Location,
+           Pesqueria) %>% 
+  summarise(Moni = paste(unique(Nombre.Municipio),
+                         collapse = "; "),
+            Compo = paste(unique(Componente),
+                         collapse = "; ")
+            ) %>% 
+  mutate(
+         T1 = paste("Beneficiarios del programa:", Programa, "en", Location,
+         sep = " "),
+         T2 = paste("Recurso federal destinado a Beneficiarios del programa", Programa, "en", Location,
+                    sep = " "),
+         Key1 = paste("Subsidios; Programas; Apoyo; Pescadores; Cadena Productiva",Compo, Moni,
+                      sep = "; ")
+  ) %>% 
+  left_join(Mexico_Politico,
+            by="Location") %>% 
+  select(T1,
+         T2,
+         Key1,
+         Location, 
+         Area_M,
+         Region_M,
+         Pesqueria)
+
+
+Arte_Pesca <- ArtePesca_2011 %>% 
+  group_by(
+    Nombre.Estado,
+    Pesqueria
+  ) %>% 
+  summarise(Moni = paste(unique(Nombre.Municipio),
+                         collapse = "; "),
+            Loc = paste(unique(Nombre.Municipio),
+                        collapse = "; "),
+            Compo = paste(unique(Componente),
+                          collapse = "; ")
+  ) %>% 
+  mutate(
+    Titulo = paste("Beneficiarios de programa de Modernizacion de Embarcaciones Pesqueras Menores en", Nombre.Estado, "(2011)"),
+    Key = paste("Pequena escala; Embarcaciones menores; Subsidio",Moni,Loc,Compo,
+                sep="; ")
+  ) %>% 
+  rename(Location = Nombre.Estado) %>%
+  filter(Location != "*") %>% 
+  select(
+    Titulo,
+    Key,
+    Location,
+    Pesqueria
+  )
+
+Motores <- Motor_2008.2016 %>% 
+  filter(Nombre.Estado != "*") %>% 
+  group_by(
+    Nombre.Estado,
+    Pesqueria
+  ) %>% 
+  summarise(Moni = paste(unique(Nombre.Municipio),
+                         collapse = "; "),
+            # Loc = paste(unique(Nombre.Municipio),
+            #             collapse = "; "),
+            Compo = paste(unique(Componente),
+                          collapse = "; ")
+  ) %>% 
+  mutate(
+    Titulo = paste("Beneficiarios de programa de Sustitucion de Motores en", Nombre.Estado, "(2008-2016)"),
+    Key = paste("Pequena escala; Embarcaciones menores; Subsidio; MotorM 4 tiempos; 115 HP; fuera de borda",Moni,Compo,
+                sep="; ")
+  ) %>% 
+  rename(Location = Nombre.Estado) %>% 
+  select(
+    Titulo,
+    Key,
+    Location,
+    Pesqueria
+  )
+
+write.csv(Motores,
+      "Motores.csv",
+      row.names= FALSE)
+  
+
+
+GPS <- GPS_Data %>% 
+  filter(Nombre.Estado != "*") %>% 
+  group_by(
+    Nombre.Estado,
+    Pesqueria
+  ) %>% 
+  summarise(Moni = paste(unique(Nombre.Municipio),
+                         collapse = "; "),
+            # Loc = paste(unique(Nombre.Municipio),
+            #             collapse = "; "),
+            Compo = paste(unique(Componente),
+                          collapse = "; ")
+  ) %>% 
+  mutate(
+    Titulo = paste("Beneficiarios de programa de adquisicion de GPS en", Nombre.Estado, "(2011 - 2016)"),
+    Key = paste("GPS; Comunicacion Satelital; Embarcaciones menores; Subsidio",Moni,Compo,
+                sep="; ")
+  ) %>% 
+  rename(Location = Nombre.Estado) %>% 
+  select(
+    Titulo,
+    Key,
+    Location,
+    Pesqueria
+  )
+
+write.csv(GPS,
+          "GPS.csv",
+          row.names= FALSE)
+
+
+Localidad <- GPS %>% 
+  select(Location) %>% 
+  left_join(Mexico_Politico,
+            by = "Location")
+
+
+Beneficiarios_emb_mayores$NOMBRE.ESTADO <- tolower(Beneficiarios_emb_mayores$NOMBRE.ESTADO)
+Mexico_Politico$Location <- tolower(Mexico_Politico$Location)
+
+Emb_Mayores <- Beneficiarios_emb_mayores %>% 
+  group_by(NOMBRE.ESTADO
+           ) %>% 
+  summarise(Moni = paste(unique(NOMBRE.MUNICIPIO),
+                         collapse = "; "),
+            # Loc = paste(unique(Nombre.Municipio),
+            #             collapse = "; "),
+            Compo = paste(unique(COMPONENTE),
+                          collapse = "; ")
+  ) %>% 
+  mutate(
+    Titulo = paste("Beneficiarios de programa de modernizacion de flota mayor en", NOMBRE.ESTADO, "(2012 - 2015)"),
+    Key = paste("Modernizacion; Subsidio; Embarcaciones mayores; Industrial;",Moni,Compo,
+                sep="; ")
+  ) %>% 
+  rename(Location = NOMBRE.ESTADO) %>% 
+  left_join(Mexico_Politico,
+            by = "Location") %>% 
+  select(
+    Titulo,
+    Key,
+    Location,
+    Area_M,
+    Region_M
+  ) %>% 
+  filter(!is.na(Area_M))
+  
+Produccion <- Produccion_2014 %>% 
+  group_by(ENTIDAD,
+           NOMBRE_CIENTIFICO,
+           ORIGEN
+           ) %>% 
+  summarise(
+    Comun = paste(unique(NOMBRE_COMUN),
+                  collapse = "; "),
+    Ofi = paste(unique(OFICINA),
+                  collapse = "; "),
+    Princi = paste(unique(NOMBREPRINCIPAL),
+                   collapse = "; ")
+  ) %>% 
+  mutate(
+    T1 = paste(ORIGEN, "(peso vivo) de", NOMBRE_CIENTIFICO, "en", ENTIDAD,
+               sep = " "),
+    T2 = paste(ORIGEN, "(peso deembarcado) de", NOMBRE_CIENTIFICO, "en", ENTIDAD,
+               sep = " "),
+    T3 = paste("Valor de",ORIGEN, "de", NOMBRE_CIENTIFICO, "en", ENTIDAD,
+               sep = " "),
+    K1 = paste(Comun, Ofi, Princi, "Estadistica oficial; Pesca; Produccion; Captura")
+  ) %>% 
+  select(
+    ENTIDAD,
+    NOMBRE_CIENTIFICO,
+    K1,
+    T1,
+    T2,
+    T3
+  ) %>% 
+  tidyr::gather("TItulo",
+                "Short_Title",
+                4:6) 
+
+#
+
+Vigilancia <- invenctivos %>% 
+  group_by(ESTADO
+           ) %>% 
+  summarise(
+    Min_Y = min(ANO),
+    Max_Y = max(ANO),
+    Compo = paste(unique(COMPONENTE),
+                  collapse = "; "),
+    Pro = paste(unique(PROGRAMA),
+                collapse = "; ")
+    ) %>% 
+  mutate(
+    Titulo = paste("Beneficiarios de programas de incentivos de inspeccion y vigilancia en", ESTADO,
+    sep = " "),
+    TituloB = paste("Monto otorgado de programas de incentivos de inspeccion y vigilancia en", ESTADO,
+                   sep = " "),
+    Key = paste(Compo, Pro, "Subsidios; Pesca; IIU; Vigilancia; Monitoreo; Inspecicon; Aquicola")
+  ) %>% 
+  rename(Location = ESTADO) %>% 
+  left_join(Mexico_Politico,
+            by ="Location")
+
+
+#   
+Bene <- Beneficiarios_obras_estudios %>% 
+  group_by(NOMBRE.ESTADO,
+           NOMBRE.MUNICIPIO
+           ) %>% 
+  summarise(
+    Pro = paste(unique(PROGRAMA),
+                collapse = "; "),
+    Con = paste(unique(CONCEPTO),
+                collapse = "; ")
+  ) %>% 
+  mutate(
+    T1 = paste("Beneficiarios de programa de obras y estudios en",NOMBRE.MUNICIPIO,",",NOMBRE.ESTADO),
+    T2 = paste("Montos Otorgados del programa de obras y estudios en",NOMBRE.MUNICIPIO,",",NOMBRE.ESTADO),
+    key = paste(Pro,Con,"Subsidio; CONAPESCA; Pesca; Equipamento; Infraestructura", sep = "; ")
+  )
+
+LoLo <- lolo%>% 
+  left_join(Mexico_Politico,
+            by ="Location")
+
+
+#### INAPESCA ####
+
+DICTAMENES <- read_csv("~/Downloads/DICTAMENES.csv", 
+                       col_types = cols(Ano_del_dictamen = col_number()))
+
+# Primero los que tienen nombre cientifico
+DIC <- DICTAMENES %>% 
+  filter(Nombre_Scientifico != "") %>%
+  group_by(
+    Nombre_Scientifico,
+    area
+           ) %>% 
+  summarise(
+    Centro = paste(unique(Nombre_del_Centro_Regional),
+    collapse = ";"),
+    Nombre_Comun = paste(unique(Nombre_Comun),
+                   collapse = ";"),
+    Amin = min(Ano_del_dictamen),
+    Amax = max(Ano_del_dictamen),
+    Nano = length(unique(Ano_del_dictamen))
+  ) %>% 
+  mutate(
+    Titulo = paste("Listado de Dictamenes Tecnicos para",Nombre_Scientifico, "del",area),
+    Key = paste("Pesca; Dictamenes; Manejo Pesquero",Nombre_Comun,
+                sep = "; ")
+  )
+
+WDIC_b <- DICTAMENES %>% 
+  filter(is.na(Nombre_Scientifico)) %>%
+  group_by(
+    Nombre_Comun,
+    area
+  ) %>% 
+  summarise(
+    Centro = paste(unique(Nombre_del_Centro_Regional),
+                   collapse = ";"),
+    Amin = min(Ano_del_dictamen),
+    Amax = max(Ano_del_dictamen),
+    Nano = length(unique(Ano_del_dictamen))
+  ) %>% 
+  mutate(
+    Titulo = paste("Listado de Dictamenes Tecnicos para",Nombre_Comun, "del",area),
+    Key = paste("Pesca; Dictamenes; Manejo Pesquero",Nombre_Comun,
+                sep= "; ")
+  )
+
+
+# SENER #####
+
+SENER <-Mexico_Politico %>% 
+  mutate(
+    Titulo = paste("Precios medios de energia de alumbrado publico en",Location,
+                   sep=" ")
+  )
+
+
+Regions_Fuera <- c("Norte", "Sur")
+
+Campos_Pemex_A <- SENER %>% 
+  group_by(Region,
+           Campo) %>% 
+  summarise(n()) %>% 
+  filter(Region == "Marina Noreste") %>% 
+  select(1,2) %>% 
+  mutate(
+    Area = paste("Atlantic"),
+    Regions = paste("W. G. of Mexico")
+  )
+
+Campos_Pemex_P <- SENER %>% 
+  group_by(Region,
+           Campo) %>% 
+  summarise(n()) %>% 
+  filter(Region == "Marina Suroeste") %>% 
+  select(1,2) %>% 
+  mutate(
+    Area = paste("Pacific"),
+    Regions = paste("South Pacific")
+  )
+
+Campos_Pemex <- Campos_Pemex_A %>% 
+  bind_rows(Campos_Pemex_P)
+
+write.csv(Campos_Pemex,
+          "Campos_Pemex.csv",
+          row.names = FALSE)
+
+Reservas <- Campos_Pemex %>% 
+  mutate(
+    Petroleo = paste("Reserva Remanente de Petroleo Crudo en",Campo),
+    Aceite = paste("Reserva Remanente de Aceite en",Campo),
+   Condensado =  paste("Reserva Remanente de Condensado en",Campo),
+   Liquidos =  paste("Reserva Remanente de Liquidos de planta en",Campo),
+   Gas_Seco =  paste("Reserva Remanente de Gas seco en",Campo),
+   Gas_Natural =  paste("Reserva Remanente de Gas Natural en",Campo),
+   Condensado =  paste("Reserva Remanente de Condensado en",Campo)
+  ) %>% 
+  tidyr::gather(
+    "Key",
+    "Title",
+    5:10
+  ) %>% 
+  mutate(
+    Keywords = paste(Key,"Posible; Probable; Probada; MMb; Barriles",
+                     sep="; ")
+  )
+
+write.csv(Reservas,
+          "Reservas.csv",
+          row.names = FALSE)
+
+## SCT ####
+
+Numero <- BDportstats %>% 
+  tidyr::gather(
+    "CAMPO",
+    "Desc",
+    4:length(.)
+  ) %>% 
+  left_join(Dic_Puertos,
+            by= "CAMPO")
+
+NN <- Numero %>% 
+  group_by(
+    PUERTO,
+    DECRIPCION
+  ) %>% 
+  summarise(
+    YMin = min(ANO),
+    Ymax = max(ANO),
+    N_dat = length(unique(ANO))
+  ) %>% 
+  mutate(
+    Titulo = paste(DECRIPCION,"en",PUERTO,
+                   sep=" "),
+    Key = paste("Puertos; Movimientos; exportacion; Inportacion; Comercio; Carga; Buques; Pasajeros")
+  )
+
+write.csv(NN,
+          "nn.csv",
+          row.names = FALSE)
+
+
+### All topgether NOW! ### 
+
+Data_Guide <- c("CIBNOR.csv",
+"CNH.csv",
+"CONANP.csv",
+"CONAPESCA.csv",
+"Generales.csv",
+"Indicadores_pesqueros.csv",
+"INEPESCA.csv",
+"SCT.csv",
+"SECTUR.csv"
+)
+
+### STEP DONE ###
+for(i in 6:length(Data_Guide)){
+  Name <- paste(Data_Guide[i])
+  xx <- read_csv(
+    paste("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/Finalizados/",
+          Name,
+          sep=""),
+    col_types = cols(X1 = col_skip())
+  )%>% 
+    mutate(MMID="") %>% 
+    select(MMID,everything())
+  
+  write.csv(x,
+            Name,
+            row.names = F)
+}
+
+####____________________________________
+
+# Now merging everything
+xx <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Arrecifes_BC_Final.csv")
+Data_Guide <- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/GBIF/Final_Data/Data_Guide.csv") %>% 
+  select(Final_List)
+x <- NULL
+
+for(i in 1:length(Data_Guide)){
+  # Name <- paste(Data_Guide[i])
+  Liga <- paste("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/Datasets/DatosAbiertosGov/Finalizados/",
+                Data_Guide[i],
+                sep="")
+  
+  x <- fread(Liga)
+  x <- x %>% 
+    mutate(File = paste(Data_Guide[i])) %>% 
+    filter(!is.na(Short_Title))
+  
+  x <- data.table(x)
+  
+  # print(Liga)
+  # }
+  
+  if(i == 1){
+    Data <- copy(x) # <- copies the previouse data.table
+  }else{ 
+    setkey(Data, # <- sets the data.table as "reference" ?setkey
+           Area); setkey(x,
+                         Area); 
+    list <- list(Data, # <- creates a list to merge the tables
+                 x)
+    Data <- rbindlist(list, #<- Merges all the data in one single file.
+                      use.names = TRUE, # <- This will merge columns by Name
+                      fill = FALSE, # <- This allows for the NA's
+                      idcol =  NULL)  # Columns id
+  }
+}
+
+unique(Data$File)
+
+Data <- select(Data, -File)
+
+write.csv(Data,
+          "Data.csv",
+          row.names = F)
+
+
+  
+
+########_______________ CONABIO a CNP ####
+>>>>>>> a643b33e7075e40afc2bcadcb048db1812e4c690
 
 ### Problemas, el nivel de detalle para las especies no es el mismo. Almejas es un claro ejemplo
 
@@ -5587,3 +6093,317 @@ Tiburcio <- Angel_tiburones %>%
             DP = length(unique(Ano))) %>% 
   mutate(Titulo = paste("Datos crudos de exportacion de", Presentacion,"(",Origen,"-",Destino,")"))
 
+####___________________________________ dataMares ####
+
+Ecol <- ec_gc_ecological_monitoring %>% 
+  group_by(Species,
+           Region) %>% 
+  summarise(
+    Type = paste(unique(`Label (Species)`), collapse = "; "),
+    Ymi = min(`Year of Date`),
+    Ymax = max(`Year of Date`)
+  ) %>% 
+  mutate(
+    T1 = paste("Abundancia de", Species, "en", Region),
+    T2 = paste("Talla de", Species, "en", Region),
+    K = paste(Type, "Monitoreo; Colecta; Talla; Auundancia",
+              sep ="; ")
+  ) %>% 
+  select(-Type) %>% 
+  tidyr::gather(
+    "Titulo",
+    "Title",
+    5:6
+  )
+
+write.csv(Ecol,
+          "Ecol.csv",
+          row.names =FALSE)
+
+# em_gc_healthindex
+
+Helath <- em_gc_healthindex %>% 
+  group_by(
+    Region
+  ) %>% 
+  summarise(
+    Ymi = min(Year),
+    Ymax = max(Year),
+    Keys = paste(unique(Arrecife),
+                 collapse = "; "),
+    Keys2 = paste(unique(Exploitation),
+                 collapse = "; "),
+    Keys3 = paste(unique(Habitat),
+                 collapse = "; ")
+    ) %>% 
+  mutate(
+    Key = paste(Keys,Keys2,Keys3,
+                sep="; "),
+    T1 = paste("Indice de salud de arrecifes rocosos del",Region,
+                sep=" "), 
+    T2 = paste("Abundancia relativa de erizos en arrecifes rocosos de",Region,
+                  sep=" "),
+    T3 = paste("Abundancia relativa de Estrellas en arrecifes rocosos de",Region,
+                  sep=" "),
+    T4 = paste("Abundancia relativa de peces en arrecifes rocosos de",Region,
+                sep=" "),
+    T5 = paste("Biomasa promedio de peces en arrecifes rocosos de",Region,
+                sep=" "),
+    T6 = paste("Biomasa promedio en arrecifes rocosos de",Region,
+                sep=" ")
+    ) %>% 
+  select(-4:-6) %>% 
+  tidyr::gather("Titulo",
+                "Texto",
+                5:10)
+  
+# em_gc_snappers_densities.xlsx
+
+Densidades <- em_gc_snappers_densities %>% 
+  group_by(
+    Species,
+    Region
+  ) %>% 
+  summarise(
+    Sites = paste(unique(Site),
+                  collapse = "; "),
+    miny = min(Year),
+    maxy = max(Year)
+  ) %>% 
+  mutate(
+    Titulo = paste("Densidad de", Species, "en manglares de", Region),
+    TituloI = paste("Tallas de", Species, "en manglares de", Region),
+    TituloII = paste("Abundancia de", Species, "en manglares de", Region),
+    Key = paste(Sites, "Densidad; Red Snapper; Pargo; Manglar")
+  ) %>% 
+  tidyr::gather("Titulo",
+                "Texto",
+                6:8) %>% 
+  select(-Sites,
+         -Titulo)
+write.csv(Densidades,
+          "Densidades.csv",
+          row.names = FALSE)
+
+# em_gc_snappers_distances
+
+Pargo <- em_gc_snappers_distances %>% 
+  group_by(Mangles.Sitio,
+           Especie) %>% 
+  summarise(
+    Sitios = paste(unique(Sitio),
+                   collapse = "; "
+    ),
+    miny = min(ANO),
+    maxy = max(ANO)
+  ) %>% 
+  mutate(
+    Titulo = paste("Densidad de", Especie, "en manglares de", Mangles.Sitio),
+    TituloI = paste("Tallas de", Especie, "en manglares de", Mangles.Sitio),
+    TituloII = paste("Abundancia de", Especie, "en manglares de", Mangles.Sitio),
+    Key = paste(Sitios, "Densidad; Red Snapper; Pargo amarillo; Manglar")
+  ) %>% 
+  tidyr::gather("Titulo",
+                "Texto",
+                6:8)
+
+write.csv(Pargo,
+          "Pargo.csv",
+          row.names = FALSE)
+
+Inver <- em_hu_monitoreo_arrecifal_INVERTEBRADOS %>% 
+  group_by(Especies
+           ) %>% 
+  summarise(
+    miny = min(Anio),
+    maxy = max(Anio)
+  ) %>% 
+  mutate(Titulo = paste("Talla de", Especies, "en Parque Nacional Bahia de Huatulco"),
+         TituloI = paste("Abundancia de", Especies, "en Parque Nacional Bahia de Huatulco"),
+         TituloII = paste("Densidad de", Especies, "en Parque Nacional Bahia de Huatulco"))
+
+Peces <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/em_hu_monitoreo_arrecifal_PECES.xlsx")
+View(Peces)
+
+Peces_S <- Peces %>% 
+  group_by(Especies
+  ) %>% 
+  summarise(
+    miny = min(Anio),
+    maxy = max(Anio)
+  ) %>% 
+  mutate(Titulo = paste("Talla de", Especies, "en Parque Nacional Bahia de Huatulco"),
+         TituloI = paste("Abundancia de", Especies, "en Parque Nacional Bahia de Huatulco"),
+         TituloII = paste("Biomasa de", Especies, "en Parque Nacional Bahia de Huatulco"))
+
+Div_Fun <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/em_po_diversidad_funcional.xlsx")
+
+Div <- Div_Fun %>% 
+  group_by(Especie,
+           `Sitio (Sitios)`) %>% 
+  summarise(
+    Nombre = paste(`Nombre espanol`,`Nombre ingles`, unique(Ecosistema),"Diversidad funcional",
+                   sep  = "; ",
+                   collapse = "; ")
+  ) %>% 
+  mutate(
+    T1 = paste("Talla maxima de", Especie, "en",`Sitio (Sitios)`,", Ensenada (BC)"),
+    T1 = paste("Numero de individuos de", Especie, "en",`Sitio (Sitios)`,", Ensenada (BC)")
+  )
+
+# em_po_fish_communities
+
+Peces_G <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/em_po_fish_communities.xlsx")
+
+Peces_Goc <- Peces_G %>% 
+  filter(`ID Country` != "Ecuador") %>% 
+  group_by(
+    `ID Species`,
+    `ID Region`
+  ) %>% 
+  summarise(
+    Key= paste(unique(IDReefs2),"Monitoreo; Peces; Abundancia; Talla; Islas",
+                sep= "; ",
+                collapse = "; ")
+  ) %>% 
+  mutate(
+    Title1 = paste("Abundancia de",`ID Species`,"en",`ID Region`),
+    Title2 = paste("Tallas de",`ID Species`,"en",`ID Region`)
+  )
+
+# em_po_kelp
+
+Kelp_Data <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/em_po_kelp.xlsx")
+
+Kelp <- Kelp_Data %>%
+  filter(Especie != "Especie X") %>% 
+  group_by(Especie,
+           Localidad) %>% 
+  summarise(n()) %>% 
+  mutate(
+    Titulo = paste("Abundancia de",Especie,"en",Localidad)
+      )
+
+# dataMares_Segunda Tanda desde metadatos
+
+#ec_cp_endemism
+
+Endemismo <- ec_cp_endemism %>% 
+  group_by(`Species complete`) %>% 
+  summarise(
+    n=n(),
+    Habitats = paste(unique(Habitat),
+                    collapse = "; "),
+    Ymin = min(Year),
+    Ymax = max(Year),
+    Data_Points = length(unique(Year))
+  ) %>% 
+  mutate(
+    T1 = paste("Presencia de",`Species complete`,"en Parque nacional Cabo Pulmo",
+               sep = " "),
+    T2 = paste("Status de proteccion de", `Species complete`,"en Parque nacional Cabo Pulmo",
+               sep = " "),
+    K1 = paste("Presencia; Ausencia; Terrestres; Conservacion; Cabo Pulmo; Listado",Habitats,
+               sep = "; "),
+    K2 = paste("NOM; Peligro; Proteccion; Endemica; Region; Amenazada",Habitats,
+               sep="; ")
+  ) %>% 
+  tidyr::gather(
+    "Type",
+    "Text",
+    7:10
+  ) %>% 
+  select(-2,-3)
+
+# write.csv(Endemismo,
+#           "Endemismo.csv",
+#           row.names = FALSE)
+
+
+#ec_cp_fish_larvae 
+
+Larvas <- ec_cp_fish_larvae %>% 
+  group_by(
+    Species
+  ) %>% 
+  summarise(
+    Ymin = min(Year),
+    Ymax = max(Year),
+    Data_Points = length(unique(Year))
+  ) %>% 
+  mutate(
+    Titulo = paste ("Abundancia de huevos de",Species,"en Cabo Pulmo",
+                    sep = " "),
+    Key = paste ("Larvas; Reclutamiento; Huevecillos; Cabo Pulmo ",
+                    sep = " ")
+  )
+
+# ec_gc_anemones.xlsx
+
+Anemonas <- ec_gc_anemones %>% 
+  filter(País == "México") %>% 
+  group_by(Localidad,
+           Especie) %>% 
+  summarise(
+    n()
+  ) %>% 
+  mutate(
+    Titulo = paste("Informacion Taxonomica de", Especie,"En el Golfo de California",
+                   sep = " "),
+    Keyword = paste("Taxonomia; Anemonas; Cnidario; Cnidocisto; Tamano; Tipo; Colecta; Listado; Coleccion Taxonomica")
+  )
+
+# ec_gc_size_matters.xlsx
+
+ec_gc_size_matters <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_gc_size_matters.xlsx")
+
+MetaDataMares <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_gc_size_matters_metadata.xlsx",
+                                 col_names = FALSE)
+
+
+Pre_Template <- MetaDataMares %>% 
+  slice(
+    c(
+      2,3,5,6,7,11,17,45)
+  ) %>% 
+  select(1:2) %>% 
+  tidyr::spread(
+    X0,X1
+  )
+
+Pre_Template$`Date of last update:` <- as.Date(as.numeric(Pre_Template$`Date of last update:`),
+                                               origin = "1899-12-30"
+                                               )
+
+Size_Matters <- ec_gc_size_matters %>% 
+  group_by(Reef,
+           Genre) %>% 
+  summarise(
+    n()
+  ) %>% 
+  mutate(
+    Titulo = paste("Densidad de", Genre, "en",Reef,
+                   sep=" "),
+    Titulo_B = paste("Densidad de polipos de", Genre, "en",Reef,
+                   sep=" "),
+      key= paste("Arrecife; Abanicos de mar; Monitoreo; Rocoso")
+  ) %>% 
+  select(-3) %>% 
+  tidyr::gather(
+    "Title",
+    "Text",
+    3:4
+  ) %>% 
+  select(-4)
+
+write.csv(Size_Matters,
+          "Size_Matters.csv",
+          row.names = FALSE)
+
+#ec_po_sponges.xlsx
+
+ec_po_sponges <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_po_sponges.xlsx")
+
+
+  
+  
