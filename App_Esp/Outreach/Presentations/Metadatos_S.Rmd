@@ -262,9 +262,10 @@ align = "c"
 
 Spp <- data %>% 
   filter(Area != "TBD") %>% 
+  filter(Research_Field == "Fisheries") %>% 
   group_by(Area) %>% 
   summarise(Entradas = n()) %>% 
-  filter(Area !="na") # %>% 
+  filter(Area !="na")
 # filter(Entradas >= input$Num_Data_Range[1]) %>% 
 # filter(Entradas <= input$Num_Data_Range[2])
 
@@ -289,6 +290,7 @@ P1 <- ggplot(data= Spp,
         
   )
 Spp2 <- data %>%
+  filter(Research_Field == "Fisheries") %>% 
   filter(Region != "TBD") %>% 
   group_by(Region) %>%
   summarise(Value = n()) %>% 
@@ -370,7 +372,7 @@ ggplot(data=Se_Plot,
        ))+
   geom_bar(stat = "identity")+
   theme_classic() +
-  ylab("Porsentaje del total de\n registros por área")+
+  ylab("Porcentaje del total de\n registros por área")+
   xlab("Area")+
   theme(axis.text.x = element_text(
                                    size=14

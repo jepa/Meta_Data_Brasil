@@ -137,8 +137,22 @@ shinyUI(
                             p(
                               "El grupo Biodiversidad Marina de Yucatán (BDMY) es un grupo de investigadores e la Universidad Nacional Autónoma de México asociados a la Facultad de Ciencias - Unidad académica Sisal/Yucatán.  El grupo pretende describir y analizar los patrones de diversidad y distribución de especies de las zonas costeras y arrecifales del Golfo de México, con la finalidad de generar líneas base y contribuir al manejo y conservación de dichos hábitats. Actualmente los colaboradores de BDMY se están dedicando al estudio de los siguientes taxa: Cnidaria, Crustacea, Porifera, Echinodermata, Mollusca, Urochordata (Ascidacea), Briozoa, Vertebrata (peces). El grupo maneja 4 colecciones científicas y ha identificado más de 60 nuevas especies."
                             )
-                          ) #END BMDY
-             ),
+                          ), #END BMDY
+                      column( #CONABIO
+                        3,
+                        align = "justified",
+                        offset = 0,
+                        a(href="http://www.biodiversidad.gob.mx/",
+                          img(
+                            src = "logo_conabio.png",
+                            height = 100,
+                            width = 280
+                          )),
+                        p(
+                          "La Comisión Nacional para el Conocimiento y Uso de la Biodiversidad es una comisión intersecretarial creada en 1992. La CONABIO desempeña sus funciones mediante un grupo operativo que desde su creación ha estado encabezado por el Dr. José Sarukhán Kermez, como Coordinador Nacional. Su misión de promover, coordinar, apoyar y realizar actividades dirigidas al conocimiento de la diversidad biológica, así como a su conservación y uso sustentable para beneficio de la sociedad. Entre las funciones principales de la CONABIO están instrumentar y operar el Sistema Nacional de Información sobre Biodiversidad",a(href="http://www.conabio.gob.mx/remib/doctos/snib.html", "SNIB"), ". La base de metadatos de investigación marina está directamente conectada con las bases de CONABIO quien se espera participe de manera más activa en el proyecto en los próximos meses."
+                        )
+                      ) #END CONABIO
+                      ),
              #### PROJECT DESCRIPTION ####
              tabPanel("El Proyecto",
                       fluidRow(

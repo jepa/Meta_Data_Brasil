@@ -5355,6 +5355,45 @@ Ram <- RAMSAR%>%
             by = "Estado")
 
 
+<<<<<<< HEAD
+Portuario <- DATOS %>% 
+  group_by(SERVICIO,
+           PUERTO
+           ) %>% 
+  summarise(
+    n()
+  ) %>% 
+  mutate(
+    Titulo = paste(SERVICIO,"EN",PUERTO)
+  )
+
+
+list <- NULL
+
+for(i in nrow(Datos)){
+  list[[i]] <- paste("Numero de Embarcaciones de",Datos$Embarcacion[i], "en", Datos$Locaiton)
+}
+
+
+Eslora_Menor <- Datos %>% 
+  gather("Valores",
+         "Titulo",
+         2:15) %>% 
+  select(-Titulo) %>% 
+  mutate(
+    Titulo = paste("Numero de Embarcaciones de",Valores, "en", Location)
+  ) %>% 
+  left_join(Mexico_Politico,
+            by = "Location")
+
+
+write.csv(Eslora_Menor,
+          "Eslora_Menor.csv",
+          row.names = FALSE)
+
+
+#### CONABIO a CNP ###
+=======
 
 #### CONAPESCA ####
 
@@ -5842,6 +5881,7 @@ write.csv(Data,
   
 
 ########_______________ CONABIO a CNP ####
+>>>>>>> a643b33e7075e40afc2bcadcb048db1812e4c690
 
 ### Problemas, el nivel de detalle para las especies no es el mismo. Almejas es un claro ejemplo
 
