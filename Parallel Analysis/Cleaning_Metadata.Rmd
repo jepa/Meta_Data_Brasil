@@ -1,0 +1,207 @@
+---
+title: "Database Clean"
+author: "Juliano Palacios Abrantes"
+date: "11/22/2017"
+output: html_document
+---
+
+The following script will be used to explore and clean the final metadata. I'm searching for any type of errors and will go column by column.
+
+- First modification on Template_5 on November 22
+
+
+```{r Setup, echo= T, eval= F}
+
+# Libraries 
+
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg)) 
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+
+#### Library ####
+packages <- c(
+  "dplyr",
+  "tidyr",
+  "knitr",
+  "data.table"
+              )
+
+ipak(packages)
+
+
+#Dataset
+
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.csv")
+
+```
+
+
+```{r Useful_Codes, echo= T, eval= F}
+
+
+
+#### Usefull codes ####
+
+
+#### Changing Words ###
+# Only one column
+Template$Unit_Type[33725] <- gsub( 
+  "Shapefile", #Word you want to change
+  "Values", #New Word
+  Template$Unit_Type[33725])
+
+#All Columns #
+
+Templatebb <- data.frame(lapply(Templateb, function(x) {
+  gsub("Swath Surveys", #Word you want to change
+       "Quadrat Surveys", #New Word
+       x)
+}))
+
+```
+
+## General Corrections
+
+This chunk corrected the following mistakes:
+
+### Duplicated rows
+
+These are the repositories that had duplicated rows (Title | n repeated | Initial MMID | Final MMID ): 
+
+- Tendencias de Captura de tiburon en el sureste de Mexico y caracterizacion de sus mercados	30	96385	100723
+- Base de Datos Oceanograficos Proyectados del golfo de california 5 60949 60958
+- Gulf of Mexico Species Interactions	1	35235	35235
+- Global Biodiversity Information Facility 13000	68500	82157
+- Datos Abiertos MX	2	83951	83956
+- Datos Abiertos MX	102	83304	83759
+- World Data Base of Marine Protected Areas 56	60308	60674
+
+Observacion: 
+- Datos Abiertos MX	102	83304	83759. Se queda porque a pesar de que cada entrada se llama igual, aplica para distintas especies
+
+```{r General_corrections, echo= T, eval= F}
+
+# DO NOT RUN #
+
+# It will look for rows that are identical
+
+Repeated_Template <-Template[duplicated(Template[2:length(Template)]), ] # Ignoring MMID because thatone will not be repeated
+
+Repeated_Bases <- Repeated_Template %>% 
+  group_by(
+           Dataset_Title,
+           Compilation_Title) %>% 
+  summarise(n(),
+            Min=min(MMID),
+            Max=max(MMID)
+  )
+  
+### Testing #
+x <- Template %>% 
+  filter(Short_Title == "Beneficiarios de Programa de Modernizacion de Flota Mayor en Yucatan (2012 - 2015)")
+
+Modernos <- Template %>% 
+  filter(Dataset_Title == "Base de Datos Oceanograficos Proyectados del golfo de california")
+
+
+### Clear the Dataset ####
+
+# Remove Repeated Values
+
+# First we filter-out the dataset that is duplicated but correct
+Template_Embar <- Template %>% 
+  filter(Dataset_Title != "Tabla de solicitudes ingresadas para sustitucion de motores por municipio") 
+
+# Now we remove the duplicated rows from the rest of the metadata
+No_Duplicated <- Template_Embar[!duplicated(Template_Embar[2:length(Template_Embar)]), ]
+
+# Finally we join them back together...
+Clear_Template <- Template %>% 
+  filter(Dataset_Title == "Tabla de solicitudes ingresadas para sustitucion de motores por municipio") %>% 
+  bind_rows(No_Duplicated) %>% 
+  arrange(MMID)
+
+# Aaaaaaaand, we Fix the MMID order....
+
+Clear_Template$MMID <- seq(1,nrow(Clear_Template))
+
+# Now we check everything is OK, there should be only 102 duplicated ones
+Double_Chek <-Clear_Template[duplicated(Clear_Template[2:length(Clear_Template)]), ] 
+
+ #unique(Double_Chek$Dataset_Title)
+
+#All es gut we save it...
+
+write.csv(Clear_Template,
+          "Template_5.1.csv",
+          row.names = FALSE)
+
+### END _________________________________________________________________#
+
+#### NOTE ####
+knitr::kable(Repeated_Bases,
+             caption = "Duplicated Records within Compilations")
+
+
+```
+
+# ¡¡¡¡¡ AQUI ME QUEDE !!!!!
+
+## Short_Title
+
+# As character
+Template$Short_Title <- as.character(Template$Short_Title)
+
+# All entreies should be in the following format (Excel Proper):
+"La Pesca Ilegal En Mexico"
+# So we borrow this function
+# https://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+
+# And then we run it for this column
+Template$Short_Title<- lapply(Template$Short_Title,
+                               simpleCap
+                               )
+
+# Now we remove the capital for articles
+
+Template$Short_Title <-Template$Short_Title %>% 
+  # First English
+  gsub("For","for",.) %>% 
+  gsub("Of","of",.) %>% 
+  gsub("And","and",.) %>% 
+  gsub("In","in",.) %>% 
+  gsub("On","on",.) %>% 
+  gsub("The","the",.) %>% 
+  # And now Spanish
+  gsub("El","el",.) %>% 
+  gsub("La","la",.) %>% 
+  gsub("Las","la",.) %>% 
+  gsub("Los","los",.) %>% 
+  gsub("Y","y",.) %>% 
+  gsub("En","en",.) %>% 
+  gsub("De","de",.) %>% 
+  gsub("Del","del",.)
+
+
+# Keywords ####
+
+# Replace ", by "; "
+
+Template$Keywords <-Template$Keywords %>% 
+  gsub(",",";",.) %>% 
+  gsub("  "," ",.)
+
+# Translate any english to spanis (In excel)
+
+
+
