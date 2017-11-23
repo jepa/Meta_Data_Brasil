@@ -6284,7 +6284,7 @@ Kelp <- Kelp_Data %>%
     Titulo = paste("Abundancia de",Especie,"en",Localidad)
       )
 
-# dataMares_Segunda Tanda desde metadatos
+# dataMares_Segunda Tanda desde metadatos ####
 
 #ec_cp_endemism
 
@@ -6404,6 +6404,227 @@ write.csv(Size_Matters,
 
 ec_po_sponges <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Segunda_Tanda/ec_po_sponges.xlsx")
 
+# dataMares TERCERA Tanda desde metadatos ####
 
-  
-  
+CONAPESCA <- f_bm_conapesca_1997_2015 %>% 
+  group_by(Comunidad,
+           `Nombre Cientifico`) %>% 
+  summarise(
+    MinY = min(Año),
+    MaxY = max(Año),
+    DP = length(unique(Año))
+  ) %>% 
+  mutate(
+    Peso = paste("Captura total de",`Nombre Cientifico`,"en",Comunidad,"Bahia, Magdalena (BCS)",
+                 sep=" "),
+    Precio = paste("Precio de venta de",`Nombre Cientifico`,"en",Comunidad,"Bahia Magdalena (BCS)",
+                 sep=" "),
+    Ganacia = paste("Ganancia total de",`Nombre Cientifico`,"en",Comunidad,"Bahia Magdalena (BCS)",
+                   sep=" "),
+    Key_Peso = paste("Pesca; Kilogramos; Peso Fresco; Captura; Bahia Magdalena; CONAPESCA"),
+    Key_Ganacia = paste("Pesca; Ganacia; Valor economico; Bahia Magdalena; CONAPESCA")
+  ) %>% 
+  tidyr::gather(
+    "Titulo",
+    "Texto",
+    6:10
+  )
+
+write.csv(CONAPESCA,
+          "CONAPESCA.csv",
+          row.names = FALSE)
+
+# f_bm_fisheries_magdalena
+
+f_bm_fisheries_magdalena <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Tercer_Paquete/f_bm_fisheries_magdalena.xlsx")
+
+Magda <- f_bm_fisheries_magdalena %>% 
+  filter(!is.na(`Recurso pesqero`)) %>% 
+  group_by(Comunidad,
+           `Recurso pesqero`) %>% 
+  summarise(
+    MinY = min(Anio),
+    MaxY = max(Anio),
+    DP = length(unique(Anio))
+  ) %>% 
+  mutate(
+    Peso = paste("Captura total de",`Recurso pesqero`,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                 sep=" "),
+    Precio = paste("Precio de venta de",`Recurso pesqero`,"en",Comunidad,", Bahia Magdalena (BCS)",
+                   sep=" "),
+    Ganacia = paste("Ganancia total de",`Recurso pesqero`,"en",Comunidad,", Bahia Magdalena (BCS)",
+                    sep=" "),
+    GPS = paste("Monitoreo de la pesca de",`Recurso pesqero`, "mediante GPS en ",Comunidad,", Bahia Magdalena (BCS)",
+                 sep=" "),
+    Hora = paste("Duracion de jornada pesquera en la comunidad de",Comunidad,", Bahia Magdalena (BCS)",
+                    sep=" "),
+    Distancia = paste("Distancia recorrida por evento de pesca en",Comunidad,"Bahia Magdalena (BCS)",
+                    sep=" "),
+    Habitat = paste("Habitat donde se pesca",`Recurso pesqero`,"en",Comunidad,", Bahia Magdalena (BCS)",
+                    sep=" "),
+    Gas = paste("Gasolina gastada en pesca de",`Recurso pesqero`,"en",Comunidad,", Bahia Magdalena (BCS)",
+                    sep=" "),
+    Presentaacion = paste("Presentacion de producto de pesca en","en",Comunidad,", Bahia Magdalena (BCS)",
+                          sep=" "),
+    Key_Peso = paste("Pesca; Kilogramos; Peso Fresco; Captura; Bahia Magdalena; CONAPESCA"),
+    Key_Ganacia = paste("Pesca; Ganacia; Valor economico; Bahia Magdalena; CONAPESCA"),
+    Key_Esfuerzo = paste("Pesca; Esfuerzo; Pesquero; Distancia; GPS; Embarcacion; Monitoreo; Jornada Laboral")
+  ) %>% 
+  tidyr::gather(
+    "Titulo",
+    "Texto",
+    6:17
+  )
+
+write.csv(Magda,
+          "Magda.csv",
+          row.names = FALSE)
+
+# f_bm_revenues_costs.xlsx
+
+f_bm_revenues_costs <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Tercer_Paquete/f_bm_revenues_costs.xlsx")
+
+
+Costos <- f_bm_revenues_costs %>% 
+  group_by(Comunidad,
+           Recurso) %>% 
+  summarise(
+    n()
+  ) %>% 
+  mutate(
+    Peso = paste("Captura total de",Recurso,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                 sep=" "),
+    Peso_viaje = paste("Captura por viaje de",Recurso,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                 sep=" "),
+    Precio = paste("Precio de venta de",Recurso,"en",Comunidad,", Bahia Magdalena (BCS)",
+                   sep=" "),
+    Gas = paste("Gasolina gastada en pesca de",Recurso,"en",Comunidad,", Bahia Magdalena (BCS)",
+                sep=" "),
+    Gas_Costo = paste("Costo de gasoluna para pesca de",Recurso,"en",Comunidad,", Bahia Magdalena (BCS)",
+                sep=" "),
+    Tipo_arte = paste("Arte de pesca para",Recurso,"en",Comunidad,", Bahia Magdalena (BCS)",
+                      sep=" "),
+    Costo_arte = paste("Costo de arte de pesca para",Recurso,"en",Comunidad,", Bahia Magdalena (BCS)",
+                       sep = " "),
+    Key_Peso = paste("Pesca; Kilogramos; Peso Fresco; Captura; Bahia Magdalena"),
+    Key_Econ = paste("Pesca; Ganacia; Costo; Valor economico; Bahia Magdalena; CONAPESCA"),
+    Key_Esfuerzo = paste("Pesca; Esfuerzo; Pesquero; Distancia; Arte de pesca; Embarcacion; Monitoreo")
+  ) %>% 
+  tidyr::gather(
+    "Titulo",
+    "Texto",
+    4:13
+  )
+
+
+# f_gc_trackers.xlsx
+
+f_gc_trackers <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Tercer_Paquete/f_gc_trackers.xlsx")
+
+Track <- f_gc_trackers %>% 
+  filter(!is.na(`Nombre cientifico`)) %>% 
+  group_by(Comunidad,
+           `Nombre cientifico`) %>% 
+  summarise(
+    MinY = min(Anio),
+    MaxY = max(Anio),
+    DP = length(unique(Anio))
+  ) %>% 
+  mutate(
+    Captura = paste("Captura total de",`Nombre cientifico`,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Fauna = paste("Fauna de Acompanamiento de",`Nombre cientifico`,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Zona = paste("Zona de pesca de",`Nombre cientifico`,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Precio = paste("Precio de venta de",`Nombre cientifico`,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Tracker = paste("Numero de tracker y nombre de panga en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Distancia = paste("Distancia Recorrida por Evento de Pesca en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Gas = paste("Gasolina Utilizada por Evento de Pesca en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Jornada = paste("Jornada de Pesca en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Motor = paste("Motor de Pangas en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Key_Captura = paste("Pesca; Captura; Bycatch; Fauna acompanamiento; Objetivo"),
+    Key_Esfuerzo = paste("Pesca; Captura; Esfuerzo; Costo; Precio; Monitoreo; GPS; Tracker")
+) %>% 
+  tidyr::gather(
+    "Titulo",
+    "Texto",
+    6:16
+  )
+
+write.csv(Track,
+          "Track.csv",
+          row.names = FALSE)  
+
+# f_gc_trackers_sitios.xlsx  
+
+f_gc_trackers_sitios <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Tercer_Paquete/f_gc_trackers_sitios.xlsx")
+
+Trackers_sitios <- f_gc_trackers_sitios %>% 
+filter(!is.na(`Nombre cientifico`)) %>% 
+  group_by(Comunidad,
+           `Nombre cientifico`) %>% 
+  summarise(
+    MinY = min(Anio),
+    MaxY = max(Anio),
+    DP = length(unique(Anio))
+  )%>% 
+  mutate(
+    Captura = paste("Captura total de",`Nombre cientifico`,"en",Comunidad,", Bahia, Magdalena (BCS)",
+                  sep=" "),
+    Tipo_arte = paste("Arte de pesca para",`Nombre cientifico`,"en",Comunidad,", Bahia Magdalena (BCS)",
+                      sep=" "),
+    Localizacion = paste("Localizacion de sitios de pesca de",`Nombre cientifico`,"en", Comunidad,", Bahia Magdalena (BCS)",
+                         sep=" "),
+    Key_Captura = paste("Pesca; Captura; Bahia Magdalena; Trackers; GPS"),
+    Key_Esfuerzo = paste("Pesca; Captura; Esfuerzo; Monitoreo; GPS; Tracker; Localizacion; Arte de Pesca; ")
+  )
+
+# f_pa_cooperatives.xlsx
+
+f_pa_cooperatives <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Tercer_Paquete/f_pa_cooperatives.xlsx")
+
+Cooperativas <- f_pa_cooperatives %>% 
+  group_by(`Scientific name`) %>% 
+  summarise(
+    MinY = min(Year),
+    MaxY = max(Year),
+    DP = length(unique(Year))
+  )%>% 
+  mutate(
+    Captura = paste("Captura de", `Scientific name`, "en Punta Abreojos (BCS)",
+                    sep=" "),
+    Precio = paste("Precio por kilo de", `Scientific name`, "en Punta Abreojos (BCS)",
+                    sep=" "),
+    PreicioTotal = paste("Precio de captura total de", `Scientific name`, "en Punta Abreojos (BCS)",
+                    sep=" ")
+  )
+
+# f_paz_cooperatives.xlsx
+
+f_paz_cooperatives <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Tercer_Paquete/f_pa_cooperatives.xlsx")
+
+
+Paz <- f_paz_cooperatives %>% 
+  group_by(`Scientific name`) %>% 
+  summarise(
+    MinY = min(Year),
+    MaxY = max(Year),
+    DP = length(unique(Year))
+  )%>% 
+  mutate(
+    Captura = paste("Captura de", `Scientific name`, "en La Paz (BCS)",
+                    sep=" "),
+    Precio = paste("Precio por kilo de", `Scientific name`, "en La Paz (BCS)",
+                    sep=" "),
+    PreicioTotal = paste("Precio de captura total de", `Scientific name`, "en La Paz (BCS)",
+                    sep=" "),
+    Presentacion = paste("Presentacion de venta de ", `Scientific name`, "en La Paz (BCS)",
+                    sep=" ")
+  )
