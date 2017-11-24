@@ -5,7 +5,7 @@
 
 
 #### NOTE Allways run this first ####
-#library(xlsx)
+library(readxl)
 library(readr)
 library(dplyr)
 library(tidyr)
@@ -42,6 +42,10 @@ Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
 # # Get Mexico's Atlantic EEZ (2)
 # eez_Mex_A <- EEZ_Mex %>% 
 #   filter(piece == 2)
+
+
+Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico.csv")
+
 #________________________________________________________#
 
 
@@ -5355,7 +5359,7 @@ Ram <- RAMSAR%>%
             by = "Estado")
 
 
-<<<<<<< HEAD
+
 Portuario <- DATOS %>% 
   group_by(SERVICIO,
            PUERTO
@@ -5393,7 +5397,7 @@ write.csv(Eslora_Menor,
 
 
 #### CONABIO a CNP ###
-=======
+
 
 #### CONAPESCA ####
 
@@ -5881,7 +5885,7 @@ write.csv(Data,
   
 
 ########_______________ CONABIO a CNP ####
->>>>>>> a643b33e7075e40afc2bcadcb048db1812e4c690
+
 
 ### Problemas, el nivel de detalle para las especies no es el mismo. Almejas es un claro ejemplo
 
@@ -6612,7 +6616,7 @@ f_paz_cooperatives <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/d
 
 
 Paz <- f_paz_cooperatives %>% 
-  group_by(`Scientific name`) %>% 
+group_by(`Scientific name`) %>% 
   summarise(
     MinY = min(Year),
     MaxY = max(Year),
@@ -6628,3 +6632,461 @@ Paz <- f_paz_cooperatives %>%
     Presentacion = paste("Presentacion de venta de ", `Scientific name`, "en La Paz (BCS)",
                     sep=" ")
   )
+
+#### Cuarto paquete #
+
+# f_ug_biological.xlsx
+
+f_ug_biological <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Cuarto_Paquete/f_ug_biological.xlsx")
+
+Bio <- f_ug_biological %>% 
+  group_by(
+    Specie,
+    Community
+  ) %>% 
+  summarise(
+    MinY = min(Year),
+    MaxY = max(Year),
+    DP = length(unique(Year))
+  ) %>% 
+  mutate(
+    Captura = paste("Captura de",Specie, "en",Community,", BCS",
+                    sep=" "),
+    Gora = paste("Hora de captura de",Specie, "en",Community,", BCS",
+                 sep=" "),
+    Sexo = paste("Sexo de",Specie, "Capturada en",Community,", BCS",
+                 sep=" ")
+  )
+
+# f_ug_conapesca_2000_2008.xlsx  
+
+f_ug_conapesca_2000_2008 <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Cuarto_Paquete/f_ug_conapesca_2000_2008.xlsx")
+
+CONAPESCA_08 <- f_ug_conapesca_2000_2008 %>% 
+  group_by(
+    Specie
+  ) %>% 
+  summarise(
+    MinY = min(Year),
+    MaxY = max(Year),
+    DP = length(unique(Year))
+  ) %>% 
+  mutate(
+    Peso = paste("Captura total de",Specie,"en el Golfo de Santa Clara (Son)",
+                 sep=" "),
+    Precio = paste("Precio total reportado de venta de",Specie,"en el Golfo de Santa Clara (Son)",
+                   sep=" "),
+    Preciob = paste("Precio total estimado de venta de",Specie,"en el Golfo de Santa Clara (Son)",
+                   sep=" "),
+    Ganacia = paste("Precio por kilo",Specie,"en el Golfo de Santa Clara (Son)",
+                    sep=" "),
+    Key_Peso = paste("Pesca; Kilogramos; Peso Fresco; Captura; Golfo de Santa Clara; Alto Golfo"),
+    Key_Ganacia = paste("Pesca; Ganacia; Valor economico; Golfo de Santa Clara; Alto Golfo")
+  )
+
+# f_ug_cooperatives.xlsx 
+
+f_ug_cooperatives <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Cuarto_Paquete/f_ug_cooperatives.xlsx")
+
+Coop_San_Fe <- f_ug_cooperatives %>% 
+  group_by(Especie) %>% 
+  summarise(
+    MinY = min(ANO),
+    MaxY = max(ANO),
+    DP = length(unique(ANO))
+  )%>% 
+  mutate(
+    Captura = paste("Captura de", Especie, "en San Felipe (BC)",
+                    sep=" "),
+    Precio = paste("Precio por kilo de", Especie, "en San Felipe (BC)",
+                   sep=" "),
+    PreicioTotal = paste("Precio de captura total de", Especie, "en La Paz (BCS)",
+                         sep=" "),
+    CPUE = paste("Captura por unidad de esfuerzo de", Especie, "en San Felipe (BC)",
+                 sep=" ")
+  )
+
+# f_ug_prices_monitoring.xlsx
+
+f_ug_prices_monitoring <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Cuarto_Paquete/f_ug_prices_monitoring.xlsx")
+
+Precios <-  f_ug_prices_monitoring %>% 
+  group_by(Especie) %>% 
+  summarise(
+    MinY = min(AÑO),
+    MaxY = max(AÑO),
+    DP = length(unique(AÑO))
+  ) %>% 
+  mutate(
+    Precio = paste("Precio por kilo de", Especie, "en el Golfo de Santa Clara (BC)",
+                   sep=" "),
+    PreicioTotal = paste("Precio unitario por kilo", Especie, "en el Golfo de Santa Clara (BC)",
+                         sep=" "),
+    datos = paste("Nombre de comprador y fecha de compra de", Especie, "en el Golfo de Santa Clara (BC)",
+                 sep=" ")
+  )
+
+
+# f_ug_revenues_costs
+
+
+f_ug_revenues_costs <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Cuarto_Paquete/f_ug_revenues_costs.xlsx")
+
+Revenues <-  f_ug_revenues_costs %>% 
+  mutate(
+    Precio = paste("Proyeccion de Precio por kilo de", Recurso, "en", Comunidad, "(BC)",
+                   sep=" "),
+    Esfuerzo = paste("Proyeccion Captura de", Recurso, "por viaje en", Comunidad, "(BC)",
+                   sep=" "),
+    Viajes = paste("Proyeccion de numero de viajes para pesca de", Recurso, "en", Comunidad, "(BC)",
+                     sep=" "),
+    Gas = paste("Proyeccion de uso de combustible para pesca de", Recurso, "en", Comunidad, "(BC)",
+                   sep=" "),
+    Preciogas = paste("Proyeccion de costo de combustible para pesca de", Recurso, "en", Comunidad, "(BC)",
+                    sep=" "),
+    preciored = paste("Proyeccion de costo de arte de pesca de", Recurso, "en", Comunidad, "(BC)",
+                      sep=" ")
+  )
+
+
+# QUINTO Y ULTIMO PAQUETE #
+
+# f_me_produccion_pesquera.xlsx
+
+f_me_produccion_pesquera <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Quinto_Paquete/f_me_produccion_pesquera.xlsx")
+
+CONAPESCA <- f_me_produccion_pesquera %>% 
+  group_by(
+    Entidad,
+    `Nombre Cientifico`
+  ) %>% 
+  summarise(
+    MinY = min(AÑO),
+    MaxY = max(AÑO),
+    DP = length(unique(AÑO)),
+    Oficina = paste(unique(`Oficina Nombre`),
+                    collapse = "; ")
+  ) %>% 
+  mutate(
+    Pesode = paste("Peso Desembarcado de", `Nombre Cientifico`, "en", Entidad,
+                 sep =" "),
+    Peso = paste("Peso Vivo de", `Nombre Cientifico`, "en", Entidad,
+                 sep =" "),
+    Valor = paste("Valor de la pesca de", `Nombre Cientifico`, "en", Entidad,
+                 sep =" "),
+    Key_Cap = paste("Captura; Estadistica; oficial; CONAPESCA; Peso Vivo; Peso Desembarcado; Pesca",Oficina,
+                    sep="; "),
+    Key_Econ = paste("Valor Total; Oficial; CONAPESCA; Pesca",Oficina,
+                    sep="; ")
+  )
+
+write.csv(CONAPESCA,
+          "CONAPESCA.csv",
+          row.names = FALSE)
+
+DD <- Data_Mares %>% 
+  left_join(Mexico_Politico,
+            by = "Location")
+write.csv(DD,
+          "DD.csv",
+          row.names = FALSE)
+
+
+# f_po_conapesca.xlsx
+
+f_po_conapesca <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Quinto_Paquete/f_po_conapesca.xlsx")
+
+
+#### BIOMASA ###
+
+CONAPESCA_Pacific <- f_po_conapesca %>% 
+  filter(`Especie nombre cientifico` != "ND") %>% 
+  group_by(
+    `Entidad federativa`,
+    `Especie nombre cientifico`
+  ) %>% 
+  summarise(
+    MinY = min(`Year of Fecha`),
+    MaxY = max(`Year of Fecha`),
+    DP = length(unique(`Year of Fecha`)),
+    Oficina = paste(unique(Oficina),
+                    collapse = "; ")
+  ) %>% 
+  mutate(
+    Pesode = paste("Peso Desembarcado de", `Especie nombre cientifico`, "en", `Entidad federativa`,
+                   sep =" "),
+    Peso = paste("Peso Vivo de", `Especie nombre cientifico`, "en", `Entidad federativa`,
+                 sep =" "),
+    Keywords = paste("Captura; Estadistica; oficial; CONAPESCA; Peso Vivo; Peso Desembarcado; Pesca",Oficina,
+                    sep="; ")
+  ) %>% 
+  tidyr::gather(
+    "Cat",
+    "Short_Title",
+    7:8
+  ) %>% 
+  select(-Cat) %>%
+  rename(Location =`Entidad federativa`) %>% 
+  left_join(Mexico_Politico, #Location data
+            by="Location") %>% 
+  mutate(
+    # Rest of template
+    Author = "Mascarenas, I",
+    Institution = "dataMares",
+    Dataset_Available = 1,
+    Subject_name = paste(`Especie nombre cientifico`),
+    Area = paste(Area),
+    Region = paste(Region),
+    Start_Year = paste(MinY),
+    End_Year = paste(MaxY),
+    Data_Time_Points = paste(DP),
+    Unit_Type = "Weight",
+    Temporal_Resolution = "Year",
+    Spatial_Resolution = "Location",
+    Dataset_Title = "Mexico's Pacific Fisheries Statistics",
+    Compilation_Title = "dataMares",
+    Publication_Year = 2017,
+    Reference = "http://datamares.ucsd.edu/",
+    Available_Metadata = "NA",
+    Metadata_name = "NA",
+    User_Contact = "Ismael Mascarenas; ismael.mascarenas@gcmarineprogram.org",
+    Institution_Type = "INT",
+    Research_Fund = "NA",
+    Research_Field = "Fisheries",
+    SE_Interaction = "Benefits",
+    Notes = "NA",
+    Lat = "NA",
+    Long = "NA",
+    Science = "Natural Science"
+  ) %>% 
+  select(-2:-6,-Area_M,-Region_M) %>% 
+  select(Short_Title,
+         Keywords,
+         Author,
+         Institution,
+         Dataset_Available,
+         Subject_name,
+         Area,
+         Region,
+         Location,
+         everything())
+
+
+#### Valor ##
+
+CONAPESCA_Pacific_Value<- f_po_conapesca %>% 
+  filter(`Especie nombre cientifico` != "ND") %>% 
+  group_by(
+    `Entidad federativa`,
+    `Especie nombre cientifico`
+  ) %>% 
+  summarise(
+    MinY = min(`Year of Fecha`),
+    MaxY = max(`Year of Fecha`),
+    DP = length(unique(`Year of Fecha`)),
+    Oficina = paste(unique(Oficina),
+                    collapse = "; ")
+  ) %>% 
+  mutate(
+    Short_Title = paste("Valor de la pesca de", `Especie nombre cientifico`, "en", `Entidad federativa`,
+                  sep =" ")
+  ) %>% 
+  rename(Location =`Entidad federativa`) %>% 
+  left_join(Mexico_Politico, #Location data
+            by="Location") %>% 
+  mutate(
+    # Rest of template
+    Keywords = paste("Valor Total; Oficial; CONAPESCA; Pesca",Oficina,sep="; "),
+    Author = "Mascarenas, I",
+    Institution = "dataMares",
+    Dataset_Available = 1,
+    Subject_name = paste(`Especie nombre cientifico`),
+    Area = paste(Area),
+    Region = paste(Region),
+    Start_Year = paste(MinY),
+    End_Year = paste(MaxY),
+    Data_Time_Points = paste(DP),
+    Unit_Type = "Currency",
+    Temporal_Resolution = "Year",
+    Spatial_Resolution = "Location",
+    Dataset_Title = "Mexico's Pacific Fisheries Statistics",
+    Compilation_Title = "dataMares",
+    Publication_Year = 2017,
+    Reference = "http://datamares.ucsd.edu/",
+    Available_Metadata = "NA",
+    Metadata_name = "NA",
+    User_Contact = "Ismael Mascarenas; ismael.mascarenas@gcmarineprogram.org",
+    Institution_Type = "INT",
+    Research_Fund = "NA",
+    Research_Field = "Fisheries",
+    SE_Interaction = "Benefits",
+    Notes = "NA",
+    Lat = "NA",
+    Long = "NA",
+    Science = "Social Science"
+  ) %>% 
+  select(-2:-6,-Area_M,-Region_M) %>% 
+  select(Short_Title,
+         Keywords,
+         Author,
+         Institution,
+         Dataset_Available,
+         Subject_name,
+         Area,
+         Region,
+         Location,
+         everything())
+
+CONAPESCA_Pacifico_Fin <- bind_rows(CONAPESCA_Pacific,
+                                    CONAPESCA_Pacific_Value)
+
+
+
+
+metadata <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/dataMares_Metadata.csv")
+
+# Juntar con metadata datamares ###
+
+Final <- data_Mares_B %>% 
+  bind_rows(CONAPESCA_Pacifico_Fin)
+
+# SAlvar nueva
+
+write.csv(CONAPESCA_Pacifico_Fin,
+          DataMares_B.csv,
+          row.names = FALSE)
+
+
+# f_po_groupers.xlsx
+
+f_po_groupers <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/Quinto_Paquete/f_po_groupers.xlsx")
+
+COBI_Bio <- f_po_groupers %>% 
+  group_by(
+    Zone,
+    Genusspecies
+  ) %>% 
+  summarise(
+    MinY = min(Year),
+    MaxY = max(Year),
+    DP = length(unique(Year))
+  ) %>% 
+  mutate(
+    A = paste("Abundance of",Genusspecies, "in", Zone, "of Bahia Magdalena (BC)", sep =" "),
+    B = paste("Biomass of",Genusspecies, "in", Zone, "of Bahia Magdalena (BC)", sep = " "),
+    C = paste("Normalaized Abundance of",Genusspecies, "in", Zone, "of Bahia Magdalena (BC)", sep =" ")
+  ) %>% 
+  gather(
+    "Title",
+    "S_Title",
+    6:8
+  ) %>% 
+  select(-Title) %>% 
+  mutate(
+    # Rest of template
+    Short_Title = paste(S_Title),
+    Keywords = paste("Abundancia; Biomasa; Groupers; Bahia Magdalena; COBI; Marine Protected Areaa; MPA; Bass; Cabrilla; Garropa",Zone, sep = "; "),
+    Author = "Hernández-Velasco, A.",
+    Institution = "dataMares",
+    Dataset_Available = 1,
+    Subject_name = paste(Genusspecies),
+    Area = "Pacific",
+    Region = "G. of California",
+    Location = "Bahia Magdalena",
+    Start_Year = MinY,
+    End_Year = MaxY,
+    Data_Time_Points = DP,
+    Unit_Type = "Weight",
+    Temporal_Resolution = "Year",
+    Spatial_Resolution = "Location",
+    Dataset_Title = "Marine Reserves Project (COBI): groupers in Bahia Magdalena",
+    Compilation_Title = "dataMares",
+    Publication_Year = 2015,
+    Reference = "http://dx.doi.org/10.13022/M3ZW2S",
+    Available_Metadata = "NA",
+    Metadata_name = "NA",
+    User_Contact = "Arturo Hernandez-Velasco; jhernandez@cobi.org.mx",
+    Institution_Type = "INT",
+    Research_Fund = "NA",
+    Research_Field = "Conservation",
+    SE_Interaction = "Response",
+    Notes = "NA",
+    Lat = "NA",
+    Long = "NA",
+    Science = "Natural Science"
+  ) %>% 
+  ungroup() %>% # Ungroup allows removing the grouping variable
+  select(-1:-6)
+
+COBI_Econ <- f_po_groupers %>% 
+  group_by(
+    Zone,
+    Genusspecies
+  ) %>% 
+  summarise(
+    MinY = min(Year),
+    MaxY = max(Year),
+    DP = length(unique(Year))
+  ) %>% 
+  mutate(
+    A = paste("Total Price of",Genusspecies, "in", Zone, "of Bahia Magdalena (BC)", sep =" "),
+    B = paste("Price per kilo of",Genusspecies, "in", Zone, "of Bahia Magdalena (BC)", sep = " ")
+  ) %>% 
+  gather(
+    "Title",
+    "S_Title",
+    6:7
+  ) %>% 
+  select(-Title) %>% 
+  mutate(
+    # Rest of template
+    Short_Title = paste(S_Title),
+    Keywords = paste("Precio; Valor economico; Ganacia; Groupers; Bahia Magdalena; COBI; Marine Protected Areaa; MPA; Bass; Cabrilla; Garropa",Zone, sep = "; "),
+    Author = "Hernández-Velasco, A.",
+    Institution = "dataMares",
+    Dataset_Available = 1,
+    Subject_name = paste(Genusspecies),
+    Area = "Pacific",
+    Region = "G. of California",
+    Location = "Bahia Magdalena",
+    Start_Year = MinY,
+    End_Year = MaxY,
+    Data_Time_Points = DP,
+    Unit_Type = "Currency",
+    Temporal_Resolution = "Year",
+    Spatial_Resolution = "Location",
+    Dataset_Title = "Marine Reserves Project (COBI): groupers in Bahia Magdalena",
+    Compilation_Title = "dataMares",
+    Publication_Year = 2015,
+    Reference = "http://dx.doi.org/10.13022/M3ZW2S",
+    Available_Metadata = "NA",
+    Metadata_name = "NA",
+    User_Contact = "Arturo Hernandez-Velasco; jhernandez@cobi.org.mx",
+    Institution_Type = "INT",
+    Research_Fund = "NA",
+    Research_Field = "Conservation",
+    SE_Interaction = "Response",
+    Notes = "NA",
+    Lat = "NA",
+    Long = "NA",
+    Science = "Social Science"
+  ) %>% 
+  ungroup() %>% # Ungroup allows removing the grouping variable
+  select(-1:-6)  
+
+
+datamaeres_b <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/data_Mares_B.csv")
+
+dataMares_Metadata <- datamaeres_b %>% 
+  bind_rows(COBI_Bio,
+            COBI_Econ) %>% 
+  mutate(MMID = "") %>% 
+select(MMID, everything())
+
+
+
+
+write.csv(dataMares_Metadata,
+          "dataMares_Metadata_B.csv",
+          row.names = FALSE)
+  
