@@ -49,10 +49,10 @@ Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Temp
 
 #### Changing Words ###
 # Only one column
-Template$Unit_Type[33725] <- gsub( 
-  "Shapefile", #Word you want to change
-  "Values", #New Word
-  Template$Unit_Type[33725])
+Template_5.2$Keywords <- gsub( 
+  "Ciudad Acu\x90\xabA", #Word you want to change
+  " ", #New Word
+  Template_5.2$Keywords)
 
 #All Columns #
 
@@ -61,6 +61,9 @@ Templatebb <- data.frame(lapply(Templateb, function(x) {
        "Quadrat Surveys", #New Word
        x)
 }))
+
+" Remove unwanted characters"
+chartr("áéíóúñ", "aeioun", dataMares_Metadata)
 
 ```
 

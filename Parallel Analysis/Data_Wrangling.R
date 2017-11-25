@@ -7084,9 +7084,42 @@ dataMares_Metadata <- datamaeres_b %>%
 select(MMID, everything())
 
 
+max(Template_5.1$MMID)
+
 
 
 write.csv(dataMares_Metadata,
           "dataMares_Metadata_B.csv",
           row.names = FALSE)
   
+
+Template_5.2 <- Template_5.1 %>% 
+  bind_rows(dataMares_Metadata_B)
+
+write.csv(Template_5.2,
+          "Template_5.2.csv",
+          row.names = FALSE)
+
+
+gnr_resolve("Strongylocentrotus")
+
+ Spp
+
+ #### AQUI ME QUEDE####
+ Template_5.2 <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.2.csv")
+
+ Template_5.2$Keywords[109093]
+ 
+ 
+ Template_5.2$Keywords[104951] <- as.factor("Captura; Estadistica; Oficial; CONAPESCA; Peso Vivo; Peso Desembarcado; Pesca; Saltillo")
+ 
+ Template_5.2$Keywords <- gsub( 
+   "Puerto Pe\x90\xabAsco", #Word you want to change
+   "Puerto Penasco", #New Word
+   Template_5.2$Keywords)
+ 
+ write.csv(Template_5.2,
+           "Template_5.2.csv",
+           row.names = FALSE)
+)
+ 
