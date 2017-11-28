@@ -27,7 +27,8 @@ packages <- c(
   "dplyr",
   "tidyr",
   "knitr",
-  "data.table"
+  "data.table",
+  "hunspell" #For spelling check in english
               )
 
 ipak(packages)
@@ -35,7 +36,15 @@ ipak(packages)
 
 #Dataset
 
-Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.csv")
+# Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.2.csv")
+
+
+#### NOTE ####
+# RUN EVERYTIME YOU FINISH
+
+write.csv(Fized,
+          "Template_5.3B.csv",
+          row.names = FALSE)
 
 ```
 
@@ -50,7 +59,7 @@ Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Temp
 #### Changing Words ###
 # Only one column
 Template_5.2$Keywords <- gsub( 
-  "Ciudad Acu\x90\xabA", #Word you want to change
+  "", #Word you want to change
   " ", #New Word
   Template_5.2$Keywords)
 
@@ -84,7 +93,11 @@ These are the repositories that had duplicated rows (Title | n repeated | Initia
 - World Data Base of Marine Protected Areas 56	60308	60674
 
 Observacion: 
-- Datos Abiertos MX	102	83304	83759. Se queda porque a pesar de que cada entrada se llama igual, aplica para distintas especies
+- Datos Abiertos MX	102	83304	83759. Stays because is the same title but each row is a different species
+
+### Characters
+
+I've sorted all unwanted characters (áé...ñ) from the meta-database
 
 ```{r General_corrections, echo= T, eval= F}
 
@@ -93,6 +106,9 @@ Observacion:
 # It will look for rows that are identical
 
 Repeated_Template <-Template[duplicated(Template[2:length(Template)]), ] # Ignoring MMID because thatone will not be repeated
+
+### NOTE: ####
+# Since Template_5.2 there should be 102 repeated observations 
 
 Repeated_Bases <- Repeated_Template %>% 
   group_by(
@@ -152,9 +168,13 @@ knitr::kable(Repeated_Bases,
 
 ```
 
-# ¡¡¡¡¡ AQUI ME QUEDE !!!!!
+
 
 ## Short_Title
+
+All entries in `Short_Title` were changed so the first letter of each word is capitalize (e.j. "Historic Catch of Wild Lisa in Mexico") this will improve consistency but will bring all species names to both upper cases. 
+
+```{r Short_Title, eval =F, echo =T}
 
 # As character
 Template$Short_Title <- as.character(Template$Short_Title)
@@ -179,32 +199,137 @@ Template$Short_Title<- lapply(Template$Short_Title,
 
 Template$Short_Title <-Template$Short_Title %>% 
   # First English
-  gsub("For","for",.) %>% 
-  gsub("Of","of",.) %>% 
-  gsub("And","and",.) %>% 
-  gsub("In","in",.) %>% 
-  gsub("On","on",.) %>% 
-  gsub("The","the",.) %>% 
+  gsub("For ","for ",.) %>% 
+  gsub("Of ","of ",.) %>% 
+  gsub("And ","and ",.) %>% 
+  gsub("In ","in ",.) %>% 
+  gsub("On ","on ",.) %>% 
+  gsub("The ","the ",.) %>% 
   # And now Spanish
-  gsub("El","el",.) %>% 
-  gsub("La","la",.) %>% 
-  gsub("Las","la",.) %>% 
-  gsub("Los","los",.) %>% 
-  gsub("Y","y",.) %>% 
-  gsub("En","en",.) %>% 
-  gsub("De","de",.) %>% 
-  gsub("Del","del",.)
+  gsub("El ","el ",.) %>% 
+  gsub("La ","la ",.) %>% 
+  gsub("Las ","la ",.) %>% 
+  gsub("Los ","los ",.) %>% 
+  gsub("Y ","y ",.) %>% 
+  gsub("En ","en ",.) %>% 
+  gsub("De ","de ",.) %>% 
+  gsub("Del ","del ",.)
 
+# NOTE: 
+# Species names will be both capitalized.
+
+# Manually correct them (beacuase of spanish)
+Template$Short_Title <-Template$Short_Title %>% 
+  # First English
+  gsub(" de de ","de ",.)
+
+```
+
+
+## Keywords
+
+The only changes for `Keywords` was bringing all first letter to capital letters, removing double spaces and changing "," for ";"
+```{r Keywords, ecal =F, echo =T}
 
 # Keywords ####
 
-# Replace ", by "; "
+Template$Keywords <- as.character(Template$Keywords)
+
+Template$Keywords<- lapply(Template$Keywords,
+                               simpleCap
+                               )
+
+# Now we remove the capital for articles
 
 Template$Keywords <-Template$Keywords %>% 
-  gsub(",",";",.) %>% 
-  gsub("  "," ",.)
+  # gsub(",",";",.) %>%  # , for ; 
+  # gsub("  "," ",.) %>% #double spaces
+  gsub("checklist","Listado",.) #Translations
 
-# Translate any english to spanis (In excel)
+
+```
+
+
+## Author
+
+All records under `Author` have been standarized to Lastname Initial(s) (e.j. Walters, C.J.)
+
+```{r Author, eval =T, echo =T}
+
+Authors <- Template_5.3 %>% 
+  group_by(Author) %>% 
+  summarise(n())
+
+# Corrections
+Template_5.2$Author[min(Guat$MMID):max(Guat$MMID)] <- gsub( 
+  "NA", #Word you want to change
+  "USGS", #New Word
+  Template_5.2$Author[min(Guat$MMID):min(Guat$MMID)])
+
+
+Guat <- Reomve %>% 
+  filter(is.na(Author)) %>% 
+  filter(MMID == 637 | MMID == 41314)
+
+Guat$Author <- c("CONABIO","USGS")
+
+Fixed <- Template_5.3 %>% 
+  filter(is.na(Author)) %>% 
+  bind_rows(Guat)
+
+
+Not <- Template_5.2 %>% 
+  anti_join(Template_5.3,
+            by ="MMID") %>% 
+  filter(MMID == 637)
+
+Fized <- Template_5.3 %>% 
+  bind_rows(Not)
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
