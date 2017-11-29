@@ -28,8 +28,10 @@ packages <- c(
   "tidyr",
   "knitr",
   "data.table",
-  "hunspell" #For spelling check in english
-              )
+  "hunspell",#For spelling check in english
+  "stringr", # For finding string in column
+  "taxize"
+  )
 
 ipak(packages)
 
@@ -42,9 +44,12 @@ ipak(packages)
 #### NOTE ####
 # RUN EVERYTIME YOU FINISH
 
-write.csv(Fized,
-          "Template_5.3B.csv",
+write.csv(Final_Corrected_Names,
+          "Template_5.5.csv",
           row.names = FALSE)
+
+# Tremplate_5.3 until Subject_name
+
 
 ```
 
@@ -74,6 +79,16 @@ Templatebb <- data.frame(lapply(Templateb, function(x) {
 " Remove unwanted characters"
 chartr("áéíóúñ", "aeioun", dataMares_Metadata)
 
+
+# Use \b to indicate a word boundary:
+# Punctual Corrections
+Sci_Correct_75$user_supplied_name<- gsub( 
+  "\\bsp\\b", #Word you want to change
+  "", #New Word
+  Sci_Correct_75$user_supplied_name)
+
+
+
 ```
 
 ## General Corrections
@@ -94,7 +109,8 @@ These are the repositories that had duplicated rows (Title | n repeated | Initia
 
 Observacion: 
 - Datos Abiertos MX	102	83304	83759. Stays because is the same title but each row is a different species
-
+- Since Template_5.2 there should be 102 repeated observations 
+- Since Template_5.2_4 there should be 109 repeated observations because some of the categories were merged (e.g. "Camaron sin cabeza"" and "Camaron con cabeza" became "Camaron")
 ### Characters
 
 I've sorted all unwanted characters (áé...ñ) from the meta-database
@@ -155,9 +171,9 @@ Double_Chek <-Clear_Template[duplicated(Clear_Template[2:length(Clear_Template)]
 
 #All es gut we save it...
 
-write.csv(Clear_Template,
-          "Template_5.1.csv",
-          row.names = FALSE)
+# write.csv(Clear_Template,
+#           "Template_5.1.csv",
+#           row.names = FALSE)
 
 ### END _________________________________________________________________#
 
@@ -183,6 +199,16 @@ Template$Short_Title <- as.character(Template$Short_Title)
 "La Pesca Ilegal En Mexico"
 # So we borrow this function
 # https://stackoverflow.com/questions/6364783/capitalize-the-first-letter-of-both-words-in-a-two-word-string
+
+#New modern version
+
+
+library(tools)
+toTitleCase("demonstrating the title case")
+
+
+# Old version
+
 
 simpleCap <- function(x) {
   s <- strsplit(x, " ")[[1]]
@@ -218,6 +244,12 @@ Template$Short_Title <-Template$Short_Title %>%
 # NOTE: 
 # Species names will be both capitalized.
 
+
+# Only first letter capitalized in EXCEL
+
+# =UPPER(LEFT(A2,1))&LOWER(RIGHT(A2,LEN(A2)-1))
+
+
 # Manually correct them (beacuase of spanish)
 Template$Short_Title <-Template$Short_Title %>% 
   # First English
@@ -252,66 +284,273 @@ Template$Keywords <-Template$Keywords %>%
 
 ## Author
 
-All records under `Author` have been standarized to Lastname Initial(s) (e.j. Walters, C.J.)
+All records under `Author` have been standarized to Lastname Initial(s) (e.j. Walters, C.J.) and "-" have been removed.
 
 ```{r Author, eval =T, echo =T}
 
-Authors <- Template_5.3 %>% 
+Authors <- Template %>% 
   group_by(Author) %>% 
   summarise(n())
 
 # Corrections
-Template_5.2$Author[min(Guat$MMID):max(Guat$MMID)] <- gsub( 
-  "NA", #Word you want to change
-  "USGS", #New Word
-  Template_5.2$Author[min(Guat$MMID):min(Guat$MMID)])
+Template$Author<- gsub( 
+  "UNEP WCMC", #Word you want to change
+  "UNEP-WCMC", #New Word
+  Template$Author)
+
+Author_Explore <- Template %>% 
+  filter(Author == "DSC_RTP")
+
+head(Author_Explore)
+
+Author_Explore$Reference[1]
+  
+
+```
 
 
-Guat <- Reomve %>% 
-  filter(is.na(Author)) %>% 
-  filter(MMID == 637 | MMID == 41314)
+## Institution
 
-Guat$Author <- c("CONABIO","USGS")
+All records under `Institution` have been standarized to University-Facutluy (e.j. UNAM-ICMyL)
 
-Fixed <- Template_5.3 %>% 
-  filter(is.na(Author)) %>% 
-  bind_rows(Guat)
+```{r Institutions, eval =T, echo =T}
 
+Institutions <- Template %>% 
+  group_by(Institution) %>% 
+  summarise(n())
 
-Not <- Template_5.2 %>% 
-  anti_join(Template_5.3,
-            by ="MMID") %>% 
-  filter(MMID == 637)
+# Corrections
+Template$Institution<- gsub( 
+  "UNIATMOS-UNAM", #Word you want to change
+  "UNAM-UNIATMOS", #New Word
+  Template$Institution)
 
-Fized <- Template_5.3 %>% 
-  bind_rows(Not)
+Institution_Explore <- Template %>% 
+  filter(Institution == "CINVESTAV")
 
+head(Institution_Explore)
 
+Institution_Explore$Reference[1]
+
+# Dealing with the two NA's
+
+Institutions_NA <- Template %>% 
+  filter(is.na(Institution))
+
+# Nevermind, we actually don't have that information...
+
+Author_Institutions <- Template %>% 
+  group_by(Institution,
+           Author) %>% 
+  summarise(n())
+
+#All es gut! 
+  
+```
+
+## Dataset_Available
+
+```{r Dataset_Available, eval =T, echo =T}
+
+#Checking if they are all 1,2 or 3... 
+unique(Template$Dataset_Available)
+
+#... not
+
+length(unique(Template$Dataset_Available))
+
+#### Fixing the whole #
+
+Wrong <- Template %>% 
+  filter(Dataset_Available >= 4) %>% 
+  mutate(Dataset_Availableb = 1) %>% 
+  select(-Dataset_Available) %>% 
+  select(1:5,Dataset_Availableb,everything()) %>% 
+  rename(Dataset_Available = Dataset_Availableb)
+
+Templateb <- Template %>% 
+  filter(Dataset_Available <= 3) %>% 
+  bind_rows(Wrong) %>% 
+  arrange(MMID)
+
+# GOC were excluded because they did not have a number... 
+Excluded <- Template %>% 
+  anti_join(Templateb,
+            by="MMID") %>% 
+  mutate(Dataset_Availableb = 2) %>% 
+  select(-Dataset_Available) %>% 
+  select(1:5,Dataset_Availableb,everything()) %>% 
+  rename(Dataset_Available = Dataset_Availableb) %>% 
+  bind_rows(Templateb) %>% 
+  arrange(MMID)
+
+Template <- Excluded
+
+# Now go back and re-check
+
+#All es gut! 
 
 
 ```
 
 
 
+## Subject_name
+
+This will probably be the most intesive-fix of all. Things to do:
+ 
+- Check all common names are in spanish
+- Check all common names are well spelled
+- Check all scientific names are well spelled
+  + No Authors included
+- Standarize categories (e.j. Multiple Species, Species Multiple, Many Species, etc)
+  + Multiple species
+  + Remove "s" from common names
+  + Arrecife y corales
+- Remove non-species
+
+```{r Subject_name, eval =T, echo =T}
+
+# Exploration
+Subjects <- Template %>% 
+  group_by(Subject_name) %>% 
+  summarise(n())
 
 
+# - Standarize categories (e.j. Multiple Species, Species Multiple, Many Species, etc)
+# Multiple
+Specific <- Subjects %>% 
+  filter(str_detect(Subject_name, 'Multiple')
+  )
 
+# Arrecife y corales
+Specific <- Subjects %>% 
+  filter(str_detect(Subject_name, 'Coral')
+  )
 
+# Common names
 
+# Filter all names that do not have more than one word
+Comn <- Subjects %>% 
+  filter(!str_detect(Subject_name, ' ')
+  )
 
+# Plural to singular ("s")
+Plurals <- data.frame(Plural_Names = grepl("^.+(s)$",Comn$Subject_name)) %>%  #Finds all strings ending with "s"
+  bind_cols(Comn) %>% 
+  filter(Plural_Names == TRUE)
 
+# Fin del editado de nombres comunes
 
+# Sci names
+Sci <- Template %>% 
+  group_by(Subject_name) %>% 
+  summarise(n()) %>% 
+  filter(str_detect(Subject_name, ' ')
+  ) 
 
+# Remove text within parenthesis for betteer species catalogue
+Sci$Subject_name <- gsub( " *\\(.*?\\) *", "", 
+                               Sci$Subject_name)
 
+# Now, we will use taxzise to correct scientific names
 
+Sci_Correct <- gnr_resolve(names = Sci$Subject_name, #Looks for homogenic names 
+                           best_match_only = TRUE, # Will only give us the best match
+                           canonical = TRUE #Removes names
+                           )
 
+# How many from each score...
 
+Scores <- Sci_Correct %>% 
+  group_by(score) %>% 
+  summarise(n())
 
+# Good, most of them are over 95...
 
+# Filtering those that are correct or were corrected
+Sci_Correct_90 <- Sci_Correct %>% 
+  filter(score >= 0.90) %>% # Select good ones
+  select(user_supplied_name,
+         matched_name2) %>% 
+  rename(Subject_name = user_supplied_name) %>% 
+  left_join(Template,
+            by="Subject_name") %>% # Join both datasets by the original name
+  select(-Subject_name) %>% #Remove old (original) column 
+  select(2:7,matched_name2,everything()) %>% # Select the new (corrected) subject names
+  rename(Subject_name = matched_name2) # rename it
 
+#Done 
 
+#Now those that are under 95% confidence
+  
+Sci_Correct_75 <- Sci_Correct %>% 
+  filter(score <= 0.80)
 
+# First lets take out those that were "somehow" ok
 
+Sci_Correct_75_Similar_Metadata <- Sci_Correct_75 %>%  # Original ones
+  filter(score <= 0.80) %>% 
+  select(user_supplied_name) %>% 
+  rename(matched_name2 = user_supplied_name)
+
+Sci_Correct_75_Similar_Matched <- Sci_Correct_75 %>% # Newones ones
+  filter(score <= 0.80) %>% 
+  select(matched_name2)
+
+Sci_Correct_75_Similars <-Sci_Correct_75_Similar_Metadata %>% #Those that are the same (Only 12)
+  semi_join(Sci_Correct_75_Similar_Matched,
+            by = "matched_name2")
+
+#Lets join both the over 90% and the 12 that are correct together
+
+#### THE MOST COMPLETED DATABASE ####
+Sci_Correct_75_A <- Template %>% 
+  filter(Subject_name %in% Sci_Correct_75_Similars$matched_name2) %>% 
+  bind_rows(Sci_Correct_90)
+
+# Now we add the other names but leave the originals in the "NOTE column"
+
+Final_Sci_Correct_75 <- Template %>% 
+  filter(Subject_name %in% Sci_Incorrect_75$Subject_name) %>% #Filter from the template those names under 75%
+  left_join(Sci_Incorrect_75, #Bring the corrected names
+            by="Subject_name") %>% 
+  select(-Notes,-Sci) %>% #Remove Note and "Sci"
+  rename(Notes = Subject_name, #Rename the old categories as Notes
+         Subject_name = matched_name2) %>% # Bring in the new names (corrected) as Subject_name
+  select(1:6,31,8:27,Notes,everything()) #rearrenge
+
+# Now we add scientific and common...
+
+All_Scientific <- Sci_Correct_75_A %>%  #All scientific names
+  bind_rows(Final_Sci_Correct_75)
+  
+NON_Sci_Temp <- Template %>% #Selecting all rows not in scientific names
+  anti_join(All_Scientific,
+            by ="MMID")
+
+# And now technically this should be the same size as "Template"
+
+Final_Corrected_Names <- Sci_Correct_75_A %>% 
+  bind_rows(Final_Sci_Correct_75) %>% 
+  bind_rows(NON_Sci_Temp) %>% 
+  arrange(MMID)
+
+# It is... is it the same, thou?
+
+Test <- Final_Corrected_Names %>% 
+  anti_join(Template,
+            by="MMID")
+
+#MMID: 0 match, they are all the same!!!!!!
+#Short_title: 0 match, they are all the same!!!!!!
+# 1196 names corrected
+
+# and repeats?
+
+#________________________________________#
+
+```
 
 
 
