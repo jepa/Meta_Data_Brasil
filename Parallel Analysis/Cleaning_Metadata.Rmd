@@ -414,8 +414,7 @@ This will probably be the most intesive-fix of all. Things to do:
   + Arrecife y corales
 - Remove non-species
 - Solved for FAO's "Tbd"s
-
-**NOTA:** Pedir a Andrés la lista de nombre de inglés a español de FAO
+- Translate names to spanish
 
 ```{r Subject_name, eval =T, echo =T}
 
@@ -656,13 +655,73 @@ New_Template <- Template %>%
 ```
 
 
+## Area, region
+
+- Fixed some of the missspells in the categories 
+- Filled missing cattegories
+- There are many TBDs waiting for Marcia Moreno's data
+
+```{r Area, eval =T, echo =T}
+
+#### Area ####
+
+Area_Explore <- Template %>% 
+  group_by(Area) %>% 
+  dplyr::summarise(n()) 
+
+# Some NA's
+
+Area_NA <- Template %>% 
+  filter(is.na(Area))%>% 
+  select(MMID,
+         Short_Title,
+         Area,
+         Region,
+         Location)
+
+# Get all those NAs
+
+Nas <- Template %>% 
+  filter(MMID >= 68567 & MMID <=68649) %>% 
+   select(MMID,
+         Short_Title,
+         Area,
+         Region,
+         Location) 
+
+#### Region ####
+
+Region_Explore <- Template %>% 
+  group_by(Region) %>% 
+  dplyr::summarise(n())
 
 
+#### Corrections #
+
+# Corrections
+Template$Region<- gsub( 
+  "Sopa", #Word you want to change
+  "W.G. Mexico", #New Word
+  Template$Region)
+
+View(Template)
 
 
+```
 
 
+# Locations
 
+This is going to be fun...
+
+```{r Locations, eval =T, echo =T}
+
+Location_explore <- Template %>% 
+  group_by(Location) %>% 
+  dplyr::summarise(n())
+
+
+```
 
 
 
