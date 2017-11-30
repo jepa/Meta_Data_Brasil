@@ -8,6 +8,8 @@ output: html_document
 The following script will be used to explore and clean the final metadata. I'm searching for any type of errors and will go column by column.
 
 - First modification on Template_5 on November 22
+- Second modification on Template_5 on November 27 (5.3)
+- Third modification on Template_5 on November 28 (5.5) With subject names
 
 
 ```{r Setup, echo= T, eval= F}
@@ -30,7 +32,8 @@ packages <- c(
   "data.table",
   "hunspell",#For spelling check in english
   "stringr", # For finding string in column
-  "taxize"
+  "taxize",
+  "translateR"
   )
 
 ipak(packages)
@@ -44,7 +47,7 @@ ipak(packages)
 #### NOTE ####
 # RUN EVERYTIME YOU FINISH
 
-write.csv(Final_Corrected_Names,
+write.csv(New_Template,
           "Template_5.5.csv",
           row.names = FALSE)
 
@@ -80,7 +83,9 @@ Templatebb <- data.frame(lapply(Templateb, function(x) {
 chartr("áéíóúñ", "aeioun", dataMares_Metadata)
 
 
-# Use \b to indicate a word boundary:
+# Use \b to indicate a word boundary: "\\bsp\\b"
+# Use ",.*" to eliminate/replace everything after a ","
+# Use to eliminate/replace everything within parenthesis " *\\(.*?\\) *"
 # Punctual Corrections
 Sci_Correct_75$user_supplied_name<- gsub( 
   "\\bsp\\b", #Word you want to change
@@ -408,6 +413,9 @@ This will probably be the most intesive-fix of all. Things to do:
   + Remove "s" from common names
   + Arrecife y corales
 - Remove non-species
+- Solved for FAO's "Tbd"s
+
+**NOTA:** Pedir a Andrés la lista de nombre de inglés a español de FAO
 
 ```{r Subject_name, eval =T, echo =T}
 
@@ -548,17 +556,104 @@ Test <- Final_Corrected_Names %>%
 
 # and repeats?
 
+# NO repeats!!! 
 #________________________________________#
 
+## Fixing the Tbd (FAO from english to scientific) ####
+
+# Select specific species
+TBD <- Template %>% 
+  filter(Subject_name == "Tbd") %>% 
+  select(MMID,
+         Short_Title) %>% 
+  mutate(TBD_Original = paste(Short_Title))
+
+# Remove short title to have only common names
+TBD$Short_Title<- TBD$Short_Title %>% 
+  gsub("Catch of ", "",.) %>% 
+  gsub(" Nei", "",.) %>% 
+  gsub("Aquaculture Production of Marine ", "",.) %>% 
+  gsub("Aquaculture Production of Freshwater ", "",.) %>%
+  gsub("Aquaculture Production of Brackishwater ", "",.) %>%
+  gsub("Production and Trade of Marine ", "",.) %>%
+  gsub("Production and Trade of Freshwater ", "",.) %>%
+  gsub("Production and Trade of ", "",.) %>%
+  gsub("Aquaculture Production Value of Freshwater ", "",.) %>% 
+  gsub("Aquaculture Production Value of Brackishwater ", "",.) %>% 
+  gsub("Aquaculture Production Value of Marine ", "",.) %>% 
+  gsub(",.*", "",.) %>% 
+  gsub(" *\\(.*?\\) *", "",.) %>% 
+  gsub(" Meat", "",.) %>% 
+  gsub(" and.*", "",.)
+
+# Manualy change some of them that are beign anoying
+
+TBD$Short_Title [313]<- "Euthynnus"
+
+# Now we retrieve the scientific names available from the list using taxsize
+Fixed_Names <- comm2sci(TBD$Short_Title,
+                          db="worms",
+                          # itisby = "search",
+                          simplify= TRUE
+                          )
+
+# Put it on a nice dataframe
+Sci_Name <- data.frame(Corrected = sapply(Fixed_Names, function(x){paste(x[1])}))
+                       
+# Now we incorporate the new names to the old data 
+
+Fixed_TBD <- TBD %>% 
+  bind_cols(Sci_Name)
+
+# Fix the NA problem
+
+Fixed_TBA_NA <- Fixed_TBD %>% 
+  filter(Corrected == "NA") %>% 
+  select(MMID,Short_Title) %>% 
+  dplyr::rename(Corrected = Short_Title) %>% 
+  mutate(Old_Subject = paste(Corrected))
+
+# Now we translate those that the system did not liked... Hell no... Just do it on Excel "bruh!!"
+
+FAO_Translated <- read.csv("~/Desktop/FAO_Translated.csv")
+
+
+Fixed_TBD_Final <- Fixed_TBD %>% 
+  filter(Corrected != "NA") %>% 
+  select(-TBD_Original) %>% 
+  dplyr::rename(Old_Subject = Short_Title) %>% 
+  bind_rows(FAO_Translated) %>% 
+  arrange(MMID)
+
+# Fixed and translated! 
+
+
+# Extra solve short title problem #
+
+# Now we incorporate the 
+Final_TBD <- Fixed_TBD_Final %>% 
+  left_join(Template,
+            by="MMID") %>% 
+  select(-Subject_name,
+         -Notes,
+         -Sci) %>% 
+  select(
+    1,4:8,Corrected,10:29,Old_Subject,everything()
+  ) %>% 
+  dplyr::rename(Subject_name = Corrected) %>% 
+  dplyr::rename(Notes = Old_Subject)
+
+# And now merge to the Template
+
+New_Template <- Template %>% 
+  filter(Subject_name != "Tbd") %>% 
+  bind_rows(Final_TBD) %>% 
+  arrange(MMID) %>% 
+  select(-Sci)
+
+# Take out non-species names... ####
+
 ```
-
-
-
-
-
-
-
-
 
 
 
