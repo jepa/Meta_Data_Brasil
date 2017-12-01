@@ -32,24 +32,23 @@ packages <- c(
   "data.table",
   "hunspell",#For spelling check in english
   "stringr", # For finding string in column
-  "taxize",
-  "translateR"
+  "taxize", # For species scientific name
+  "tools" #For upper/lowwer letters
   )
 
 ipak(packages)
 
-
 #Dataset
 
-# Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.2.csv")
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.5.csv")
 
 
 #### NOTE ####
 # RUN EVERYTIME YOU FINISH
 
-write.csv(Template,
-          "Template_5.5.csv",
-          row.names = FALSE)
+# write.csv(Template,
+#           "Template_5.5.csv",
+#           row.names = FALSE)
 
 # Tremplate_5.3 until Subject_name
 
@@ -83,9 +82,9 @@ Templatebb <- data.frame(lapply(Templateb, function(x) {
 chartr("áéíóúñ", "aeioun", dataMares_Metadata)
 
 
-# Use \b to indicate a word boundary: "\\bsp\\b"
-# Use ",.*" to eliminate/replace everything after a ","
-# Use to eliminate/replace everything within parenthesis " *\\(.*?\\) *"
+# Use \b to indicate a word boundary <-  "\\bsp\\b"
+# Use to eliminate/replace everything after a "," <-  ",.*"
+# Use to eliminate/replace everything within parenthesis <- " *\\(.*?\\) *"
 # Punctual Corrections
 Sci_Correct_75$user_supplied_name<- gsub( 
   "\\bsp\\b", #Word you want to change
@@ -208,7 +207,7 @@ Template$Short_Title <- as.character(Template$Short_Title)
 #New modern version
 
 
-library(tools)
+# library(tools)
 toTitleCase("demonstrating the title case")
 
 
@@ -712,17 +711,132 @@ View(Template)
 
 # Locations
 
-This is going to be fun...
+This is going to be fun... I don't think standarization of names is worth the time since we will not do any analysis with it and it still works for the "search" component.
 
 ```{r Locations, eval =T, echo =T}
 
 Location_explore <- Template %>% 
   group_by(Location) %>% 
-  dplyr::summarise(n())
+  summarise(n(),
+            MMID = paste(MMID,
+                         collapse = ";"))
 
+# Multiple
+Template$Location <- Template$Location %>% 
+  gsub("\\bMultiple Sites\\b", "Multiple Localidades",.) %>% 
+  gsub("\\bMultiple Locations\\b", "Multiple Localidades",.) %>% 
+  gsub("\\bMultiple Stations\\b", "Multiple Localidades",.) %>% 
+  gsub("\\bMultiple States\\b", "Multiple Localidades",.) %>% 
+  gsub("\\bMultiple\\b", "Multiple Localidades",.) %>% 
+  gsub("\\Area De Proteccion De Flora Y Fauna Cuatrocienegas\\b", "ANP Cuatrocienegas",.) %>% 
+  gsub("\\Area De Proteccion De Flora Y Fauna Laguna De Terminos\\b", "ANP Laguna de Terminos",.) %>% 
+  gsub("\\Area De Proteccion De Flora Y Fauna Yum Balam\\b", "ANP Yum Balam",.) %>% 
+  gsub("\\Area Natural Protegida Estatal Presa De Silva Y Zonas Aledanas\\b", "ANP Presa de Silva",.) %>% 
+  gsub("\\Areas De Proteccion De Flora Y Fauna De Naha Y Metzabok\\b", "ANP Naha Y Metzabok",.) %>% 
+  gsub("\\Archipielago\\b", "Revillagigedo",.) %>% 
+  gsub(" De Juarez", "",.) %>% 
+  gsub(" De Alvarez", "",.) %>% 
+  gsub(" De Navarro", "",.) %>% 
+  gsub(" De Terrazas", "",.) %>% 
+  gsub(" De Perez Figueroa", "",.) %>% 
+  gsub(" De Iturbide", "",.) %>% 
+  gsub(" De Mercado", "",.) %>% 
+  gsub(" De Guerrero", "",.) %>% 
+  gsub(" De Montes", "",.) %>% 
+  gsub("Bahia Concepcion ", "Bahia Concepcion",.) %>% 
+  gsub(", Son", "",.) %>% 
+  gsub("Bahia Kino", "Bahia De Kino",.) %>% 
+  gsub("\\bBahia De\\b", "Bahia",.) %>% 
+  gsub("\\bBahia\\b", "Bahia De ",.) %>% 
+  gsub("Sebasti_N", "Sebastian",.) %>% 
+  gsub("Baja California Norte", "Baja California",.) %>% 
+  gsub("Baja California, Bahia Tortugas", "Bahia De Tortugas",.) %>% 
+  gsub("Baja California; Embarcaciones; Principales Pesquerias; Altura; Estado; Pesca; Camaron", "Baja California",.) %>% 
+  gsub(",.*", "",.) %>% 
+  gsub("Campeche Bank, Alacranes Reef", "Arrecife De Alacranes",.) %>% 
+  gsub("Kenedy", "Kennedy",.)
+    
+# Second rownd
+
+Template$Location <- Template$Location %>% 
+  gsub("Baja California Sur Sur", "Baja California Sur",.) %>% 
+  gsub("Baja California Sur Sur", "Baja California Sur",.)
+
+
+  
+Locations <- Template %>% 
+  filter(Location == "Apulco")
+View(Locations)
 
 ```
 
 
+## Years
+
+```{r Time, eval =T, echo =T}
+
+Time <- Template %>% 
+  group_by(Location) %>% 
+  summarise(n(),
+            Min_S = min(Start_Year),
+            Max_S = max(Start_Year),
+            Min_E = min(End_Year),
+            Max_E = max(End_Year)
+  )
+
+Time_Explore <- Template %>% 
+  filter(End_Year == 2021)
+
+DTP <- Template %>% 
+  group_by(Dataset_Title) %>% 
+  summarise(
+    n(),
+    Min = min(Data_Time_Points, na.rm=T),
+    Max = max(Data_Time_Points, na.rm=T),
+    Mean = mean(Data_Time_Points, na.rm=T)
+  )
+
+```
 
 
+## Dataset_Title
+
+```{r Dataset_Title, eval =T, echo =T}
+
+Dataset <- Template %>% 
+  group_by(
+           Compilation_Title) %>% 
+  summarise(
+            Min = min(MMID),
+            Max = max(MMID),
+            Check = Max-Min+1,
+            n()
+  )
+
+Template$Dataset_Title[29444:29534] <- "Aquaculture Production (Quantities and values) 1950-2014"
+Template$Dataset_Title[29534:29761] <- "Fisheries Commodities Production and Trade 1976-2013"
+Template$Dataset_Title[1548:1579] <- "Balanza comercial por principales productos pesqueros, 1989 - 2013"
+Template$Dataset_Title[31659:32038] <- "Base del Golfo de California 2016"
+Template$Dataset_Title[68681:73783] <- "Lista de sitios de Patrimonio Mundial, Natural o Mixtos en ANP de Mexico 2016"
+Template$Dataset_Title[1807:1839] <- "Permisos de Pesca Deportiva-Recreativa Por Litoral, Entidades sin Litoral, Oficina de San Diego, Tipo y Categoria (Ley Federal de Derechos)"
+Template$Dataset_Title[32515:32548] <- "Permisos de Pesca Deportiva-Recreativa Por Litoral, Entidades sin Litoral, Oficina de San Diego, Tipo y Categoria (Ley Federal de Derechos)"
+Template$Dataset_Title[74001:74063] <- "Tabla de solicitudes ingresadas para artes de pesca por municipio 2011"
+Template$Compilation_Title[10:10] <- "dataMares"
+
+
+
+
+Dataset_Explore <- Template %>% 
+  # filter(Compilation_Title == "Historial de Permisos de Pesca Deportiva")
+  filter(str_detect(Dataset_Title, 'Tabla de solicitudes ingresadas para artes de pesca por municipio'))
+
+  # filter(Dataset_Title == "Lista de sitios de Patrimonio Mundial, Natural o Mixtos en ANP de Mexico 2016")
+
+#### Checking....
+
+Check <- Template %>% 
+  filter(MMID >= 1540 & MMID <= 1580)
+
+# all es gut! 
+
+```
