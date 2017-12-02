@@ -40,15 +40,15 @@ ipak(packages)
 
 #Dataset
 
-Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.5.csv")
+# Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.6.csv")
 
 
 #### NOTE ####
 # RUN EVERYTIME YOU FINISH
 
-# write.csv(Template,
-#           "Template_5.5.csv",
-#           row.names = FALSE)
+write.csv(Template,
+          "Template_5.7.csv",
+          row.names = FALSE)
 
 # Tremplate_5.3 until Subject_name
 
@@ -115,6 +115,7 @@ Observacion:
 - Datos Abiertos MX	102	83304	83759. Stays because is the same title but each row is a different species
 - Since Template_5.2 there should be 102 repeated observations 
 - Since Template_5.2_4 there should be 109 repeated observations because some of the categories were merged (e.g. "Camaron sin cabeza"" and "Camaron con cabeza" became "Camaron")
+
 ### Characters
 
 I've sorted all unwanted characters (áé...ñ) from the meta-database
@@ -184,6 +185,14 @@ Double_Chek <-Clear_Template[duplicated(Clear_Template[2:length(Clear_Template)]
 #### NOTE ####
 knitr::kable(Repeated_Bases,
              caption = "Duplicated Records within Compilations")
+
+
+#### ELIMINATE ROWS ####
+# Not yet removed...
+
+#MMIDs:
+# 59554
+# 59555
 
 
 ```
@@ -258,6 +267,12 @@ Template$Short_Title <-Template$Short_Title %>%
 Template$Short_Title <-Template$Short_Title %>% 
   # First English
   gsub(" de de ","de ",.)
+
+### Specific changes #
+
+Template$Short_Title <-Template$Short_Title %>% 
+  gsub("Iucn ","IUCN ",.)
+
 
 ```
 
@@ -798,8 +813,286 @@ DTP <- Template %>%
 
 ```
 
+## Unit Type
 
-## Dataset_Title
+In this section I worked on the standarization of terms (e.g. Count -> Counts), I also re categorize some of the records to more appropiate categories
+
+```{r Dataset_Title, eval =T, echo =T}
+
+Unit <- Template %>% 
+  group_by(Unit_Type) %>% 
+  summarise(n())
+  
+Unit_type <- Template %>% 
+  select(MMID,
+         Unit_Type)
+
+Unit_type$Unit_Type <- Unit_type$Unit_Type %>% 
+  gsub("\\bCount\\b", "Counts",.) %>% 
+  gsub("Lenght", "Length",.) %>% 
+  gsub("Mapa", "Map",.) %>% 
+  gsub("PDF", "Literature",.) %>% 
+  gsub("Cover", "",.) %>% 
+  gsub("Porcentaje", "Percentage",.) %>% 
+  gsub("Teperature", "Temperature",.) %>% 
+  gsub("Tons", "Weight",.) %>% 
+  gsub("Values", "Value",.) %>% 
+  gsub("Videotransect", "Video",.) %>% 
+  gsub("Volumen", "Volume",.) %>% 
+  gsub(" ", "",.) %>% 
+  gsub("\\bC\\b", "Counts",.) %>% 
+  gsub("\\bDensity\\b", "Concentration",.) %>% 
+  gsub("\\bSize\\b", "Length",.) %>% 
+  gsub("\\bUnit\\b", "Literature",.)
+
+data.frame(Uni = unique(Unit_type$Unit_Type)) %>% 
+  arrange(Uni)
+
+# Fixing: "Area"
+
+# Fisheries Monitoring Program in La Paz, B.C.S.
+Unit_type$Unit_Type[97794:97852] <- "Weight" 
+Unit_type$Unit_Type[97853:97970] <- "Currency"
+Unit_type$Unit_Type[97971:98029] <- "Other"
+
+# Fixing: "Concentration"
+
+# Bitacora de colecta de pH | Proyecto Vaquita
+Unit_type$Unit_Type[33117:33118] <- "pH" 
+# Bitacora de colecta de pH | Tehuanos2
+Unit_type$Unit_Type[33125:33125] <- "pH" 
+# Atlas Climatico Digital de Mexico
+Unit_type$Unit_Type[1487:1498] <- "Counts"
+
+# Fixing: "Currency"
+# All gut
+
+# Fixing Index
+# ESPECIES, EPOCAS Y ZONAS DE VEDA PERMANENTE | Anuario Estadístico
+Unit_type$Unit_Type[1842:1947] <- "Time"
+# Mapping Ocean Ecosystem Services
+Unit_type$Unit_Type[32503:32505] <- "Currency"
+Unit_type$Unit_Type[32509:32511] <- "Map"
+Unit_type$Unit_Type[32512:32512] <- "Currency"
+Unit_type$Unit_Type[32513:32513] <- "Weight"
+
+# Fixing Multiple
+Unit_type$Unit_Type[27108:29218] <- "Value"
+
+# Fixing Percentage
+Unit_type$Unit_Type[92894:92895] <- "Area"
+
+# Fixing Point
+Unit_type$Unit_Type[59007:59187] <- "Index"
+
+# Fixing Pressure and Radiation
+# Datos Abiertos MX
+Unit_type$Unit_Type[73680:73680] <- "Other"
+Unit_type$Unit_Type[73675:73675] <- "Other"
+
+
+# Fixing Unit
+# dataMares
+Unit_type$Unit_Type[93052:93172] <- "Counts"
+Unit_type$Unit_Type[97295:97296] <- "Other"
+Unit_type$Unit_Type[98471:98478] <- "Counts"
+
+# Indicadores Basicos del Desempeno Ambiental - Biodiversidad - Especies
+Unit_type$Unit_Type[29805:29805] <- "Index"
+
+# Fixing NA's
+Unit_type$Unit_Type[33119:33119] <- "Density"
+Unit_type$Unit_Type[62184:62213] <- "Literature"
+Unit_type$Unit_Type[88032:88079] <- "Literature"
+Unit_type$Unit_Type[88080:88080] <- "Value"
+
+
+Unit_Explore <- Template %>% 
+  # filter(Unit_Type == "Weight") %>% 
+  filter(is.na(Unit_Type)) %>% 
+  group_by(
+    Dataset_Title,
+    Compilation_Title
+    ) %>% 
+  summarise(paste(Short_Title,
+                  collapse = ";"),
+            Min = min(MMID),
+            Max = max(MMID),
+            Ref = paste(unique(Reference),
+                        collapse = ";")
+  )
+
+x <- Template %>%
+  # filter(MMID >= 59007 & MMID <= 59187) %>%
+  filter(Institution == "UNAM-UAY") %>%
+  group_by(Author) %>% 
+  summarise(n())
+  select(
+    MMID,
+    Short_Title,
+    Dataset_Title,
+    Keywords,
+    Reference)
+
+
+data.frame(Uni = unique(Unit_type$Unit_Type)) %>% 
+  arrange(Uni)
+
+## Merge New Unit Type with old dataset
+
+New_Template <- Template %>% 
+  select(-Unit_Type) %>% 
+  left_join(Unit_type,
+            by="MMID") %>% 
+  select(1:13,Unit_Type,everything())
+
+New_template_Check <- New_Template %>% 
+  group_by(Unit_Type) %>% 
+  summarise(n())
+
+
+```
+
+## Temporal_Resolution
+
+Standarization of terms and correction of some records.
+
+
+```{r Temporal_Resolution, eval =T, echo =T}
+
+Explore_Temporal <- Template %>% 
+  group_by(Temporal_Resolution) %>% 
+  summarise(n())
+
+TE <- Template %>% 
+  select(MMID,Temporal_Resolution)
+
+TE$Temporal_Resolution <- TE$Temporal_Resolution %>% 
+  gsub("\\bAnual\\b", "Year",.) %>% 
+  gsub("Daily", "Day",.) %>% 
+  gsub("hour", "Hour",.) %>% 
+  gsub("Hourly", "Hour",.) %>% 
+  gsub("Monthly", "Month",.) %>% 
+  gsub("Seconds", "Second",.) %>% 
+  gsub("Annual", "Year",.) %>% 
+  gsub("Minutes", "Minute",.)
+
+data.frame(Uni = unique(TE$Temporal_Resolution)) %>% 
+  arrange(Uni)
+
+# Check them out
+
+TE_Explore <- Template %>% 
+  filter(Temporal_Resolution == "Semester") %>%
+  # filter(is.na(Temporal_Resolution)) %>% 
+  group_by(
+    Dataset_Title,
+    Compilation_Title
+    ) %>% 
+  summarise(paste(Short_Title,
+                  collapse = ";"),
+            Min = min(MMID),
+            Max = max(MMID),
+            Ref = paste(unique(Reference),
+                        collapse = ";")
+  )
+
+TE$Temporal_Resolution[749:1235] <- "Day"
+TE$Temporal_Resolution[27108:29218] <- "NA"
+
+data.frame(Uni = unique(Template$Temporal_Resolution)) %>% 
+  arrange(Uni)
+
+
+# Merge stuff 
+
+New_Template <- Template %>% 
+  select(-Temporal_Resolution) %>% 
+  left_join(TE,
+            by="MMID") %>% 
+  select(1:14,Temporal_Resolution,everything())
+
+New_template_Check <- New_Template %>% 
+  group_by(Temporal_Resolution) %>% 
+  summarise(n())
+
+
+```
+
+## Spatial resolution (MISSING)
+
+```{r Spatial_Resolution, eval =T, echo =T}
+
+Explore_Spatial <- Template %>% 
+  group_by(Spatial_Resolution) %>% 
+  summarise(n())
+
+SR <- Template %>% 
+  select(MMID,Spatial_Resolution)
+
+SR$Spatial_Resolution <- SR$Spatial_Resolution %>% 
+  gsub("\\bGeoreference\\b", "Georeferenced",.) %>% 
+  gsub("Atlantic", "Area",.) %>% 
+  gsub("Gulf of Mexico", "Region",.) %>% 
+  gsub("Nacional", "National",.) %>% 
+  gsub("North Pacific", "Region",.) %>% 
+  gsub("Pacific", "Area",.) %>% 
+  gsub("Pacifico", "Area",.) %>% 
+  gsub("Regional", "Region",.) %>% 
+  gsub("Zone", "Location",.) %>% 
+  gsub("Oceanografia del golfo", "Region",.) %>% 
+  gsub("Areao", "Area",.)
+
+SR_Explore <- Template %>% 
+  filter(Spatial_Resolution == "Zone") %>%
+  # filter(is.na(Spatial_Resolution)) %>% 
+  group_by(
+    Dataset_Title,
+    Compilation_Title
+    ) %>% 
+  summarise(paste(Short_Title,
+                  collapse = ";"),
+            Min = min(MMID),
+            Max = max(MMID),
+            Ref = paste(unique(Reference),
+                        collapse = ";")
+  )
+
+data.frame(Uni = unique(SR$Spatial_Resolution)) %>% 
+  arrange(Uni)
+
+# One by One 
+
+SE_Explore <- Template %>% 
+  filter(Spatial_Resolution == "Area") %>%
+  # filter(is.na(Temporal_Resolution)) %>% 
+  group_by(
+    Dataset_Title,
+    Compilation_Title
+    ) %>% 
+  summarise(paste(Short_Title,
+                  collapse = ";"),
+            Min = min(MMID),
+            Max = max(MMID),
+            Area = paste(unique(Area),
+                        collapse = ";"),
+            Region = paste(unique(Region),
+                        collapse = ";"),
+            Loc = paste(unique(Location),
+                        collapse = ";")
+  )
+
+data.frame(Uni = unique(Template$Spatial_Resolution)) %>% 
+  arrange(Uni)
+
+
+
+
+```
+
+## Dataset_Title and Compilation_Title
+
+I've changed all the datasets that Excel miss label 2013...2014...2015...2056...20nn. Did the same for Compilation Titles. 
 
 ```{r Dataset_Title, eval =T, echo =T}
 
@@ -838,5 +1131,8 @@ Check <- Template %>%
   filter(MMID >= 1540 & MMID <= 1580)
 
 # all es gut! 
+
+Template$Dataset_Title <-Template$Dataset_Title %>% 
+  gsub("Predio de Filete ","Precio de Filete ",.)
 
 ```
