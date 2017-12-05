@@ -47,10 +47,13 @@ ipak(packages)
 # RUN EVERYTIME YOU FINISH
 
 write.csv(Template,
-          "Template_5.7.csv",
+          "Template_5.8.csv",
           row.names = FALSE)
 
 # Tremplate_5.3 until Subject_name
+
+
+
 
 
 ```
@@ -272,7 +275,6 @@ Template$Short_Title <-Template$Short_Title %>%
 
 Template$Short_Title <-Template$Short_Title %>% 
   gsub("Iucn ","IUCN ",.)
-
 
 ```
 
@@ -1110,20 +1112,32 @@ Template$Dataset_Title[29444:29534] <- "Aquaculture Production (Quantities and v
 Template$Dataset_Title[29534:29761] <- "Fisheries Commodities Production and Trade 1976-2013"
 Template$Dataset_Title[1548:1579] <- "Balanza comercial por principales productos pesqueros, 1989 - 2013"
 Template$Dataset_Title[31659:32038] <- "Base del Golfo de California 2016"
-Template$Dataset_Title[68681:73783] <- "Lista de sitios de Patrimonio Mundial, Natural o Mixtos en ANP de Mexico 2016"
+# Template$Dataset_Title[68681:73783] <- "Lista de sitios de Patrimonio Mundial, Natural o Mixtos en ANP de Mexico 2016"
 Template$Dataset_Title[1807:1839] <- "Permisos de Pesca Deportiva-Recreativa Por Litoral, Entidades sin Litoral, Oficina de San Diego, Tipo y Categoria (Ley Federal de Derechos)"
 Template$Dataset_Title[32515:32548] <- "Permisos de Pesca Deportiva-Recreativa Por Litoral, Entidades sin Litoral, Oficina de San Diego, Tipo y Categoria (Ley Federal de Derechos)"
 Template$Dataset_Title[74001:74063] <- "Tabla de solicitudes ingresadas para artes de pesca por municipio 2011"
 Template$Compilation_Title[10:10] <- "dataMares"
 
+# Datamares
 
+DataMares <- Template %>% 
+  filter(Compilation_Title == "dataMares") %>% 
+  group_by(Dataset_Title) %>% 
+  summarise(n())
 
+Template$Dataset_Title <- Template$Dataset_Title %>% 
+  gsub("em_hu_monitoreo_arrecifal_CORALES","Conservacion de Arrecifes de Coral en el Pacifico Mexicano",.) %>% 
+  gsub("em_hu_monitoreo_arrecifal_INVERTEBRADOS","Conservacion de Arrecifes de Coral en el Pacifico Mexicano",.) %>% 
+  gsub("em_hu_monitoreo_arrecifal_PECES","Conservacion de Arrecifes de Coral en el Pacifico Mexicano",.) %>% 
+  gsub("em_po_diversidad_funcional.xlsx","Assessing the role of fish in kelp forests and rocky reefs",.) %>% 
+  gsub("em_po_kelp.xslx","Counting Fish in the Kelp Forests of Baja California",.)
 
 Dataset_Explore <- Template %>% 
   # filter(Compilation_Title == "Historial de Permisos de Pesca Deportiva")
   filter(str_detect(Dataset_Title, 'Tabla de solicitudes ingresadas para artes de pesca por municipio'))
-
   # filter(Dataset_Title == "Lista de sitios de Patrimonio Mundial, Natural o Mixtos en ANP de Mexico 2016")
+
+
 
 #### Checking....
 
@@ -1136,3 +1150,264 @@ Template$Dataset_Title <-Template$Dataset_Title %>%
   gsub("Predio de Filete ","Precio de Filete ",.)
 
 ```
+
+
+
+## Publication year
+
+Just fixed some classic Excel mistake of 2016,2017...20nn.
+
+```{r Pubication_Year, eval =T, echo =T}
+
+Exploring <- Template %>% 
+  group_by(Publication_Year) %>% 
+  summarise(n())
+
+Wrong_Publi <- Template %>% 
+  filter(Publication_Year >= 2018) %>% 
+  select(MMID,
+         Short_Title,
+         End_Year,
+         Dataset_Title,
+         Compilation_Title,
+         Publication_Year)
+
+Template$Publication_Year[1494:1510] <- 2012
+Template$Publication_Year[33749:34015] <- 2017
+Template$Publication_Year[64611:66832] <- 2017
+
+Template %>% 
+  filter(Compilation_Title == "Diversity of benthic diatoms in the Guerrero Negro Lagoon (El Vizcaino Biosfere Reserve), Baja California Peninsula, Mexico")
+
+
+```
+
+## Reference
+
+Fixed most of Datos Abiertos MX links that were not functional
+
+```{r Reference, eval =T, echo =T}
+
+Exploring_Ref <- Template %>% 
+  group_by(Reference) %>% 
+  summarise(n())
+
+Wrong_ <- Template %>% 
+  filter(Publication_Year >= 2018) %>% 
+  select(MMID,
+         Short_Title,
+         End_Year,
+         Dataset_Title,
+         Compilation_Title,
+         Publication_Year)
+
+Template$Reference[59744:59751] <- "doi:10.5063/AA/afleishman.6.1"
+Template$Reference[59722:59741] <- "doi:10.6085/AA/pisco_intertidal.53.7"
+
+#GobMX 
+
+Template$Reference <- gsub(
+  "/resource/.*",
+  "",
+  Template$Reference
+)
+
+Template %>% 
+  filter(Reference == "https://datos.gob.mx/busca/dataset/indicadores-basicos-del-desempeno-ambiental--biodiversidad--especies")
+
+Template %>% 
+  filter(Compilation_Title == "Datos Abiertos MX") %>% 
+  group_by(Reference) %>% 
+  summarise(n())
+
+```
+
+
+## Institution Type
+
+Institution type represents the type o institution where THE DATA IS FOUND and does not necessarly represents who collected the data
+
+- Standarization of categories
+- Making sure they make sense
+
+```{r Institution_Type, eval = T, echo = F}
+
+unique(Template$Institution_Type)
+
+InstExpo <- Template %>%
+  group_by(Institution_Type) %>% 
+  summarise(n())
+
+# First we standarize everything #
+Explore_IT <- Template %>% 
+  filter(Institution_Type == "<NA>")
+
+Template$Institution_Type[87177:87182] <- "ACA"
+
+Template$Institution_Type <- gsub(
+  "Int",
+  "INT",
+  Template$Institution_Type
+)
+
+# And now lets see if it makes sensce... 
+
+
+Institution_Type <- Template %>% 
+  select(MMID,
+         Author,
+         Institution,
+         Compilation_Title,
+         Institution_Type)
+
+InstsExpo <- Template %>%
+  group_by(Institution,
+           Institution_Type,
+           Compilation_Title) %>% 
+  summarise(n(),
+            MIN = min(MMID),
+            MAX = max (MMID))
+
+
+Template$Institution_Type[62214:63213] <- "ACA" #GBIF-CONABIO
+Template$Institution_Type[29235:29236] <- "GOV" #INAPESCA/ECOPATH
+Template$Institution_Type[59742:59751] <- "INT" #KNB
+Template$Institution_Type[59658:59691] <- "INT" #KNB
+Template$Institution_Type[1511:1511] <- "INT" #OBIS
+Template$Institution_Type[29229] <- "INT" #Southeast Fisheries Science Center
+Template$Institution_Type[29256:29268] <- "INT" #Southeast Fisheries Science Center
+Template$Institution_Type[40415:41262] <- "ACA" # UNIMAR
+Template$Institution_Type[29219:29255] <- "INT" # EcoBase
+Template$Institution_Type[59626] <- "GOV" # Datos Abierto MX
+Template$Institution_Type[68467:69465] <- "GOV" # Datos Abierto MX
+Template$Institution_Type[73638:73682] <- "GOV" # Datos Abierto MX | CIBNOR
+Template$Institution_Type[41263:42262] <- "INT" # OBIS
+Template$Institution_Type[27018:27107] <- "INT" # FERU
+
+Template$Research_Fund[88081:110971] <- "Unknown" # dataMares
+
+Template %>% 
+  filter(Compilation_Title == "dataMares")
+
+
+# Check them ALL out #
+# ACA check
+# NGO check
+# GOV check
+# INT check
+# IGO check
+
+InstExpo <- Template %>%
+  group_by(Institution_Type) %>% 
+  summarise(n())
+
+Inst_Tye <- Template %>%
+  filter(Institution_Type == "IGO") %>% 
+  group_by(
+    Author,
+    Institution,
+    Compilation_Title
+           ) %>% 
+  summarise(n())
+
+
+```
+
+
+## Research Fund
+
+Research fund represents the type of funding that the proyect had, in case of uncertanty funding is linked to the repository where data lives...
+
+- Standarization of categories
+- Making sure they make sense
+
+```{r Research_Fund, eval = T, echo = F}
+
+ResearchFund <- Template %>%
+  group_by(Research_Fund) %>% 
+  summarise(n())
+
+# Do they Make sense? 
+
+# ACA_F check 
+# GOV_F check
+# IGO_F check (Obis in Excel from IGO_F to INT_F)
+# Int_F check
+# NGO_F check
+# Private_F check
+# Unknown check
+
+MF_Check <- Template %>%
+  filter(Research_Fund == "Unknown") %>% 
+  group_by(
+    Author,
+    Institution,
+    Compilation_Title
+           ) %>% 
+  summarise(n())
+
+EcoBase <- Template %>% 
+  filter(Compilation_Title == "OBIS Data for Mexico")
+
+
+Template$Research_Fund[29219:29255] <- "Unknown" # EcoBase
+Template$Research_Fund[27018:27107] <- "Int_F" # EcoBase
+Template$Research_Fund[29256:29268] <- "Int_F" # Feru
+Template$Research_Fund[29269:29761] <- "IGO_F" # FAO | FishStatJ
+
+
+
+```
+
+
+
+Research Field
+
+```{r Research_Field, eval = T, echo = F}
+
+ResearchField <- Template %>%
+  group_by(Research_Field) %>% 
+  summarise(n())
+
+# Do they Make sense? 
+
+# ACA_F check 
+# GOV_F check
+# IGO_F check (Obis in Excel from IGO_F to INT_F)
+# Int_F check
+# NGO_F check
+# Private_F check
+# Unknown check
+
+RF_Check <- Template %>%
+  filter(Research_Field == "Aquaculture") %>% 
+  group_by(
+    Author,
+    Institution,
+    Dataset_Title,
+    Compilation_Title
+           ) %>% 
+  summarise(n(),
+            Titulos = paste(unique(Short_Title),
+                            collapse = "")
+            )
+
+EcoBase <- Template %>% 
+  filter(Dataset_Title == "Lista de sitios de Patrimonio Mundial, Natural o Mixtos en ANP de Mexico 2016")
+
+
+Template$Research_Field[68771:29255] <- "Unknown" # EcoBase
+Template$Research_Field[27018:27107] <- "Int_F" # EcoBase
+Template$Research_Field[29256:29268] <- "Int_F" # Feru
+Template$Research_Field[29269:29761] <- "IGO_F" # FAO | FishStatJ
+
+
+
+
+
+
+
+```
+
+
+
