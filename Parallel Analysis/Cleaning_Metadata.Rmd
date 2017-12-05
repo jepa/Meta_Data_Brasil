@@ -40,7 +40,7 @@ ipak(packages)
 
 #Dataset
 
-# Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.6.csv")
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.8.csv")
 
 
 #### NOTE ####
@@ -1359,9 +1359,7 @@ Template$Research_Fund[29269:29761] <- "IGO_F" # FAO | FishStatJ
 
 ```
 
-
-
-Research Field
+# Research Field
 
 ```{r Research_Field, eval = T, echo = F}
 
@@ -1402,12 +1400,73 @@ Template$Research_Field[29256:29268] <- "Int_F" # Feru
 Template$Research_Field[29269:29761] <- "IGO_F" # FAO | FishStatJ
 
 
+```
 
 
+# Social Ecological Interactions
 
+What type of social-ecological interaction is this data an indicator for?
+
+- Benefit (Catch or Landed value)
+- State (Stock assessment or Habitat area)
+- Pressure (Fishing effort) 
+- Response (CONAPESCA budget or Protected area coverage)
+
+- Standarizarion of terminology
+- Checking things make sense 
+
+```{r SE, eval = T, echo = F}
+
+SE_Explore <- Template %>%
+  group_by(SE_Interaction) %>% 
+  summarise(n())
+
+# Spellcheck
+
+Template$SE_Interaction <-Template$SE_Interaction %>% 
+  gsub("Respond","Response",.) %>% 
+  gsub("Status","State",.) %>% 
+  gsub("Benefits","Benafit",.)
+
+# Review each one of them...
+
+# Benefit
+# Pressure
+# Response
+# State
+
+SE_Check <- Template %>%
+  filter(SE_Interaction == "Benefit") %>%
+  group_by(
+    Author,
+    Institution,
+    Dataset_Title,
+    Compilation_Title
+           ) %>% 
+  summarise(n(),
+            # Titulos = paste(unique(SE_Interaction),
+                            # collapse = "; "),
+            min = min(MMID),
+            max = max(MMID)
+            )
+
+Template %>%
+  # filter(MMID == 86502) %>% 
+  filter(MMID >= 80728 & MMID <= 80781)
+
+# Genero? Peso viserado? 
+
+Template$SE_Interaction[73573:73584] <- "State"
+Template$SE_Interaction[73585:73608] <- "State"
 
 
 ```
 
 
+Modificar en template: 
 
+"Programa de innovacion cienti fica como herramienta para el fortalecimiento de la actividad pesquera sostenible en Bahi a Magdalena, B.C.S"
+
+"Registros acuicultura Mex 2012-2017"
+
+```{r Science, eval = T, echo = F}
