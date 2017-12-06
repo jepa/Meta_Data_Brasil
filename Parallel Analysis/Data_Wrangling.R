@@ -7100,5 +7100,24 @@ write.csv(Template_5.2,
           "Template_5.2.csv",
           row.names = FALSE)
 
- 
+#### Oscar Sosa
 
+Tiburones_Oscar <- Tiburcios %>% 
+  mutate(x = paste("Captura Reconstruida de",Especies,"en el Golfo de California")
+  )
+
+#### Xavier Chiapa
+
+Listado <- Listado_Especies_Xavier %>% 
+  mutate(T1 = paste("Microfotografia de barrido electronico de otolito de ",Otolitos))
+
+
+## DBEM data for metadatos
+
+DBEM_MEx_Spp <- exploited_species_list %>% 
+  rename(Cientifico = TaxonName) %>% 
+  semi_join(Especies_CNP,
+            by="Cientifico") %>% 
+  mutate(Tsss = paste("Catch Projection for", Cientifico, "in Mexico"),
+         SSSS = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Mtematico; IPCC; RCP; MSY; Captura",CommonName)
+  )
