@@ -7121,3 +7121,27 @@ DBEM_MEx_Spp <- exploited_species_list %>%
   mutate(Tsss = paste("Catch Projection for", Cientifico, "in Mexico"),
          SSSS = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Mtematico; IPCC; RCP; MSY; Captura",CommonName)
   )
+
+
+
+#### Municipios ####
+
+Estados_Municipios <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Estados_Municipios.csv")
+Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico.csv")
+
+
+Estados_Municipios$Entidad.Federativa <- as.character(Estados_Municipios$Entidad.Federativa)
+Estados_Municipios$Municipio <- as.character(Estados_Municipios$Municipio)
+
+unique(Estados_Municipios$Entidad.Federativa)
+unique(Mexico_Politico$Location)
+
+Mexico_Politico_Complete <- Mexico_Politico %>% 
+  rename(Entidad.Federativa = Location) %>% 
+  left_join(Estados_Municipios,
+            by = "Entidad.Federativa")
+
+write.csv(Mexico_Politico_Complete,
+          "Mexico_Politico_Municipios.csv",
+          row.names = FALSE)
+####
