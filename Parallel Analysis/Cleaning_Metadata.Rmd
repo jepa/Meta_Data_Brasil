@@ -40,15 +40,15 @@ ipak(packages)
 
 #Dataset
 
-Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_5.8.csv")
+# Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.1.csv")
 
 
 #### NOTE ####
 # RUN EVERYTIME YOU FINISH
 
-write.csv(Template,
-          "Template_5.8.csv",
-          row.names = FALSE)
+# write.csv(Template,
+#           "Template_6.1.csv",
+          # row.names = FALSE)
 
 # Tremplate_5.3 until Subject_name
 
@@ -1426,7 +1426,7 @@ SE_Explore <- Template %>%
 Template$SE_Interaction <-Template$SE_Interaction %>% 
   gsub("Respond","Response",.) %>% 
   gsub("Status","State",.) %>% 
-  gsub("Benefits","Benafit",.)
+  gsub("Benefits","Benefit",.)
 
 # Review each one of them...
 
@@ -1436,19 +1436,20 @@ Template$SE_Interaction <-Template$SE_Interaction %>%
 # State
 
 SE_Check <- Template %>%
-  filter(SE_Interaction == "Benefit") %>%
+  # filter(SE_Interaction == "Benefit") %>%
   group_by(
     Author,
     Institution,
     Dataset_Title,
     Compilation_Title
            ) %>% 
-  summarise(n(),
-            # Titulos = paste(unique(SE_Interaction),
-                            # collapse = "; "),
+  summarise(
+            SE_Inter = paste(unique(SE_Interaction),
+                            collapse = "; "),
             min = min(MMID),
             max = max(MMID)
-            )
+            ) %>% 
+  select(1:3,SE_Inter,everything())
 
 Template %>%
   # filter(MMID == 86502) %>% 
