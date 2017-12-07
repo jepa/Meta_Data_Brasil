@@ -40,7 +40,7 @@ ipak(packages)
 
 #Dataset
 
-# Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.1.csv")
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.2.csv")
 
 
 #### NOTE ####
@@ -130,9 +130,14 @@ I've sorted all unwanted characters (áé...ñ) from the meta-database
 # It will look for rows that are identical
 
 Repeated_Template <-Template[duplicated(Template[2:length(Template)]), ] # Ignoring MMID because thatone will not be repeated
+Non_Repeated_Template <-Template[!duplicated(Template[2:length(Template)]), ] # dropping repeated
+Check_Repeated_Template <-Non_Repeated_Template[duplicated(Non_Repeated_Template[2:length(Non_Repeated_Template)]), ] # Ignoring MMID because thatone will not be repeated
 
-### NOTE: ####
-# Since Template_5.2 there should be 102 repeated observations 
+# write.csv(Non_Repeated_Template,
+#           "Template_6.2.csv",
+#           row.names = F)
+
+
 
 Repeated_Bases <- Repeated_Template %>% 
   group_by(
@@ -239,23 +244,23 @@ Template$Short_Title<- lapply(Template$Short_Title,
 
 # Now we remove the capital for articles
 
-Template$Short_Title <-Template$Short_Title %>% 
+Template$Location <-Template$Location %>% 
   # First English
-  gsub("For ","for ",.) %>% 
-  gsub("Of ","of ",.) %>% 
-  gsub("And ","and ",.) %>% 
-  gsub("In ","in ",.) %>% 
-  gsub("On ","on ",.) %>% 
-  gsub("The ","the ",.) %>% 
+  gsub(" For "," for ",.) %>% 
+  gsub(" Of "," of ",.) %>% 
+  gsub(" And "," and ",.) %>% 
+  gsub(" In "," in ",.) %>% 
+  gsub(" On "," on ",.) %>% 
+  gsub(" The "," the ",.) %>% 
   # And now Spanish
-  gsub("El ","el ",.) %>% 
-  gsub("La ","la ",.) %>% 
-  gsub("Las ","la ",.) %>% 
-  gsub("Los ","los ",.) %>% 
-  gsub("Y ","y ",.) %>% 
-  gsub("En ","en ",.) %>% 
-  gsub("De ","de ",.) %>% 
-  gsub("Del ","del ",.)
+  gsub(" El "," el ",.) %>% 
+  gsub(" La "," la ",.) %>% 
+  gsub(" Las "," la ",.) %>% 
+  gsub(" Los "," los ",.) %>% 
+  gsub(" Y "," y ",.) %>% 
+  gsub(" En "," en ",.) %>% 
+  gsub(" De "," de ",.) %>% 
+  gsub(" Del "," del ",.)
 
 # NOTE: 
 # Species names will be both capitalized.
@@ -726,7 +731,7 @@ View(Template)
 ```
 
 
-# Locations
+# Locations (INCOMPLETE)
 
 This is going to be fun... I don't think standarization of names is worth the time since we will not do any analysis with it and it still works for the "search" component.
 
@@ -784,6 +789,63 @@ Template$Location <- Template$Location %>%
 Locations <- Template %>% 
   filter(Location == "Apulco")
 View(Locations)
+
+
+# Missing location 
+
+# Dataset of Mexico Politico and Municipios
+
+Mexico_Politico <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico_Municipios.csv")
+
+Template$Location <- Template$Location %>% 
+  gsub(" -D.*", "",.)
+
+# INEGI
+
+INEGI <- Template %>% 
+  filter(Author == "INEGI") %>%  
+  left_join(Mexico_Politico,
+            by="Location") %>% 
+  select(-Entidad.Federativa)
+
+INEGI$Area <- INEGI$Area_M
+INEGI$Region <- INEGI$Region_M
+
+INEGI_Fin <- INEGI %>% 
+  select(-Area_M,
+         -Region_M
+  )
+
+
+## Put INEGI back in the Template
+
+# Solve the repetition problem of the left join created by "Municipios" with the same name in different parts of the country (E.g. Loreto BCS and Loreto Zacatecas)
+Duplicated_INEGI <-INEGI_Fin[duplicated(INEGI_Fin[2]), ] # dropping repeated
+Clean_INEGI <-INEGI_Fin[!duplicated(INEGI_Fin[2]), ] # dropping repeated
+
+
+New_Template <- Template %>% 
+  filter(Author != "INEGI") %>% 
+  bind_rows(Clean_INEGI) %>% 
+  arrange(MMID)
+
+# Listo
+
+#### Explore NA's by Region ####
+
+NA_Region <- New_Template %>% 
+  filter(Author == "INEGI") %>% 
+  filter(is.na(Region)) %>% 
+  group_by(Location) %>% 
+  summarise(n())
+
+## Varios problemas con "El, La, Los". Quitar y volver a hacer.... CHECK! 
+
+# Los ultimos cuatro los pongo manual....
+write.csv(New_Template,
+          "Template_6.3.csv",
+          row.names = FALSE)
+
 
 ```
 
@@ -1025,9 +1087,12 @@ New_template_Check <- New_Template %>%
 
 ```{r Spatial_Resolution, eval =T, echo =T}
 
+
 Explore_Spatial <- Template %>% 
   group_by(Spatial_Resolution) %>% 
   summarise(n())
+
+
 
 SR <- Template %>% 
   select(MMID,Spatial_Resolution)
