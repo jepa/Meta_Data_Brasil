@@ -7126,7 +7126,12 @@ DBEM_MEx_Spp <- exploited_species_list %>%
 
 #### Municipios ####
 
-Estados_Municipios <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Estados_Municipios.csv")
+Estados_Municipios <- read.csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Estados_Municipios.csv") %>% 
+  group_by(Entidad.Federativa,
+           Municipio) %>% 
+  summarise(n()) %>% 
+  select(-3)
+
 Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico.csv")
 
 
@@ -7139,7 +7144,16 @@ unique(Mexico_Politico$Location)
 Mexico_Politico_Complete <- Mexico_Politico %>% 
   rename(Entidad.Federativa = Location) %>% 
   left_join(Estados_Municipios,
-            by = "Entidad.Federativa")
+            by = "Entidad.Federativa") %>% 
+  mutate(Location = paste(Municipio,")",sep="")) %>% 
+  select(-Municipio)
+
+Mexico_Politico_Complete$Location <- Mexico_Politico_Complete$Location %>% 
+  gsub(" )", "",.) %>% 
+  gsub(")", "",.)
+
+
+
 
 write.csv(Mexico_Politico_Complete,
           "Mexico_Politico_Municipios.csv",
