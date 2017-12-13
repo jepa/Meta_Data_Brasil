@@ -52,12 +52,12 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- fread("./Template_4.1.csv",
+    data<- fread("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.3.csv",
                  colClasses = c(Area = 'character',
                                 Notes = 'character',
-                                Data_Uncertanty ='character',
+                                # Data_Uncertanty ='character',
                                 Data_Time_Points = 'numeric'))
-    #data.frame(data)
+    # data.frame(data)
   })
   
   
@@ -819,6 +819,8 @@ output$Network <- renderSankeyNetwork({
   
   #First Research Funding
   R_Fund_Org <-Template %>%
+    filter(!is.na(Research_Fund)) %>%
+    filter(Research_Fund != "NA") %>%
     group_by(Research_Fund,Institution_Type) %>%
     summarise(Value =n()) %>%
     rename(Source = Research_Fund,
@@ -826,6 +828,7 @@ output$Network <- renderSankeyNetwork({
   
   Inst_Field <-Template %>%
     filter(!is.na(Institution_Type)) %>%
+    filter(Institution_Type != "NA") %>%
     group_by(Institution_Type,Research_Field) %>%
     summarise(Value = n()) %>%
     rename(Source = Institution_Type,

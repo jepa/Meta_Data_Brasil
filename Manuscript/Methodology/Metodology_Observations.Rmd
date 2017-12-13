@@ -16,15 +16,19 @@ suppressWarnings(library(knitr))
 
 Template <- read.csv("~/Documents/Github/Meta_Data_Mexico/App_Esp/Template.csv")
 
+
 ```
 
 
 # General stuff
 
+- We should change "Natural Science" for "Something Science"
+
+# Comments to resolve
+
 # SE_ Interaction
 
 We could see all human ctivities as benefits as they bring money, jobs, etc. However, the way we are seign the SE interaction is overall system. Shipping, for example will bring benefits to society but will create extra pressure to the system. ANDRES
-
 
 # MMID[597:748]
 ##Autor: CONABIO
@@ -201,11 +205,12 @@ Longitude and Latitude are setted as the mean value for when there are more than
 ### Data_Time_Points
 NOTE: This dataset might be the same as the one UNIMAR Solis, et al.
 
-# Comments to resolve
-- Datos MX, Generales = Energía es... Sociologia?
-- SENER y Pemex, info por pozo petrolero... 
-- Deepwater Horizon, datapoints = stations in oceanography... ? 
-- 
+
+# MMID[:]
+##Autor: Monitoreo
+### Long and Lat
+
+ 
 
 
 

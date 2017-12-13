@@ -7108,8 +7108,17 @@ Tiburones_Oscar <- Tiburcios %>%
 
 #### Xavier Chiapa
 
+Listado_Especies_Xavier<- read.csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Xavier/Listado_Especies_Xavier.csv")
+
 Listado <- Listado_Especies_Xavier %>% 
-  mutate(T1 = paste("Microfotografia de barrido electronico de otolito de ",Otolitos))
+  mutate(T1 = paste("Microfotografia de barrido electronico de otolito de",Otolitos)) %>% 
+  mutate(T2 = paste("Abundancia de",Listado, "en Laguna Celestun, YUC"))
+
+lugares <- data.frame(Lugar = c("Laguna Celestun","El palmar","La carbonera","Chelem","Tel chac", "Rio Lagartos")) %>% 
+  mutate(XX = paste("Listado de especies de peces en",Lugar),
+         XXX = paste("Monitoreo de especies de peces en", Lugar))
+
+
 
 
 ## DBEM data for metadatos
@@ -7159,3 +7168,14 @@ write.csv(Mexico_Politico_Complete,
           "Mexico_Politico_Municipios.csv",
           row.names = FALSE)
 ####
+
+
+#### Monitoreo ##
+
+
+Repeated_Monitoreo <-Monitoreo[duplicated(Monitoreo), ]
+Not_Repeated_Monitoreo <-Monitoreo[!duplicated(Monitoreo), ]
+
+# write.csv(Not_Repeated_Monitoreo,
+#           "Monitoreo_Clean.csv",
+#           row.names = FALSE)
