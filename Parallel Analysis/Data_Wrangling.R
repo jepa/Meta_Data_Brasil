@@ -7179,3 +7179,22 @@ Not_Repeated_Monitoreo <-Monitoreo[!duplicated(Monitoreo), ]
 # write.csv(Not_Repeated_Monitoreo,
 #           "Monitoreo_Clean.csv",
 #           row.names = FALSE)
+
+
+# Monitoreo Nooroeste Spetial Template
+Monitoreo_T <- read.csv("~/Documents/Dropbox/Metadata_Mexico/Manuscript/Data/Monitoreo_Template.csv") 
+
+Monitoreo_SE <- Monitoreo_T %>% 
+  group_by(Research_Field) %>% 
+  summarise(
+    State = length(grep("State",SE_Interaction)),
+    Pressure = length(grep("Pressure",SE_Interaction)),
+    Response = length(grep("Response",SE_Interaction)),
+    Benefit = length(grep("Benefit",SE_Interaction)),
+    RF_Total = n()
+  )
+
+# Checking
+
+sum(Monitoreo_SE$RF_Total) #988 wich is the number of rows MN has, so all es gut!
+  
