@@ -7194,7 +7194,19 @@ Monitoreo_SE <- Monitoreo_T %>%
     RF_Total = n()
   )
 
+
+Monitoreo_Datos <- Monitoreo_T %>% 
+  group_by(Subject_name,
+           Research_Field) %>% 
+  summarise(
+    Records = n(),
+    DT_Points = sum(Data_Time_Points, na.rm=T)
+  )
+
 # Checking
 
 sum(Monitoreo_SE$RF_Total) #988 wich is the number of rows MN has, so all es gut!
+  
+
+
   

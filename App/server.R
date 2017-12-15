@@ -52,7 +52,7 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- fread("/Users/jpalacios/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.3.csv",
+    data<- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/Sisal/Datos_OCeanograficos.csv",
                  colClasses = c(Area = 'character',
                                 Notes = 'character',
                                 # Data_Uncertanty ='character',
