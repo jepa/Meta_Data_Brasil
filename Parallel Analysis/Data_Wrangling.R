@@ -28,6 +28,8 @@ setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 #### Template
 
+Template_6.3 <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.3.csv")
+
 Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
 # View(Template)
 
@@ -7207,6 +7209,152 @@ Monitoreo_Datos <- Monitoreo_T %>%
 
 sum(Monitoreo_SE$RF_Total) #988 wich is the number of rows MN has, so all es gut!
   
+#### MUNICIPIOS H.Reyes ####
+
+Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico_Municipios.csv")
+
+T_CONEVAl_Municipio <- Mexico_Politico %>% 
+  mutate(First = paste("Negocios dedicados a la pesca en",Location,Entidad.Federativa,
+                       sep =" "),
+         Second = paste("Numero de Personas en Pobreza en",Location,Entidad.Federativa,
+                       sep =" "),
+         Third = paste("Numero Promedio de Carencias en",Location,Entidad.Federativa,
+                        sep =" "),
+         Forth = paste("Salario minimo de profesiones ligadas a la pesca en",Location, Entidad.Federativa,
+                       sep =" ")
+  ) %>% 
+  gather(
+    "Secuencia",
+    "Titulo",
+    5:8
+  ) 
+
+K_CONEVAl_Municipio <-Mexico_Politico %>% 
+  mutate(
+    Key_F = paste("INEGI; Negocios; Empleo; Indicadores;Sector Pesca; Cadena de valor"),
+         kSecond = paste("CONEVAL; Personas; Pobreza; Indicadores;Sector Pesca; Cadena de valor",Location,Entidad.Federativa),
+         kThird = paste("CONEVAL; Pobreza; Carencia; Indicadores; Sector Pesca"),
+         kForth = paste("CONEVAL; Salario minimo; Pobreza; Riqueza; Secotr Pesca; Cadena de valores Indicador")
+  ) %>% 
+  gather(
+    "Sec",
+    "Key",
+    5:8
+  )
+
+CONEVAl_Municipio_Template <- data.table(
+  MMID = seq(
+    max(Template_6.3$MMID,na.rm = T)+1, # Next MID
+    max(Template_6.3$MMID,na.rm = T) + nrow(T_CONEVAl_Municipio) # to lenght
+    ),
+  Short_Title = T_CONEVAl_Municipio$Titulo,
+  Keywords = K_CONEVAl_Municipio$Key,
+  Author = "Traiana",
+  Institution = "UABCS",
+  Dataset_Available = 2,
+  Subject_name = "Multiple Species",
+  Area = T_CONEVAl_Municipio$Area_M,
+  Region = T_CONEVAl_Municipio$Region_M,
+  Location = T_CONEVAl_Municipio$Location,
+  Start_Year = 1998,
+  Start_Year = 2014,
+  Data_Time_Points = c(rep(10, each = 7474),
+                       rep(17, each = 2490)),
+  Unit_Type = c(
+    rep("Count", each = 7474),
+    rep("Currency", each = 2490)
+    ),
+  Temporal_Resolution = "Year",
+  Spatial_Resolution = "Location",
+  Dataset_Title = c(
+    rep("Base de datos DENUE (INEGI)", each = 2491),
+    rep("Medicion de la Pobreza Relacionada a la Pesca (CONEVAL)", each = 4982),
+    rep("Salario Minimo en Empleos Relacionado a la Pesca (CONEVAL)", each = 2491)
+    ),
+  Compilation_Title = "Recopilacion de Datos Socioeconomicos relacionados a la Pesca en Mexico (CONEVAL-INEGI)",
+  Publication_Year = "",
+  Reference = "NA",
+  User_Contact = "Triana Paulina; trianapaulinagi@hotmail.com",
+  Institution_Type = "ACA",
+  Research_Fund = "GOV_F",
+  SE_Interaction = "Status",
+  Notes = "Datos de INEGI Y CONEVAL recopilados por investigador",
+  Lat = "NA",
+  Long = "NA",
+  Science = "Social Science"
+)
+
+# write.csv(CONEVAl_Municipio_Template,
+#           "Triana.csv",
+#           row.names = FALSE)
 
 
-  
+## DONE, Tidy and b-e-a-utifull! 
+
+
+## SENER Energia ####
+
+Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico_Municipios.csv")
+
+SENER_Municipio <- Mexico_Politico %>% 
+  mutate(First = paste("Total de Habitantes en",Location,Entidad.Federativa,
+                       sep =" "),
+         Second = paste("Total de Habitantes con Energia Electria en",Location,Entidad.Federativa,
+                        sep =" "),
+         Third = paste("Porcentaje de Habitantes con Energia Electrica en",Location,Entidad.Federativa,
+                       sep =" ")
+  ) %>% 
+  gather(
+    "Secuencia",
+    "Titulo",
+    5:7
+  ) 
+
+
+SENER_Municipio_Template <- data.table(
+  MMID = seq(
+    max(CONEVAl_Municipio_Template$MMID,na.rm = T)+1, # Next MID
+    max(CONEVAl_Municipio_Template$MMID,na.rm = T) + nrow(SENER_Municipio) # to lenght
+  ),
+  Short_Title = SENER_Municipio$Titulo,
+  Keywords = "Energia; Indicadores; Pobreza; Electricidad; Localidad",
+  Author = "SENER",
+  Institution = "SENER",
+  Dataset_Available = 2,
+  Subject_name = "NA",
+  Area = SENER_Municipio$Area_M,
+  Region = SENER_Municipio$Region_M,
+  Location = SENER_Municipio$Location,
+  Start_Year = 2015,
+  Start_Year = 2015,
+  Data_Time_Points = 1,
+  Unit_Type = c(
+    rep("Count", each = 4982),
+    rep("Percentage", each = 2491)
+  ),
+  Temporal_Resolution = "Year",
+  Spatial_Resolution = "Location",
+  Dataset_Title = "Regiones Sin Electricidad",
+  Compilation_Title = "Datos Abiertos MX",
+  Publication_Year = 2015,
+  Reference = "https://datos.gob.mx/busca/dataset/regiones-sin-electricidad",
+  User_Contact = "dbernal@energia.gob.mx",
+  Institution_Type = "GOV",
+  Research_Fund = "GOV_F",
+  SE_Interaction = "Status",
+  Notes = "NA",
+  Lat = "NA",
+  Long = "NA",
+  Science = "Social Science"
+)
+
+# write.csv(SENER_Municipio_Template,
+#           "SENER.csv",
+#           row.names = FALSE)
+
+#### Falta Unirlas ###
+
+Template_6.4 <- Template_6.3 %>% 
+  bind_rows(CONEVAl_Municipio_Template,
+            SENER_Municipio_Template
+            )
