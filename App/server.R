@@ -52,7 +52,7 @@ shinyServer(function(input, output) {
   # Reading the Template ####
   datasetInput <- reactive({
     
-    data<- fread("~/Documents/Dropbox/Metadata_Mexico/Datasets/Sisal/Datos_OCeanograficos.csv",
+    data<- fread("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.4.csv",
                  colClasses = c(Area = 'character',
                                 Notes = 'character',
                                 # Data_Uncertanty ='character',
@@ -219,7 +219,6 @@ shinyServer(function(input, output) {
   
   #### Quantitative Analysis ####
   
-  # Number of entries ####
   output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
@@ -250,6 +249,8 @@ shinyServer(function(input, output) {
     paste(sum(z$z))
     
   })
+  
+  #_____________________ END ___________________________ #  
   
   #### NUMBER OF DATA POINTS ####
   
@@ -666,7 +667,7 @@ shinyServer(function(input, output) {
     }
   })
   
-  #### Research_Field ####
+  #### Research_Field_DP ####
   output$RF_Plot <- renderPlot({
     Se_Plot <- datasetInput() %>% 
       filter(!is.na(Research_Field)) %>% 
@@ -693,7 +694,33 @@ shinyServer(function(input, output) {
                                       face="bold"))
   })
   
-  ## Research Field Plot ####
+  output$RF_Plot_Rec <- renderPlot({
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(Research_Field)) %>% 
+      #filter(Research_Field != "Otros") %>% 
+      group_by(Research_Field) %>% 
+      summarise(Value = n())
+    
+    ggplot(data=Se_Plot,
+           aes(
+             y = Value,
+             x = Research_Field,
+             fill =Research_Field
+           ))+
+      geom_bar(stat = "identity")+
+      theme_classic() +
+      ylab("Número de Registros")+
+      xlab("Campos de Investigación")+
+      theme(axis.text.x = element_text(hjust = 1,
+                                       size=14,
+                                       angle= 45),
+            axis.text.y = element_text(size = 14),
+            legend.position = "none",
+            axis.title = element_text(size=20,
+                                      face="bold"))
+  })
+  
+  ## Research Field Plot DP ####
   output$Research_Field_Plot <- renderPlot({
     
     #### By Area ####
@@ -775,6 +802,97 @@ shinyServer(function(input, output) {
                                              angle= 45),
                   axis.text.y = element_text(size = 14),
                   legend.position = "top",
+                  axis.title = element_text(size=20,
+                                            face="bold"))+ 
+            guides(fill = guide_legend(title = "Research Field",
+                                       title.position = "left"))
+          
+        }
+      }
+    }
+  })
+  
+  output$Research_Field_Plot_Rec <- renderPlot({
+    
+    #### By Area ####
+    Se_Plot <- datasetInput() %>% 
+      filter(!is.na(Area)) %>% 
+      group_by(Area,Research_Field) %>% 
+      summarise(Entradas = n())
+    
+    if(input$Research_Field_Plot_Option == 1){
+      ggplot(data=Se_Plot,
+             aes(
+               x=Area,
+               y=Entradas,
+               fill= Research_Field
+             ))+
+        geom_bar(stat = "identity")+
+        theme_classic() +
+        ylab("Numero de Registros")+
+        xlab("Area")+
+        theme(axis.text.x = element_text(hjust = 1,
+                                         size=14,
+                                         angle= 45),
+              axis.text.y = element_text(size = 14),
+              legend.position = "none",
+              axis.title = element_text(size=20,
+                                        face="bold"))+ 
+        guides(fill = guide_legend(title = "Research Field",
+                                   title.position = "left"))
+    }else{
+      #### By Region ####
+      
+      if(input$Research_Field_Plot_Option == 2){
+        Se_Plot <- datasetInput() %>% 
+          filter(!is.na(Region)) %>% 
+          group_by(Region,Research_Field) %>% 
+          summarise(Entradas = n())
+        
+        ggplot(data=Se_Plot,
+               aes(
+                 x=Region,
+                 y= Entradas,
+                 fill= Research_Field
+               ))+
+          geom_bar(stat = "identity")+
+          theme_classic() +
+          ylab("Numero de Registros")+
+          xlab("Region")+
+          theme(axis.text.x = element_text(hjust = 1,
+                                           size=14,
+                                           angle= 45),
+                axis.text.y = element_text(size = 14),
+                legend.position = "none",
+                axis.title = element_text(size=20,
+                                          face="bold"))+ 
+          guides(fill = guide_legend(title = "Research Field",
+                                     title.position = "left"))
+      }else{
+        #### By Location ####
+        
+        if(input$Research_Field_Plot_Option == 3){
+          
+          Se_Plot <- datasetInput() %>% 
+            filter(!is.na(Location)) %>% 
+            group_by(Location,Research_Field) %>% 
+            summarise(Entradas = n())
+          
+          ggplot(data=Se_Plot,
+                 aes(
+                   x=Location,
+                   y = Entradas,
+                   fill= Research_Field
+                 ))+
+            geom_bar(stat = "identity")+
+            theme_classic() +
+            ylab("Numero de Registros")+
+            xlab("Location")+
+            theme(axis.text.x = element_text(hjust = 1,
+                                             size=14,
+                                             angle= 45),
+                  axis.text.y = element_text(size = 14),
+                  legend.position = "none",
                   axis.title = element_text(size=20,
                                             face="bold"))+ 
             guides(fill = guide_legend(title = "Research Field",

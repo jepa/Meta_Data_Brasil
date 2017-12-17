@@ -390,17 +390,35 @@ shinyUI(
     tabPanel("Premilinar Results",
              #Wellcome / Instructions####
              p("Hola"),
-             column(
-               width=12,
-               align = "center",
+             # column(
+             #   width=12,
+             #   align = "center",
                #### Map of Data Localization ####
-               p(h3("Map of Data Localization")),
-               leafletOutput("Data_Map"),
-               p(em("Note: The numbers displayed in each marker (Blue Baloon) represent the MMID")),
-               p(h3(
-                 "Time Series of Data Information Gathering"
-               )),
-               dygraphOutput("TFgraph")
+               # p(h3("Map of Data Localization")),
+               # leafletOutput("Data_Map"),
+               # p(em("Note: The numbers displayed in each marker (Blue Baloon) represent the MMID")),
+               # p(h3(
+               #   "Time Series of Data Information Gathering"
+               # )),
+               # dygraphOutput("TFgraph")
+               column(
+                 width=3,
+                 align = "center",
+                 offset = 1,
+                 p(h3("Records")),
+                 p(h4(textOutput("Number_Entries")))
+               ),
+               column(
+                 width=3,
+                 align = "center",
+                 p(h3("Data Points")),
+                 p(h4(textOutput("Number_Data_Points")))
+               ),
+               column(
+                 width=3,
+                 align = "center",
+                 p(h3("Repositories")),
+                 p(h4(textOutput("Sources")))
              ),
              br(),
              br(),
@@ -495,11 +513,10 @@ shinyUI(
                plotOutput("Subjects_Plot")
              ),
              #### Experimental Analysis ####
-             column(width =12,
+             column(width =6,
                     align = "center",
-                    p(h4("Research Field")),
+                    p(h4("Research Field By DP")),
                     plotOutput("RF_Plot"),
-                    p(h2("Experimental Analysis")),
                     selectInput("SE_E_Plot_Option", 
                                 label= "Choose To Show Plot:",
                                 choices = list("By Area" = 1, 
@@ -507,11 +524,26 @@ shinyUI(
                                                "By Location" =3
                                 ),
                                 width = "20%"
+                    )
                     ),
-             plotOutput("SE_Component_Area"),
-             selectInput("Research_Field_Plot_Option", 
+             column(width =6,
+                    align = "center",
+                    p(h4("Research Field By Record")),
+                    plotOutput("RF_Plot_Rec")#,
+                    # selectInput("SE_E_Plot_Option", 
+                    #             label= "Choose To Show Plot:",
+                    #             choices = list("By Area" = 1, 
+                    #                            "By Region" = 2,
+                    #                            "By Location" =3
+                    #             ),
+                    #             width = "20%"
+                    # )
+             ),
+             column(width =6,
+                    align = "center",
+             selectInput("Research_Field_Plot_Option",
                          label= "Choose To Show Plot:",
-                         choices = list("By Area" = 1, 
+                         choices = list("By Area" = 1,
                                         "By Region" = 2,
                                         "By Location" =3
                          ),
@@ -519,17 +551,14 @@ shinyUI(
              ),
              plotOutput("Research_Field_Plot")
              ),
+             column(width =6,
+                    align = "center",
+                    plotOutput("Research_Field_Plot_Rec")
+             ),
+             column(width =12,
+                    align = "center",
              sankeyNetworkOutput("Network")
+             )
     )
   )
 )
-
-
-
-
-
-
-
-
-
-
