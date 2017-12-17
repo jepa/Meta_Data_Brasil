@@ -7120,18 +7120,119 @@ lugares <- data.frame(Lugar = c("Laguna Celestun","El palmar","La carbonera","Ch
   mutate(XX = paste("Listado de especies de peces en",Lugar),
          XXX = paste("Monitoreo de especies de peces en", Lugar))
 
+## DBEM data for metadatos ####
+
+Listado_Spp_Mex_DBEM <- read.csv("~/Documents/Dropbox/Proyecto Cambio Climatico/Datos/Listado_Spp_Mex_DBEM.csv")
+
+DBEM_MEx_Spp <- Listado_Spp_Mex_DBEM  %>% 
+  separate(Litoral, c("Lit1", "Lit2","Lit3"), ";") %>% 
+  gather("Cat",
+         "Litoral",
+         7:9) %>% 
+  select(-Cat) %>% 
+  filter(!is.na(Litoral),
+         Litoral != " NA") %>% 
+  group_by(Cientifico,
+           Litoral) %>% 
+  summarise(
+    Key= paste(unique(Recurso_CNP, Tipo_CNP,Nombres_Comunes, sep = "; "),
+               collapse = ";")
+  ) %>% 
+  mutate(
+    GFDLL = paste("Catch Projection under Low Emission Climate Change (GFDL-2.6) for", Cientifico, "in",Litoral),
+    GFDLH = paste("Catch Projection under High Emission Climate Change (GFDL-8.5) for", Cientifico, "in",Litoral),
+    IPSLL = paste("Catch Projection under Low Emission Climate Change (IPSL-2.6) for", Cientifico, "in",Litoral),
+    IPSLH = paste("Catch Projection under High Emission Climate Change (IPSL-8.5) for", Cientifico, "in",Litoral),
+    MPIL = paste("Catch Projection under Low Emission Climate Change (MPI-2.6) for", Cientifico, "in",Litoral),
+    MPIH = paste("Catch Projection under High Emission Climate Change (MPI-8.5) for", Cientifico, "in",Litoral),
+    GFDLLA = paste("Abundance Projection under Low Emission Climate Change (GFDL-2.6) for", Cientifico, "in",Litoral),
+    GFDLHA = paste("Abundance Projection under High Emission Climate Change (GFDL-8.5) for", Cientifico, "in",Litoral),
+    IPSLLA = paste("Abundance Projection under Low Emission Climate Change (IPSL-2.6) for", Cientifico, "in",Litoral),
+    IPSLHA = paste("Abundance Projection under High Emission Climate Change (IPSL-8.5) for", Cientifico, "in",Litoral),
+    MPILA = paste("Abundance Projection under Low Emission Climate Change (MPI-2.6) for", Cientifico, "in",Litoral),
+    MPIHA = paste("Abundance Projection under High Emission Climate Change (MPI-8.5) for", Cientifico, "in",Litoral)
+  ) %>% 
+  gather("Category",
+         "Titulo",
+         4:15)
+
+DBEM_MEx_Spp_K <- Listado_Spp_Mex_DBEM  %>% 
+  separate(Litoral, c("Lit1", "Lit2","Lit3"), ";") %>% 
+  gather("Cat",
+         "Litoral",
+         7:9) %>% 
+  select(-Cat) %>% 
+  filter(!is.na(Litoral),
+         Litoral != " NA") %>% 
+  group_by(Cientifico,
+           Litoral) %>% 
+  summarise(
+    Key= paste(unique(Recurso_CNP, Tipo_CNP,Nombres_Comunes, sep = "; "),
+               collapse = ";")
+  ) %>% 
+  mutate(
+KGFDL = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 2.6; Bajas Emissiones; MSY; Captura",Key,sep=";"),
+KGFDLH = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 8.5; Altas Emissiones; MSY; Captura",Key,sep=";"),
+KIPSL = paste("IPSL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 2.6; Altas Emissiones; MSY; Captura",Key,sep=";"),
+KIPSH = paste("IPSL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 8.5; Altas Emissiones; MSY; Captura",Key,sep=";"),
+KMPIL = paste("MPI; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 2.6; Altas Emissiones; MSY; Captura",Key,sep=";"),
+KMPIH = paste("MPI; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 8.5; Altas Emissiones; MSY; Captura",Key,sep=";"),
+KGFDLA = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 2.6; Bajas Emissiones; MSY; Abundancia",Key,sep=";"),
+KGFDLHA = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 8.5; Altas Emissiones; MSY; Abundancia",Key,sep =";"),
+KIPSLA = paste("IPSL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 2.6; Altas Emissiones; MSY; Abundancia",Key,sep=";"),
+KIPSHA = paste("IPSL; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 8.5; Altas Emissiones; MSY; Abundancia",Key,sep=";"),
+KMPILA = paste("MPI; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 2.6; Altas Emissiones; MSY; Abundancia",Key,sep=";"),
+KMPIHA = paste("MPI; Cambio Climatico; Distribucion de Especies; Modelo Matematico; IPCC; RCP 8.5; Altas Emissiones; MSY; Abundancia",Key,sep=";")
+  ) %>% 
+  gather("KeyCat",
+         "Keyss",
+         4:15)
+
+DBEM_Template <- data.table(
+  MMID = "",
+  Short_Title = DBEM_MEx_Spp$Titulo,
+  Keywords = DBEM_MEx_Spp_K$Keyss,
+  Author = "Cheung, W.",
+  Institution = "UBC",
+  Dataset_Available = 2,
+  Subject_name = DBEM_MEx_Spp$Cientifico,
+  Area = DBEM_MEx_Spp$Litoral,
+  Region = "NA",
+  Location = "NA",
+  Start_Year = 1951,
+  Start_Year = 2100,
+  Data_Time_Points = (2100-1951)+1,
+  Unit_Type = "Weight",
+  Temporal_Resolution = "Year",
+  Spatial_Resolution = "Georeferenced",
+  Dataset_Title = "DBEM Species Distribution Results",
+  Compilation_Title = c(
+    rep("DBEM Projected Maximum Catch Potential",1500),
+    rep("DBEM Projected Abundance",1500)
+  ),
+  Publication_Year = 2009,
+  Reference =  c(
+    rep("http://doi.org/10.1111/j.1365-2486.2009.01995.x",1500),
+    rep("http://doi.org/10.1111/j.1467-2979.2008.00315.x",1500)
+  ),
+  User_Contact = "William Cheung, w.cheung@oceans.ubc.ca",
+  Institution_Type = "INT",
+  Research_Fund = "INT_F",
+  SE_Interaction = "Status",
+  Notes = "NA",
+  Lat = "NA",
+  Long = "NA",
+  Science = "Natural Science"
+)
 
 
 
-## DBEM data for metadatos
+write.csv(DBEM_Template,
+          "DBEM_Template.csv",
+          row.names = FALSE)
 
-DBEM_MEx_Spp <- exploited_species_list %>% 
-  rename(Cientifico = TaxonName) %>% 
-  semi_join(Especies_CNP,
-            by="Cientifico") %>% 
-  mutate(Tsss = paste("Catch Projection for", Cientifico, "in Mexico"),
-         SSSS = paste("GFDL; Cambio Climatico; Distribucion de Especies; Modelo Mtematico; IPCC; RCP; MSY; Captura",CommonName)
-  )
+## END ####
+
 
 
 
@@ -7352,9 +7453,101 @@ SENER_Municipio_Template <- data.table(
 #           "SENER.csv",
 #           row.names = FALSE)
 
-#### Falta Unirlas ###
+## END ####
 
-Template_6.4 <- Template_6.3 %>% 
-  bind_rows(CONEVAl_Municipio_Template,
-            SENER_Municipio_Template
-            )
+### Compilation and dataset ID
+
+# Something I've should have done long time a-go, set numbers to compilations and datasets ##
+
+DID <- Template %>% 
+  group_by(Dataset_Title) %>% 
+  summarise(
+    D_ID = n()
+  ) %>% 
+  mutate(
+    D_ID = seq(1,1634)
+  )
+
+Template_IDs <- Template %>% 
+  left_join(DID,
+            by="Dataset_Title")
+
+CID <- Template %>% 
+  group_by(Compilation_Title) %>% 
+  summarise(
+    C_ID = n()
+  ) %>% 
+  mutate(
+    C_ID = seq(1,127)
+  )
+
+Template_CIDs <- Template_IDs %>% 
+  left_join(CID,
+            by="Compilation_Title") %>% 
+  select(MMID,C_ID,D_ID,everything())
+
+write.csv(Template_CIDs,
+          "Template_6.5.csv",
+          row.names = FALSE)
+
+
+#### SOLVE FOR THE LAST TBD'S ####
+
+
+Template <- read_csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.4.csv")
+MPA_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/MPA_Politico.csv")
+
+# First ARea TBD's
+# Only MPAs... The rest I'll do them manually on excel.
+
+TBDs <- Template %>% 
+  filter(Area == "TBD") %>% 
+  left_join(MPA_Politico,
+            by="Location") %>% 
+  rename(
+    Area =Area.x,
+    Region = Region.x
+  )
+
+TBDs$Area <- TBDs$Area.y
+TBDs$Region <- TBDs$Region.y
+
+
+TBDs_Fin <- TBDs %>% 
+  select(-30,-31)
+
+
+New_Template <- Template %>% 
+  filter(C_ID != 94) %>% 
+  bind_rows(TBDs_Fin)
+
+
+# Now Region
+
+TBDs_Reg <- Template %>% 
+  filter(Region == "TBD") 
+
+# Is all OBIS I'll need the map in polygons to work it out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
