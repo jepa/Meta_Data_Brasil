@@ -28,7 +28,7 @@ setwd("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis")
 
 #### Template
 
-Template_6.3 <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.3.csv")
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.5.csv")
 
 Template <- read_csv("~/Documents/Github/Meta_Data_Mexico/App/Template_4.1.csv")
 # View(Template)
@@ -7397,7 +7397,7 @@ CONEVAl_Municipio_Template <- data.table(
 
 Mexico_Politico <- read_csv("~/Documents/Github/Meta_Data_Mexico/Parallel Analysis/Data/Mexico_Politico_Municipios.csv")
 
-SENER_Municipio <- Mexico_Politico %>% 
+SENER_Municipio <- Municipios_Costeros_Complete %>% 
   mutate(First = paste("Total de Habitantes en",Location,Entidad.Federativa,
                        sep =" "),
          Second = paste("Total de Habitantes con Energia Electria en",Location,Entidad.Federativa,
@@ -7530,6 +7530,9 @@ TBDs_Reg <- Template %>%
 # Is all OBIS I'll need the map in polygons to work it out
 
 
+write.csv(New_Template,
+          "Template_6.5.csv",
+          row.names = FALSE)
 
 
 
@@ -7539,15 +7542,34 @@ TBDs_Reg <- Template %>%
 
 
 
+# Filtrar datos por Municipios Costeros en Mexico ####
+
+Municipios_Costeros <- read.csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/Municipios_Costeros.csv")
+
+Municipios_Costeros_Complete <- Mexico_Politico %>% 
+  filter(Location %in% Municipios_Costeros$Municipio) %>% 
+  filter(Area_M!= "Freshwater/Terrestrial")
 
 
+Datos_Municipios <- c("SENER","INEGI","Traiana")
+
+Muni <- Template %>% 
+  filter(Author %in% Datos_Municipios) %>% 
+  filter(Location %in% Municipios_Costeros$Municipio) %>% 
+  filter(Area != "Freshwater/Terrestrial")
+
+SENER_Muni <- Muni %>% 
+  filter(Institution == "SENER")
 
 
+Old_Template <- Template %>% 
+  filter(!Author %in% Datos_Municipios) %>% 
+  bind_rows(Muni) %>% 
+  arrange(MMID)
 
-
-
-
-
+write.csv(Old_Template,
+          "Template_6.6.csv",
+          row.names = FALSE)
 
 
 
