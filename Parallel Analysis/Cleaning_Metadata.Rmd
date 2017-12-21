@@ -40,7 +40,7 @@ ipak(packages)
 
 #Dataset
 
-Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.2.csv")
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.7.csv")
 
 
 #### NOTE ####
@@ -726,6 +726,80 @@ Template$Region<- gsub(
   Template$Region)
 
 View(Template)
+
+
+#### OBIS TBDS ####
+
+TBDS <- Template %>% 
+  filter(Region =="TBD")
+
+BCC <- Template %>% 
+  filter(Region =="TBD") %>% 
+  filter(Long >= -92.488283) %>% 
+  select(-Region) %>% 
+  mutate(Region = "B. Camp. Caribe") %>% 
+  select(1:10,Region,everything())
+
+WGM <- Template %>% 
+  filter(Region =="TBD") %>% 
+  filter(Long <= -92.488283 & Long >= -98.242770,
+         Lat >= 18.091205) %>% 
+  select(-Region) %>% 
+  mutate(Region = "W. G. Mexico") %>% 
+  select(1:10,Region,everything())
+
+SP <- Template %>% 
+  filter(Region =="TBD") %>% 
+  filter(Lat <= 16.315368 & Long >= -98.552521) %>% 
+  select(-Region) %>% 
+  mutate(Region = "South Pacific") %>% 
+  select(1:10,Region,everything())
+
+CP <- Template %>% 
+  filter(Region =="TBD") %>% 
+  filter(Long <= -98.552521 & Long >= -105.738200) %>% 
+  select(-Region) %>% 
+  mutate(Region = "Central Pacific") %>% 
+  select(1:10,Region,everything())
+
+GC <- Template %>% 
+  filter(Region =="TBD") %>% 
+  filter(Long <= -105.738200) %>% 
+  select(-Region) %>% 
+  mutate(Region = "G. Califronia") %>% 
+  select(1:10,Region,everything())
+
+TBDS_Clear <- BCC %>% 
+  bind_rows(
+            WGM,
+            SP,
+            CP,
+            GC)
+
+New_Template <-Template %>% 
+  filter(D_ID != 786) %>% 
+  bind_rows(TBDS_Clear) %>% 
+  arrange(MMID)
+
+CheckMark <- New_Template %>% 
+  filter(Region == "TBD")
+
+# write.csv(New_Template,
+#           "Template_6.8.csv",
+#           row.names = FALSE)
+
+leaflet(GC) %>%
+  addTiles(
+    urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
+    attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
+  ) %>%
+  setView(lng = -90, lat = 18, zoom = 5) %>% 
+  addMarkers(
+    lng = ~Long,
+    lat= ~Lat,
+    popup = ""
+  )
+
 
 
 ```
