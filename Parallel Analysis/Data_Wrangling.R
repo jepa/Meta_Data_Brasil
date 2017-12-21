@@ -5403,6 +5403,50 @@ write.csv(Eslora_Menor,
 
 #### CONAPESCA ####
 
+
+
+# revission DAtos MX
+
+Capturas <- CONAPESCA %>% 
+  filter(Dataset_Title == "Tabla de la produccion pesquera por oficina de pesca") %>% 
+  group_by(Subject_name,
+           Location) %>% 
+  summarise(n())
+
+simpleCap <- function(x) {
+  s <- strsplit(x, " ")[[1]]
+  paste(toupper(substring(s, 1,1)), substring(s, 2),
+        sep="", collapse=" ")
+}
+
+CONAPESCA_2006_2014 <- read.csv("~/Documents/Dropbox/Proyecto Cambio Climatico/Datos/CONAPESCA_2006_2014.csv")
+
+
+
+Conapesca <-CONAPESCA_2006_2014 %>% 
+  group_by(NOMBRECIENTIFICO) %>% 
+  summarise(n())
+
+CONAPESCA_2006_2014$NOMBRECIENTIFICO <- as.character(CONAPESCA_2006_2014$NOMBRECIENTIFICO)
+
+Species_Correct <- gnr_resolve(names = Species$Subject_name, #Looks for homogenic names 
+                                                       best_match_only = TRUE)
+
+
+
+
+write.csv(CONAPESCA_2006_2014,
+          "CONAPESCA_2006_2014.csv",
+          row.names = FALSE)
+                             
+
+
+# And then we run it for this column
+CONAPESCA_2006_2014$NOMBRE.CIENTIFICO <- lapply(CONAPESCA_2006_2014$NOMBRE.CIENTIFICO,
+                              simpleCap
+)
+
+
 tolower(Acciones_Inspeccion_Vigilancia$Estado)
 
 Acciones_Inspeccion_Vigilancia$Estado <- tolower(Acciones_Inspeccion_Vigilancia$Estado)
@@ -6412,6 +6456,7 @@ ec_po_sponges <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMa
 
 # dataMares TERCERA Tanda desde metadatos ####
 
+
 CONAPESCA <- f_bm_conapesca_1997_2015 %>% 
   group_by(Comunidad,
            `Nombre Cientifico`) %>% 
@@ -6828,7 +6873,6 @@ CONAPESCA_Pacific <- f_po_conapesca %>%
     7:8
   ) %>% 
   select(-Cat) %>%
-  rename(Location =`Entidad federativa`) %>% 
   left_join(Mexico_Politico, #Location data
             by="Location") %>% 
   mutate(
@@ -6943,8 +6987,6 @@ CONAPESCA_Pacifico_Fin <- bind_rows(CONAPESCA_Pacific,
                                     CONAPESCA_Pacific_Value)
 
 
-
-
 metadata <- read_csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/dataMares/dataMares_Metadata.csv")
 
 # Juntar con metadata datamares ###
@@ -6957,6 +6999,20 @@ Final <- data_Mares_B %>%
 write.csv(CONAPESCA_Pacifico_Fin,
           DataMares_B.csv,
           row.names = FALSE)
+
+
+#### Desmadre de dataMares de CONAPESCA ####
+
+DataMares <- Template %>% 
+  filter(Dataset_Title =="Mexico's National Fisheries Statistics") %>% 
+  group_by(Subject_name,
+           Location) %>% 
+  summarise(n())
+
+En_CONAPESCA <- f_me_produccion_pesquera %>% 
+  group_by(`Nombre Cientifico`,
+           Entidad) %>% 
+  summarise(n())
 
 
 # f_po_groupers.xlsx
@@ -7533,11 +7589,6 @@ TBDs_Reg <- Template %>%
 write.csv(New_Template,
           "Template_6.5.csv",
           row.names = FALSE)
-
-
-
-
-
 
 
 
