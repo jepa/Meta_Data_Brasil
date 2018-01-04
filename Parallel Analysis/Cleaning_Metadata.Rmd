@@ -40,7 +40,7 @@ ipak(packages)
 
 #Dataset
 
-Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.7.csv")
+Template <- read.csv("~/Documents/Dropbox/Metadata_Mexico/English/Templates/Template_6.8.csv")
 
 
 #### NOTE ####
@@ -673,6 +673,36 @@ New_Template <- Template %>%
 
 # Take out non-species names... ####
 
+
+#### Fish Base cleaning ####
+Especies_CNP <- read.csv("~/Documents/Dropbox/Metadata_Mexico/Datasets/CartaNac.Pesq/Especies_CNP.csv") %>% 
+  rename(Subject_name = Cientifico)
+
+FishBase <- Template %>% 
+  filter(C_ID == 56) %>% 
+  semi_join(Especies_CNP,
+            by="Subject_name")
+
+
+EcoFishBase <- Template %>% 
+  filter(C_ID == 56) %>% 
+  anti_join(Especies_CNP,
+            by="Subject_name") %>% 
+  select(-Research_Field) %>% 
+  mutate(Research_Field = "Ecology") %>% 
+  select(1:25,Research_Field,everything()) %>% 
+  bind_rows(FishBase)
+  
+New_template <- Template %>%
+  filter(C_ID != 56) %>% 
+  bind_rows(EcoFishBase) %>% 
+  arrange(MMID)
+
+# write.csv(New_template,
+#           "Template_6.8.csv",
+#           row.names = FALSE)
+
+
 ```
 
 
@@ -799,8 +829,6 @@ leaflet(GC) %>%
     lat= ~Lat,
     popup = ""
   )
-
-
 
 ```
 

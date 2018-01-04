@@ -163,10 +163,10 @@ Because this is a catalogue made from different publications it is extremeley ha
 # MMID[33298:33897]
 ##Autor: Damien Olvier Kunz
 ### Data_Time_Points
-All the records have 9 data time points. Damien used 9 publications (of different years) to gather all data. Hence, I though that it will be the best to just use that number instead of going publication by publication searching for each year of sampling.Also, he compiled a database of other bases that we already have (e.g. Hector Relles Pangas). Hence, those years are not captured on Damien's database to avoid duplication. 
+All the records have 9 data time points. Damien used 9 publications (of different years) to gather all data. Therfore, I though that it will be the best to just use that number instead of going publication by publication searching for each year of sampling.Also, he compiled a database of other bases that we already have (e.g. Hector Relles Pangas). Hence, those years are not captured on Damien's database to avoid duplication. 
 
 
-Data points will be by location. Hence, each species will have data for each location inicial and end.
+Data points will be by location. each species will have data for each location inicial and end.
 
 
 # MMID[32805:32921]
