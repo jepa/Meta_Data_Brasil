@@ -45,8 +45,8 @@ shinyServer(function(input, output, session) {
     
     data<- fread("./Template.csv",
                  colClasses = c(Location = 'character',
-                                Notes = 'character',
-                                Data_Uncertanty ='character'))
+                                Notes = 'character'
+                                ))
   })
   
   

@@ -1,11 +1,12 @@
 name: marmetadatamexeng
-title: MarMetadataMex/Eng
+title: marmetadatamexeng
+username:
 account: jepa
 server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
 appId: 153939
-bundleId: 1043407
+bundleId: 1284794
 url: https://jepa.shinyapps.io/marmetadatamexeng/
-when: 1508893631.37264
+when: 1521828833.68807
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Outreach/GOMSumm/choru_logo.png|Outreach/GOMSumm/GoMSummit.Rmd|Outreach/GOMSumm/Images/FAO.png|Outreach/GOMSumm/Images/Flow.png|Outreach/GOMSumm/Images/Gom.png|Outreach/GOMSumm/Images/Logos_PI.png|Outreach/GOMSumm/Images/Logos3.png|Outreach/GOMSumm/rsconnect/documents/GoMSummit.Rmd/shinyapps.io/jepa/GoMSummit.dcf|Outreach/Reports/Executive_Report.pdf|Outreach/Reports/Executive_Report.Rmd
