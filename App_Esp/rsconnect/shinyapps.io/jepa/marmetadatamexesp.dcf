@@ -1,11 +1,13 @@
 name: marmetadatamexesp
 title: marmetadatamexesp
+username:
 account: jepa
 server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
 appId: 155793
-bundleId: 1043404
+bundleId: 1284770
 url: https://jepa.shinyapps.io/marmetadatamexesp/
-when: 1508893439.61185
+when: 1521828368.97462
 asMultiple: FALSE
 asStatic: FALSE
-ignoredFiles: Outreach/.DS_Store|Outreach/Presentations/.DS_Store|Outreach/Presentations/choru_logo.png|Outreach/Presentations/Fondo.css|Outreach/Presentations/Metadatos_D.Rmd|Outreach/Presentations/Metadatos_S.Rmd|Outreach/Presentations/Metadatos.pdf|Outreach/Presentations/Presentacion_CONABIO.html|Outreach/Presentations/Presentacion_CONABIO.Rmd|Outreach/Presentations/ts_fun.R|Outreach/Presentations/Data/Glosario.csv|Outreach/Presentations/Images/Canada.png|Outreach/Presentations/Images/CanadaB.png|Outreach/Presentations/Images/Caso_Flow.png|Outreach/Presentations/Images/Climate_Fish.png|Outreach/Presentations/Images/Colabora.png|Outreach/Presentations/Images/Conabio.png|Outreach/Presentations/Images/EDF_CC.jpg|Outreach/Presentations/Images/FAO.png|Outreach/Presentations/Images/Fish.png|Outreach/Presentations/Images/Flow.png|Outreach/Presentations/Images/Gom.png|Outreach/Presentations/Images/Historial.png|Outreach/Presentations/Images/Historico.png|Outreach/Presentations/Images/Interfaz.png|Outreach/Presentations/Images/Logos_Pi.png|Outreach/Presentations/Images/Logos.png|Outreach/Presentations/Images/Logos3.png|Outreach/Presentations/Images/metadata.jpg|Outreach/Presentations/Images/Pagina.png|Outreach/Presentations/Images/Questions.png|Outreach/Presentations/Images/unete.jpg|Outreach/Reports/Executive_Report_Metadatos.pdf|Outreach/Reports/Executive_Report.Rmd|Outreach/Reports/Resumen_Presentacion.pdf|Outreach/Reports/Resumen.Rmd
+ignoredFiles: Data_Download/Metadata_Template.csv
