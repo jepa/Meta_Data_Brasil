@@ -7622,5 +7622,471 @@ write.csv(Old_Template,
           "Template_6.6.csv",
           row.names = FALSE)
 
+#### NUNO ####
+
+# Metadatos_Ascidias
+Metadatos_Ascidias <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Ascidias.xlsx")
 
 
+New_Ascidias <- Metadatos_Ascidias %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+           ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+# Metadatos_Cnidarios
+Metadatos_Cnidarios <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Cnidarios.xlsx")
+
+Metadatos_Cnidarios$Short_Title <- Metadatos_Cnidarios$Short_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+Metadatos_Cnidarios$Compilation_Title <- Metadatos_Cnidarios$Compilation_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+
+
+New_Cnidarios <- Metadatos_Cnidarios %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+  ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+# Metadatos_Crustaceos
+Metadatos_Crustaceos <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Crustaceos.xlsx")
+
+Metadatos_Crustaceos$Short_Title <- Metadatos_Crustaceos$Short_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+Metadatos_Crustaceos$Compilation_Title <- Metadatos_Crustaceos$Compilation_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+
+
+New_Crustaceos <- Metadatos_Crustaceos %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+  ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+
+
+# Metadatos_Equinodermos
+Metadatos_Equinodermos <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Equinodermos.xlsx")
+
+Metadatos_Equinodermos$Short_Title <- Metadatos_Equinodermos$Short_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+Metadatos_Equinodermos$Compilation_Title <- Metadatos_Equinodermos$Compilation_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+
+
+New_Equinodermos <- Metadatos_Equinodermos %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+  ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+New_Equinodermos$Start_Year <- as.numeric(New_Equinodermos$Start_Year)
+New_Equinodermos$End_Year <- as.numeric(New_Equinodermos$End_Year)
+
+# Metadatos_Moluscos
+Metadatos_Moluscos <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Moluscos.xlsx")
+
+Metadatos_Moluscos$Short_Title <- Metadatos_Moluscos$Short_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+Metadatos_Moluscos$Compilation_Title <- Metadatos_Moluscos$Compilation_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+
+
+New_Moluscos <- Metadatos_Moluscos %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+  ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+
+# Metadatos_Porifera
+Metadatos_Porifera <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Porifera.xlsx")
+
+Metadatos_Porifera$Short_Title <- Metadatos_Porifera$Short_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+Metadatos_Porifera$Compilation_Title <- Metadatos_Porifera$Compilation_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+
+
+New_Porifera <- Metadatos_Porifera %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+  ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+
+# Metadatos_Colecciones
+Metadatos_Colecciones <- read_excel("~/Documents/Dropbox/Metadata_Mexico/Datasets/SISAL/Nuno/Metadatos_Colecciones.xlsx")
+
+Metadatos_Colecciones$Short_Title <- Metadatos_Colecciones$Short_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+Metadatos_Colecciones$Compilation_Title <- Metadatos_Colecciones$Compilation_Title %>% 
+  gsub("á","a",.) %>% 
+  gsub("é","e",.) %>% 
+  gsub("í","i",.) %>% 
+  gsub("ó","o",.) %>% 
+  gsub("ú","u",.) %>% 
+  gsub("ñ","n",.)
+
+
+
+New_Colecciones <- Metadatos_Colecciones %>% 
+  group_by(
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Spatial_Resolution,
+    Dataset_Title,
+    Compilation_Title,
+    Publication_Year,
+    Reference,
+    User_Contact
+  ) %>% 
+  summarise(
+    Start_Year = min(Start_Year),
+    End_Year = max(End_Year)
+  ) %>% 
+  mutate(
+    Temporal_Resolution = (as.numeric(End_Year)-as.numeric(Start_Year))+1,
+    Short_Title = paste("Registro de",Subject_name,"en", Location, sep=" "),
+    Institution_Type = "ACA",
+    Research_Fund = "NA",
+    Research_Field = "Ecology",
+    SE_Interaction = "NA"
+  ) %>% 
+  select(
+    Short_Title,
+    Keywords,
+    Author,
+    Institution,
+    Dataset_Available,
+    Subject_name,
+    Area,
+    Region,
+    Location,
+    Start_Year,
+    End_Year,
+    Temporal_Resolution,
+    everything()
+  )
+
+Final_Nuno <- New_Ascidias %>% 
+  bind_rows(New_Cnidarios,
+            New_Crustaceos,
+            New_Colecciones,
+            New_Equinodermos,
+            New_Moluscos,
+            New_Porifera)
+
+names(Final_Nuno)
+unique(Final_Nuno$Dataset_Title)
+
+
+write.csv(Final_Nuno,
+          "Final_Nuno.csv")
