@@ -169,7 +169,7 @@ shinyServer(function(input, output, session) {
   output$Number_Entries <- renderText({
     Number_entries <- datasetInput() %>% 
       filter(MMID != "na")
-    paste(Number_entries$MMID[length(Number_entries$MMID)])
+    paste(nrow(Number_entries))
     
   })
   
